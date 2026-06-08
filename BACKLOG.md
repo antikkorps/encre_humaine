@@ -21,7 +21,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [ ] Contenu CGV (prestations + produits physiques, rétractation 14 j) — `docs/10-legal.md`.
 - [ ] Identité légale : `legal_name`, `legal_status`, `siret`, adresse, hébergeur — pour `site_settings`.
 - [ ] Secrets réels (Stripe, Resend, Turnstile, Cloudflare, R2, Directus) au moment du déploiement.
-- [!] **Docker indisponible dans ce WSL** (intégration Docker Desktop à activer) → bloque `docker compose up` et les tests d'intégration conteneurisés en local.
+- [x] ~~Docker indisponible dans ce WSL~~ → **résolu** (Docker Desktop était éteint ; server 29.5.2, compose v5.1.4).
 - [ ] URL Forgejo + remote GitHub miroir.
 
 ---
@@ -46,8 +46,8 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [~] `_schema.ts` (pgSchema app) + `_helpers.ts` (pk uuidv7, timestamps) + enums
 - [~] Tables `orders`, `contact_leads`, `newsletter_subscribers`
 - [~] Exports de types dérivés (`InferSelectModel`/`InferInsertModel`)
-- [ ] `drizzle.config.ts` + génération migration initiale
-- [ ] Test Vitest : idempotence `orders.stripe_session_id` (double insert → 1 ligne)
+- [x] `drizzle.config.ts` + génération migration initiale (`0000_messy_yellowjacket.sql`, `CREATE SCHEMA IF NOT EXISTS app` pour coexister avec `init.sql`)
+- [~] Test Vitest : idempotence `orders.stripe_session_id` — test structurel (index unique) ✅ ; comportement `ON CONFLICT DO NOTHING` (double insert → 1 ligne) **vérifié manuellement contre Postgres 17 réel** le 2026-06-08 ; test automatisé du comportement = avec l'endpoint webhook (Phase 1)
 
 ### `packages/directus` — snapshots de schéma — `docs/02-content-model.md`
 - [ ] Scripts `directus:snapshot` / `directus:apply`
@@ -58,7 +58,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [~] `.env.example` (toutes les variables) + schéma de validation
 - [~] `docker-compose.yml` (caddy · web · directus · postgres · umami)
 - [~] `Caddyfile` (3 sous-domaines, en-têtes sécurité + CSP)
-- [~] `postgres/init.sql` (schémas `app`/`directus`/`umami` + rôles séparés)
+- [x] `postgres/init.sql` (schémas `app`/`directus`/`umami` + rôles séparés) — **validé contre Postgres 17 réel** (3 rôles + 3 schémas, `app_user` n'a pas accès à `directus`). Bug corrigé : psql n'interpole pas `:'pw'` dans un bloc `$$` → passage par `set_config`/`current_setting` + `EXECUTE format(%L)`
 - [ ] Dockerfile `web` (multi-stage, Nitro node-server, non-root)
 - [ ] Job migrate avant rollout web
 - [ ] Backups `pg_dump` → R2 (rclone) + test de restauration
