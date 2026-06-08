@@ -33,6 +33,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [~] `pnpm-workspace.yaml` + `package.json` racine (scripts) + `tsconfig.base.json`
 - [~] Biome (lint + format) — `biome.json`
 - [~] `renovate.json` (`minimumReleaseAge: 30 days`, vulnérabilités prioritaires)
+- [x] `Makefile` (raccourcis dev) + `infra/docker-compose.dev.yml` (overlay dev opt-in, Postgres exposé sur `127.0.0.1:55432`) : `make db-up` · `psql` · `psql-app` · `db-migrate` · `query` · `db-reset`
 - [ ] Vitest (config racine + par package)
 - [ ] Playwright (parcours critiques)
 - [ ] Validation d'env au boot (`packages/shared`, valibot) — `docs/06-security.md` §5

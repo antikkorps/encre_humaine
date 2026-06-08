@@ -1,0 +1,11 @@
+# Overlay DÉVELOPPEMENT — opt-in explicite (la prod n'utilise QUE docker-compose.yml).
+# Charge via : docker compose -f docker-compose.yml -f docker-compose.dev.yml ...
+# (c'est ce que fait le Makefile à la racine).
+#
+# Expose Postgres sur l'hôte (127.0.0.1 uniquement) pour : psql/outils GUI locaux,
+# application des migrations Drizzle depuis l'hôte. Jamais exposé en prod.
+
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:${HOST_PG_PORT:-55432}:5432"
