@@ -1,0 +1,31 @@
+{
+  "name": "@encre/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "generate": "nuxi generate",
+    "preview": "nuxi preview",
+    "postinstall": "nuxi prepare",
+    "typecheck": "nuxi typecheck",
+    "test:e2e": "echo 'Playwright à configurer (BACKLOG Phase 0)' && exit 0"
+  },
+  "dependencies": {
+    "@encre/db": "workspace:*",
+    "@encre/shared": "workspace:*",
+    "valibot": "^1.1.0"
+  },
+  "devDependencies": {
+    "@nuxt/fonts": "0.14.0",
+    "@nuxt/image": "2.0.0",
+    "@nuxtjs/seo": "5.1.4",
+    "@tailwindcss/vite": "4.3.0",
+    "nuxt": "4.4.8",
+    "reka-ui": "2.9.9",
+    "tailwindcss": "4.3.0",
+    "typescript": "^5.9.0",
+    "vue-tsc": "3.3.4"
+  }
+}

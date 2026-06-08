@@ -1,0 +1,39 @@
+{
+  "name": "encre-humaine",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Site L'Encre Humaine — conseil RH & accompagnement + boutique serious games",
+  "type": "module",
+  "packageManager": "pnpm@10.16.1",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @encre/web dev",
+    "build": "pnpm --filter @encre/web build",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "test:e2e": "pnpm --filter @encre/web test:e2e",
+    "db:generate": "pnpm --filter @encre/db db:generate",
+    "db:migrate": "pnpm --filter @encre/db db:migrate",
+    "directus:snapshot": "pnpm --filter @encre/directus snapshot",
+    "directus:apply": "pnpm --filter @encre/directus apply"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "@parcel/watcher",
+      "vue-demi"
+    ]
+  }
+}

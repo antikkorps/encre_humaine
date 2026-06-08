@@ -1,0 +1,10 @@
+{
+  "name": "@encre/directus",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "snapshot": "docker compose -f ../../infra/docker-compose.yml exec -T directus npx directus schema snapshot --yes /directus/snapshots/schema.yaml && cp ../../infra/data/directus-snapshots/schema.yaml ./snapshots/schema.yaml || echo 'Lancer la stack Docker (infra/) puis réessayer'",
+    "apply": "docker compose -f ../../infra/docker-compose.yml exec -T directus npx directus schema apply --yes /directus/snapshots/schema.yaml"
+  }
+}

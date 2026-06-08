@@ -1,0 +1,120 @@
+# Stack L'Encre Humaine — docs/07-deploy.md.
+# Réseau interne ; seuls 80/443 exposés (par Caddy). `docker compose up` lève tout.
+# Note : Dockerfile `web` et image Caddy custom = items BACKLOG (Phase 0/1).
+
+name: encre
+
+x-postgres-healthcheck: &pg-health
+  test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+  interval: 10s
+  timeout: 5s
+  retries: 5
+
+services:
+  postgres:
+    image: postgres:17.6-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      DIRECTUS_DB_PASSWORD: ${DIRECTUS_DB_PASSWORD}
+      UMAMI_DB_PASSWORD: ${UMAMI_DB_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./postgres/init.sh:/docker-entrypoint-initdb.d/10-init.sh:ro
+      - ./postgres/init.sql:/opt/encre/init.sql:ro
+    healthcheck: *pg-health
+    networks: [internal]
+
+  directus:
+    image: directus/directus:11.12.0
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      DB_CLIENT: pg
+      DB_CONNECTION_STRING: ${DIRECTUS_DB_URL}
+      DB_SEARCH_PATH: directus
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+      # Assets → R2 (S3-compatible). docs/02 §7, docs/07 §6.
+      STORAGE_LOCATIONS: r2
+      STORAGE_R2_DRIVER: s3
+      STORAGE_R2_ENDPOINT: ${R2_ENDPOINT}
+      STORAGE_R2_KEY: ${R2_ACCESS_KEY_ID}
+      STORAGE_R2_SECRET: ${R2_SECRET_ACCESS_KEY}
+      STORAGE_R2_BUCKET: ${R2_BUCKET_ASSETS}
+      STORAGE_R2_REGION: auto
+      STORAGE_R2_FORCE_PATH_STYLE: "true"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8055/server/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks: [internal]
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-v2.18.1
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_TYPE: postgresql
+      DATABASE_URL: ${UMAMI_DB_URL}
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    networks: [internal]
+
+  web:
+    # build: ../apps/web   # Dockerfile multi-stage Nitro — item BACKLOG Phase 0
+    image: encre/web:dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      directus:
+        condition: service_healthy
+    env_file:
+      - ./env/.env
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks: [internal]
+
+  caddy:
+    # build: ./caddy   # image custom avec module caddy-dns/cloudflare — item BACKLOG
+    image: encre/caddy:dev
+    restart: unless-stopped
+    depends_on:
+      - web
+      - directus
+      - umami
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
+      BASE_DOMAIN: lencre-humaine.com
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [internal]
+
+volumes:
+  pg_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  internal:
+    driver: bridge

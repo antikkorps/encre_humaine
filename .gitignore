@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build / output
+dist/
+.output/
+.nuxt/
+.nitro/
+.cache/
+*.tsbuildinfo
+
+# Env & secrets (only .env.example is committed)
+.env
+.env.*
+!.env.example
+infra/env/.env
+infra/env/.env.*
+!infra/env/.env.example
+
+# Test / coverage
+coverage/
+.vitest/
+playwright-report/
+test-results/
+.playwright/
+
+# Drizzle (migrations ARE committed; ignore only transient meta if any)
+# (packages/db/migrations is tracked on purpose)
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Docker / data volumes
+infra/data/
