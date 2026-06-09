@@ -9,3 +9,20 @@ services:
   postgres:
     ports:
       - "127.0.0.1:${HOST_PG_PORT:-55432}:5432"
+
+  # Directus exposé en local (127.0.0.1) pour piloter l'API depuis l'hôte :
+  # bootstrap du schéma/rôles, snapshot/apply. Jamais exposé en prod (Caddy seul).
+  directus:
+    ports:
+      - "127.0.0.1:${HOST_DIRECTUS_PORT:-8055}:8055"
+    environment:
+      # En dev, storage local (volume) au lieu de R2 : healthcheck vert sans
+      # secrets R2 réels, uploads testables. La prod garde R2 (compose de base).
+      STORAGE_LOCATIONS: local
+      STORAGE_LOCAL_DRIVER: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+    volumes:
+      - directus_uploads:/directus/uploads
+
+volumes:
+  directus_uploads:
