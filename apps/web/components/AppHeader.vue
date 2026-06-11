@@ -1,6 +1,8 @@
 <script setup lang="ts">
-// Nav principale — docs/00-global.md §Layout. Menu mobile accessible = item BACKLOG.
-const nav = [
+// Nav principale — docs/00-global.md §Layout. Partagée avec le menu mobile (NavMobile).
+import type { NavItem } from "~/types/content";
+
+const nav: NavItem[] = [
   { label: "Accueil", to: "/" },
   { label: "À propos", to: "/a-propos" },
   { label: "Pour les organisations", to: "/organisations" },
@@ -25,12 +27,15 @@ const nav = [
         </ul>
       </nav>
 
-      <NuxtLink
-        to="/contact"
-        class="rounded-full bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
-      >
-        Prendre RDV
-      </NuxtLink>
+      <div class="flex items-center gap-2">
+        <NuxtLink
+          to="/contact"
+          class="hidden rounded-full bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700 sm:inline-flex"
+        >
+          Prendre RDV
+        </NuxtLink>
+        <NavMobile :items="nav" />
+      </div>
     </div>
   </header>
 </template>

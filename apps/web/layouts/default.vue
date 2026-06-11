@@ -14,5 +14,8 @@
     </main>
 
     <AppFooter />
+
+    <!-- Bandeau de consentement global (gate des embeds tiers) — docs/06 §7. -->
+    <ConsentBanner />
   </div>
 </template>

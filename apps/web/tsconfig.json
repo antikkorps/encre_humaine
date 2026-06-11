@@ -1,3 +1,10 @@
 {
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    // Les packages workspace (@encre/*) exposent leur source TS et ré-exportent
+    // avec des extensions `.ts` explicites (cf. tsconfig.base.json). Le tsconfig
+    // généré par Nuxt n'en hérite pas → on réactive le flag ici pour que la
+    // résolution des imports `@encre/shared`/`@encre/db` passe au typecheck.
+    "allowImportingTsExtensions": true
+  }
 }

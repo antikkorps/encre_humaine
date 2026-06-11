@@ -33,3 +33,36 @@
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
 }
+
+/*
+ * Styles du contenu riche (Directus WYSIWYG, rendu par <RichText>).
+ * Pas de plugin typography : on reste sobre et maîtrisé (perf, pas de dep en plus).
+ */
+.rich-text {
+  color: var(--color-teal-900);
+  line-height: 1.7;
+}
+.rich-text :where(h2, h3) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-teal-900);
+  margin-block: 1.5em 0.5em;
+}
+.rich-text :where(h2) { font-size: 1.5rem; }
+.rich-text :where(h3) { font-size: 1.25rem; }
+.rich-text :where(p, ul, ol) { margin-block: 0.75em; }
+.rich-text :where(ul, ol) { padding-inline-start: 1.5rem; }
+.rich-text :where(ul) { list-style: disc; }
+.rich-text :where(ol) { list-style: decimal; }
+.rich-text :where(a) {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rich-text :where(strong) { font-weight: 600; }
+.rich-text :where(blockquote) {
+  border-inline-start: 3px solid var(--color-teal-500);
+  padding-inline-start: 1rem;
+  color: var(--color-teal-700);
+  font-style: italic;
+}

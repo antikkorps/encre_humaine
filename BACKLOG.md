@@ -69,7 +69,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 ### `apps/web` — Nuxt + Nitro (squelette)
 - [~] `nuxt.config` + modules (seo, image, fonts, tailwind v4, reka-ui)
 - [~] Layout global + `app.vue` + thème teal/orange — `docs/00-global.md`
-- [ ] Composants d'inventaire (AppHeader, AppFooter, NavMobile, ConsentBanner, …)
+- [x] Composants d'inventaire (docs/00-global.md §Composants) — **14 composants + 2 composables + types** : `SectionHeading`, `CtaBlock`, `StatRow`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `RichText` (présentationnels, masquage si vide) ; `NavMobile` (Reka Dialog : focus trap/Escape/ARIA), `FaqAccordion` (Reka Accordion), `ConsentBanner` (gate tiers), `CalendlyEmbed` (load au consentement), `ContactForm`/`NewsletterForm` (valibot partagé + Turnstile + honeypot + états). Composables `useConsent` (cookie) / `useTurnstile`. Module `reka-ui/nuxt` activé. NavMobile branché dans `AppHeader`, ConsentBanner dans le layout. Lint + typecheck + build verts. Câblage du contenu Directus + tests = phases suivantes
 - [ ] Validation d'env au boot (refus de démarrer si var manquante)
 
 ---

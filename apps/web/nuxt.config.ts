@@ -6,7 +6,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-05-01",
   future: { compatibilityVersion: 4 },
 
-  modules: ["@nuxt/image", "@nuxt/fonts", "@nuxtjs/seo"],
+  // reka-ui/nuxt : auto-import des primitives headless (Dialog, Accordion…) —
+  // docs/00-global.md §Composants (NavMobile, FaqAccordion). a11y native.
+  modules: ["@nuxt/image", "@nuxt/fonts", "@nuxtjs/seo", "reka-ui/nuxt"],
 
   css: ["~/assets/css/main.css"],
   vite: { plugins: [tailwindcss()] },
