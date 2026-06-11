@@ -10,9 +10,13 @@ COMPOSE   := docker compose --env-file $(ENV_FILE) -f infra/docker-compose.yml -
 # `export` pour que docker compose (overlay dev) le voie aussi.
 HOST_PG_PORT ?= 55432
 export HOST_PG_PORT
+# Port d'exposition Directus sur l'hôte (dev uniquement, cf. overlay).
+HOST_DIRECTUS_PORT ?= 8055
+export HOST_DIRECTUS_PORT
 
 .DEFAULT_GOAL := help
-.PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean
+.PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
+        cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply
 
 help: ## Liste les cibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -47,6 +51,26 @@ psql-app: ## Ouvre un shell psql en tant qu'app_user (search_path=app) — manip
 
 query: ## Exécute une requête SQL ponctuelle en app_user — ex: make query Q="select * from orders;"
 	$(COMPOSE) exec -T postgres sh -c 'PGPASSWORD=$$APP_DB_PASSWORD psql -U app_user -d $$POSTGRES_DB -c "$(Q)"'
+
+# ── Directus (CMS) ───────────────────────────────────────────────────────────
+cms-up: $(ENV_FILE) ## Démarre Postgres + Directus (API sur 127.0.0.1:$(HOST_DIRECTUS_PORT))
+	$(COMPOSE) up -d --wait postgres directus
+	@echo "→ Directus prêt sur http://127.0.0.1:$(HOST_DIRECTUS_PORT)."
+
+cms-down: ## Stoppe Directus (conserve les données)
+	$(COMPOSE) stop directus
+
+cms-logs: ## Logs Directus (suivi)
+	$(COMPOSE) logs -f directus
+
+cms-bootstrap: cms-up ## Crée/maj collections, champs, relations, rôles & permissions (idempotent)
+	pnpm --filter @encre/directus bootstrap
+
+cms-snapshot: cms-up ## Exporte le schéma Directus → packages/directus/snapshots/schema.yaml
+	pnpm --filter @encre/directus snapshot
+
+cms-apply: cms-up ## Rejoue le snapshot de schéma sur l'instance courante
+	pnpm --filter @encre/directus apply
 
 ps: ## État des conteneurs
 	$(COMPOSE) ps
