@@ -29,24 +29,24 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 ## Phase 0 — Socle technique (run en cours)
 
 ### Scaffold monorepo & outillage — `docs/CLAUDE.md` §Méthode 1
-- [~] `git init` (main) + `.gitignore` + `.node-version` + `.editorconfig`
-- [~] `pnpm-workspace.yaml` + `package.json` racine (scripts) + `tsconfig.base.json`
-- [~] Biome (lint + format) — `biome.json`
-- [~] `renovate.json` (`minimumReleaseAge: 30 days`, vulnérabilités prioritaires)
+- [x] `git init` (main) + `.gitignore` + `.node-version` + `.editorconfig`
+- [x] `pnpm-workspace.yaml` + `package.json` racine (scripts) + `tsconfig.base.json`
+- [x] Biome (lint + format) — `biome.json`
+- [x] `renovate.json` (`minimumReleaseAge: 30 days`, vulnérabilités prioritaires)
 - [x] `Makefile` (raccourcis dev) + `infra/docker-compose.dev.yml` (overlay dev opt-in, Postgres exposé sur `127.0.0.1:55432`) : `make db-up` · `psql` · `psql-app` · `db-migrate` · `query` · `db-reset`
 - [ ] Vitest (config racine + par package)
 - [ ] Playwright (parcours critiques)
-- [ ] Validation d'env au boot (`packages/shared`, valibot) — `docs/06-security.md` §5
+- [x] Validation d'env au boot (`packages/shared`, valibot) — `docs/06-security.md` §5 — plugin Nitro `00.validate-env.ts`, **vérifié** (web refuse de démarrer si var manquante/malformée)
 
 ### `packages/shared` — schémas & types partagés
-- [~] Schéma d'env (valibot) + parse au boot
-- [ ] Enveloppe d'erreur uniforme `{ error: { code, message } }`
-- [ ] Schémas de validation : contact, newsletter subscribe — `docs/03-api-contracts.md`
+- [x] Schéma d'env (valibot) + parse au boot (`env.ts` + test)
+- [x] Enveloppe d'erreur uniforme `{ error: { code, message } }` (`errors.ts` : `ErrorCode`, `errorEnvelope`, `STATUS_BY_CODE`)
+- [x] Schémas de validation : contact, newsletter subscribe — `docs/03-api-contracts.md` (réutilisés par les forms Nuxt)
 
 ### `packages/db` — Drizzle (schéma `app`) — `docs/01-data-model.md`
-- [~] `_schema.ts` (pgSchema app) + `_helpers.ts` (pk uuidv7, timestamps) + enums
-- [~] Tables `orders`, `contact_leads`, `newsletter_subscribers`
-- [~] Exports de types dérivés (`InferSelectModel`/`InferInsertModel`)
+- [x] `_schema.ts` (pgSchema app) + `_helpers.ts` (pk uuidv7, timestamps) + `enums.ts`
+- [x] Tables `orders`, `contact_leads`, `newsletter_subscribers`
+- [x] Exports de types dérivés (`InferSelectModel`/`InferInsertModel`)
 - [x] `drizzle.config.ts` + génération migration initiale (`0000_messy_yellowjacket.sql`, `CREATE SCHEMA IF NOT EXISTS app` pour coexister avec `init.sql`)
 - [~] Test Vitest : idempotence `orders.stripe_session_id` — test structurel (index unique) ✅ ; comportement `ON CONFLICT DO NOTHING` (double insert → 1 ligne) **vérifié manuellement contre Postgres 17 réel** le 2026-06-08 ; test automatisé du comportement = avec l'endpoint webhook (Phase 1)
 
@@ -57,9 +57,9 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [ ] Client Directus typé (`@directus/sdk`) côté serveur Nuxt → Phase 1
 
 ### `infra` — `docs/07-deploy.md`
-- [~] `.env.example` (toutes les variables) + schéma de validation
-- [~] `docker-compose.yml` (caddy · web · directus · postgres · umami)
-- [~] `Caddyfile` (3 sous-domaines, en-têtes sécurité + CSP)
+- [x] `.env.example` (toutes les variables) + schéma de validation (commentaires hors-valeur pour `env_file`)
+- [x] `docker-compose.yml` (caddy · web · directus · postgres · umami · migrate) — toutes les images buildables
+- [x] `Caddyfile` (3 sous-domaines, en-têtes sécurité + CSP) — validé/formaté (cf. image Caddy custom)
 - [x] Image Caddy custom (`infra/caddy/Dockerfile`, Caddy 2.10.2 + module `caddy-dns/cloudflare` via xcaddy, TLS DNS-01) — **buildée & vérifiée** (image 144 MB, `dns.providers.cloudflare` présent, `Caddyfile` validé/formaté). TLS réel = au déploiement (token Cloudflare + DNS)
 - [x] `postgres/init.sql` (schémas `app`/`directus`/`umami` + rôles séparés) — **validé contre Postgres 17 réel** (3 rôles + 3 schémas, `app_user` n'a pas accès à `directus`). Bug corrigé : psql n'interpole pas `:'pw'` dans un bloc `$$` → passage par `set_config`/`current_setting` + `EXECUTE format(%L)`
 - [x] Dockerfile `web` (`apps/web/Dockerfile`, multi-stage, Nitro node-server, **non-root** `uid 1000`) + `.dockerignore` racine — **buildé & vérifié** (image 402 MB, `/api/health` ok, healthcheck Docker `healthy` via `fetch` natif Node 26, pas de wget/corepack dans l'image slim)
@@ -67,17 +67,17 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [ ] Backups `pg_dump` → R2 (rclone) + test de restauration
 
 ### `apps/web` — Nuxt + Nitro (squelette)
-- [~] `nuxt.config` + modules (seo, image, fonts, tailwind v4, reka-ui)
-- [~] Layout global + `app.vue` + thème teal/orange — `docs/00-global.md`
+- [x] `nuxt.config` + modules (seo, image, fonts, tailwind v4, reka-ui)
+- [x] Layout global + `app.vue` + thème teal/orange — `docs/00-global.md`
 - [x] Composants d'inventaire (docs/00-global.md §Composants) — **14 composants + 2 composables + types** : `SectionHeading`, `CtaBlock`, `StatRow`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `RichText` (présentationnels, masquage si vide) ; `NavMobile` (Reka Dialog : focus trap/Escape/ARIA), `FaqAccordion` (Reka Accordion), `ConsentBanner` (gate tiers), `CalendlyEmbed` (load au consentement), `ContactForm`/`NewsletterForm` (valibot partagé + Turnstile + honeypot + états). Composables `useConsent` (cookie) / `useTurnstile`. Module `reka-ui/nuxt` activé. NavMobile branché dans `AppHeader`, ConsentBanner dans le layout. Lint + typecheck + build verts. Câblage du contenu Directus + tests = phases suivantes
-- [ ] Validation d'env au boot (refus de démarrer si var manquante)
+- [x] Validation d'env au boot (refus de démarrer si var manquante)
 
 ---
 
 ## Phase 1 — Pages & features (après socle)
 
 ### Données & contenu
-- [ ] Migration initiale Drizzle appliquée (schéma `app`)
+- [x] Migration initiale Drizzle appliquée (schéma `app`) — appliquée sur le volume dev + **vérifiée via le job `migrate` dockerisé** (idempotent)
 - [x] Collections Directus créées + snapshot versionné + rôles (cf. `packages/directus`, Phase 0)
 - [ ] Client Directus typé (`@directus/sdk`) côté serveur Nuxt (token lecture seule)
 
@@ -106,7 +106,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [ ] Rate-limiting endpoints publics (IP réelle via `CF-Connecting-IP`)
 - [ ] Turnstile serveur (siteverify) + honeypot
 - [ ] CSP stricte + en-têtes sécurité (Caddy)
-- [ ] Bandeau de consentement maison (gate embeds tiers)
+- [~] Bandeau de consentement maison (gate embeds tiers) — `ConsentBanner` + `useConsent` + gate `CalendlyEmbed` faits (Phase 0) ; reste l'intégration des autres embeds + Umami
 - [ ] Umami cookieless intégré
 
 ### Déploiement — `docs/07-deploy.md`
