@@ -1,7 +1,6 @@
 # Caddyfile — reverse proxy + TLS (Cloudflare DNS-01) + en-têtes sécurité + CSP.
 # docs/07-deploy.md §2, docs/06-security.md §6.
-# Image Caddy à builder avec le module caddy-dns/cloudflare (item BACKLOG).
-
+# Image Caddy custom (infra/caddy/Dockerfile) : Caddy + module caddy-dns/cloudflare.
 {
 	email admin@lencre-humaine.com
 }

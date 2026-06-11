@@ -121,7 +121,8 @@ services:
     networks: [internal]
 
   caddy:
-    # build: ./caddy   # image custom avec module caddy-dns/cloudflare — item BACKLOG
+    build:
+      context: ./caddy
     image: encre/caddy:dev
     restart: unless-stopped
     depends_on:
