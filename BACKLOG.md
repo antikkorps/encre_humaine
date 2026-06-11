@@ -50,10 +50,11 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [x] `drizzle.config.ts` + génération migration initiale (`0000_messy_yellowjacket.sql`, `CREATE SCHEMA IF NOT EXISTS app` pour coexister avec `init.sql`)
 - [~] Test Vitest : idempotence `orders.stripe_session_id` — test structurel (index unique) ✅ ; comportement `ON CONFLICT DO NOTHING` (double insert → 1 ligne) **vérifié manuellement contre Postgres 17 réel** le 2026-06-08 ; test automatisé du comportement = avec l'endpoint webhook (Phase 1)
 
-### `packages/directus` — snapshots de schéma — `docs/02-content-model.md`
-- [ ] Scripts `directus:snapshot` / `directus:apply`
-- [ ] Définition des collections (singletons + collections) + bloc statut/SEO
-- [ ] Rôles : Admin (Franck), Éditrice (Eléonore), API lecture seule (published only)
+### `packages/directus` — schéma + accès — `docs/02-content-model.md`
+- [x] Bootstrap idempotent (`bootstrap.ts` : DSL `fields.ts` → `schema.ts` → moteur) — **vérifié contre Directus 11.12 réel** : 16 collections (8 singletons + 8) + jonction `products_files`, bloc statut/SEO, re-run = +0 partout
+- [x] Scripts `snapshot` / `apply` (`make cms-snapshot` / `cms-apply`) — round-trip prouvé (snapshot → apply = « No changes to apply »). Snapshot versionné : `packages/directus/snapshots/schema.yaml`. Le CLI Directus s'invoque via `node cli.js` (pas dans le PATH de l'image)
+- [x] Rôles : Admin (système, Franck), Éditrice (Eléonore, CRUD contenu+fichiers : 72 perms), API lecture seule published-only (18 perms) + user à token statique — vérifié actif
+- [ ] Client Directus typé (`@directus/sdk`) côté serveur Nuxt → Phase 1
 
 ### `infra` — `docs/07-deploy.md`
 - [~] `.env.example` (toutes les variables) + schéma de validation
@@ -76,7 +77,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 
 ### Données & contenu
 - [ ] Migration initiale Drizzle appliquée (schéma `app`)
-- [ ] Collections Directus créées + snapshot versionné + rôles
+- [x] Collections Directus créées + snapshot versionné + rôles (cf. `packages/directus`, Phase 0)
 - [ ] Client Directus typé (`@directus/sdk`) côté serveur Nuxt (token lecture seule)
 
 ### Endpoints Nitro — `docs/03-api-contracts.md`
