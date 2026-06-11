@@ -1,0 +1,36 @@
+# Contexte de build (racine monorepo). On exclut tout ce qui est régénéré
+# dans l'image (deps, artefacts) ou qui n'a rien à y faire (secrets, git, docs).
+
+# Deps & artefacts (réinstallés/rebuildés dans le Dockerfile)
+**/node_modules
+**/.nuxt
+**/.output
+**/.nitro
+**/dist
+**/.cache
+**/coverage
+**/.turbo
+
+# Secrets / env — NE JAMAIS copier dans une image
+**/.env
+**/.env.*
+!**/.env.example
+infra/env/.env
+
+# Git & CI
+.git
+.gitignore
+.github
+.forgejo
+
+# Outils / éditeur / local
+.claude
+.vscode
+.idea
+**/*.log
+.DS_Store
+
+# Docs & méta (inutiles au build de l'app)
+docs
+*.md
+!README.md

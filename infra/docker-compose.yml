@@ -1,6 +1,6 @@
 # Stack L'Encre Humaine — docs/07-deploy.md.
 # Réseau interne ; seuls 80/443 exposés (par Caddy). `docker compose up` lève tout.
-# Note : Dockerfile `web` et image Caddy custom = items BACKLOG (Phase 0/1).
+# Note : image Caddy custom (module cloudflare) = item BACKLOG (Phase 0/1).
 
 name: encre
 
@@ -71,8 +71,32 @@ services:
       APP_SECRET: ${UMAMI_APP_SECRET}
     networks: [internal]
 
+  # Job one-shot : applique les migrations Drizzle (schéma `app`) AVANT le
+  # rollout de `web` (docs/07 §4). Tourne, migre, sort. `restart: "no"` →
+  # `web` attend sa sortie 0 via `service_completed_successfully`.
+  migrate:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      target: migrate
+    image: encre/migrate:dev
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Les migrations sont du DDL → exécutées par le SUPERUSER (comme `make
+      # db-migrate`), pas par `app_user` (cloisonné à `app`, sans droit de créer
+      # un schéma). init.sql (ALTER DEFAULT PRIVILEGES) octroie ensuite ALL à
+      # `app_user` sur les tables ainsi créées → le runtime `web` reste restreint.
+      APP_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?search_path=app
+    networks: [internal]
+
   web:
-    # build: ../apps/web   # Dockerfile multi-stage Nitro — item BACKLOG Phase 0
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      target: runtime
     image: encre/web:dev
     restart: unless-stopped
     depends_on:
@@ -80,10 +104,17 @@ services:
         condition: service_healthy
       directus:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     env_file:
       - ./env/.env
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      # Image slim sans wget/curl → sonde via fetch natif (Node 26).
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 15s
       timeout: 5s
       retries: 5

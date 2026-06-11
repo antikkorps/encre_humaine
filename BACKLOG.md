@@ -61,8 +61,8 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [~] `docker-compose.yml` (caddy · web · directus · postgres · umami)
 - [~] `Caddyfile` (3 sous-domaines, en-têtes sécurité + CSP)
 - [x] `postgres/init.sql` (schémas `app`/`directus`/`umami` + rôles séparés) — **validé contre Postgres 17 réel** (3 rôles + 3 schémas, `app_user` n'a pas accès à `directus`). Bug corrigé : psql n'interpole pas `:'pw'` dans un bloc `$$` → passage par `set_config`/`current_setting` + `EXECUTE format(%L)`
-- [ ] Dockerfile `web` (multi-stage, Nitro node-server, non-root)
-- [ ] Job migrate avant rollout web
+- [x] Dockerfile `web` (`apps/web/Dockerfile`, multi-stage, Nitro node-server, **non-root** `uid 1000`) + `.dockerignore` racine — **buildé & vérifié** (image 402 MB, `/api/health` ok, healthcheck Docker `healthy` via `fetch` natif Node 26, pas de wget/corepack dans l'image slim)
+- [x] Job migrate avant rollout web (service one-shot `migrate`, cible Docker partagée) — applique drizzle-kit **en superuser** (DDL : `app_user` ne peut pas `CREATE SCHEMA`), `web` attend `service_completed_successfully`. **Vérifié** : 3 tables créées (owner postgres, `app_user` reçoit ALL via `ALTER DEFAULT PRIVILEGES`), 2ᵉ run idempotent. Bug latent corrigé : commentaires inline dans `.env.example` embarqués dans la valeur par `env_file` → sortis sur leur propre ligne
 - [ ] Backups `pg_dump` → R2 (rclone) + test de restauration
 
 ### `apps/web` — Nuxt + Nitro (squelette)
