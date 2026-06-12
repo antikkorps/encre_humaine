@@ -16,7 +16,8 @@ export HOST_DIRECTUS_PORT
 
 .DEFAULT_GOAL := help
 .PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
-        cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply
+        cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply \
+        backup-build backup-run restore
 
 help: ## Liste les cibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -71,6 +72,16 @@ cms-snapshot: cms-up ## Exporte le schéma Directus → packages/directus/snapsh
 
 cms-apply: cms-up ## Rejoue le snapshot de schéma sur l'instance courante
 	pnpm --filter @encre/directus apply
+
+# ── Sauvegardes (pg_dump chiffré → R2) ───────────────────────────────────────
+backup-build: $(ENV_FILE) ## Construit l'image de sauvegarde
+	$(COMPOSE) build backup
+
+backup-run: db-up ## Lance une sauvegarde immédiate (pg_dump chiffré → R2)
+	$(COMPOSE) run --rm --entrypoint /usr/local/bin/backup.sh backup
+
+restore: db-up ## Restaure une sauvegarde — make restore NAME=latest (ou encre-...dump.gpg)
+	$(COMPOSE) run --rm --entrypoint /usr/local/bin/restore.sh backup "$(or $(NAME),latest)"
 
 ps: ## État des conteneurs
 	$(COMPOSE) ps

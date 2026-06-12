@@ -71,6 +71,33 @@ services:
       APP_SECRET: ${UMAMI_APP_SECRET}
     networks: [internal]
 
+  # Sauvegardes chiffrées (pg_dump → gpg → rclone → R2). Conteneur cron :
+  # planifie selon BACKUP_CRON. docs/07-deploy.md §6. Restauration : voir
+  # infra/backup/README.md (`make restore`).
+  backup:
+    build:
+      context: ./backup
+    image: encre/backup:dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_BACKUPS: ${R2_BUCKET_BACKUPS}
+      BACKUP_PASSPHRASE: ${BACKUP_PASSPHRASE}
+      BACKUP_CRON: ${BACKUP_CRON}
+      BACKUP_KEEP_DAILY: ${BACKUP_KEEP_DAILY}
+      BACKUP_KEEP_WEEKLY: ${BACKUP_KEEP_WEEKLY}
+    networks: [internal]
+
   # Job one-shot : applique les migrations Drizzle (schéma `app`) AVANT le
   # rollout de `web` (docs/07 §4). Tourne, migre, sort. `restart: "no"` →
   # `web` attend sa sortie 0 via `service_completed_successfully`.
