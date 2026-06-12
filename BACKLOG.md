@@ -34,8 +34,8 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [x] Biome (lint + format) — `biome.json`
 - [x] `renovate.json` (`minimumReleaseAge: 30 days`, vulnérabilités prioritaires)
 - [x] `Makefile` (raccourcis dev) + `infra/docker-compose.dev.yml` (overlay dev opt-in, Postgres exposé sur `127.0.0.1:55432`) : `make db-up` · `psql` · `psql-app` · `db-migrate` · `query` · `db-reset`
-- [ ] Vitest (config racine + par package)
-- [ ] Playwright (parcours critiques)
+- [x] Vitest (par package : `vitest.config.ts` shared/db en env Node, `apps/web` en env Nuxt via `@nuxt/test-utils` + happy-dom ; orchestration racine `pnpm test` = `pnpm -r` — chaque projet tourne dans son cwd, requis par la config Nuxt liée au cwd). Vitest unifié sur **4.1.6** (peer de `@nuxt/test-utils` 4.0.3). **8 tests de composants** : `ConsentBanner` (affichage/accept/refus + valeur `thirdParty`), `NavMobile` (déclencheur labellisé, dialog titré + nav, contenu téléporté), `ContactForm` (validation valibot client, honeypot → succès silencieux). Total **23 tests** verts (shared 10, db 5, web 8)
+- [~] Playwright (parcours critiques) — **amorce faite** : `apps/web/playwright.config.ts` + smoke `e2e/health.spec.ts` (`GET /api/health` → `{status:"ok"}`, requête API pure, sans navigateur). `webServer` lance `nuxi dev` avec un env SYNTHÉTIQUE valide (passe la validation au boot, aucun service tiers contacté → CI-runnable sans secret). Les vrais parcours (accueil/boutique/contact/newsletter) = Phase 1 quand les pages existeront
 - [x] Validation d'env au boot (`packages/shared`, valibot) — `docs/06-security.md` §5 — plugin Nitro `00.validate-env.ts`, **vérifié** (web refuse de démarrer si var manquante/malformée)
 
 ### `packages/shared` — schémas & types partagés
