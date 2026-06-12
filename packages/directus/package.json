@@ -3,15 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "exports": {
+    "./schema": "./src/schema.gen.ts"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "bootstrap": "tsx src/bootstrap.ts",
     "snapshot": "tsx src/snapshot.ts",
-    "apply": "tsx src/apply.ts"
+    "apply": "tsx src/apply.ts",
+    "types": "tsx src/types-gen.ts"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
+    "@types/node": "^25.9.2",
     "tsx": "^4.19.0",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "yaml": "^2.9.0"
   }
 }

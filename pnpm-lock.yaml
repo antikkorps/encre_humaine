@@ -23,9 +23,15 @@ importers:
 
   apps/web:
     dependencies:
+      '@directus/sdk':
+        specifier: 21.3.0
+        version: 21.3.0
       '@encre/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@encre/directus':
+        specifier: workspace:*
+        version: link:../../packages/directus
       '@encre/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -112,6 +118,9 @@ importers:
       typescript:
         specifier: ^5.9.0
         version: 5.9.3
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
 
   packages/shared:
     dependencies:
@@ -370,6 +379,10 @@ packages:
     resolution: {integrity: sha512-qMkBFw1OqhPuNs1tQWkRq0z0Tg49kXNu53bs59tdF4lytKupatWVnL3cpsVPqn+Q5P7A70r99BKTcm+prMtHqw==}
     peerDependencies:
       devframe: 0.5.2
+
+  '@directus/sdk@21.3.0':
+    resolution: {integrity: sha512-ozK2OmlaBiCuP5RuL046CaGGqEnlOdl4Rg690qaOgbC0C45XnDZVeBlb+NDLTUqEj88iSX8Cv74G3qh0L2i7Yw==}
+    engines: {node: '>=22'}
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -5746,6 +5759,8 @@ snapshots:
       pathe: 2.0.3
       perfect-debounce: 2.1.0
       tinyexec: 1.2.4
+
+  '@directus/sdk@21.3.0': {}
 
   '@drizzle-team/brocli@0.10.2': {}
 

@@ -21,7 +21,8 @@
     "db:generate": "pnpm --filter @encre/db db:generate",
     "db:migrate": "pnpm --filter @encre/db db:migrate",
     "directus:snapshot": "pnpm --filter @encre/directus snapshot",
-    "directus:apply": "pnpm --filter @encre/directus apply"
+    "directus:apply": "pnpm --filter @encre/directus apply",
+    "directus:types": "pnpm --filter @encre/directus types"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",

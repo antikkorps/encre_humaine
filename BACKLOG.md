@@ -54,7 +54,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [x] Bootstrap idempotent (`bootstrap.ts` : DSL `fields.ts` → `schema.ts` → moteur) — **vérifié contre Directus 11.12 réel** : 16 collections (8 singletons + 8) + jonction `products_files`, bloc statut/SEO, re-run = +0 partout
 - [x] Scripts `snapshot` / `apply` (`make cms-snapshot` / `cms-apply`) — round-trip prouvé (snapshot → apply = « No changes to apply »). Snapshot versionné : `packages/directus/snapshots/schema.yaml`. Le CLI Directus s'invoque via `node cli.js` (pas dans le PATH de l'image)
 - [x] Rôles : Admin (système, Franck), Éditrice (Eléonore, CRUD contenu+fichiers : 72 perms), API lecture seule published-only (18 perms) + user à token statique — vérifié actif
-- [ ] Client Directus typé (`@directus/sdk`) côté serveur Nuxt → Phase 1
+- [x] Client Directus typé (`@directus/sdk`) côté serveur Nuxt → cf. Phase 1
 
 ### `infra` — `docs/07-deploy.md`
 - [x] `.env.example` (toutes les variables) + schéma de validation (commentaires hors-valeur pour `env_file`)
@@ -79,7 +79,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 ### Données & contenu
 - [x] Migration initiale Drizzle appliquée (schéma `app`) — appliquée sur le volume dev + **vérifiée via le job `migrate` dockerisé** (idempotent)
 - [x] Collections Directus créées + snapshot versionné + rôles (cf. `packages/directus`, Phase 0)
-- [ ] Client Directus typé (`@directus/sdk`) côté serveur Nuxt (token lecture seule)
+- [x] Client Directus typé (`@directus/sdk`) côté serveur Nuxt (token lecture seule) — **codegen depuis le snapshot** : `pnpm directus:types` (`make cms-types`) lit `snapshots/schema.yaml` → génère `packages/directus/src/schema.gen.ts` (interface `Schema` + un type par collection, relations résolues m2o/o2m/files, singletons vs tableaux). **Types dérivés, jamais ré-écrits** (DRY, docs/02 §Accès), codegen **reproductible**. Client serveur `apps/web/server/utils/directus.ts` : `createDirectus<Schema>().with(staticToken).with(rest())`, token *published-only* strictement serveur, mémoïsé. Lint + typecheck + tests verts. Câblage du contenu dans les pages = items pages ci-dessous
 
 ### Endpoints Nitro — `docs/03-api-contracts.md`
 - [ ] `POST /api/stripe/webhook` (raw body, signature, idempotence ON CONFLICT) + **test Vitest idempotence**
