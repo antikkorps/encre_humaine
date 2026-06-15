@@ -83,7 +83,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 
 ### Endpoints Nitro — `docs/03-api-contracts.md`
 - [x] `POST /api/stripe/webhook` (raw body, signature, idempotence ON CONFLICT) + **test Vitest idempotence** — handler `apps/web/server/api/stripe/webhook.post.ts` (body brut via `readRawBody`, `constructEvent` → 400 si signature KO, `checkout.session.completed`/`charge.refunded`, 2xx après persistance). Logique « dure » sans globals Nitro dans `server/utils/orders.ts` (`sessionToOrder` + `recordCheckoutSession` ON CONFLICT DO NOTHING + emails best-effort + `applyRefund`). Utils `db.ts`/`stripe.ts`/`resend.ts`/`api-error.ts`. **Idempotence prouvée sous PGlite** (`test/stripe-webhook.spec.ts`, env node) : 2× même session → 1 commande + 1 jeu d'emails ; échec email ≠ échec persistance. DRY : opérateurs drizzle ré-exportés depuis `@encre/db` (instance unique)
-- [ ] `POST /api/contact` (valibot + Turnstile serveur + rate-limit + Resend)
+- [x] `POST /api/contact` (valibot + Turnstile serveur + rate-limit + Resend) — `apps/web/server/api/contact.post.ts` : honeypot `website` → validation `ContactPayloadSchema` (partagée) → `verifyTurnstile` (fail-closed) → `enforceRateLimit` 5/min/IP → INSERT `contact_leads` → `sendContactNotification` best-effort (`notification_sent=true` si OK). Utils partagés `client-ip.ts` (CF-Connecting-IP), `rate-limit.ts` (fenêtre glissante en mémoire, **testé** `test/rate-limit.spec.ts`), `turnstile.ts` (siteverify). Aucune IP persistée.
 - [ ] `POST /api/newsletter/subscribe` (double opt-in, token hashé)
 - [ ] `GET /api/newsletter/confirm` (comparaison constante, expiration)
 - [ ] Purge planifiée des `pending > 30j` (DB + Resend)

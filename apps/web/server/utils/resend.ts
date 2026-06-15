@@ -1,4 +1,4 @@
-import type { Order } from "@encre/db";
+import type { ContactLead, Order } from "@encre/db";
 import { Resend } from "resend";
 import type { OrderEmailer } from "./orders";
 
@@ -19,6 +19,29 @@ export function resend(): Resend {
   }
   client = new Resend(resendApiKey);
   return client;
+}
+
+/**
+ * Notifie Eléonore d'un nouveau lead de contact (docs/03 §2).
+ * `reply_to` = email du visiteur → réponse directe. Best-effort côté appelant.
+ */
+export async function sendContactNotification(lead: ContactLead): Promise<void> {
+  const config = useRuntimeConfig();
+  await resend().emails.send({
+    from: config.newsletterFrom,
+    to: config.contactNotifyTo,
+    replyTo: lead.email,
+    subject: `Nouveau message ${lead.audience} — ${lead.firstName}`,
+    text: [
+      `De : ${lead.firstName} <${lead.email}>`,
+      `Audience : ${lead.audience}`,
+      lead.sourcePage ? `Page : ${lead.sourcePage}` : "",
+      "",
+      lead.message,
+    ]
+      .filter(Boolean)
+      .join("\n"),
+  });
 }
 
 /** Formate un montant en centimes vers une chaîne lisible (ex. 2900 → 29,00 €). */
