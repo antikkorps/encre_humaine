@@ -103,8 +103,8 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [ ] `/mentions-legales` · `/cgv` · `/confidentialite` — `docs/10-legal.md`
 
 ### Sécurité & conformité — `docs/06-security.md`
-- [ ] Rate-limiting endpoints publics (IP réelle via `CF-Connecting-IP`)
-- [ ] Turnstile serveur (siteverify) + honeypot
+- [x] Rate-limiting endpoints publics (IP réelle via `CF-Connecting-IP`) — `server/utils/rate-limit.ts` (fenêtre glissante en mémoire, cœur testable à horloge injectée) + `client-ip.ts` (CF-Connecting-IP → X-Forwarded-For → socket). Appliqué sur `/api/contact` & `/api/newsletter/subscribe` (5/min/IP) et `/api/shop/checkout` (10/min/IP). Test `test/rate-limit.spec.ts`. NB : store mémoire = mono-instance (phase 1)
+- [x] Turnstile serveur (siteverify) + honeypot — `server/utils/turnstile.ts` (`verifyTurnstile` siteverify, **fail-closed**) sur contact + newsletter ; honeypot `website` court-circuité côté serveur (faux succès)
 - [ ] CSP stricte + en-têtes sécurité (Caddy)
 - [~] Bandeau de consentement maison (gate embeds tiers) — `ConsentBanner` + `useConsent` + gate `CalendlyEmbed` faits (Phase 0) ; reste l'intégration des autres embeds + Umami
 - [ ] Umami cookieless intégré
