@@ -42,6 +42,12 @@ export default defineNuxtConfig({
     },
   },
 
+  // Nitro : tâches planifiées (purge RGPD newsletter, docs/03 §3.4). Quotidien 03h.
+  nitro: {
+    experimental: { tasks: true },
+    scheduledTasks: { "0 3 * * *": ["newsletter:purge"] },
+  },
+
   // @nuxtjs/seo : robots/sitemap/canonical/OG. Site renseigné via env au build.
   site: { url: process.env.BASE_URL, name: "L'Encre Humaine" },
 

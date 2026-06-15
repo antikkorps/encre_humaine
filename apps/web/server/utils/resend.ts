@@ -22,6 +22,76 @@ export function resend(): Resend {
 }
 
 /**
+ * Crée ou met à jour le contact Resend de l'audience (docs/03 §3.1-3.2).
+ * `unsubscribed` pilote l'état de diffusion : `true` tant que le double opt-in
+ * n'est pas confirmé (un `pending` ne reçoit AUCUN broadcast), `false` une fois
+ * confirmé. Renvoie l'id du contact (à stocker) ou `null`.
+ */
+export async function upsertNewsletterContact(opts: {
+  email: string;
+  firstName?: string;
+  unsubscribed: boolean;
+}): Promise<string | null> {
+  const { resendAudienceId } = useRuntimeConfig();
+  const r = resend();
+
+  const created = await r.contacts.create({
+    audienceId: resendAudienceId,
+    email: opts.email,
+    firstName: opts.firstName,
+    unsubscribed: opts.unsubscribed,
+  });
+  if (created.data?.id) return created.data.id;
+
+  // Contact déjà présent → mise à jour de l'état d'abonnement (par email).
+  const updated = await r.contacts.update({
+    audienceId: resendAudienceId,
+    email: opts.email,
+    firstName: opts.firstName,
+    unsubscribed: opts.unsubscribed,
+  });
+  return updated.data?.id ?? null;
+}
+
+/** Supprime le contact Resend de l'audience (purge RGPD, docs/03 §3.4). */
+export async function removeNewsletterContact(email: string): Promise<void> {
+  const { resendAudienceId } = useRuntimeConfig();
+  await resend().contacts.remove({ audienceId: resendAudienceId, email });
+}
+
+/** Envoie l'email de confirmation double opt-in avec lien tokenisé (docs/03 §3.1). */
+export async function sendNewsletterConfirmation(opts: {
+  email: string;
+  firstName?: string | null;
+  token: string;
+}): Promise<void> {
+  const config = useRuntimeConfig();
+  // Lien vers l'endpoint de confirmation, qui valide puis redirige vers la page.
+  const link = new URL("/api/newsletter/confirm", config.public.baseUrl);
+  link.searchParams.set("token", opts.token);
+  link.searchParams.set("email", opts.email);
+
+  await resend().emails.send({
+    from: config.newsletterFrom,
+    to: opts.email,
+    subject: "Confirmez votre inscription — L'Encre Humaine",
+    text: [
+      opts.firstName ? `Bonjour ${opts.firstName},` : "Bonjour,",
+      "",
+      "Merci de votre intérêt pour la newsletter de L'Encre Humaine.",
+      "Pour finaliser votre inscription, confirmez votre adresse :",
+      "",
+      link.toString(),
+      "",
+      "Ce lien expire dans 30 jours. Si vous n'êtes pas à l'origine de cette",
+      "demande, ignorez simplement ce message.",
+      "",
+      "L'Encre Humaine",
+    ].join("\n"),
+  });
+}
+
+/**
  * Notifie Eléonore d'un nouveau lead de contact (docs/03 §2).
  * `reply_to` = email du visiteur → réponse directe. Best-effort côté appelant.
  */
