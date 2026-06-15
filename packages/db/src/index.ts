@@ -3,6 +3,11 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema/index.ts";
 
+// Opérateurs de requête ré-exportés depuis l'unique instance drizzle-orm du
+// monorepo (DRY) : les consommateurs (apps/web/server) évitent un import direct
+// de `drizzle-orm`, qui — peer-keyé par driver — crée une 2ᵉ instance dont les
+// types de colonnes ne sont plus compatibles avec ceux du schéma exporté ici.
+export { and, asc, desc, eq, gt, gte, inArray, isNull, lt, lte, or, sql } from "drizzle-orm";
 export * from "./schema/index.ts";
 
 /**

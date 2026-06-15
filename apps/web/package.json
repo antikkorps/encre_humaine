@@ -18,9 +18,12 @@
     "@encre/db": "workspace:*",
     "@encre/directus": "workspace:*",
     "@encre/shared": "workspace:*",
+    "resend": "6.12.4",
+    "stripe": "22.2.1",
     "valibot": "^1.1.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.2",
     "@nuxt/fonts": "0.14.0",
     "@nuxt/image": "2.0.0",
     "@nuxt/test-utils": "4.0.3",
@@ -28,6 +31,7 @@
     "@playwright/test": "1.60.0",
     "@tailwindcss/vite": "4.3.0",
     "@vue/test-utils": "2.4.10",
+    "drizzle-orm": "0.44.7",
     "happy-dom": "20.9.0",
     "nuxt": "4.4.8",
     "reka-ui": "2.9.9",
