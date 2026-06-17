@@ -22,17 +22,20 @@ export default defineNuxtConfig({
 
   // Valeurs exposées au client = publiques uniquement (docs/06 §5).
   // Les secrets restent côté serveur (runtimeConfig racine, non préfixé `public`).
+  // Pontés depuis `process.env` (noms simples du `.env`/compose env_file) : sans
+  // ce pont, Nuxt n'overriderait que des clés `NUXT_*`, et les secrets seraient
+  // vides au runtime (les utils serveur lèveraient « non configuré »).
   runtimeConfig: {
-    appDatabaseUrl: "",
-    directusReadToken: "",
-    stripeSecretKey: "",
-    stripeWebhookSecret: "",
-    stripeShippingRateFr: "",
-    resendApiKey: "",
-    resendAudienceId: "",
-    newsletterFrom: "",
-    contactNotifyTo: "",
-    turnstileSecretKey: "",
+    appDatabaseUrl: process.env.APP_DATABASE_URL ?? "",
+    directusReadToken: process.env.DIRECTUS_READ_TOKEN ?? "",
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
+    stripeShippingRateFr: process.env.STRIPE_SHIPPING_RATE_FR ?? "",
+    resendApiKey: process.env.RESEND_API_KEY ?? "",
+    resendAudienceId: process.env.RESEND_AUDIENCE_ID ?? "",
+    newsletterFrom: process.env.NEWSLETTER_FROM ?? "",
+    contactNotifyTo: process.env.CONTACT_NOTIFY_TO ?? "",
+    turnstileSecretKey: process.env.TURNSTILE_SECRET_KEY ?? "",
     public: {
       baseUrl: process.env.BASE_URL ?? "",
       directusPublicUrl: process.env.DIRECTUS_PUBLIC_URL ?? "",
