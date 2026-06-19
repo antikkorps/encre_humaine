@@ -17,15 +17,16 @@
 	}
 }
 
-# ── CSP stricte avec allow-list des tiers (Stripe / Calendly / Turnstile / Umami / R2) ─
+# ── CSP stricte avec allow-list des tiers (Stripe / Cal.com / Turnstile / Umami / R2) ─
+# Prise de RDV : Cal.com (embed.js sur app.cal.com, iframe sur cal.com/app.cal.com).
 (csp) {
 	header Content-Security-Policy "default-src 'self';
-		script-src 'self' https://js.stripe.com https://challenges.cloudflare.com https://assets.calendly.com https://stats.lencre-humaine.com;
-		style-src 'self' 'unsafe-inline' https://assets.calendly.com;
-		img-src 'self' data: blob: https://cms.lencre-humaine.com https://*.r2.cloudflarestorage.com https://*.stripe.com;
+		script-src 'self' https://js.stripe.com https://challenges.cloudflare.com https://app.cal.com https://stats.lencre-humaine.com;
+		style-src 'self' 'unsafe-inline';
+		img-src 'self' data: blob: https://cms.lencre-humaine.com https://*.r2.cloudflarestorage.com https://*.stripe.com https://app.cal.com;
 		font-src 'self' data:;
-		connect-src 'self' https://api.stripe.com https://cms.lencre-humaine.com https://stats.lencre-humaine.com https://challenges.cloudflare.com;
-		frame-src https://js.stripe.com https://checkout.stripe.com https://challenges.cloudflare.com https://calendly.com https://assets.calendly.com;
+		connect-src 'self' https://api.stripe.com https://cms.lencre-humaine.com https://stats.lencre-humaine.com https://challenges.cloudflare.com https://app.cal.com;
+		frame-src https://js.stripe.com https://checkout.stripe.com https://challenges.cloudflare.com https://cal.com https://app.cal.com;
 		frame-ancestors 'self';
 		base-uri 'self';
 		form-action 'self' https://checkout.stripe.com;

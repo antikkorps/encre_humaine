@@ -8,7 +8,7 @@ Transformer l'intérêt en action. Page chaude : simple, rassurante. Ne pas gâc
 ## Sections (ordre)
 1. **Accroche humaine** — `accroche_title` + `accroche_body`.
 2. **Deux façons de me contacter** :
-   - **Appel découverte** — `calendly_intro` + `CalendlyEmbed` (URL `site_settings.calendly_url`, **chargé après consentement** ; sinon bouton « Activer la prise de RDV »).
+   - **Appel découverte** — `booking_intro` + `BookingEmbed` (URL `site_settings.booking_url`, provider Cal.com, **chargé après consentement** ; sinon bouton « Activer la prise de RDV »).
    - **Message** — `ContactForm` : prénom, email, « Vous êtes : organisation / particulier » (radio), message 2-3 lignes, Turnstile. → `POST /api/contact`. Mention RGPD discrète.
 3. **Ce qui se passe ensuite** — `next_steps` (répéteur) + `response_time_note` (48h ouvrées).
 4. **FAQ courte** — `faq_items` (scope=contact).
@@ -16,7 +16,7 @@ Transformer l'intérêt en action. Page chaude : simple, rassurante. Ne pas gâc
 
 ## A11y / SEO
 - Formulaire accessible (labels, radios groupées en `fieldset`/`legend`, erreurs `aria-live`, focus sur succès/erreur). `h1` = `accroche_title`.
-- Calendly en iframe différée : ne charge aucun cookie tiers avant consentement.
+- Embed RDV (Cal.com) en iframe différée : ne charge aucun cookie tiers avant consentement.
 
 ## Critères d'acceptation
-- Soumission valide → lead enregistré + email à Eléonore. Turnstile vérifié serveur. Calendly ne se charge qu'après consentement. États succès/erreur clairs. Pas d'IP persistée.
+- Soumission valide → lead enregistré + email à Eléonore. Turnstile vérifié serveur. L'embed RDV ne se charge qu'après consentement. États succès/erreur clairs. Pas d'IP persistée.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Bandeau de consentement maison — docs/06-security.md §7.
 // Non bloquant (region, pas de modale) : le site reste utilisable. Gate uniquement
-// les contenus tiers (Calendly, embeds Stripe). Umami cookieless = exempté.
+// les contenus tiers (embed RDV, embeds Stripe). Umami cookieless = exempté.
 const { decided, acceptThirdParty, refuseThirdParty } = useConsent();
 </script>
 
@@ -16,7 +16,7 @@ const { decided, acceptThirdParty, refuseThirdParty } = useConsent();
       <div class="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-sm text-teal-800">
           Ce site n'utilise aucun cookie de suivi. Certains contenus tiers
-          (prise de RDV Calendly, paiement Stripe) nécessitent votre accord pour se charger.
+          (prise de rendez-vous, paiement) nécessitent votre accord pour se charger.
           <NuxtLink to="/confidentialite" class="underline">En savoir plus</NuxtLink>.
         </p>
         <div class="flex shrink-0 gap-2">

@@ -13,7 +13,7 @@ Tu vas construire le site **L'Encre Humaine** (Eléonore Morée, conseil RH & ac
 En cas de doute ou de contradiction : **00-overview prime**, et tu remontes la question plutôt que d'inventer.
 
 ## Stack (rappel)
-Monorepo **pnpm** · **Nuxt (Nitro)** front + backend résiduel (`server/`) · **Tailwind** (couche composants interactifs à trancher : Reka UI ou Nuxt UI thémé) · **Drizzle** + **PostgreSQL** (schémas isolés) · **Directus** (CMS) · **Stripe** (Checkout hébergé) · **Resend** (email) · **Calendly** (embed) · **Turnstile** (anti-bot) · **Umami** (analytics) · **Caddy** + **Docker** + **Cloudflare** + **R2** · CI **Forgejo**.
+Monorepo **pnpm** · **Nuxt (Nitro)** front + backend résiduel (`server/`) · **Tailwind** (couche composants interactifs à trancher : Reka UI ou Nuxt UI thémé) · **Drizzle** + **PostgreSQL** (schémas isolés) · **Directus** (CMS) · **Stripe** (Checkout hébergé) · **Resend** (email) · **Cal.com** (embed RDV) · **Turnstile** (anti-bot) · **Umami** (analytics) · **Caddy** + **Docker** + **Cloudflare** + **R2** · CI **Forgejo**.
 
 ## Principes non négociables
 - **DRY** : une seule source par concept. Types **dérivés** de Drizzle et du SDK Directus, jamais ré-écrits.

@@ -15,7 +15,7 @@ const base: Record<string, string> = {
   CONTACT_NOTIFY_TO: "eleonore@example.com",
   TURNSTILE_SITE_KEY: "site",
   TURNSTILE_SECRET_KEY: "secret",
-  CALENDLY_URL: "https://calendly.com/eleonore",
+  BOOKING_URL: "https://cal.com/eleonore/decouverte",
 };
 
 describe("parseServerEnv", () => {

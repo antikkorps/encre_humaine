@@ -27,12 +27,12 @@
 ## 6. En-têtes HTTP & CSP
 Posés par Caddy (ou Nitro) :
 - `Strict-Transport-Security` (HSTS), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options`/`frame-ancestors`, `Permissions-Policy` minimal.
-- **CSP** stricte avec allow-list pour : Stripe (`js.stripe.com`, `checkout.stripe.com`), Calendly (`assets.calendly.com`, frames), Turnstile (`challenges.cloudflare.com`), Umami (domaine self-hosted), R2/Directus (images). `default-src 'self'`, pas de `unsafe-inline` non maîtrisé (nonces si nécessaire).
+- **CSP** stricte avec allow-list pour : Stripe (`js.stripe.com`, `checkout.stripe.com`), Cal.com (`app.cal.com`, frames `cal.com`), Turnstile (`challenges.cloudflare.com`), Umami (domaine self-hosted), R2/Directus (images). `default-src 'self'`, pas de `unsafe-inline` non maîtrisé (nonces si nécessaire).
 
 ## 7. Cookies & consentement
 - **Bandeau de consentement** maison, 2 catégories : *nécessaire* / *tiers (embeds)*.
 - **Umami cookieless** → exempté de consentement (config CNIL respectée : pas de cross-site, IP anonymisée).
-- **Calendly & Stripe embeds** : chargés **après consentement** (load-on-interaction côté Calendly). Aucun cookie tiers avant action utilisateur.
+- **Embed RDV (Cal.com) & Stripe** : chargés **après consentement**. Aucun cookie tiers avant action utilisateur. (Provider RDV isolé dans `BookingEmbed` — interchangeable.)
 - Choix de consentement mémorisé (cookie strictement nécessaire, pas de tracking).
 
 ## 8. RGPD

@@ -89,13 +89,13 @@ export interface ContactPage {
   id: string;
   accroche_title: string | null;
   accroche_body: string | null;
-  calendly_intro: string | null;
   next_steps: unknown | null;
   response_time_note: string | null;
   meta_title: string | null;
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  booking_intro: string | null;
 }
 
 export interface FaqItems {
@@ -289,7 +289,6 @@ export interface SiteSettings {
   tagline: string | null;
   contact_email: string | null;
   linkedin_url: string | null;
-  calendly_url: string | null;
   location_label: string | null;
   social_links: unknown | null;
   legal_name: string | null;
@@ -300,6 +299,7 @@ export interface SiteSettings {
   host_info: string | null;
   default_og_image: string | DirectusFile | null;
   default_meta_description: string | null;
+  booking_url: string | null;
 }
 
 export interface Testimonials {

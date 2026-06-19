@@ -56,8 +56,8 @@ export const ServerEnvSchema = v.object({
   TURNSTILE_SITE_KEY: nonEmpty(),
   TURNSTILE_SECRET_KEY: nonEmpty(),
 
-  // Calendly (embed public)
-  CALENDLY_URL: url(),
+  // Prise de RDV (embed public — Cal.com, Calendly… ; nom agnostique du provider)
+  BOOKING_URL: url(),
 });
 
 export type ServerEnv = v.InferOutput<typeof ServerEnvSchema>;

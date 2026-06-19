@@ -40,7 +40,7 @@ export default defineNuxtConfig({
       baseUrl: process.env.BASE_URL ?? "",
       directusPublicUrl: process.env.DIRECTUS_PUBLIC_URL ?? "",
       turnstileSiteKey: process.env.TURNSTILE_SITE_KEY ?? "",
-      calendlyUrl: process.env.CALENDLY_URL ?? "",
+      bookingUrl: process.env.BOOKING_URL ?? "",
       vatEnabled: process.env.VAT_ENABLED === "true",
     },
   },

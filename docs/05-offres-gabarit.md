@@ -14,7 +14,7 @@
 6. **Investissement** — `price_label` + `price_note` (ex. acompte 30 %, paiement 2×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
 7. **FAQ** — `faq` (M2M `faq_items` ou filtre par scope).
 8. **Témoignage** — `featured_testimonial` ; masqué si vide.
-9. **CTA** — `cta_label` → `/contact` (ou Calendly pour B2C : séance découverte).
+9. **CTA** — `cta_label` → `/contact` (ou prise de RDV pour B2C : séance découverte).
 
 ## Renvois croisés (bonne pratique du brief)
 - `booster-recherche` → encart « Pas encore sûr de votre cap ? Commencez par *Clarifier & Avancer* ».

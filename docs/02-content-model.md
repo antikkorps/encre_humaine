@@ -60,7 +60,7 @@ Deux familles de contenu, deux traitements :
 - `tagline`
 - `contact_email`
 - `linkedin_url`
-- `calendly_url` ← consommé par l'embed RDV
+- `booking_url` ← URL de prise de RDV, consommée par l'embed RDV (provider-agnostique : Cal.com, Calendly…)
 - `location_label` (« Bouches-du-Rhône · France entière »)
 - `social_links` (répéteur : plateforme + url)
 - **Infos légales** (pour footer + mentions) : `legal_name`, `legal_status`, `siret`, `legal_address`, `vat_mention` (prérempli « TVA non applicable, art. 293 B du CGI »), `host_info`
@@ -116,7 +116,7 @@ Deux familles de contenu, deux traitements :
 
 ### `contact_page`
 - `accroche_title`, `accroche_body`
-- `calendly_intro` (texte au-dessus de l'embed)
+- `booking_intro` (texte au-dessus de l'embed RDV)
 - `next_steps` (répéteur : `number` + `title` + `description`)
 - FAQ : filtre `faq_items` `scope=contact`
 - `response_time_note` (« Je réponds sous 48h ouvrées… »)

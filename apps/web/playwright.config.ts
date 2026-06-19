@@ -28,7 +28,7 @@ const bootEnv: Record<string, string> = {
   CONTACT_NOTIFY_TO: "contact@example.com",
   TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
   TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
-  CALENDLY_URL: "https://calendly.com/encre-humaine/rdv",
+  BOOKING_URL: "https://cal.com/encre-humaine/rdv",
 };
 
 export default defineConfig({

@@ -39,4 +39,4 @@
 
 ## Composants réutilisables (inventaire)
 
-`AppHeader`, `AppFooter`, `NavMobile`, `ConsentBanner`, `CtaBlock`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `FaqAccordion`, `StatRow`, `SectionHeading`, `ContactForm`, `NewsletterForm`, `CalendlyEmbed` (chargé au consentement), `RichText` (rendu sûr du WYSIWYG Directus).
+`AppHeader`, `AppFooter`, `NavMobile`, `ConsentBanner`, `CtaBlock`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `FaqAccordion`, `StatRow`, `SectionHeading`, `ContactForm`, `NewsletterForm`, `BookingEmbed` (prise de RDV, chargé au consentement), `RichText` (rendu sûr du WYSIWYG Directus).

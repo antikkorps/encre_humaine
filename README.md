@@ -100,7 +100,7 @@ La prod n'utilise que `infra/docker-compose.yml` ; en local on ajoute l'overlay
 ## Environnement
 
 Toutes les variables sont décrites dans [`infra/env/.env.example`](infra/env/.env.example)
-(Postgres, Directus, Stripe, Resend, Turnstile, Calendly, R2, sauvegardes, Umami, Cloudflare).
+(Postgres, Directus, Stripe, Resend, Turnstile, Cal.com, R2, sauvegardes, Umami, Cloudflare).
 
 - Copier en `infra/env/.env` (jamais committé). `make env` / `make db-up` le font à partir du gabarit.
 - Le service `web` valide ces variables au boot (schéma valibot dans `packages/shared`).

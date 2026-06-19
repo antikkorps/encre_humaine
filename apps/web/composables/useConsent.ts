@@ -1,6 +1,6 @@
 /**
  * Consentement maison (gate des embeds tiers) — docs/06-security.md §7.
- * Deux catégories : *nécessaire* (toujours) / *tiers* (Calendly, Stripe embeds…).
+ * Deux catégories : *nécessaire* (toujours) / *tiers* (embed RDV, Stripe embeds…).
  * Umami est cookieless → exempté, ne dépend pas de ce consentement.
  *
  * Stocké dans un cookie strictement nécessaire (pas de tracking), lisible au SSR

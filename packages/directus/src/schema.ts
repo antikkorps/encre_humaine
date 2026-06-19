@@ -49,7 +49,9 @@ const singletons: CollectionDef[] = [
       f.input("tagline"),
       f.input("contact_email"),
       f.input("linkedin_url"),
-      f.input("calendly_url", { note: "Consommé par l'embed RDV" }),
+      f.input("booking_url", {
+        note: "URL de prise de RDV (Cal.com, Calendly… — consommée par l'embed RDV)",
+      }),
       f.input("location_label", { note: "Bouches-du-Rhône · France entière" }),
       f.repeater("social_links", [{ field: "platform" }, { field: "url" }], {
         note: "Réseaux sociaux",
@@ -224,7 +226,7 @@ const singletons: CollectionDef[] = [
     fields: [
       f.input("accroche_title"),
       f.textarea("accroche_body"),
-      f.textarea("calendly_intro", { note: "Texte au-dessus de l'embed" }),
+      f.textarea("booking_intro", { note: "Texte au-dessus de l'embed RDV" }),
       f.repeater("next_steps", [
         { field: "number" },
         { field: "title" },
