@@ -9,7 +9,7 @@ import { allCollections } from "./schema.ts";
 
 type Action = "create" | "read" | "update" | "delete" | "share";
 
-const API_USER_EMAIL = "api-readonly@lencre-humaine.com";
+const API_USER_EMAIL = "api-readonly@encrehumaine.fr";
 
 /** Collections de contenu + indicateur « possède un champ status ». */
 function contentTargets(): { collection: string; hasStatus: boolean; junction?: string }[] {

@@ -2,7 +2,7 @@
 # docs/07-deploy.md §2, docs/06-security.md §6.
 # Image Caddy custom (infra/caddy/Dockerfile) : Caddy + module caddy-dns/cloudflare.
 {
-	email admin@lencre-humaine.com
+	email admin@encrehumaine.fr
 }
 
 # ── En-têtes de sécurité communs (docs/06 §6) ────────────────────────────────
@@ -21,11 +21,11 @@
 # Prise de RDV : Cal.com (embed.js sur app.cal.com, iframe sur cal.com/app.cal.com).
 (csp) {
 	header Content-Security-Policy "default-src 'self';
-		script-src 'self' https://js.stripe.com https://challenges.cloudflare.com https://app.cal.com https://stats.lencre-humaine.com;
+		script-src 'self' https://js.stripe.com https://challenges.cloudflare.com https://app.cal.com https://stats.encrehumaine.fr;
 		style-src 'self' 'unsafe-inline';
-		img-src 'self' data: blob: https://cms.lencre-humaine.com https://*.r2.cloudflarestorage.com https://*.stripe.com https://app.cal.com;
+		img-src 'self' data: blob: https://cms.encrehumaine.fr https://*.r2.cloudflarestorage.com https://*.stripe.com https://app.cal.com;
 		font-src 'self' data:;
-		connect-src 'self' https://api.stripe.com https://cms.lencre-humaine.com https://stats.lencre-humaine.com https://challenges.cloudflare.com https://app.cal.com;
+		connect-src 'self' https://api.stripe.com https://cms.encrehumaine.fr https://stats.encrehumaine.fr https://challenges.cloudflare.com https://app.cal.com;
 		frame-src https://js.stripe.com https://checkout.stripe.com https://challenges.cloudflare.com https://cal.com https://app.cal.com;
 		frame-ancestors 'self';
 		base-uri 'self';
@@ -34,7 +34,7 @@
 }
 
 # ── Site public (Nuxt/Nitro) ─────────────────────────────────────────────────
-lencre-humaine.com, www.lencre-humaine.com {
+encrehumaine.fr, www.encrehumaine.fr {
 	import security_headers
 	import csp
 	encode zstd gzip
@@ -45,7 +45,7 @@ lencre-humaine.com, www.lencre-humaine.com {
 }
 
 # ── CMS Directus ─────────────────────────────────────────────────────────────
-cms.lencre-humaine.com {
+cms.encrehumaine.fr {
 	import security_headers
 	encode zstd gzip
 	tls {
@@ -55,7 +55,7 @@ cms.lencre-humaine.com {
 }
 
 # ── Analytics Umami (self-hosted, cookieless) ────────────────────────────────
-stats.lencre-humaine.com {
+stats.encrehumaine.fr {
 	import security_headers
 	encode zstd gzip
 	tls {

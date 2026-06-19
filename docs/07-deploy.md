@@ -24,9 +24,9 @@ assets (directus) ──► R2 (externe)
 
 - Image Caddy **buildée avec le module `caddy-dns/cloudflare`** (certificats via **DNS-01**, pas besoin d'exposer 80 pour la validation).
 - Mapping :
-  - `lencre-humaine.com` → `web`
-  - `cms.lencre-humaine.com` → `directus`
-  - `stats.lencre-humaine.com` → `umami`
+  - `encrehumaine.fr` → `web`
+  - `cms.encrehumaine.fr` → `directus`
+  - `stats.encrehumaine.fr` → `umami`
 - En-têtes de sécurité + CSP posés ici (cf. `06` §6). Compression (zstd/gzip), HTTP/2-3.
 - `CLOUDFLARE_API_TOKEN` (scopé DNS edit de la zone) en secret.
 
@@ -58,7 +58,7 @@ Script d'init (premier boot) :
 
 ```
 # Domaine
-BASE_URL=https://lencre-humaine.com
+BASE_URL=https://encrehumaine.fr
 
 # Postgres
 POSTGRES_HOST=postgres
@@ -71,7 +71,7 @@ DIRECTUS_SECRET=...
 DIRECTUS_DB_URL=postgres://directus_user:...@postgres:5432/...
 DIRECTUS_ADMIN_EMAIL=...
 DIRECTUS_ADMIN_PASSWORD=...
-DIRECTUS_PUBLIC_URL=https://cms.lencre-humaine.com
+DIRECTUS_PUBLIC_URL=https://cms.encrehumaine.fr
 DIRECTUS_READ_TOKEN=...          # token lecture seule, published only (côté serveur Nuxt)
 
 # Stripe
@@ -84,7 +84,7 @@ VAT_RATE=0
 # Resend
 RESEND_API_KEY=...
 RESEND_AUDIENCE_ID=...
-NEWSLETTER_FROM="L'Encre Humaine <contact@lencre-humaine.com>"
+NEWSLETTER_FROM="L'Encre Humaine <contact@encrehumaine.fr>"
 CONTACT_NOTIFY_TO=...
 
 # Turnstile

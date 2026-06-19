@@ -162,7 +162,7 @@ services:
       - "443:443/udp"
     environment:
       CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
-      BASE_DOMAIN: lencre-humaine.com
+      BASE_DOMAIN: encrehumaine.fr
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

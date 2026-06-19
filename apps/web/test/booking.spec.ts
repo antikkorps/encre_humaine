@@ -13,8 +13,8 @@ describe("parseBookingUrl", () => {
   });
 
   it("supporte un domaine self-hosted (origin préservé)", () => {
-    expect(parseBookingUrl("https://rdv.lencre-humaine.com/eleonore/30min")).toEqual({
-      origin: "https://rdv.lencre-humaine.com",
+    expect(parseBookingUrl("https://rdv.encrehumaine.fr/eleonore/30min")).toEqual({
+      origin: "https://rdv.encrehumaine.fr",
       calLink: "eleonore/30min",
     });
   });
