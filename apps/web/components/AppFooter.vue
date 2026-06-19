@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // Pied de page — docs/00-global.md §Layout. Contenu réel depuis site_settings (Directus) = item BACKLOG.
+// Le lien « Boutique » suit l'activation de la boutique (shop_page).
 const year = new Date().getFullYear();
+const { data: shop } = await useShopPage();
 </script>
 
 <template>
@@ -11,6 +13,13 @@ const year = new Date().getFullYear();
         <p class="mt-2 text-sm text-teal-700">
           Conseil RH &amp; accompagnement. Bouches-du-Rhône · France entière.
         </p>
+        <NuxtLink
+          v-if="shop?.enabled"
+          to="/boutique"
+          class="mt-3 inline-block text-sm font-medium text-teal-700 hover:text-teal-600"
+        >
+          Boutique →
+        </NuxtLink>
       </div>
       <nav aria-label="Organisations">
         <p class="text-sm font-semibold text-teal-800">Organisations</p>

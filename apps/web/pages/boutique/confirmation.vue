@@ -1,0 +1,41 @@
+<script setup lang="ts">
+// Confirmation de commande — retour de Stripe Checkout (docs/06 §Parcours).
+// success_url = /boutique/confirmation?session_id={CHECKOUT_SESSION_ID}. La commande
+// est enregistrée et l'email envoyé par le webhook Stripe (docs/05 §5.1) ; cette page
+// se contente d'un accusé sobre. Pas indexée (page transactionnelle).
+const route = useRoute();
+const hasSession = computed(() => typeof route.query.session_id === "string");
+
+const siteName = "L'Encre Humaine";
+useSeoMeta({
+  title: `Commande confirmée — ${siteName}`,
+  robots: "noindex, nofollow",
+});
+</script>
+
+<template>
+  <section class="mx-auto max-w-2xl px-4 py-20 text-center">
+    <template v-if="hasSession">
+      <p class="text-5xl" aria-hidden="true">🎉</p>
+      <h1 class="mt-6 font-display text-3xl font-bold text-teal-900">Merci pour votre commande !</h1>
+      <p class="mt-4 text-teal-700">
+        Votre paiement a bien été pris en compte. Vous allez recevoir un email de confirmation
+        avec le récapitulatif de votre commande. Pensez à vérifier vos spams si besoin.
+      </p>
+    </template>
+    <template v-else>
+      <h1 class="font-display text-3xl font-bold text-teal-900">Commande</h1>
+      <p class="mt-4 text-teal-700">
+        Nous n'avons pas trouvé de commande à afficher. Si vous venez de payer, votre email de
+        confirmation reste la référence.
+      </p>
+    </template>
+
+    <NuxtLink
+      to="/boutique"
+      class="mt-8 inline-flex items-center rounded-full bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800"
+    >
+      Retour à la boutique
+    </NuxtLink>
+  </section>
+</template>

@@ -1,5 +1,13 @@
-import { readItems } from "@directus/sdk";
+import { readItems, readSingleton } from "@directus/sdk";
 import type Stripe from "stripe";
+import {
+  type ContentSeo,
+  type FileField,
+  mapSeo,
+  type RawSiteDefaults,
+  records,
+  str,
+} from "./content/_shared";
 
 /**
  * Catalogue boutique — docs/05-shop.md §2. Source de vérité partagée :
@@ -112,6 +120,124 @@ export function mergeCatalog(
     });
   }
   return catalog;
+}
+
+// — Fiche produit (docs/06 §`/boutique/{slug}`) —
+
+/** Caractéristique de jeu (`game_details`, répéteur label/value). */
+export interface ProductGameDetail {
+  label: string;
+  value: string;
+}
+
+/** Champs Directus de la fiche (catalogue + éditorial détaillé + SEO). */
+export interface ProductDetailInput extends CatalogProductInput {
+  game_details?: unknown; // répéteur { label, value }
+  meta_title?: string | null;
+  meta_description?: string | null;
+  og_image?: FileField;
+  no_index?: boolean | null;
+}
+
+/** Produit détaillé exposé à la fiche (prix Stripe, description assainie). */
+export interface ProductDetail {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string | null;
+  /** `description` (rich text Directus) assainie côté serveur (docs/06 §1). */
+  descriptionHtml: string;
+  gameDetails: ProductGameDetail[];
+  images: string[];
+  audience: string | null;
+  featured: boolean;
+  priceId: string;
+  unitAmount: number; // centimes (Stripe)
+  currency: string;
+  seo: ContentSeo;
+}
+
+/** Signature du sanitizer injecté (cf. `sanitizeRichText`). */
+type Sanitize = (html?: string | null) => string;
+
+/** Répéteur `game_details` → liste label/value ; entrées vides exclues. */
+export function mapGameDetails(raw: unknown): ProductGameDetail[] {
+  return records(raw)
+    .map((d) => ({ label: str(d.label), value: str(d.value) }))
+    .filter((d) => d.label !== "" || d.value !== "");
+}
+
+/** Compose la fiche produit (pur ; `sanitize` injecté pour la description rich text). */
+export function mapProductDetail(
+  raw: ProductDetailInput,
+  price: ActivePrice,
+  settings: RawSiteDefaults,
+  assetBase: string,
+  sanitize: Sanitize,
+): ProductDetail {
+  return {
+    id: raw.id,
+    slug: raw.slug,
+    name: raw.name ?? "",
+    tagline: raw.tagline,
+    descriptionHtml: sanitize(raw.description),
+    gameDetails: mapGameDetails(raw.game_details),
+    images: imageUrls(raw.images, assetBase),
+    audience: raw.audience,
+    featured: raw.featured,
+    priceId: price.priceId,
+    unitAmount: price.unitAmount,
+    currency: price.currency,
+    seo: mapSeo(raw, settings, assetBase),
+  };
+}
+
+/**
+ * Charge une fiche produit par slug (Directus published + prix Stripe actif).
+ * `null` si le produit est dépublié/inexistant OU sans prix actif (docs/06 :
+ * « produit dépublié ou inactif → absent »).
+ */
+export async function loadProductDetail(slug: string): Promise<ProductDetail | null> {
+  const client = directusServer();
+  const assetBase = useRuntimeConfig().public.directusPublicUrl;
+
+  const [product] = (await client.request(
+    readItems("products", {
+      filter: { status: { _eq: "published" }, slug: { _eq: slug } },
+      limit: 1,
+      fields: [
+        "id",
+        "slug",
+        "name",
+        "tagline",
+        "description",
+        "game_details",
+        "audience",
+        "featured",
+        "stripe_product_id",
+        "status",
+        { images: ["directus_files_id"] },
+        "meta_title",
+        "meta_description",
+        "og_image",
+        "no_index",
+      ],
+    }),
+  )) as unknown as ProductDetailInput[];
+
+  if (!product) return null;
+
+  const prices = await stripe().prices.list({ active: true, limit: 100, expand: ["data.product"] });
+  const price = buildPriceMap(prices.data).get(product.stripe_product_id);
+  if (!price) return null;
+
+  const settings = (await client.request(
+    readSingleton("site_settings", {
+      fields: ["brand_name", "default_meta_description", "default_og_image"],
+    }),
+  )) as unknown as RawSiteDefaults;
+
+  return mapProductDetail(product, price, settings, assetBase, sanitizeRichText);
 }
 
 /** Charge et merge le catalogue (Directus published + prix Stripe actifs). */

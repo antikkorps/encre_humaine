@@ -364,6 +364,32 @@ collections:
       versioning: false
     schema:
       name: resources_page
+  - collection: shop_page
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: shop_page
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: storefront
+      item_duplication_fields: null
+      note: >-
+        Boutique : activation + libellés éditoriaux (générique — pas seulement
+        des jeux)
+      preview_url: null
+      singleton: true
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: shop_page
   - collection: site_settings
     meta:
       accountability: all
@@ -9463,6 +9489,386 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: shop_page
+    field: id
+    type: uuid
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: shop_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: shop_enabled
+    type: boolean
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: shop_enabled
+      group: null
+      hidden: false
+      interface: boolean
+      note: 'Active la boutique : lien de navigation + accès aux pages /boutique'
+      options: null
+      readonly: false
+      required: false
+      sort: 2
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: shop_enabled
+      table: shop_page
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: Titre de la page (ex. « La boutique »)
+      options: null
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: intro
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapeau sous le titre
+      options: null
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: intro
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: empty_message
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: empty_message
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Affiché quand la boutique est ouverte mais sans produit disponible
+      options: null
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: empty_message
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: seo_divider
+    type: alias
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: seo_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: SEO
+      readonly: false
+      required: false
+      sort: 6
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: shop_page
+    field: meta_title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: meta_title
+      group: null
+      hidden: false
+      interface: input
+      note: 'Fallback : titre de l''item + nom du site'
+      options: null
+      readonly: false
+      required: false
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: meta_title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: meta_description
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: meta_description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: meta_description
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: og_image
+    type: uuid
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: og_image
+      group: null
+      hidden: false
+      interface: file-image
+      note: 'Fallback : site_settings.default_og_image'
+      options: null
+      readonly: false
+      required: false
+      sort: 9
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: og_image
+      table: shop_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: shop_page
+    field: no_index
+    type: boolean
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: no_index
+      group: null
+      hidden: false
+      interface: boolean
+      note: Exclure cette page de l'indexation
+      options: null
+      readonly: false
+      required: false
+      sort: 10
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: no_index
+      table: shop_page
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: site_settings
     field: id
     type: uuid
@@ -11251,6 +11657,27 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: resources_page_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: shop_page
+    field: og_image
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: shop_page
+      many_field: og_image
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: shop_page
+      column: og_image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: shop_page_og_image_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: site_settings

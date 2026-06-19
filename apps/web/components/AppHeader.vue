@@ -1,15 +1,23 @@
 <script setup lang="ts">
 // Nav principale — docs/00-global.md §Layout. Partagée avec le menu mobile (NavMobile).
+// Le lien « Boutique » n'apparaît que si la boutique est activée (shop_page,
+// piloté par Eléonore) — sinon la boutique reste masquée de la navigation.
 import type { NavItem } from "~/types/content";
 
-const nav: NavItem[] = [
-  { label: "Accueil", to: "/" },
-  { label: "À propos", to: "/a-propos" },
-  { label: "Pour les organisations", to: "/organisations" },
-  { label: "Pour les particuliers", to: "/particuliers" },
-  { label: "Ressources", to: "/ressources" },
-  { label: "Travaillons ensemble", to: "/contact" },
-];
+const { data: shop } = await useShopPage();
+
+const nav = computed<NavItem[]>(() => {
+  const items: NavItem[] = [
+    { label: "Accueil", to: "/" },
+    { label: "À propos", to: "/a-propos" },
+    { label: "Pour les organisations", to: "/organisations" },
+    { label: "Pour les particuliers", to: "/particuliers" },
+    { label: "Ressources", to: "/ressources" },
+  ];
+  if (shop.value?.enabled) items.push({ label: "Boutique", to: "/boutique" });
+  items.push({ label: "Travaillons ensemble", to: "/contact" });
+  return items;
+});
 </script>
 
 <template>

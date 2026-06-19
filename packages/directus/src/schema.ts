@@ -185,6 +185,23 @@ const singletons: CollectionDef[] = [
     ],
   },
   {
+    collection: "shop_page",
+    singleton: true,
+    icon: "storefront",
+    note: "Boutique : activation + libellés éditoriaux (générique — pas seulement des jeux)",
+    fields: [
+      f.bool("shop_enabled", false, {
+        note: "Active la boutique : lien de navigation + accès aux pages /boutique",
+      }),
+      f.input("title", { note: "Titre de la page (ex. « La boutique »)" }),
+      f.textarea("intro", { note: "Chapeau sous le titre" }),
+      f.textarea("empty_message", {
+        note: "Affiché quand la boutique est ouverte mais sans produit disponible",
+      }),
+      ...f.seoBlock(),
+    ],
+  },
+  {
     collection: "newsletter_page",
     singleton: true,
     icon: "mail",
@@ -260,7 +277,7 @@ const collections: CollectionDef[] = [
   {
     collection: "products",
     icon: "casino",
-    note: "Contenu éditorial des serious games. AUCUN prix/stock (→ Stripe). Lien stripe_product_id.",
+    note: "Contenu éditorial des produits de la boutique (serious games & autres). AUCUN prix/stock (→ Stripe). Lien stripe_product_id.",
     fields: [
       f.input("stripe_product_id", {
         note: "Lien vers Stripe (source des prix/stock)",

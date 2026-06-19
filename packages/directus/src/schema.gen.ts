@@ -271,6 +271,18 @@ export interface ResourcesPage {
   no_index: boolean;
 }
 
+export interface ShopPage {
+  id: string;
+  shop_enabled: boolean;
+  title: string | null;
+  intro: string | null;
+  empty_message: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  og_image: string | DirectusFile | null;
+  no_index: boolean;
+}
+
 export interface SiteSettings {
   id: string;
   brand_name: string | null;
@@ -324,6 +336,7 @@ export interface Schema {
   products_files: ProductsFiles[];
   resources: Resources[];
   resources_page: ResourcesPage;
+  shop_page: ShopPage;
   site_settings: SiteSettings;
   testimonials: Testimonials[];
 }

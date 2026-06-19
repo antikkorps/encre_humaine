@@ -5,7 +5,14 @@
 // (Directus published + prix Stripe actif), sans jamais de prix en dur.
 import type Stripe from "stripe";
 import { describe, expect, it } from "vitest";
-import { buildPriceMap, type CatalogProductInput, mergeCatalog } from "../server/utils/shop";
+import {
+  buildPriceMap,
+  type CatalogProductInput,
+  mapGameDetails,
+  mapProductDetail,
+  mergeCatalog,
+  type ProductDetailInput,
+} from "../server/utils/shop";
 
 const ASSET_BASE = "https://cms.example.fr";
 
@@ -79,5 +86,70 @@ describe("mergeCatalog", () => {
       ASSET_BASE,
     );
     expect(out[0]?.images).toEqual([`${ASSET_BASE}/assets/file-abc`]);
+  });
+});
+
+// Sanitizer factice : marque le passage (et "" sur entrée vide, comme le vrai).
+const wrap = (h?: string | null) => (h ? `clean(${h})` : "");
+
+describe("mapGameDetails", () => {
+  it("mappe label/value, filtre les entrées vides et le bruit", () => {
+    expect(
+      mapGameDetails([
+        { label: "Joueurs", value: "3 à 6" },
+        { label: "", value: "" },
+        { label: "Durée" },
+        "bruit",
+      ]),
+    ).toEqual([
+      { label: "Joueurs", value: "3 à 6" },
+      { label: "Durée", value: "" },
+    ]);
+  });
+
+  it("renvoie [] hors tableau", () => {
+    expect(mapGameDetails(null)).toEqual([]);
+  });
+});
+
+describe("mapProductDetail", () => {
+  const activePrice = { priceId: "price_1", unitAmount: 2900, currency: "eur" };
+  function detail(over: Partial<ProductDetailInput>): ProductDetailInput {
+    return { ...product({}), ...over };
+  }
+
+  it("assainit la description, mappe game_details/images/prix et le SEO", () => {
+    const d = mapProductDetail(
+      detail({
+        name: "Octopus Quest",
+        tagline: "Un jeu coopératif.",
+        description: "<p>Règles</p>",
+        game_details: [{ label: "Joueurs", value: "3 à 6" }],
+        images: [{ directus_files_id: "f1" }],
+        meta_title: "",
+      }),
+      activePrice,
+      { brand_name: "L'Encre Humaine", default_meta_description: "Jeux." },
+      ASSET_BASE,
+      wrap,
+    );
+    expect(d).toMatchObject({
+      name: "Octopus Quest",
+      tagline: "Un jeu coopératif.",
+      descriptionHtml: "clean(<p>Règles</p>)",
+      gameDetails: [{ label: "Joueurs", value: "3 à 6" }],
+      images: [`${ASSET_BASE}/assets/f1`],
+      priceId: "price_1",
+      unitAmount: 2900,
+      currency: "eur",
+    });
+    expect(d.seo.title).toBe("L'Encre Humaine");
+    expect(d.seo.description).toBe("Jeux.");
+  });
+
+  it("description vide → chaîne vide (section masquée côté page)", () => {
+    expect(mapProductDetail(detail({}), activePrice, {}, ASSET_BASE, wrap).descriptionHtml).toBe(
+      "",
+    );
   });
 });
