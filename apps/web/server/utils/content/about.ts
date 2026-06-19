@@ -6,9 +6,10 @@ import {
   mapPhoto,
   mapSeo,
   mapStringList,
+  mapTitledItems,
   type RawSiteDefaults,
-  records,
   str,
+  type TitledItem,
 } from "./_shared";
 
 /**
@@ -40,10 +41,8 @@ export interface RawAbout {
   no_index?: boolean | null;
 }
 
-export interface AboutConviction {
-  title: string;
-  body: string;
-}
+/** « Ce en quoi je crois » : item titre + corps (forme commune `TitledItem`). */
+export type AboutConviction = TitledItem;
 
 export interface AboutContent {
   /** Source du `h1` (null = fallback d'affichage côté page). */
@@ -65,9 +64,7 @@ type Sanitize = (html?: string | null) => string;
 
 /** « Ce en quoi je crois » : items avec au moins un titre ou un corps (docs/02 §5). */
 export function mapConvictions(raw: unknown): AboutConviction[] {
-  return records(raw)
-    .map((c) => ({ title: str(c.title), body: str(c.body) }))
-    .filter((c) => c.title !== "" || c.body !== "");
+  return mapTitledItems(raw);
 }
 
 /** Compose le payload de la page (pur ; `sanitize` injecté pour le rich text). */

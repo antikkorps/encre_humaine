@@ -180,6 +180,19 @@ export function mapOffers(raws: unknown, fallback: Audience): OfferSummary[] {
     .filter((o): o is OfferSummary => o !== null);
 }
 
+/** Item « titre + corps » (convictions À propos, `outcomes` des offres…). */
+export interface TitledItem {
+  title: string;
+  body: string;
+}
+
+/** Répéteur `[{ title, body }]` ; entrées sans titre ni corps exclues. */
+export function mapTitledItems(raw: unknown): TitledItem[] {
+  return records(raw)
+    .map((c) => ({ title: str(c.title), body: str(c.body) }))
+    .filter((c) => c.title !== "" || c.body !== "");
+}
+
 /** Étape numérotée (méthode B2B, étapes contact). `number` tolère number|string. */
 export interface NumberedStep {
   number: string;

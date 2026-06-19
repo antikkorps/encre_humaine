@@ -12,6 +12,7 @@ import {
   mapStringList,
   mapTestimonialItem,
   mapTestimonials,
+  mapTitledItems,
 } from "../server/utils/content/_shared";
 
 const BASE = "https://cms.example.fr";
@@ -182,6 +183,26 @@ describe("mapOffers", () => {
     expect(mapOffers([{ title: "T", slug: "s", audience: "x" }], "organisation")[0]?.audience).toBe(
       "organisation",
     );
+  });
+});
+
+describe("mapTitledItems", () => {
+  it("garde les items ayant titre OU corps, filtre les vides et le bruit", () => {
+    expect(
+      mapTitledItems([
+        { title: "Clarté", body: "Une feuille de route." },
+        { title: "", body: "" },
+        { body: "Sans titre" },
+        "bruit",
+      ]),
+    ).toEqual([
+      { title: "Clarté", body: "Une feuille de route." },
+      { title: "", body: "Sans titre" },
+    ]);
+  });
+
+  it("renvoie [] hors tableau", () => {
+    expect(mapTitledItems(null)).toEqual([]);
   });
 });
 
