@@ -16,7 +16,7 @@ export HOST_DIRECTUS_PORT
 
 .DEFAULT_GOAL := help
 .PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
-        cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply cms-types \
+        cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply cms-types cms-seed \
         backup-build backup-run restore
 
 help: ## Liste les cibles
@@ -75,6 +75,10 @@ cms-apply: cms-up ## Rejoue le snapshot de schéma sur l'instance courante
 
 cms-types: ## Génère les types TS du schéma depuis le snapshot (sans Docker)
 	pnpm --filter @encre/directus types
+
+cms-seed: cms-up ## Injecte du contenu DÉMO (FR) pour travailler la mise en page (idempotent)
+	pnpm --filter @encre/directus bootstrap
+	pnpm --filter @encre/directus seed
 
 # ── Sauvegardes (pg_dump chiffré → R2) ───────────────────────────────────────
 backup-build: $(ENV_FILE) ## Construit l'image de sauvegarde

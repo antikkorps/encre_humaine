@@ -11,7 +11,8 @@
     "bootstrap": "tsx src/bootstrap.ts",
     "snapshot": "tsx src/snapshot.ts",
     "apply": "tsx src/apply.ts",
-    "types": "tsx src/types-gen.ts"
+    "types": "tsx src/types-gen.ts",
+    "seed": "tsx src/seed.ts"
   },
   "devDependencies": {
     "@types/node": "^25.9.2",
