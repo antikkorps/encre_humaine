@@ -47,6 +47,8 @@
   font-weight: 700;
   color: var(--color-teal-900);
   margin-block: 1.5em 0.5em;
+  /* Décale l'ancre sous l'en-tête sticky (table des matières légale). */
+  scroll-margin-top: 5rem;
 }
 .rich-text :where(h2) { font-size: 1.5rem; }
 .rich-text :where(h3) { font-size: 1.25rem; }

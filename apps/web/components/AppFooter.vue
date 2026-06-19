@@ -38,6 +38,7 @@ const { data: shop } = await useShopPage();
         <ul class="mt-2 space-y-1 text-sm text-teal-700">
           <li><NuxtLink to="/mentions-legales">Mentions légales</NuxtLink></li>
           <li><NuxtLink to="/cgv">CGV</NuxtLink></li>
+          <li><NuxtLink to="/cgu">CGU</NuxtLink></li>
           <li><NuxtLink to="/confidentialite">Confidentialité</NuxtLink></li>
         </ul>
       </nav>
