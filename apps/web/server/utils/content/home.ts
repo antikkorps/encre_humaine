@@ -46,7 +46,7 @@ export interface RawArticle {
   reading_time?: number | null;
   published_at?: string | null;
   cover_image?: FileField;
-  category?: { name?: string | null } | string | null;
+  category?: { name?: string | null; slug?: string | null; group?: string | null } | string | null;
 }
 
 export interface RawHome {
@@ -127,15 +127,16 @@ export function mapTestimonial(raw: RawHome["featured_testimonial"]): Testimonia
 }
 
 export function mapArticle(raw: RawArticle, assetBase: string): ArticleSummary {
-  const cat = raw.category;
-  const categoryName = cat && typeof cat === "object" ? str(cat.name) || undefined : undefined;
+  const cat = raw.category && typeof raw.category === "object" ? raw.category : null;
   return {
     title: str(raw.title),
     slug: str(raw.slug),
     excerpt: str(raw.excerpt) || undefined,
     coverImage: fileUrl(raw.cover_image, assetBase) ?? undefined,
     coverAlt: fileAlt(raw.cover_image) || undefined,
-    categoryName,
+    categoryName: (cat && str(cat.name)) || undefined,
+    categorySlug: (cat && str(cat.slug)) || undefined,
+    categoryGroup: (cat && str(cat.group)) || undefined,
     readingTime: typeof raw.reading_time === "number" ? raw.reading_time : undefined,
     publishedAt: str(raw.published_at) || undefined,
   };

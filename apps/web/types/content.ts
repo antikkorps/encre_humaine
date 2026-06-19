@@ -49,6 +49,10 @@ export interface ArticleSummary {
   coverImage?: string;
   coverAlt?: string;
   categoryName?: string;
+  /** Slug de la catégorie (lien/filtre). */
+  categorySlug?: string;
+  /** Groupe de catégorie (Organisations / Particuliers / Terrain) — filtre index. */
+  categoryGroup?: string;
   /** Minutes de lecture. */
   readingTime?: number;
   /** ISO date (string) — formatée à l'affichage. */
