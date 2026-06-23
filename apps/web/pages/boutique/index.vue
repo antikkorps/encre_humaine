@@ -40,18 +40,13 @@ useSeoMeta({
 <template>
   <div>
     <!-- 1. En-tête éditorial -->
-    <section class="bg-teal-50">
-      <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:py-20">
-        <h1 class="font-display text-3xl font-bold text-teal-900 sm:text-4xl">{{ title }}</h1>
-        <p v-if="shop?.intro" class="mx-auto mt-4 max-w-2xl text-teal-700">{{ shop.intro }}</p>
-      </div>
-    </section>
+    <PageHero :title="title" eyebrow="Boutique" :body="shop?.intro ?? undefined" variant="neutral" />
 
-    <section class="mx-auto max-w-6xl px-4 py-16">
+    <section class="mx-auto max-w-6xl px-4 py-20">
       <!-- Boutique non activée : message « bientôt » (pas de grille) -->
       <p
         v-if="!enabled"
-        class="py-12 text-center text-teal-700"
+        class="py-12 text-center text-ink/65"
         role="status"
       >
         {{ shop?.emptyMessage ?? "La boutique ouvrira bientôt ses portes. Revenez très vite !" }}
@@ -66,14 +61,14 @@ useSeoMeta({
         <div
           v-for="i in 6"
           :key="i"
-          class="h-80 animate-pulse rounded-2xl border border-teal-100 bg-teal-50"
+          class="h-80 animate-pulse rounded-3xl border border-ink/5 bg-paper-2"
         />
       </div>
 
       <!-- Erreur : message sobre -->
       <p
         v-else-if="error"
-        class="py-12 text-center text-teal-700"
+        class="py-12 text-center text-ink/65"
         role="status"
       >
         La boutique est momentanément indisponible. Merci de réessayer dans un instant.
@@ -82,7 +77,7 @@ useSeoMeta({
       <!-- Ouverte mais sans produit : message éditorial -->
       <p
         v-else-if="!products.length"
-        class="py-12 text-center text-teal-700"
+        class="py-12 text-center text-ink/65"
         role="status"
       >
         {{ shop?.emptyMessage ?? "Les premiers produits arrivent bientôt. Revenez vite !" }}

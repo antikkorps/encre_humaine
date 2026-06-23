@@ -15,6 +15,22 @@ const visibleArticles = computed(() => {
   return activeGroup.value ? all.filter((a) => a.categoryGroup === activeGroup.value) : all;
 });
 
+// Pagination côté client (l'endpoint renvoie tous les articles publiés). Réinitialisée
+// au changement de filtre. La grille n'affiche qu'une page ; navigation par numéros.
+const PAGE_SIZE = 9;
+const page = ref(1);
+watch(activeGroup, () => {
+  page.value = 1;
+});
+const pageCount = computed(() => Math.max(1, Math.ceil(visibleArticles.value.length / PAGE_SIZE)));
+const pagedArticles = computed(() =>
+  visibleArticles.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE),
+);
+function goToPage(n: number) {
+  page.value = Math.min(Math.max(1, n), pageCount.value);
+  if (import.meta.client) window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 useSeoMeta({
   title: () => content.value?.seo.title ?? `Ressources — ${siteName}`,
   description: () => content.value?.seo.description ?? undefined,
@@ -29,21 +45,16 @@ useSeoMeta({
 <template>
   <div>
     <!-- 1. Accroche (h1) -->
-    <section class="bg-teal-50">
-      <div class="mx-auto max-w-3xl px-4 py-16 text-center sm:py-20">
-        <h1 class="font-display text-3xl font-bold text-teal-900 sm:text-4xl">{{ heading }}</h1>
-        <p
-          v-if="content?.accrocheBody"
-          class="mx-auto mt-4 max-w-2xl whitespace-pre-line text-teal-700"
-        >
-          {{ content.accrocheBody }}
-        </p>
-      </div>
-    </section>
+    <PageHero
+      :title="heading"
+      eyebrow="Ressources"
+      :body="content?.accrocheBody ?? undefined"
+      variant="neutral"
+    />
 
     <p
       v-if="error"
-      class="mx-auto max-w-6xl px-4 py-16 text-center text-teal-700"
+      class="mx-auto max-w-6xl px-4 py-16 text-center text-ink/70"
       role="status"
     >
       Le contenu est momentanément indisponible. Merci de réessayer dans un instant.
@@ -52,29 +63,30 @@ useSeoMeta({
     <template v-else-if="content">
       <!-- 2. Ressource gratuite en vedette -->
       <section v-if="content.featured" class="mx-auto max-w-5xl px-4 py-16">
-        <article class="grid items-center gap-8 rounded-2xl border border-teal-100 bg-white p-6 md:grid-cols-2 md:p-8">
+        <article class="grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft md:grid-cols-2 md:p-8">
           <img
             v-if="content.featured.coverUrl"
             :src="content.featured.coverUrl"
             :alt="content.featured.title"
             width="640"
             height="480"
-            class="aspect-[4/3] w-full rounded-xl object-cover"
+            class="aspect-[4/3] w-full rounded-2xl object-cover"
           />
           <div>
-            <p class="text-xs font-semibold uppercase tracking-wide text-brand-accent">
+            <p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent">
+              <span aria-hidden="true" class="h-px w-5 bg-orange-300"></span>
               Ressource gratuite
             </p>
-            <h2 class="mt-1 font-display text-2xl font-bold text-teal-900">
+            <h2 class="mt-2 font-display text-2xl font-bold text-ink">
               {{ content.featured.title }}
             </h2>
-            <p v-if="content.featured.description" class="mt-3 text-teal-700">
+            <p v-if="content.featured.description" class="mt-3 leading-relaxed text-ink/65">
               {{ content.featured.description }}
             </p>
 
             <!-- Gating email → inscription newsletter ; sinon téléchargement direct -->
             <div v-if="content.featured.requiresEmail" class="mt-6">
-              <p class="mb-3 text-sm text-teal-600">
+              <p class="mb-3 text-sm text-ink/60">
                 Recevez cette ressource en vous inscrivant à la newsletter :
               </p>
               <NewsletterForm />
@@ -84,25 +96,26 @@ useSeoMeta({
               :href="content.featured.downloadUrl"
               target="_blank"
               rel="noopener"
-              class="mt-6 inline-flex items-center rounded-full bg-teal-700 px-6 py-3 font-medium text-white hover:bg-teal-800"
+              class="mt-6 inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
             >
               Télécharger
+              <span aria-hidden="true">↓</span>
             </a>
           </div>
         </article>
       </section>
 
       <!-- 3 + 4. Filtres + grille d'articles -->
-      <section class="mx-auto max-w-6xl px-4 pb-20">
+      <section class="mx-auto max-w-6xl px-4 pb-24" :class="content.featured ? '' : 'pt-4'">
         <SectionHeading title="Articles" />
 
         <div v-if="content.filters.length" class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filtrer par thème">
           <button
             type="button"
-            class="rounded-full border px-4 py-1.5 text-sm transition-colors"
+            class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
             :class="activeGroup === null
-              ? 'border-teal-700 bg-teal-700 text-white'
-              : 'border-teal-200 text-teal-700 hover:bg-teal-50'"
+              ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
+              : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
             :aria-pressed="activeGroup === null"
             @click="activeGroup = null"
           >
@@ -112,10 +125,10 @@ useSeoMeta({
             v-for="filter in content.filters"
             :key="filter.group"
             type="button"
-            class="rounded-full border px-4 py-1.5 text-sm transition-colors"
+            class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
             :class="activeGroup === filter.group
-              ? 'border-teal-700 bg-teal-700 text-white'
-              : 'border-teal-200 text-teal-700 hover:bg-teal-50'"
+              ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
+              : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
             :aria-pressed="activeGroup === filter.group"
             @click="activeGroup = filter.group"
           >
@@ -126,16 +139,54 @@ useSeoMeta({
         <!-- État vide (0 article) : pas de section cassée -->
         <p
           v-if="!visibleArticles.length"
-          class="mt-10 text-center text-teal-700"
+          class="mt-12 text-center text-ink/65"
           role="status"
         >
           Les premiers articles arrivent bientôt. En attendant, abonnez-vous à
-          <NuxtLink to="/newsletter" class="underline">la newsletter</NuxtLink>.
+          <NuxtLink to="/newsletter" class="text-teal-700 underline">la newsletter</NuxtLink>.
         </p>
 
-        <div v-else class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <ArticleCard v-for="article in visibleArticles" :key="article.slug" :article="article" />
+        <div v-else class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ArticleCard v-for="article in pagedArticles" :key="article.slug" :article="article" />
         </div>
+
+        <!-- Pagination (masquée s'il n'y a qu'une page) -->
+        <nav
+          v-if="pageCount > 1"
+          class="mt-12 flex items-center justify-center gap-2"
+          aria-label="Pagination des articles"
+        >
+          <button
+            type="button"
+            class="inline-flex h-10 items-center rounded-full border border-ink/15 px-4 text-sm font-medium text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
+            :disabled="page === 1"
+            @click="goToPage(page - 1)"
+          >
+            <span aria-hidden="true">←</span><span class="sr-only">Page précédente</span>
+          </button>
+          <button
+            v-for="n in pageCount"
+            :key="n"
+            type="button"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium transition-colors"
+            :class="n === page
+              ? 'bg-teal-700 text-white shadow-soft'
+              : 'border border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
+            :aria-current="n === page ? 'page' : undefined"
+            :aria-label="`Page ${n}`"
+            @click="goToPage(n)"
+          >
+            {{ n }}
+          </button>
+          <button
+            type="button"
+            class="inline-flex h-10 items-center rounded-full border border-ink/15 px-4 text-sm font-medium text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
+            :disabled="page === pageCount"
+            @click="goToPage(page + 1)"
+          >
+            <span aria-hidden="true">→</span><span class="sr-only">Page suivante</span>
+          </button>
+        </nav>
       </section>
     </template>
   </div>

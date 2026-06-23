@@ -46,16 +46,18 @@ useSeoMeta({
 </script>
 
 <template>
-  <section class="mx-auto max-w-2xl px-4 py-20 text-center">
-    <p class="text-5xl" aria-hidden="true">{{ state.icon }}</p>
-    <h1 class="mt-6 font-display text-3xl font-bold text-teal-900">{{ state.title }}</h1>
-    <p class="mt-4 text-teal-700">{{ state.body }}</p>
+  <section class="mx-auto max-w-2xl px-4 py-24">
+    <div class="rounded-3xl border border-ink/5 bg-white p-10 text-center shadow-soft sm:p-12">
+      <p class="text-5xl" aria-hidden="true">{{ state.icon }}</p>
+      <h1 class="mt-6 font-display text-3xl font-bold text-ink">{{ state.title }}</h1>
+      <p class="mt-4 leading-relaxed text-ink/70">{{ state.body }}</p>
 
-    <NuxtLink
-      :to="state.retry ? '/newsletter' : '/'"
-      class="mt-8 inline-flex items-center rounded-full bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800"
-    >
-      {{ state.retry ? "Se réinscrire" : "Retour à l'accueil" }}
-    </NuxtLink>
+      <NuxtLink
+        :to="state.retry ? '/newsletter' : '/'"
+        class="mt-8 inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
+      >
+        {{ state.retry ? "Se réinscrire" : "Retour à l'accueil" }}
+      </NuxtLink>
+    </div>
   </section>
 </template>

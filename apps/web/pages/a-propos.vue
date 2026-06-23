@@ -23,15 +23,11 @@ useSeoMeta({
 <template>
   <div>
     <!-- 1. Accroche (h1) -->
-    <section class="bg-teal-50">
-      <div class="mx-auto max-w-3xl px-4 py-16 text-center sm:py-20">
-        <h1 class="font-display text-3xl font-bold text-teal-900 sm:text-4xl">{{ heading }}</h1>
-      </div>
-    </section>
+    <PageHero :title="heading" eyebrow="À propos" variant="neutral" />
 
     <p
       v-if="error"
-      class="mx-auto max-w-6xl px-4 py-16 text-center text-teal-700"
+      class="mx-auto max-w-6xl px-4 py-16 text-center text-ink/70"
       role="status"
     >
       Le contenu est momentanément indisponible. Merci de réessayer dans un instant.
@@ -39,66 +35,80 @@ useSeoMeta({
 
     <template v-else-if="content">
       <!-- 2. Mon histoire (photo gauche / texte droite desktop) -->
-      <section v-if="content.story" class="mx-auto max-w-6xl px-4 py-16">
-        <div class="grid items-start gap-8 md:grid-cols-2">
-          <img
-            v-if="content.story.photo"
-            :src="content.story.photo.url"
-            :alt="content.story.photo.alt"
-            loading="lazy"
-            decoding="async"
-            class="aspect-[4/5] w-full rounded-2xl object-cover"
-          />
+      <section v-if="content.story?.bodyHtml || content.story?.photo" class="mx-auto max-w-6xl px-4 py-20">
+        <div class="grid items-start gap-10 md:grid-cols-2">
+          <div v-if="content.story.photo" class="relative">
+            <span
+              aria-hidden="true"
+              class="absolute -left-3 -top-3 -z-10 h-full w-full rounded-3xl bg-teal-100"
+            ></span>
+            <img
+              :src="content.story.photo.url"
+              :alt="content.story.photo.alt"
+              loading="lazy"
+              decoding="async"
+              class="aspect-[4/5] w-full rounded-3xl object-cover shadow-lift"
+            />
+          </div>
           <div :class="content.story.photo ? '' : 'md:col-span-2 mx-auto max-w-2xl'">
-            <SectionHeading title="Mon histoire" eyebrow="À propos" />
-            <RichText :html="content.story.bodyHtml" class="mt-4" />
+            <SectionHeading title="Mon histoire" eyebrow="Parcours" />
+            <RichText :html="content.story.bodyHtml" class="mt-5" />
           </div>
         </div>
       </section>
 
       <!-- 3. Pourquoi L'Encre Humaine -->
-      <section v-if="content.why" class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-16">
+      <section v-if="content.why?.bodyHtml" class="bg-teal-50">
+        <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading :title="content.why.title || 'Pourquoi L\'Encre Humaine'" />
-          <RichText :html="content.why.bodyHtml" class="mt-4" />
+          <RichText :html="content.why.bodyHtml" class="mt-5" />
         </div>
       </section>
 
-      <!-- 4. Le poulpe (ton avec humour) -->
-      <section v-if="content.octopusHtml" class="mx-auto max-w-3xl px-4 py-16">
-        <SectionHeading title="Le poulpe" eyebrow="🐙" />
-        <RichText :html="content.octopusHtml" class="mt-4" />
+      <!-- 4. Le poulpe (ton avec humour) — clin d'œil à la mascotte -->
+      <section v-if="content.octopusHtml" class="relative isolate overflow-hidden">
+        <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-20 md:grid-cols-[auto_1fr]">
+          <OctopusMark class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
+          <div>
+            <SectionHeading title="Le poulpe" eyebrow="Pourquoi ce nom" />
+            <RichText :html="content.octopusHtml" class="mt-5" />
+          </div>
+        </div>
       </section>
 
       <!-- 5. Ce en quoi je crois -->
-      <section v-if="content.convictions.length" class="bg-teal-50">
-        <div class="mx-auto max-w-6xl px-4 py-16">
+      <section v-if="content.convictions.length" class="bg-paper-2">
+        <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading title="Ce en quoi je crois" align="center" />
-          <ul class="mt-8 grid gap-6 sm:grid-cols-2">
+          <ul class="mt-10 grid gap-6 sm:grid-cols-2">
             <li
               v-for="(conviction, i) in content.convictions"
               :key="i"
-              class="rounded-2xl border border-teal-100 bg-white p-6"
+              class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
             >
-              <h3 v-if="conviction.title" class="font-display text-lg font-semibold text-teal-900">
+              <h3 v-if="conviction.title" class="font-display text-lg font-semibold text-ink">
                 {{ conviction.title }}
               </h3>
-              <p v-if="conviction.body" class="mt-2 text-teal-700">{{ conviction.body }}</p>
+              <p v-if="conviction.body" class="mt-2 leading-relaxed text-ink/65">{{ conviction.body }}</p>
             </li>
           </ul>
         </div>
       </section>
 
       <!-- 6. Ma façon de travailler -->
-      <section v-if="content.howIWork.length" class="mx-auto max-w-3xl px-4 py-16">
+      <section v-if="content.howIWork.length" class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading title="Ma façon de travailler" />
-        <ul class="mt-6 space-y-3">
+        <ul class="mt-8 space-y-3">
           <li
             v-for="(step, i) in content.howIWork"
             :key="i"
-            class="flex gap-3 text-teal-700"
+            class="flex items-start gap-3 text-ink/80"
           >
-            <span class="mt-1 text-brand-accent" aria-hidden="true">→</span>
+            <span
+              class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-sm font-bold text-orange-600"
+              aria-hidden="true"
+              >→</span
+            >
             <span>{{ step }}</span>
           </li>
         </ul>
@@ -106,16 +116,16 @@ useSeoMeta({
 
       <!-- 7. Ce que je ne fais pas -->
       <section v-if="content.whatIDontDoHtml" class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-16">
+        <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading title="Ce que je ne fais pas" />
-          <RichText :html="content.whatIDontDoHtml" class="mt-4" />
+          <RichText :html="content.whatIDontDoHtml" class="mt-5" />
         </div>
       </section>
 
       <!-- 8. Portrait + citation -->
       <section
-        v-if="content.portrait"
-        class="mx-auto max-w-4xl px-4 py-16"
+        v-if="content.portrait?.quote || content.portrait?.photo"
+        class="mx-auto max-w-4xl px-4 py-20"
         aria-label="Portrait"
       >
         <figure class="flex flex-col items-center gap-6 text-center">
@@ -125,18 +135,18 @@ useSeoMeta({
             :alt="content.portrait.photo.alt"
             loading="lazy"
             decoding="async"
-            class="h-40 w-40 rounded-full object-cover"
+            class="h-40 w-40 rounded-full object-cover shadow-lift ring-4 ring-teal-100"
           />
           <blockquote v-if="content.portrait.quote" class="max-w-2xl">
-            <p class="font-display text-xl text-teal-900 before:content-['«_'] after:content-['_»']">
-              {{ content.portrait.quote }}
+            <p class="font-display text-2xl leading-relaxed text-ink">
+              «&#160;{{ content.portrait.quote }}&#160;»
             </p>
           </blockquote>
         </figure>
       </section>
 
       <!-- 9. CTA -->
-      <section class="mx-auto max-w-6xl px-4 pb-16">
+      <section class="mx-auto max-w-6xl px-4 pb-20">
         <CtaBlock
           title="Travaillons ensemble"
           :cta-label="content.ctaLabel"

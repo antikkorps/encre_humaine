@@ -40,24 +40,25 @@ useSeoMeta({
 </script>
 
 <template>
-  <article v-if="doc" class="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-    <h1 class="font-display text-3xl font-bold text-teal-900 sm:text-4xl">{{ doc.title }}</h1>
-    <p v-if="updatedLabel" class="mt-2 text-sm text-teal-500">
-      Dernière mise à jour : {{ updatedLabel }}
-    </p>
+  <div v-if="doc" class="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+    <div class="lg:flex lg:justify-center lg:gap-12">
+      <article class="w-full max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent">Informations</p>
+        <h1 class="mt-2 font-display text-4xl font-bold text-ink sm:text-5xl">{{ doc.title }}</h1>
+        <p v-if="updatedLabel" class="mt-3 text-sm text-ink/45">
+          Dernière mise à jour : {{ updatedLabel }}
+        </p>
 
-    <!-- Table des matières (docs longs) -->
-    <nav v-if="showToc" class="mt-8 rounded-2xl border border-teal-100 bg-teal-50 p-5" aria-label="Sommaire">
-      <p class="font-display font-semibold text-teal-800">Sommaire</p>
-      <ol class="mt-3 space-y-1 text-sm">
-        <li v-for="entry in doc.toc" :key="entry.id">
-          <a :href="`#${entry.id}`" class="text-teal-700 underline-offset-2 hover:underline">
-            {{ entry.text }}
-          </a>
-        </li>
-      </ol>
-    </nav>
+        <RichText v-if="doc.html" :html="doc.html" class="mt-10" />
+      </article>
 
-    <RichText v-if="doc.html" :html="doc.html" class="mt-8" />
-  </article>
+      <!-- Sommaire fixe (navigation rapide) — desktop, docs longs uniquement. -->
+      <aside v-if="showToc" class="hidden w-56 shrink-0 lg:block">
+        <TableOfContents :items="doc.toc" class="sticky top-24" />
+      </aside>
+    </div>
+
+    <!-- Sommaire flottant (mobile) — bouton bas-droite qui déplie les sections. -->
+    <TableOfContents v-if="showToc" :items="doc.toc" mobile class="lg:hidden" />
+  </div>
 </template>

@@ -61,58 +61,84 @@ if (article.value) {
 </script>
 
 <template>
-  <article v-if="article" class="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-    <nav class="mb-6 text-sm text-teal-600" aria-label="Fil d'Ariane">
-      <NuxtLink to="/ressources" class="underline-offset-2 hover:underline">Ressources</NuxtLink>
-    </nav>
+  <div v-if="article" class="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+    <!-- Colonne principale centrée + aside sommaire à droite (groupe centré). -->
+    <div class="lg:flex lg:justify-center lg:gap-12">
+      <div class="w-full max-w-3xl">
+        <nav class="mb-6 text-sm font-medium text-teal-700" aria-label="Fil d'Ariane">
+          <NuxtLink to="/ressources" class="underline-offset-2 hover:underline">← Ressources</NuxtLink>
+        </nav>
 
-    <!-- 1. En-tête -->
-    <header>
-      <p
-        v-if="article.category"
-        class="text-xs font-semibold uppercase tracking-wide text-brand-accent"
-      >
-        {{ article.category.name }}
-      </p>
-      <h1 class="mt-1 font-display text-3xl font-bold text-teal-900 sm:text-4xl">
-        {{ article.title }}
-      </h1>
-      <p class="mt-3 flex items-center gap-2 text-sm text-teal-500">
-        <time v-if="publishedLabel" :datetime="article.publishedAt ?? undefined">
-          {{ publishedLabel }}
-        </time>
-        <span v-if="publishedLabel && article.readingTime" aria-hidden="true">·</span>
-        <span v-if="article.readingTime">{{ article.readingTime }} min de lecture</span>
-      </p>
-      <img
-        v-if="article.cover"
-        :src="article.cover.url"
-        :alt="article.cover.alt"
-        width="768"
-        height="432"
-        class="mt-6 aspect-video w-full rounded-2xl object-cover"
-      />
-    </header>
+        <!-- 1. En-tête -->
+        <article>
+          <header>
+          <p
+            v-if="article.category"
+            class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent"
+          >
+            <span aria-hidden="true" class="h-px w-5 bg-orange-300"></span>
+            {{ article.category.name }}
+          </p>
+          <h1 class="mt-2 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
+            {{ article.title }}
+          </h1>
+          <p class="mt-4 flex items-center gap-2 text-sm text-ink/45">
+            <time v-if="publishedLabel" :datetime="article.publishedAt ?? undefined">
+              {{ publishedLabel }}
+            </time>
+            <span v-if="publishedLabel && article.readingTime" aria-hidden="true">·</span>
+            <span v-if="article.readingTime">{{ article.readingTime }} min de lecture</span>
+          </p>
+          <img
+            v-if="article.cover"
+            :src="article.cover.url"
+            :alt="article.cover.alt"
+            width="768"
+            height="432"
+            class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lift"
+          />
+        </header>
 
-    <!-- 2. Corps (rich text assaini) -->
-    <RichText v-if="article.bodyHtml" :html="article.bodyHtml" class="mt-8" />
+          <!-- 2. Corps (rich text assaini, h2 ancrés) -->
+          <RichText v-if="article.bodyHtml" :html="article.bodyHtml" class="mt-10" />
+        </article>
 
-    <!-- 3. Encart newsletter -->
-    <div class="mt-12">
-      <CtaBlock
-        title="Envie d'aller plus loin ?"
-        description="Recevez « Le Fil » : des outils concrets, sans bullshit, deux fois par mois."
-        cta-label="S'abonner à la newsletter"
-        to="/newsletter"
-      />
+        <!-- 3. Encart newsletter — dans la colonne principale (aligné au corps) -->
+        <div class="mt-14">
+          <CtaBlock
+            title="Envie d'aller plus loin ?"
+            description="Recevez « Le Fil » : des outils concrets, sans bullshit, deux fois par mois."
+            cta-label="S'abonner à la newsletter"
+            to="/newsletter"
+          />
+        </div>
+      </div>
+
+      <!-- Sommaire fixe (navigation rapide) — desktop, masqué si pas de h2. -->
+      <aside v-if="article.toc.length" class="hidden w-56 shrink-0 lg:block">
+        <TableOfContents
+          :items="article.toc"
+          :reading-time="article.readingTime"
+          class="sticky top-24"
+        />
+      </aside>
     </div>
+
+    <!-- Sommaire flottant (mobile) — bouton bas-droite qui déplie les sections. -->
+    <TableOfContents
+      v-if="article.toc.length"
+      :items="article.toc"
+      :reading-time="article.readingTime"
+      mobile
+      class="lg:hidden"
+    />
 
     <!-- 4. Articles liés -->
     <section v-if="article.related.length" class="mt-16">
       <SectionHeading title="À lire aussi" />
-      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <ArticleCard v-for="rel in article.related" :key="rel.slug" :article="rel" />
       </div>
     </section>
-  </article>
+  </div>
 </template>

@@ -23,21 +23,16 @@ useSeoMeta({
 <template>
   <div>
     <!-- 1. Accroche humaine (h1) -->
-    <section class="bg-teal-50">
-      <div class="mx-auto max-w-3xl px-4 py-16 text-center sm:py-20">
-        <h1 class="font-display text-3xl font-bold text-teal-900 sm:text-4xl">{{ heading }}</h1>
-        <p
-          v-if="content?.accrocheBody"
-          class="mx-auto mt-4 max-w-2xl whitespace-pre-line text-teal-700"
-        >
-          {{ content.accrocheBody }}
-        </p>
-      </div>
-    </section>
+    <PageHero
+      :title="heading"
+      eyebrow="Contact"
+      :body="content?.accrocheBody ?? undefined"
+      variant="teal"
+    />
 
     <p
       v-if="error"
-      class="mx-auto max-w-6xl px-4 py-16 text-center text-teal-700"
+      class="mx-auto max-w-6xl px-4 py-16 text-center text-ink/70"
       role="status"
     >
       Le contenu est momentanément indisponible. Merci de réessayer dans un instant.
@@ -45,8 +40,8 @@ useSeoMeta({
 
     <template v-else-if="content">
       <!-- 2. Deux façons de me contacter -->
-      <section class="mx-auto max-w-6xl px-4 py-16">
-        <div class="grid gap-10 md:grid-cols-2">
+      <section class="mx-auto max-w-6xl px-4 py-20">
+        <div class="grid gap-8 md:grid-cols-2 md:gap-10">
           <!-- Appel découverte (masqué si pas d'URL de RDV) -->
           <div v-if="content.booking">
             <SectionHeading title="Réserver un appel découverte" eyebrow="Prise de RDV" />
@@ -58,11 +53,11 @@ useSeoMeta({
           <!-- Message -->
           <div :class="content.booking ? '' : 'mx-auto w-full max-w-xl'">
             <SectionHeading title="M'envoyer un message" eyebrow="Formulaire" />
-            <p class="mt-2 text-sm text-teal-600">
+            <p class="mt-2 text-sm text-ink/55">
               Vos données servent uniquement à traiter votre demande
-              (<NuxtLink to="/confidentialite" class="underline">confidentialité</NuxtLink>).
+              (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
             </p>
-            <div class="mt-6">
+            <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
               <ContactForm />
             </div>
           </div>
@@ -71,41 +66,41 @@ useSeoMeta({
 
       <!-- 3. Ce qui se passe ensuite -->
       <section v-if="content.nextSteps.length || content.responseTimeNote" class="bg-teal-50">
-        <div class="mx-auto max-w-5xl px-4 py-16">
+        <div class="mx-auto max-w-5xl px-4 py-20">
           <SectionHeading title="Ce qui se passe ensuite" align="center" />
           <ol
             v-if="content.nextSteps.length"
-            class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             <li
               v-for="(step, i) in content.nextSteps"
               :key="i"
-              class="rounded-2xl border border-teal-100 bg-white p-6"
+              class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft"
             >
               <span
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-teal-700 font-display font-bold text-white"
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-teal-700 font-display text-lg font-bold text-white"
                 aria-hidden="true"
               >
                 {{ step.number || i + 1 }}
               </span>
-              <h3 v-if="step.title" class="mt-3 font-display text-lg font-semibold text-teal-900">
+              <h3 v-if="step.title" class="mt-4 font-display text-lg font-semibold text-ink">
                 {{ step.title }}
               </h3>
-              <p v-if="step.description" class="mt-1 text-sm text-teal-700">
+              <p v-if="step.description" class="mt-1.5 text-sm leading-relaxed text-ink/65">
                 {{ step.description }}
               </p>
             </li>
           </ol>
-          <p v-if="content.responseTimeNote" class="mt-6 text-center text-sm text-teal-600">
+          <p v-if="content.responseTimeNote" class="mt-8 text-center text-sm text-ink/60">
             {{ content.responseTimeNote }}
           </p>
         </div>
       </section>
 
       <!-- 4. FAQ courte (scope=contact) -->
-      <section v-if="content.faq.length" class="mx-auto max-w-3xl px-4 py-16">
+      <section v-if="content.faq.length" class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading title="Questions fréquentes" align="center" />
-        <div class="mt-8">
+        <div class="mt-10">
           <FaqAccordion :items="content.faq" />
         </div>
       </section>
@@ -113,29 +108,31 @@ useSeoMeta({
       <!-- 5. Coordonnées directes -->
       <section
         v-if="content.contact.email || content.contact.linkedin || content.contact.location"
-        class="bg-teal-50"
+        class="bg-ink text-paper"
         aria-label="Coordonnées"
       >
         <div
-          class="mx-auto flex max-w-4xl flex-col items-center gap-3 px-4 py-12 text-center text-teal-700 sm:flex-row sm:justify-center sm:gap-8"
+          class="mx-auto flex max-w-4xl flex-col items-center gap-4 px-4 py-14 text-center sm:flex-row sm:justify-center sm:gap-10"
         >
           <a
             v-if="content.contact.email"
             :href="`mailto:${content.contact.email}`"
-            class="hover:text-teal-900"
+            class="inline-flex items-center gap-2 text-paper/85 transition-colors hover:text-teal-300"
           >
-            ✉️ {{ content.contact.email }}
+            <span aria-hidden="true">✉</span> {{ content.contact.email }}
           </a>
           <a
             v-if="content.contact.linkedin"
             :href="content.contact.linkedin"
             target="_blank"
             rel="noopener"
-            class="hover:text-teal-900"
+            class="inline-flex items-center gap-2 text-paper/85 transition-colors hover:text-teal-300"
           >
-            in LinkedIn
+            <span aria-hidden="true">in</span> LinkedIn
           </a>
-          <span v-if="content.contact.location">📍 {{ content.contact.location }}</span>
+          <span v-if="content.contact.location" class="inline-flex items-center gap-2 text-paper/85">
+            <span aria-hidden="true">📍</span> {{ content.contact.location }}
+          </span>
         </div>
       </section>
     </template>

@@ -91,8 +91,8 @@ if (product.value) {
 
 <template>
   <div v-if="product" class="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-    <nav class="mb-6 text-sm text-teal-600" aria-label="Fil d'Ariane">
-      <NuxtLink to="/boutique" class="underline-offset-2 hover:underline">Boutique</NuxtLink>
+    <nav class="mb-6 text-sm font-medium text-teal-700" aria-label="Fil d'Ariane">
+      <NuxtLink to="/boutique" class="underline-offset-2 hover:underline">← Boutique</NuxtLink>
     </nav>
 
     <div class="grid gap-10 md:grid-cols-2">
@@ -104,21 +104,21 @@ if (product.value) {
           :alt="product.name"
           width="800"
           height="600"
-          class="aspect-[4/3] w-full rounded-2xl border border-teal-100 object-cover"
+          class="aspect-[4/3] w-full rounded-3xl border border-ink/5 object-cover shadow-soft"
         />
         <div
           v-else
-          class="flex aspect-[4/3] w-full items-center justify-center rounded-2xl border border-teal-100 bg-teal-50 text-teal-400"
+          class="flex aspect-[4/3] w-full items-center justify-center rounded-3xl border border-ink/5 bg-teal-50 text-teal-300"
           aria-hidden="true"
         >
-          🐙
+          <OctopusMark class="h-24 w-24" />
         </div>
         <ul v-if="product.images.length > 1" class="mt-3 flex flex-wrap gap-2">
           <li v-for="(img, i) in product.images" :key="img">
             <button
               type="button"
-              class="overflow-hidden rounded-lg border-2"
-              :class="i === activeImage ? 'border-teal-600' : 'border-transparent'"
+              class="overflow-hidden rounded-xl border-2 transition-colors"
+              :class="i === activeImage ? 'border-teal-600' : 'border-transparent hover:border-teal-200'"
               :aria-label="`Voir le visuel ${i + 1}`"
               :aria-pressed="i === activeImage"
               @click="activeImage = i"
@@ -131,33 +131,34 @@ if (product.value) {
 
       <!-- Infos + achat -->
       <div>
-        <h1 class="font-display text-3xl font-bold text-teal-900">{{ product.name }}</h1>
-        <p v-if="product.tagline" class="mt-2 text-lg text-teal-700">{{ product.tagline }}</p>
+        <h1 class="font-display text-4xl font-bold text-ink">{{ product.name }}</h1>
+        <p v-if="product.tagline" class="mt-3 text-lg leading-relaxed text-ink/70">{{ product.tagline }}</p>
 
-        <p class="mt-4 font-display text-2xl font-bold text-teal-900">{{ priceLabel }}</p>
+        <p class="mt-5 font-display text-3xl font-bold text-teal-700">{{ priceLabel }}</p>
         <!-- Franchise en base de TVA (docs/06 §4, ADR #4) — près du prix. -->
-        <p class="mt-1 text-xs text-teal-500">TVA non applicable, art. 293 B du CGI.</p>
+        <p class="mt-1 text-xs text-ink/45">TVA non applicable, art. 293 B du CGI.</p>
 
         <!-- Achat direct -->
         <div class="mt-6 flex flex-wrap items-end gap-4">
           <div>
-            <label for="qty" class="block text-sm text-teal-600">Quantité</label>
+            <label for="qty" class="block text-sm text-ink/60">Quantité</label>
             <input
               id="qty"
               v-model.number="quantity"
               type="number"
               min="1"
               max="20"
-              class="mt-1 w-20 rounded-lg border border-teal-200 px-3 py-2 text-teal-900"
+              class="mt-1 w-20 rounded-xl border border-ink/15 bg-paper/40 px-3 py-2 text-ink transition-colors focus:border-teal-500 focus:bg-white"
             />
           </div>
           <button
             type="button"
-            class="inline-flex items-center rounded-full bg-teal-700 px-6 py-3 font-medium text-white transition-colors hover:bg-teal-800 disabled:opacity-60"
+            class="inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800 disabled:opacity-60"
             :disabled="buying"
             @click="buy"
           >
             {{ buying ? "Redirection…" : "Acheter" }}
+            <span v-if="!buying" aria-hidden="true">→</span>
           </button>
         </div>
         <p v-if="buyError" class="mt-3 text-sm text-orange-700" role="alert">
@@ -170,15 +171,15 @@ if (product.value) {
         <!-- Caractéristiques du jeu -->
         <dl
           v-if="product.gameDetails.length"
-          class="mt-8 divide-y divide-teal-100 rounded-2xl border border-teal-100"
+          class="mt-8 divide-y divide-ink/5 overflow-hidden rounded-2xl border border-ink/5 bg-white shadow-soft"
         >
           <div
             v-for="(detail, i) in product.gameDetails"
             :key="i"
             class="flex justify-between gap-4 px-5 py-3 text-sm"
           >
-            <dt class="text-teal-500">{{ detail.label }}</dt>
-            <dd class="text-right font-medium text-teal-900">{{ detail.value }}</dd>
+            <dt class="text-ink/50">{{ detail.label }}</dt>
+            <dd class="text-right font-medium text-ink">{{ detail.value }}</dd>
           </div>
         </dl>
       </div>

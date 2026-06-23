@@ -22,27 +22,25 @@ useSeoMeta({
 <template>
   <div>
     <!-- 1. Nom & promesse (h1) -->
-    <section class="bg-teal-50">
-      <div class="mx-auto max-w-3xl px-4 py-16 text-center sm:py-20">
-        <h1 class="font-display text-3xl font-bold text-teal-900 sm:text-4xl">{{ heading }}</h1>
+    <PageHero :title="heading" eyebrow="Le Fil" variant="teal">
+      <template v-if="content?.promiseHtml" #default>
         <RichText
-          v-if="content?.promiseHtml"
           :html="content.promiseHtml"
-          class="mx-auto mt-4 max-w-2xl text-teal-700"
+          class="mx-auto mt-5 max-w-2xl text-lg text-ink/70"
         />
-      </div>
-    </section>
+      </template>
+    </PageHero>
 
     <p
       v-if="error"
-      class="mx-auto max-w-6xl px-4 py-16 text-center text-teal-700"
+      class="mx-auto max-w-6xl px-4 py-16 text-center text-ink/70"
       role="status"
     >
       Le contenu est momentanément indisponible. Merci de réessayer dans un instant.
     </p>
 
     <template v-else-if="content">
-      <section class="mx-auto max-w-3xl px-4 py-16">
+      <section class="mx-auto max-w-4xl px-4 py-20">
         <div class="grid gap-10 md:grid-cols-2">
           <!-- 2. Ce que vous recevez -->
           <div v-if="content.whatYouReceive.length">
@@ -51,25 +49,30 @@ useSeoMeta({
               <li
                 v-for="(item, i) in content.whatYouReceive"
                 :key="i"
-                class="flex gap-3 text-teal-700"
+                class="flex items-start gap-3 text-ink/80"
               >
-                <span class="mt-1 text-teal-600" aria-hidden="true">✓</span>
+                <span
+                  class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-700"
+                  aria-hidden="true"
+                  >✓</span
+                >
                 <span>{{ item }}</span>
               </li>
             </ul>
             <!-- 4. Cadeau de bienvenue -->
             <p
               v-if="content.welcomeGiftLabel"
-              class="mt-6 rounded-xl bg-orange-50 px-4 py-3 text-sm text-teal-800"
+              class="mt-6 flex items-start gap-2 rounded-2xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-ink/80"
             >
-              🎁 Cadeau de bienvenue : <strong>{{ content.welcomeGiftLabel }}</strong>
+              <span aria-hidden="true">🎁</span>
+              <span>Cadeau de bienvenue : <strong class="text-orange-700">{{ content.welcomeGiftLabel }}</strong></span>
             </p>
           </div>
 
           <!-- 3. Formulaire -->
           <div :class="content.whatYouReceive.length ? '' : 'mx-auto w-full max-w-xl'">
-            <SectionHeading title="S'abonner" eyebrow="Le Fil" />
-            <div class="mt-6">
+            <SectionHeading title="S'abonner" eyebrow="Inscription" />
+            <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-7">
               <NewsletterForm />
             </div>
           </div>
@@ -78,12 +81,15 @@ useSeoMeta({
         <!-- 5. Aperçu d'un numéro -->
         <figure
           v-if="content.sample"
-          class="mt-12 rounded-2xl border border-teal-100 bg-white p-6"
+          class="mt-12 rounded-3xl border border-ink/5 bg-paper-2 p-7 shadow-soft"
         >
-          <figcaption v-if="content.sample.issueLabel" class="text-sm font-medium text-teal-500">
+          <figcaption
+            v-if="content.sample.issueLabel"
+            class="text-xs font-semibold uppercase tracking-[0.1em] text-brand-accent"
+          >
             {{ content.sample.issueLabel }}
           </figcaption>
-          <blockquote class="mt-2 whitespace-pre-line text-teal-700">
+          <blockquote class="mt-2 whitespace-pre-line italic leading-relaxed text-ink/75">
             {{ content.sample.excerpt }}
           </blockquote>
         </figure>

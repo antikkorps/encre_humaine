@@ -22,46 +22,56 @@ useSeoMeta({
 <template>
   <div>
     <!-- 1. Accroche empathique (h1) -->
-    <section class="bg-orange-600 text-white">
-      <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:py-20">
-        <h1 class="font-display text-3xl font-bold sm:text-4xl">{{ heading }}</h1>
-        <p
-          v-if="content?.accrocheBody"
-          class="mx-auto mt-4 max-w-2xl whitespace-pre-line text-orange-50"
-        >
-          {{ content.accrocheBody }}
-        </p>
-      </div>
-    </section>
+    <PageHero
+      :title="heading"
+      eyebrow="Particuliers"
+      :body="content?.accrocheBody ?? undefined"
+      variant="orange"
+    />
 
     <p
       v-if="error"
-      class="mx-auto max-w-6xl px-4 py-16 text-center text-teal-700"
+      class="mx-auto max-w-6xl px-4 py-16 text-center text-ink/70"
       role="status"
     >
       Le contenu est momentanément indisponible. Merci de réessayer dans un instant.
     </p>
 
     <template v-else-if="content">
+      <!-- Illustration d'accroche optionnelle (Directus) — masquée si absente. -->
+      <section v-if="content.accrochePhoto" class="mx-auto max-w-5xl px-4 pt-12">
+        <img
+          :src="content.accrochePhoto.url"
+          :alt="content.accrochePhoto.alt"
+          :width="content.accrochePhoto.width ?? undefined"
+          :height="content.accrochePhoto.height ?? undefined"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[16/7] w-full rounded-3xl object-cover shadow-lift"
+        />
+      </section>
+
       <!-- 2. Deux situations, deux offres -->
-      <section v-if="content.situations.length" class="mx-auto max-w-6xl px-4 py-16">
+      <section v-if="content.situations.length" class="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading title="Où en êtes-vous ?" eyebrow="Accompagnement" />
-        <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <div class="mt-10 grid gap-6 md:grid-cols-2">
           <article
             v-for="(situation, i) in content.situations"
             :key="i"
-            class="flex flex-col rounded-2xl border border-orange-100 bg-orange-50/50 p-6"
+            class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
           >
-            <h2 class="font-display text-xl font-bold text-teal-900">{{ situation.title }}</h2>
-            <p v-if="situation.body" class="mt-3 flex-1 whitespace-pre-line text-teal-700">
+            <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-orange-400"></span>
+            <h2 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h2>
+            <p v-if="situation.body" class="mt-3 flex-1 whitespace-pre-line leading-relaxed text-ink/65">
               {{ situation.body }}
             </p>
             <NuxtLink
               v-if="situation.ctaLabel"
               :to="situation.ctaLink"
-              class="mt-5 inline-flex w-fit items-center rounded-full bg-orange-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-orange-700"
+              class="mt-6 inline-flex w-fit items-center gap-1.5 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-orange-600"
             >
               {{ situation.ctaLabel }}
+              <span aria-hidden="true">→</span>
             </NuxtLink>
           </article>
         </div>
@@ -69,26 +79,26 @@ useSeoMeta({
 
       <!-- 3. Comment je travaille (rich text assaini) -->
       <section v-if="content.howIWorkHtml" class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-16">
+        <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading title="Comment je travaille" />
-          <RichText :html="content.howIWorkHtml" class="mt-4" />
+          <RichText :html="content.howIWorkHtml" class="mt-5" />
         </div>
       </section>
 
       <!-- 4. Témoignage — masqué si vide -->
       <section
         v-if="content.testimonial"
-        class="mx-auto max-w-3xl px-4 py-16"
+        class="mx-auto max-w-3xl px-4 py-20"
         aria-label="Témoignage"
       >
         <TestimonialCard :testimonial="content.testimonial" />
       </section>
 
       <!-- 5. FAQ (faq_items scope=b2c) -->
-      <section v-if="content.faq.length" class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-16">
+      <section v-if="content.faq.length" class="bg-paper-2">
+        <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading title="Questions fréquentes" align="center" />
-          <div class="mt-8">
+          <div class="mt-10">
             <FaqAccordion :items="content.faq" />
           </div>
         </div>
