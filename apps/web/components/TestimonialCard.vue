@@ -14,13 +14,21 @@ const attribution = computed(() => {
 </script>
 
 <template>
-  <figure class="flex h-full flex-col rounded-2xl border border-teal-100 bg-white p-6">
-    <blockquote class="flex-1 text-teal-800">
-      <p class="before:content-['«_'] after:content-['_»']">{{ testimonial.quote }}</p>
+  <figure
+    class="relative flex h-full flex-col rounded-3xl border border-ink/5 bg-white p-7 shadow-soft sm:p-8"
+  >
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute right-6 top-2 font-display text-7xl leading-none text-sand-300/80"
+    >
+      &rdquo;
+    </span>
+    <blockquote class="relative flex-1 font-display text-lg leading-relaxed text-ink sm:text-xl">
+      <p>«&#160;{{ testimonial.quote }}&#160;»</p>
     </blockquote>
-    <figcaption class="mt-4 text-sm">
-      <span class="font-semibold text-teal-900">{{ attribution }}</span>
-      <span v-if="testimonial.context" class="mt-1 block text-teal-600">
+    <figcaption class="mt-5 text-sm">
+      <span class="font-semibold text-teal-700">{{ attribution }}</span>
+      <span v-if="testimonial.context" class="mt-1 block text-ink/55">
         {{ testimonial.context }}
       </span>
     </figcaption>

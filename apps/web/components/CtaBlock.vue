@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Bloc d'appel à l'action — docs/00-global.md (CTA final de page).
-// `variant` aligne l'accent sur le public : teal (organisations) / orange (particuliers).
+// Panneau « encre » sombre et illustré. `variant` aligne l'accent du bouton sur
+// le public : teal/papier (organisations) / orange (particuliers).
 const props = withDefaults(
   defineProps<{
     title: string;
@@ -12,28 +13,33 @@ const props = withDefaults(
   { variant: "teal" },
 );
 
-const surface = computed(() => (props.variant === "orange" ? "bg-orange-50" : "bg-teal-50"));
 const button = computed(() =>
   props.variant === "orange"
-    ? "bg-orange-600 text-white hover:bg-orange-700"
-    : "bg-teal-700 text-white hover:bg-teal-800",
+    ? "bg-orange-500 text-white hover:bg-orange-600"
+    : "bg-paper text-ink hover:bg-white",
 );
 </script>
 
 <template>
-  <section :class="surface" class="rounded-2xl px-6 py-12 text-center">
-    <h2 class="font-display text-2xl font-bold text-teal-900 sm:text-3xl">
+  <section
+    class="bg-ink-gradient relative isolate overflow-hidden rounded-3xl px-6 py-14 text-center shadow-lift sm:px-12 sm:py-16"
+  >
+    <InkBlob class="absolute -right-12 -top-16 -z-10 h-56 w-56 text-teal-500/20" />
+    <InkBlob class="absolute -bottom-20 -left-10 -z-10 h-52 w-52 text-orange-400/15" />
+
+    <h2 class="font-display text-3xl font-bold text-paper sm:text-4xl">
       {{ title }}
     </h2>
-    <p v-if="description" class="mx-auto mt-3 max-w-2xl text-teal-700">
+    <p v-if="description" class="mx-auto mt-4 max-w-2xl text-paper/75">
       {{ description }}
     </p>
     <NuxtLink
       :to="to"
-      class="mt-6 inline-flex items-center rounded-full px-6 py-3 font-medium transition-colors"
+      class="mt-8 inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold shadow-soft transition-colors"
       :class="button"
     >
       {{ ctaLabel }}
+      <span aria-hidden="true">→</span>
     </NuxtLink>
   </section>
 </template>

@@ -69,27 +69,28 @@ onMounted(() => {
 
 <template>
   <div>
-    <p v-if="intro" class="mb-4 text-teal-700">{{ intro }}</p>
+    <p v-if="intro" class="mb-4 text-ink/70">{{ intro }}</p>
 
     <ClientOnly>
       <div v-if="thirdParty" ref="container" style="min-width: 320px; height: 700px" />
 
       <div
         v-else
-        class="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-teal-200 bg-teal-50 px-6 py-12 text-center"
+        class="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-teal-300 bg-teal-50 px-6 py-12 text-center"
       >
-        <p class="max-w-md text-sm text-teal-700">
+        <OctopusMark class="h-12 w-12 text-teal-400" />
+        <p class="max-w-md text-sm text-ink/70">
           La prise de rendez-vous est fournie par un service tiers.
           Autorisez son chargement pour afficher le calendrier.
         </p>
         <button
           type="button"
-          class="rounded-full bg-teal-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-teal-800"
+          class="rounded-full bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
           @click="acceptThirdParty"
         >
           Autoriser et afficher le calendrier
         </button>
-        <a :href="url" target="_blank" rel="noopener" class="text-sm text-teal-600 underline">
+        <a :href="url" target="_blank" rel="noopener" class="text-sm text-teal-700 underline">
           Ou ouvrir la page de réservation dans un nouvel onglet
         </a>
       </div>

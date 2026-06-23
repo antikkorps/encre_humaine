@@ -70,9 +70,9 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div v-if="status === 'success'" role="status" class="rounded-2xl border border-teal-100 bg-teal-50 p-6 text-teal-800">
-    <p class="font-medium">Presque terminé !</p>
-    <p class="mt-1 text-sm">
+  <div v-if="status === 'success'" role="status" class="rounded-2xl border border-teal-200 bg-teal-50 p-6 text-ink">
+    <p class="font-display text-lg font-semibold text-teal-700">Presque terminé !</p>
+    <p class="mt-1 text-sm text-ink/70">
       Vérifiez votre boîte mail et cliquez sur le lien de confirmation pour finaliser l'inscription.
     </p>
   </div>
@@ -82,36 +82,36 @@ async function onSubmit() {
       {{ formError }}
     </p>
 
-    <div class="flex flex-col gap-3 sm:flex-row">
-      <div class="sm:w-1/3">
-        <label for="nf-firstName" class="sr-only">Prénom (optionnel)</label>
-        <input
-          id="nf-firstName"
-          v-model="form.firstName"
-          type="text"
-          autocomplete="given-name"
-          placeholder="Prénom (optionnel)"
-          class="w-full rounded-lg border border-teal-200 px-3 py-2 focus:border-teal-500"
-        />
-      </div>
-      <div class="flex-1">
-        <label for="nf-email" class="sr-only">E-mail</label>
-        <input
-          id="nf-email"
-          v-model="form.email"
-          type="email"
-          autocomplete="email"
-          required
-          placeholder="vous@exemple.com"
-          :aria-invalid="!!errors.email"
-          :aria-describedby="errors.email ? 'nf-email-err' : undefined"
-          class="w-full rounded-lg border border-teal-200 px-3 py-2 focus:border-teal-500"
-        />
-      </div>
+    <div>
+      <label for="nf-firstName" class="block text-sm font-medium text-ink">
+        Prénom <span class="font-normal text-ink/45">(optionnel)</span>
+      </label>
+      <input
+        id="nf-firstName"
+        v-model="form.firstName"
+        type="text"
+        autocomplete="given-name"
+        placeholder="Votre prénom"
+        class="mt-1 w-full rounded-xl border border-ink/15 bg-paper/40 px-3.5 py-2.5 text-ink transition-colors focus:border-teal-500 focus:bg-white"
+      />
     </div>
-    <p v-if="errors.email" id="nf-email-err" role="alert" class="text-sm text-orange-700">
-      {{ errors.email }}
-    </p>
+    <div>
+      <label for="nf-email" class="block text-sm font-medium text-ink">E-mail</label>
+      <input
+        id="nf-email"
+        v-model="form.email"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="vous@exemple.com"
+        :aria-invalid="!!errors.email"
+        :aria-describedby="errors.email ? 'nf-email-err' : undefined"
+        class="mt-1 w-full rounded-xl border border-ink/15 bg-paper/40 px-3.5 py-2.5 text-ink transition-colors focus:border-teal-500 focus:bg-white"
+      />
+      <p v-if="errors.email" id="nf-email-err" role="alert" class="mt-1 text-sm text-orange-700">
+        {{ errors.email }}
+      </p>
+    </div>
 
     <!-- Honeypot -->
     <div class="absolute -left-[9999px]" aria-hidden="true">
@@ -126,12 +126,12 @@ async function onSubmit() {
     <button
       type="submit"
       :disabled="status === 'submitting' || (!!siteKey && !ready)"
-      class="rounded-full bg-teal-700 px-6 py-3 font-medium text-white hover:bg-teal-800 disabled:opacity-60"
+      class="inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800 disabled:opacity-60"
     >
       {{ status === "submitting" ? "Inscription…" : "Je m'abonne" }}
     </button>
 
-    <p class="text-xs text-teal-600">
+    <p class="text-xs text-ink/55">
       Double opt-in, désinscription en un clic. Vos données ne sont jamais cédées.
     </p>
   </form>

@@ -18,32 +18,33 @@ const publishedLabel = computed(() => {
 </script>
 
 <template>
-  <article class="relative flex h-full flex-col overflow-hidden rounded-2xl border border-teal-100 bg-white transition-shadow hover:shadow-md">
+  <article class="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift">
     <!-- @nuxt/image + provider Directus = phase 1 ; <img> dimensionné pour limiter le CLS. -->
-    <img
-      v-if="article.coverImage"
-      :src="article.coverImage"
-      :alt="article.coverAlt ?? ''"
-      width="640"
-      height="360"
-      loading="lazy"
-      decoding="async"
-      class="aspect-video w-full object-cover"
-    />
-    <div class="flex flex-1 flex-col p-5">
+    <div v-if="article.coverImage" class="overflow-hidden">
+      <img
+        :src="article.coverImage"
+        :alt="article.coverAlt ?? ''"
+        width="640"
+        height="360"
+        loading="lazy"
+        decoding="async"
+        class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    </div>
+    <div class="flex flex-1 flex-col p-6">
       <p
         v-if="article.categoryName"
-        class="text-xs font-semibold uppercase tracking-wide text-brand-accent"
+        class="text-xs font-semibold uppercase tracking-[0.1em] text-brand-accent"
       >
         {{ article.categoryName }}
       </p>
-      <h3 class="mt-1 font-display text-lg font-semibold text-teal-900">
+      <h3 class="mt-1.5 font-display text-xl font-semibold text-ink group-hover:text-teal-700">
         <NuxtLink :to="to" class="after:absolute after:inset-0">{{ article.title }}</NuxtLink>
       </h3>
-      <p v-if="article.excerpt" class="mt-2 flex-1 text-sm text-teal-700">
+      <p v-if="article.excerpt" class="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
         {{ article.excerpt }}
       </p>
-      <p class="mt-3 flex items-center gap-2 text-xs text-teal-500">
+      <p class="mt-4 flex items-center gap-2 text-xs text-ink/45">
         <time v-if="publishedLabel" :datetime="article.publishedAt">{{ publishedLabel }}</time>
         <span v-if="publishedLabel && article.readingTime" aria-hidden="true">·</span>
         <span v-if="article.readingTime">{{ article.readingTime }} min de lecture</span>

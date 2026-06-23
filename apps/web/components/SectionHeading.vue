@@ -17,19 +17,20 @@ withDefaults(
   <div :class="align === 'center' ? 'text-center' : ''">
     <p
       v-if="eyebrow"
-      class="text-sm font-semibold uppercase tracking-wide text-brand-accent"
+      class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent"
     >
+      <span aria-hidden="true" class="h-px w-6 bg-orange-300"></span>
       {{ eyebrow }}
     </p>
     <component
       :is="level === 3 ? 'h3' : 'h2'"
-      class="font-display text-2xl font-bold text-teal-900 sm:text-3xl"
+      class="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl"
     >
       {{ title }}
     </component>
     <p
       v-if="subtitle"
-      class="mt-3 max-w-2xl text-teal-700"
+      class="mt-3 max-w-2xl text-lg text-ink/70"
       :class="align === 'center' ? 'mx-auto' : ''"
     >
       {{ subtitle }}

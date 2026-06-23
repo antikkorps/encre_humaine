@@ -9,15 +9,18 @@ defineProps<{ stats: Stat[] }>();
 <template>
   <dl
     v-if="stats.length"
-    class="grid grid-cols-2 gap-6 sm:grid-cols-4"
+    class="flex flex-wrap justify-center gap-x-10 gap-y-8 sm:gap-x-16"
   >
-    <div v-for="(stat, i) in stats" :key="i" class="text-center">
+    <div v-for="(stat, i) in stats" :key="i" class="w-[40%] text-center sm:w-auto sm:min-w-[8rem]">
       <dt class="sr-only">{{ stat.label }}</dt>
       <dd>
-        <span class="block font-display text-3xl font-bold text-brand-accent">
+        <span
+          class="block font-display text-4xl font-bold text-teal-700 sm:text-5xl"
+        >
           {{ stat.value }}
         </span>
-        <span class="mt-1 block text-sm text-teal-700">{{ stat.label }}</span>
+        <span aria-hidden="true" class="mx-auto mt-2 block h-1 w-8 rounded-full bg-sand-400"></span>
+        <span class="mt-2 block text-sm font-medium text-ink/70">{{ stat.label }}</span>
       </dd>
     </div>
   </dl>

@@ -83,9 +83,9 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div v-if="status === 'success'" role="status" class="rounded-2xl border border-teal-100 bg-teal-50 p-6 text-teal-800">
-    <p class="font-medium">Merci, votre message est bien parti.</p>
-    <p class="mt-1 text-sm">Je vous réponds sous 48h ouvrées.</p>
+  <div v-if="status === 'success'" role="status" class="rounded-2xl border border-teal-200 bg-teal-50 p-6 text-ink">
+    <p class="font-display text-lg font-semibold text-teal-700">Merci, votre message est bien parti.</p>
+    <p class="mt-1 text-sm text-ink/70">Je vous réponds sous 48h ouvrées.</p>
   </div>
 
   <form v-else class="space-y-5" novalidate @submit.prevent="onSubmit">
@@ -94,7 +94,7 @@ async function onSubmit() {
     </p>
 
     <div>
-      <label for="cf-firstName" class="block text-sm font-medium text-teal-900">Prénom</label>
+      <label for="cf-firstName" class="block text-sm font-medium text-ink">Prénom</label>
       <input
         id="cf-firstName"
         v-model="form.firstName"
@@ -103,7 +103,7 @@ async function onSubmit() {
         required
         :aria-invalid="!!errors.firstName"
         :aria-describedby="errors.firstName ? 'cf-firstName-err' : undefined"
-        class="mt-1 w-full rounded-lg border border-teal-200 px-3 py-2 focus:border-teal-500"
+        class="mt-1 w-full rounded-xl border border-ink/15 bg-paper/40 px-3.5 py-2.5 text-ink transition-colors focus:border-teal-500 focus:bg-white"
       />
       <p v-if="errors.firstName" id="cf-firstName-err" role="alert" class="mt-1 text-sm text-orange-700">
         {{ errors.firstName }}
@@ -111,7 +111,7 @@ async function onSubmit() {
     </div>
 
     <div>
-      <label for="cf-email" class="block text-sm font-medium text-teal-900">E-mail</label>
+      <label for="cf-email" class="block text-sm font-medium text-ink">E-mail</label>
       <input
         id="cf-email"
         v-model="form.email"
@@ -120,7 +120,7 @@ async function onSubmit() {
         required
         :aria-invalid="!!errors.email"
         :aria-describedby="errors.email ? 'cf-email-err' : undefined"
-        class="mt-1 w-full rounded-lg border border-teal-200 px-3 py-2 focus:border-teal-500"
+        class="mt-1 w-full rounded-xl border border-ink/15 bg-paper/40 px-3.5 py-2.5 text-ink transition-colors focus:border-teal-500 focus:bg-white"
       />
       <p v-if="errors.email" id="cf-email-err" role="alert" class="mt-1 text-sm text-orange-700">
         {{ errors.email }}
@@ -128,13 +128,13 @@ async function onSubmit() {
     </div>
 
     <fieldset>
-      <legend class="text-sm font-medium text-teal-900">Vous êtes</legend>
+      <legend class="text-sm font-medium text-ink">Vous êtes</legend>
       <div class="mt-2 flex flex-wrap gap-4">
-        <label class="inline-flex items-center gap-2 text-sm text-teal-800">
+        <label class="inline-flex items-center gap-2 text-sm text-ink/80">
           <input v-model="form.audience" type="radio" value="organisation" name="audience" />
           Une organisation
         </label>
-        <label class="inline-flex items-center gap-2 text-sm text-teal-800">
+        <label class="inline-flex items-center gap-2 text-sm text-ink/80">
           <input v-model="form.audience" type="radio" value="particulier" name="audience" />
           Un particulier
         </label>
@@ -145,7 +145,7 @@ async function onSubmit() {
     </fieldset>
 
     <div>
-      <label for="cf-message" class="block text-sm font-medium text-teal-900">Votre message</label>
+      <label for="cf-message" class="block text-sm font-medium text-ink">Votre message</label>
       <textarea
         id="cf-message"
         v-model="form.message"
@@ -153,7 +153,7 @@ async function onSubmit() {
         required
         :aria-invalid="!!errors.message"
         :aria-describedby="errors.message ? 'cf-message-err' : undefined"
-        class="mt-1 w-full rounded-lg border border-teal-200 px-3 py-2 focus:border-teal-500"
+        class="mt-1 w-full rounded-xl border border-ink/15 bg-paper/40 px-3.5 py-2.5 text-ink transition-colors focus:border-teal-500 focus:bg-white"
       />
       <p v-if="errors.message" id="cf-message-err" role="alert" class="mt-1 text-sm text-orange-700">
         {{ errors.message }}
@@ -173,7 +173,7 @@ async function onSubmit() {
     <button
       type="submit"
       :disabled="status === 'submitting' || (!!siteKey && !ready)"
-      class="rounded-full bg-orange-600 px-6 py-3 font-medium text-white hover:bg-orange-700 disabled:opacity-60"
+      class="inline-flex items-center gap-1.5 rounded-full bg-orange-500 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-orange-600 disabled:opacity-60"
     >
       {{ status === "submitting" ? "Envoi…" : "Envoyer" }}
     </button>

@@ -11,25 +11,28 @@ const { decided, acceptThirdParty, refuseThirdParty } = useConsent();
       v-if="!decided"
       role="region"
       aria-label="Consentement aux contenus tiers"
-      class="fixed inset-x-0 bottom-0 z-50 border-t border-teal-100 bg-white/95 px-4 py-4 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur"
+      class="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-4xl rounded-2xl border border-ink/10 bg-paper/95 px-5 py-4 shadow-lift backdrop-blur sm:inset-x-4 sm:bottom-4"
     >
-      <div class="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-sm text-teal-800">
-          Ce site n'utilise aucun cookie de suivi. Certains contenus tiers
-          (prise de rendez-vous, paiement) nécessitent votre accord pour se charger.
-          <NuxtLink to="/confidentialite" class="underline">En savoir plus</NuxtLink>.
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p class="flex items-start gap-3 text-sm text-ink/80">
+          <OctopusMark class="mt-0.5 hidden h-6 w-6 flex-none text-teal-600 sm:block" />
+          <span>
+            Ce site n'utilise aucun cookie de suivi. Certains contenus tiers
+            (prise de rendez-vous, paiement) nécessitent votre accord pour se charger.
+            <NuxtLink to="/confidentialite" class="text-teal-700 underline">En savoir plus</NuxtLink>.
+          </span>
         </p>
         <div class="flex shrink-0 gap-2">
           <button
             type="button"
-            class="rounded-full px-4 py-2 text-sm font-medium text-teal-700 hover:bg-teal-50"
+            class="rounded-full px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:bg-teal-50 hover:text-teal-700"
             @click="refuseThirdParty"
           >
             Continuer sans
           </button>
           <button
             type="button"
-            class="rounded-full bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800"
+            class="rounded-full bg-teal-700 px-4 py-2 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
             @click="acceptThirdParty"
           >
             Autoriser les contenus tiers

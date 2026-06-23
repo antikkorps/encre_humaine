@@ -11,29 +11,35 @@ const to = computed(() => {
   return `${base}/${props.offer.slug}`;
 });
 
-const accent = computed(() =>
-  props.offer.audience === "organisation" ? "text-teal-700" : "text-orange-600",
-);
+const isOrg = computed(() => props.offer.audience === "organisation");
+const accent = computed(() => (isOrg.value ? "text-teal-700" : "text-orange-600"));
+const topBar = computed(() => (isOrg.value ? "bg-teal-500" : "bg-orange-400"));
 </script>
 
 <template>
-  <article class="relative flex h-full flex-col rounded-2xl border border-teal-100 bg-white p-6 transition-shadow hover:shadow-md">
-    <h3 class="font-display text-xl font-semibold text-teal-900">
+  <article
+    class="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-7 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+  >
+    <span aria-hidden="true" class="absolute inset-x-0 top-0 h-1.5" :class="topBar"></span>
+    <h3 class="mt-1 font-display text-xl font-semibold text-ink group-hover:text-teal-700">
       <NuxtLink :to="to" class="after:absolute after:inset-0">{{ offer.title }}</NuxtLink>
     </h3>
-    <p class="mt-2 flex-1 text-sm text-teal-700">{{ offer.shortDescription }}</p>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/65">{{ offer.shortDescription }}</p>
 
-    <dl class="mt-4 space-y-1 text-sm">
+    <dl class="mt-4 space-y-1.5 text-sm">
       <div v-if="offer.durationLabel" class="flex gap-2">
-        <dt class="text-teal-500">Durée</dt>
-        <dd class="text-teal-800">{{ offer.durationLabel }}</dd>
+        <dt class="text-ink/45">Durée</dt>
+        <dd class="font-medium text-ink/80">{{ offer.durationLabel }}</dd>
       </div>
       <div v-if="offer.priceLabel" class="flex gap-2">
-        <dt class="text-teal-500">Tarif</dt>
-        <dd class="text-teal-800">{{ offer.priceLabel }}</dd>
+        <dt class="text-ink/45">Tarif</dt>
+        <dd class="font-medium text-ink/80">{{ offer.priceLabel }}</dd>
       </div>
     </dl>
 
-    <span class="mt-4 text-sm font-medium" :class="accent">En savoir plus →</span>
+    <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold" :class="accent">
+      En savoir plus
+      <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+    </span>
   </article>
 </template>
