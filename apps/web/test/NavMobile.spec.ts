@@ -28,9 +28,9 @@ describe("NavMobile", () => {
 
     const dialog = document.querySelector('[role="dialog"]');
     expect(dialog).not.toBeNull();
-    // Titre accessible + tous les liens fournis + CTA.
+    // Titre accessible (wordmark) + tous les liens fournis + CTA.
     const text = dialog?.textContent ?? "";
-    expect(text).toContain("Menu");
+    expect(text).toContain("L'Encre Humaine");
     expect(text).toContain("Organisations");
     expect(text).toContain("Particuliers");
     expect(text).toContain("Prendre RDV");

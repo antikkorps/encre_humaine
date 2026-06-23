@@ -2,26 +2,67 @@
 
 /*
  * Thème L'Encre Humaine — Tailwind v4 (config CSS-first).
- * Palette teal (organisations) / orange (particuliers).
- * Contrastes AA à vérifier sur les nuances finales (docs/00-global §a11y).
+ * Direction « audacieux & illustré » : ADN poulpe / encre.
+ * Palette : encre profonde (sombre) + papier chaud (clair) + teal (organisations)
+ * / corail-orange (particuliers) + sable (pop). Contrastes AA visés (docs/00 §a11y).
  */
 @theme {
-  --color-teal-50: #f0fbfa;
-  --color-teal-500: #14b8a6;
-  --color-teal-600: #0d9488;
-  --color-teal-700: #0f766e;
-  --color-teal-900: #134e4a;
+  /* Teal — registre « organisations », plus profond et plus vivant que le défaut. */
+  --color-teal-50: #ecfbf8;
+  --color-teal-100: #cff3ec;
+  --color-teal-200: #a2e7da;
+  --color-teal-300: #6dd3c2;
+  --color-teal-400: #38b8a4;
+  --color-teal-500: #169c89;
+  --color-teal-600: #0d8073;
+  --color-teal-700: #0f675e;
+  --color-teal-800: #12524c;
+  --color-teal-900: #123f3b;
 
-  --color-orange-50: #fff7ed;
-  --color-orange-500: #f97316;
-  --color-orange-600: #ea580c;
-  --color-orange-700: #c2410c;
+  /* Corail / orange — registre « particuliers », chaleureux. */
+  --color-orange-50: #fff4ed;
+  --color-orange-100: #ffe3d2;
+  --color-orange-200: #ffc4a3;
+  --color-orange-300: #ff9d6b;
+  --color-orange-400: #fb7a4a;
+  --color-orange-500: #f25c2a;
+  --color-orange-600: #df4716;
+  --color-orange-700: #b8350f;
+
+  /* Encre — fonds sombres, texte, pieds de page. Bleu-noir d'encre. */
+  --color-ink-950: #04211f;
+  --color-ink-900: #062b28;
+  --color-ink-800: #0a3a36;
+  --color-ink: #062b28;
+
+  /* Papier — fonds clairs chauds (remplace le blanc pur). */
+  --color-paper: #fbf6ee;
+  --color-paper-2: #f4ebdc;
+  --color-paper-3: #efe3d0;
+
+  /* Sable — accent « pop » discret (chiffres, soulignés, détails). */
+  --color-sand-300: #fbd77a;
+  --color-sand-400: #f6c14a;
+  --color-sand-500: #eaa72a;
 
   --color-brand: var(--color-teal-700);
-  --color-brand-accent: var(--color-orange-600);
+  --color-brand-accent: var(--color-orange-500);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", ui-serif, Georgia, serif;
+
+  /* Ombres douces et chaudes (teintées encre, pas du noir pur). */
+  --shadow-soft: 0 1px 2px rgba(6, 43, 40, 0.04), 0 8px 24px -12px rgba(6, 43, 40, 0.18);
+  --shadow-lift: 0 2px 4px rgba(6, 43, 40, 0.05), 0 18px 40px -16px rgba(6, 43, 40, 0.28);
+
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+}
+
+/* Typo de base : titres en Fraunces, rendu plus chaleureux. */
+:where(h1, h2, h3, h4) {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
 }
 
 /* Cible tactile ≥ 24px, focus visibles (WCAG 2.2 AA). */
@@ -34,25 +75,60 @@
   outline-offset: 2px;
 }
 
-/*
- * Styles du contenu riche (Directus WYSIWYG, rendu par <RichText>).
- * Pas de plugin typography : on reste sobre et maîtrisé (perf, pas de dep en plus).
- */
+/* ----------------------------------------------------------------------------
+ * Langage visuel « encre » — utilitaires décoratifs (audacieux & illustré).
+ * -------------------------------------------------------------------------- */
+
+/* Soulignement « tracé d'encre » sous un mot mis en avant (titres). */
+.ink-underline {
+  background-image: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--color-sand-400) 80%, transparent) 0 0.28em,
+    transparent 0.28em
+  );
+  background-repeat: no-repeat;
+  padding-inline: 0.06em;
+}
+.ink-underline-coral {
+  background-image: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--color-orange-300) 75%, transparent) 0 0.28em,
+    transparent 0.28em
+  );
+}
+
+/* Dégradé d'encre pour les grands aplats sombres (hero, CTA, footer). */
+.bg-ink-gradient {
+  background:
+    radial-gradient(120% 90% at 12% 0%, color-mix(in oklab, var(--color-teal-700) 55%, transparent), transparent 60%),
+    radial-gradient(90% 80% at 100% 100%, color-mix(in oklab, var(--color-teal-500) 35%, transparent), transparent 55%),
+    var(--color-ink-900);
+}
+
+/* Halo de blob d'encre derrière un contenu (décoratif, aria-hidden). */
+.ink-grain {
+  background-image: radial-gradient(rgba(6, 43, 40, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* ----------------------------------------------------------------------------
+ * Contenu riche (Directus WYSIWYG, rendu par <RichText>).
+ * -------------------------------------------------------------------------- */
 .rich-text {
-  color: var(--color-teal-900);
-  line-height: 1.7;
+  color: var(--color-ink-900);
+  line-height: 1.75;
 }
 .rich-text :where(h2, h3) {
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--color-teal-900);
-  margin-block: 1.5em 0.5em;
+  color: var(--color-ink-900);
+  margin-block: 1.6em 0.5em;
   /* Décale l'ancre sous l'en-tête sticky (table des matières légale). */
   scroll-margin-top: 5rem;
 }
-.rich-text :where(h2) { font-size: 1.5rem; }
-.rich-text :where(h3) { font-size: 1.25rem; }
-.rich-text :where(p, ul, ol) { margin-block: 0.75em; }
+.rich-text :where(h2) { font-size: 1.6rem; }
+.rich-text :where(h3) { font-size: 1.3rem; }
+.rich-text :where(p, ul, ol) { margin-block: 0.8em; }
 .rich-text :where(ul, ol) { padding-inline-start: 1.5rem; }
 .rich-text :where(ul) { list-style: disc; }
 .rich-text :where(ol) { list-style: decimal; }
@@ -61,10 +137,10 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.rich-text :where(strong) { font-weight: 600; }
+.rich-text :where(strong) { font-weight: 600; color: var(--color-ink-950); }
 .rich-text :where(blockquote) {
-  border-inline-start: 3px solid var(--color-teal-500);
+  border-inline-start: 3px solid var(--color-sand-400);
   padding-inline-start: 1rem;
-  color: var(--color-teal-700);
+  color: var(--color-teal-800);
   font-style: italic;
 }

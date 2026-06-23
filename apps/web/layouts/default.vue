@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white text-teal-900">
+  <div class="min-h-screen flex flex-col bg-paper text-ink antialiased">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-teal-700 focus:px-3 focus:py-2 focus:text-white"

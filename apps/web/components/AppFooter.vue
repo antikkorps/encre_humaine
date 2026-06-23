@@ -6,44 +6,50 @@ const { data: shop } = await useShopPage();
 </script>
 
 <template>
-  <footer class="border-t border-teal-100 bg-teal-50">
-    <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 md:grid-cols-4">
-      <div>
-        <p class="font-display font-semibold text-teal-800">L'Encre Humaine</p>
-        <p class="mt-2 text-sm text-teal-700">
-          Conseil RH &amp; accompagnement. Bouches-du-Rhône · France entière.
+  <footer class="mt-auto bg-ink text-paper/80">
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 md:grid-cols-4">
+      <div class="sm:col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2.5 text-paper">
+          <OctopusMark class="h-9 w-9 text-teal-300" />
+          <p class="font-display text-lg font-semibold">L'Encre Humaine</p>
+        </div>
+        <p class="mt-3 max-w-xs text-sm leading-relaxed text-paper/70">
+          Conseil RH &amp; accompagnement. Remettre de l'humain dans le travail.
         </p>
+        <p class="mt-3 text-sm text-paper/60">Bouches-du-Rhône · France entière.</p>
         <NuxtLink
           v-if="shop?.enabled"
           to="/boutique"
-          class="mt-3 inline-block text-sm font-medium text-teal-700 hover:text-teal-600"
+          class="mt-4 inline-block text-sm font-medium text-sand-300 hover:text-sand-400"
         >
           Boutique →
         </NuxtLink>
       </div>
+
       <nav aria-label="Organisations">
-        <p class="text-sm font-semibold text-teal-800">Organisations</p>
-        <ul class="mt-2 space-y-1 text-sm text-teal-700">
-          <li><NuxtLink to="/organisations">Nos offres B2B</NuxtLink></li>
+        <p class="font-display text-sm font-semibold text-paper">Organisations</p>
+        <ul class="mt-3 space-y-2 text-sm text-paper/70">
+          <li><NuxtLink to="/organisations" class="hover:text-teal-300">Nos offres B2B</NuxtLink></li>
         </ul>
       </nav>
       <nav aria-label="Particuliers">
-        <p class="text-sm font-semibold text-teal-800">Particuliers</p>
-        <ul class="mt-2 space-y-1 text-sm text-teal-700">
-          <li><NuxtLink to="/particuliers">Accompagnement</NuxtLink></li>
+        <p class="font-display text-sm font-semibold text-paper">Particuliers</p>
+        <ul class="mt-3 space-y-2 text-sm text-paper/70">
+          <li><NuxtLink to="/particuliers" class="hover:text-teal-300">Accompagnement</NuxtLink></li>
         </ul>
       </nav>
       <nav aria-label="Liens légaux">
-        <p class="text-sm font-semibold text-teal-800">Informations</p>
-        <ul class="mt-2 space-y-1 text-sm text-teal-700">
-          <li><NuxtLink to="/mentions-legales">Mentions légales</NuxtLink></li>
-          <li><NuxtLink to="/cgv">CGV</NuxtLink></li>
-          <li><NuxtLink to="/cgu">CGU</NuxtLink></li>
-          <li><NuxtLink to="/confidentialite">Confidentialité</NuxtLink></li>
+        <p class="font-display text-sm font-semibold text-paper">Informations</p>
+        <ul class="mt-3 space-y-2 text-sm text-paper/70">
+          <li><NuxtLink to="/mentions-legales" class="hover:text-teal-300">Mentions légales</NuxtLink></li>
+          <li><NuxtLink to="/cgv" class="hover:text-teal-300">CGV</NuxtLink></li>
+          <li><NuxtLink to="/cgu" class="hover:text-teal-300">CGU</NuxtLink></li>
+          <li><NuxtLink to="/confidentialite" class="hover:text-teal-300">Confidentialité</NuxtLink></li>
         </ul>
       </nav>
     </div>
-    <div class="border-t border-teal-100 px-4 py-4 text-center text-xs text-teal-600">
+
+    <div class="border-t border-paper/10 px-4 py-5 text-center text-xs text-paper/50">
       <p>TVA non applicable, art. 293 B du CGI · © {{ year }} L'Encre Humaine</p>
     </div>
   </footer>
