@@ -133,6 +133,7 @@ const singletons: CollectionDef[] = [
     fields: [
       f.input("accroche_title"),
       f.textarea("accroche_body"),
+      f.imageFile("accroche_photo"),
       f.repeater(
         "method_steps",
         [
@@ -158,6 +159,7 @@ const singletons: CollectionDef[] = [
     fields: [
       f.input("accroche_title"),
       f.textarea("accroche_body"),
+      f.imageFile("accroche_photo"),
       f.divider("sit_a_divider", "Situation A"),
       f.input("situation_a_title"),
       f.textarea("situation_a_body"),

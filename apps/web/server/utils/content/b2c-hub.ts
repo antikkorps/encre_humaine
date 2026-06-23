@@ -1,9 +1,11 @@
 import { readItems, readSingleton } from "@directus/sdk";
 import type { FaqItem, TestimonialItem } from "~/types/content";
 import {
+  type ContentPhoto,
   type ContentSeo,
   type FileField,
   mapFaqItems,
+  mapPhoto,
   mapSeo,
   mapTestimonialItem,
   type RawSiteDefaults,
@@ -22,6 +24,7 @@ import {
 export interface RawB2cHub {
   accroche_title?: string | null;
   accroche_body?: string | null;
+  accroche_photo?: FileField;
   situation_a_title?: string | null;
   situation_a_body?: string | null;
   situation_a_cta_label?: string | null;
@@ -50,6 +53,8 @@ export interface B2cHubContent {
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
   accrocheBody: string | null;
+  /** Illustration d'accroche optionnelle (Directus) — masquée si absente. */
+  accrochePhoto: ContentPhoto | null;
   situations: B2cSituation[];
   howIWorkHtml: string | null;
   testimonial: TestimonialItem | null;
@@ -108,6 +113,7 @@ export function mapB2cHubContent(
   return {
     accrocheTitle: str(hub.accroche_title) || null,
     accrocheBody: str(hub.accroche_body) || null,
+    accrochePhoto: mapPhoto(hub.accroche_photo, assetBase),
     situations,
     howIWorkHtml: sanitize(hub.how_i_work_body) || null,
     testimonial: mapTestimonialItem(hub.testimonial),
@@ -128,6 +134,7 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
         fields: [
           "accroche_title",
           "accroche_body",
+          "accroche_photo",
           "situation_a_title",
           "situation_a_body",
           "situation_a_cta_label",

@@ -1,10 +1,12 @@
 import { readItems, readSingleton } from "@directus/sdk";
 import type { OfferSummary, TestimonialItem } from "~/types/content";
 import {
+  type ContentPhoto,
   type ContentSeo,
   type FileField,
   mapNumberedSteps,
   mapOffers,
+  mapPhoto,
   mapSeo,
   mapStringList,
   mapTestimonials,
@@ -26,6 +28,7 @@ import {
 export interface RawOrgHub {
   accroche_title?: string | null;
   accroche_body?: string | null;
+  accroche_photo?: FileField;
   method_steps?: unknown; // répéteur number + title + description
   audience_items?: unknown; // répéteur text
   cta_title?: string | null;
@@ -40,6 +43,8 @@ export interface OrgHubContent {
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
   accrocheBody: string | null;
+  /** Illustration d'accroche optionnelle (Directus) — masquée si absente. */
+  accrochePhoto: ContentPhoto | null;
   offers: OfferSummary[];
   methodSteps: NumberedStep[];
   audienceItems: string[];
@@ -60,6 +65,7 @@ export function mapOrgHubContent(
   return {
     accrocheTitle: str(hub.accroche_title) || null,
     accrocheBody: str(hub.accroche_body) || null,
+    accrochePhoto: mapPhoto(hub.accroche_photo, assetBase),
     offers: mapOffers(offers, "organisation"),
     methodSteps: mapNumberedSteps(hub.method_steps),
     audienceItems: mapStringList(hub.audience_items),
@@ -83,6 +89,7 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
         fields: [
           "accroche_title",
           "accroche_body",
+          "accroche_photo",
           "method_steps",
           "audience_items",
           "cta_title",

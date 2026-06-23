@@ -83,6 +83,7 @@ export interface B2cHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_photo: string | DirectusFile | null;
 }
 
 export interface ContactPage {
@@ -206,6 +207,7 @@ export interface OrgHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_photo: string | DirectusFile | null;
 }
 
 export interface Products {

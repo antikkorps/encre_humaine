@@ -2935,6 +2935,46 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: b2c_hub_page
+    field: accroche_photo
+    type: uuid
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_photo
+      group: null
+      hidden: false
+      interface: file-image
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 22
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_photo
+      table: b2c_hub_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
   - collection: contact_page
     field: id
     type: uuid
@@ -7356,6 +7396,46 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: org_hub_page
+    field: accroche_photo
+    type: uuid
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_photo
+      group: null
+      hidden: false
+      interface: file-image
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 13
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_photo
+      table: org_hub_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
   - collection: products
     field: id
     type: uuid
@@ -11302,6 +11382,27 @@ relations:
       constraint_name: b2c_hub_page_og_image_foreign
       on_update: NO ACTION
       on_delete: SET NULL
+  - collection: b2c_hub_page
+    field: accroche_photo
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: b2c_hub_page
+      many_field: accroche_photo
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: b2c_hub_page
+      column: accroche_photo
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: b2c_hub_page_accroche_photo_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: contact_page
     field: og_image
     related_collection: directus_files
@@ -11489,6 +11590,27 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: org_hub_page_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: org_hub_page
+    field: accroche_photo
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: org_hub_page
+      many_field: accroche_photo
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: org_hub_page
+      column: accroche_photo
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: org_hub_page_accroche_photo_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: products
