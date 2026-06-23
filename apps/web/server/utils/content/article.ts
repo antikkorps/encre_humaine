@@ -10,6 +10,7 @@ import {
   str,
 } from "./_shared";
 import { mapArticles, type RawArticle } from "./home";
+import { buildToc, type TocEntry } from "./legal";
 
 /**
  * Article de blog — `/ressources/{slug}` (docs/07-ressources.md). Source :
@@ -43,8 +44,10 @@ export interface RawArticleDetail {
 export interface ArticleContent {
   title: string;
   excerpt: string | null;
-  /** `body` (rich text Directus) assaini côté serveur (docs/06 §1). */
+  /** `body` (rich text Directus) assaini côté serveur (docs/06 §1), `<h2>` ancrés. */
   bodyHtml: string;
+  /** Table des matières (dérivée des `<h2>`) pour la navigation rapide latérale. */
+  toc: TocEntry[];
   cover: ContentPhoto | null;
   category: { name: string; slug: string; group: string } | null;
   readingTime: number | null;
@@ -66,10 +69,12 @@ export function mapArticleContent(
 ): ArticleContent {
   const cat = raw.category && typeof raw.category === "object" ? raw.category : null;
   const name = cat && str(cat.name);
+  const { html, toc } = buildToc(sanitize(raw.body));
   return {
     title: str(raw.title),
     excerpt: str(raw.excerpt) || null,
-    bodyHtml: sanitize(raw.body),
+    bodyHtml: html,
+    toc,
     cover: mapPhoto(raw.cover_image, assetBase),
     category: name ? { name, slug: str(cat?.slug), group: str(cat?.group) } : null,
     readingTime: typeof raw.reading_time === "number" ? raw.reading_time : null,
