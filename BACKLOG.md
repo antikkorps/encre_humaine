@@ -15,6 +15,18 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - **Validation** : `valibot` (léger), schémas dans `packages/shared`, réutilisés client + serveur.
 - **Docs** : les specs vivent dans `docs/` (l'amorce mentionne `specs/` — on reste sur `docs/`).
 - **Git** : dépôt `main`, hébergement Forgejo, miroir GitHub (à câbler).
+- **Palette (rebrand « marine / doré / crème »)** : identité = **marine `#1C2B4A`** (fonds sombres
+  + organisations) + **doré `#C9A84C`** (accents : soulignés, filigranes poulpe, « pop ») +
+  **crème `#F5F2EB`** (fonds clairs). Implémenté **par repointage des tokens** dans
+  `apps/web/assets/css/main.css` (un seul fichier → bascule instantanée, retour arrière =
+  `git checkout`). ⚠️ **Dette assumée** : les *noms* d'échelles Tailwind restent `teal-*` (= marine),
+  `orange-*`/`sand-*` (= doré) pour éviter de toucher ~230 usages. Doré vif sur `*-300/400`
+  (accents), doré antique plus profond sur `*-500/600/700` (aplats : passe l'AA avec texte blanc,
+  donc aucun bouton à réécrire).
+  - [ ] **Si le rebrand reste** : renommer les classes `teal→navy`, `orange/sand→gold` (gros sweep, d'un coup).
+  - **Ancienne palette (revert/comparaison)** : ink `#062b28`/`#04211f`/`#0a3a36` ·
+    paper `#fbf6ee`/`#f4ebdc`/`#efe3d0` · teal `#0f675e`(700) `#169c89`(500) `#6dd3c2`(300) ·
+    orange `#f25c2a`(500) `#fb7a4a`(400) · sand `#f6c14a`(400) `#fbd77a`(300).
 
 ## Points ouverts / à fournir par Franck
 

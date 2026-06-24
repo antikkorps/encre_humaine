@@ -2,48 +2,55 @@
 
 /*
  * Thème L'Encre Humaine — Tailwind v4 (config CSS-first).
- * Direction « audacieux & illustré » : ADN poulpe / encre.
- * Palette : encre profonde (sombre) + papier chaud (clair) + teal (organisations)
- * / corail-orange (particuliers) + sable (pop). Contrastes AA visés (docs/00 §a11y).
+ * Direction « marine / doré / crème » (rebrand) : ADN poulpe / encre, registre chic.
+ * Palette : marine profonde (sombre) #1C2B4A + crème (clair) #F5F2EB + doré #C9A84C (pop).
+ * Contrastes AA visés (docs/00 §a11y).
+ *
+ * ⚠️ DETTE ASSUMÉE (cf. BACKLOG « Palette ») : le rebrand est fait par REPOINTAGE des tokens,
+ * sans renommer les ~230 usages. Donc les *noms* d'échelles sont LEGACY :
+ *   teal-*  = MARINE (organisations + fonds sombres)   |  ink-* = marine profond
+ *   orange-* / sand-* = DORÉ (particuliers + accents)  |  paper-* = crème
+ * Doré VIF sur *-300/400 (accents : soulignés, filigranes). Doré ANTIQUE plus profond sur
+ * *-500/600/700 (aplats pleins → AA OK avec texte blanc, aucun bouton à réécrire).
  */
 @theme {
-  /* Teal — registre « organisations », plus profond et plus vivant que le défaut. */
-  --color-teal-50: #ecfbf8;
-  --color-teal-100: #cff3ec;
-  --color-teal-200: #a2e7da;
-  --color-teal-300: #6dd3c2;
-  --color-teal-400: #38b8a4;
-  --color-teal-500: #169c89;
-  --color-teal-600: #0d8073;
-  --color-teal-700: #0f675e;
-  --color-teal-800: #12524c;
-  --color-teal-900: #123f3b;
+  /* « teal » = MARINE — registre « organisations » + texte/bordures froides. */
+  --color-teal-50: #eef1f8;
+  --color-teal-100: #d8e0ef;
+  --color-teal-200: #b3c2dd;
+  --color-teal-300: #88a0c6;
+  --color-teal-400: #5d78a8;
+  --color-teal-500: #3f5a8b;
+  --color-teal-600: #314770;
+  --color-teal-700: #283c5e;
+  --color-teal-800: #1f2e49;
+  --color-teal-900: #18243b;
 
-  /* Corail / orange — registre « particuliers », chaleureux. */
-  --color-orange-50: #fff4ed;
-  --color-orange-100: #ffe3d2;
-  --color-orange-200: #ffc4a3;
-  --color-orange-300: #ff9d6b;
-  --color-orange-400: #fb7a4a;
-  --color-orange-500: #f25c2a;
-  --color-orange-600: #df4716;
-  --color-orange-700: #b8350f;
+  /* « orange » = DORÉ — registre « particuliers ». 300/400 vif, 500+ antique (AA texte blanc). */
+  --color-orange-50: #faf6ea;
+  --color-orange-100: #f3e8c8;
+  --color-orange-200: #e7d49a;
+  --color-orange-300: #d8bd66;
+  --color-orange-400: #c9a84c;
+  --color-orange-500: #8a6d24;
+  --color-orange-600: #75591d;
+  --color-orange-700: #5f4717;
 
-  /* Encre — fonds sombres, texte, pieds de page. Bleu-noir d'encre. */
-  --color-ink-950: #04211f;
-  --color-ink-900: #062b28;
-  --color-ink-800: #0a3a36;
-  --color-ink: #062b28;
+  /* « ink » = MARINE profonde — fonds sombres, texte, pieds de page. */
+  --color-ink-950: #111a30;
+  --color-ink-900: #1c2b4a;
+  --color-ink-800: #243758;
+  --color-ink: #1c2b4a;
 
-  /* Papier — fonds clairs chauds (remplace le blanc pur). */
-  --color-paper: #fbf6ee;
-  --color-paper-2: #f4ebdc;
-  --color-paper-3: #efe3d0;
+  /* « paper » = CRÈME — fonds clairs chauds (remplace le blanc pur). */
+  --color-paper: #f5f2eb;
+  --color-paper-2: #ece7da;
+  --color-paper-3: #e2dbc9;
 
-  /* Sable — accent « pop » discret (chiffres, soulignés, détails). */
-  --color-sand-300: #fbd77a;
-  --color-sand-400: #f6c14a;
-  --color-sand-500: #eaa72a;
+  /* « sand » = DORÉ VIF — accent « pop » (chiffres, soulignés, filigranes poulpe). */
+  --color-sand-300: #e3cd82;
+  --color-sand-400: #c9a84c;
+  --color-sand-500: #b08f33;
 
   --color-brand: var(--color-teal-700);
   --color-brand-accent: var(--color-orange-500);
@@ -51,9 +58,9 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", ui-serif, Georgia, serif;
 
-  /* Ombres douces et chaudes (teintées encre, pas du noir pur). */
-  --shadow-soft: 0 1px 2px rgba(6, 43, 40, 0.04), 0 8px 24px -12px rgba(6, 43, 40, 0.18);
-  --shadow-lift: 0 2px 4px rgba(6, 43, 40, 0.05), 0 18px 40px -16px rgba(6, 43, 40, 0.28);
+  /* Ombres douces (teintées marine, pas du noir pur). */
+  --shadow-soft: 0 1px 2px rgba(28, 43, 74, 0.05), 0 8px 24px -12px rgba(28, 43, 74, 0.20);
+  --shadow-lift: 0 2px 4px rgba(28, 43, 74, 0.06), 0 18px 40px -16px rgba(28, 43, 74, 0.30);
 
   --radius-2xl: 1.25rem;
   --radius-3xl: 1.75rem;
@@ -97,17 +104,18 @@
   );
 }
 
-/* Dégradé d'encre pour les grands aplats sombres (hero, CTA, footer). */
+/* Dégradé marine pour les grands aplats sombres (hero, CTA, footer),
+ * relevé d'un voile doré discret en bas à droite. */
 .bg-ink-gradient {
   background:
-    radial-gradient(120% 90% at 12% 0%, color-mix(in oklab, var(--color-teal-700) 55%, transparent), transparent 60%),
-    radial-gradient(90% 80% at 100% 100%, color-mix(in oklab, var(--color-teal-500) 35%, transparent), transparent 55%),
+    radial-gradient(120% 90% at 12% 0%, color-mix(in oklab, var(--color-teal-500) 60%, transparent), transparent 60%),
+    radial-gradient(90% 80% at 100% 100%, color-mix(in oklab, var(--color-sand-500) 16%, transparent), transparent 55%),
     var(--color-ink-900);
 }
 
-/* Halo de blob d'encre derrière un contenu (décoratif, aria-hidden). */
+/* Grain marine derrière un contenu (décoratif, aria-hidden). */
 .ink-grain {
-  background-image: radial-gradient(rgba(6, 43, 40, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(28, 43, 74, 0.05) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
