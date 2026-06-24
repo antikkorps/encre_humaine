@@ -3,10 +3,19 @@
 // Le lien « Boutique » suit l'activation de la boutique (shop_page).
 const year = new Date().getFullYear();
 const { data: shop } = await useShopPage();
+// Sur une page d'erreur (404/5xx), le bandeau porte déjà un grand filigrane poulpe :
+// on masque celui du footer pour éviter deux poulpes empilés. Ailleurs, useError() est nul.
+const appError = useError();
 </script>
 
 <template>
-  <footer class="mt-auto bg-ink text-paper/80">
+  <footer class="relative isolate mt-auto overflow-hidden bg-ink text-paper/80">
+    <!-- Filigrane poulpe qui déborde du coin — accent discret, décoratif.
+         Masqué sur les pages d'erreur (le bandeau 404 a déjà son poulpe). -->
+    <OctopusWatermark
+      v-if="!appError"
+      class="absolute -bottom-24 -right-12 -z-10 hidden h-[28rem] rotate-[8deg] text-sand-300/[0.14] sm:block"
+    />
     <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 md:grid-cols-4">
       <div class="sm:col-span-2 md:col-span-1">
         <div class="flex items-center gap-2.5 text-paper">

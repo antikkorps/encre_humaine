@@ -46,10 +46,12 @@ const heroTitle = computed(() => {
   <div>
     <!-- 1. Hero (au-dessus de la ligne de flottaison, h1 = hero_title) -->
     <section class="bg-ink-gradient relative isolate overflow-hidden text-paper">
-      <!-- Décor « taches d'encre » purement esthétique. -->
-      <InkBlob class="absolute -right-16 -top-20 -z-10 h-80 w-80 rotate-12 text-teal-400/15" />
+      <!-- Décor : filigrane poulpe (accent identitaire fort) + taches d'encre. -->
+      <OctopusWatermark
+        class="absolute -right-24 top-1/2 -z-10 hidden h-[40rem] -translate-y-1/2 rotate-6 text-sand-300/[0.2] md:block"
+      />
       <InkBlob class="absolute -left-20 top-10 -z-10 h-72 w-72 -rotate-45 text-teal-500/15" />
-      <InkBlob class="absolute -bottom-10 right-1/4 -z-10 h-56 w-56 text-orange-400/10" />
+      <InkBlob class="absolute -bottom-10 left-1/4 -z-10 h-56 w-56 text-orange-400/10" />
 
       <div class="mx-auto max-w-4xl px-4 py-24 text-center sm:py-32">
         <p

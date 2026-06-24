@@ -68,7 +68,7 @@ useSeoMeta({
       <!-- 4. Le poulpe (ton avec humour) — clin d'œil à la mascotte -->
       <section v-if="content.octopusHtml" class="relative isolate overflow-hidden">
         <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-20 md:grid-cols-[auto_1fr]">
-          <OctopusMark class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
+          <OctopusLogo class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
           <div>
             <SectionHeading title="Le poulpe" eyebrow="Pourquoi ce nom" />
             <RichText :html="content.octopusHtml" class="mt-5" />

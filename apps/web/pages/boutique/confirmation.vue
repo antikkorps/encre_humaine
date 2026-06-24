@@ -14,7 +14,11 @@ useSeoMeta({
 </script>
 
 <template>
-  <section class="mx-auto max-w-2xl px-4 py-24">
+  <section class="relative isolate mx-auto max-w-2xl overflow-hidden px-4 py-24">
+    <!-- Filigrane poulpe discret qui affleure derrière la carte. -->
+    <OctopusWatermark
+      class="absolute -bottom-10 -right-10 -z-10 h-72 rotate-6 text-teal-700/[0.1]"
+    />
     <div class="rounded-3xl border border-ink/5 bg-white p-10 text-center shadow-soft sm:p-12">
       <template v-if="hasSession">
         <p class="text-5xl" aria-hidden="true">🎉</p>

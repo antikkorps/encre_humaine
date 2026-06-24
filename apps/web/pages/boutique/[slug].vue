@@ -111,7 +111,7 @@ if (product.value) {
           class="flex aspect-[4/3] w-full items-center justify-center rounded-3xl border border-ink/5 bg-teal-50 text-teal-300"
           aria-hidden="true"
         >
-          <OctopusMark class="h-24 w-24" />
+          <OctopusLogo class="h-24 w-24" />
         </div>
         <ul v-if="product.images.length > 1" class="mt-3 flex flex-wrap gap-2">
           <li v-for="(img, i) in product.images" :key="img">
