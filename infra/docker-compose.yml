@@ -134,7 +134,37 @@ services:
       migrate:
         condition: service_completed_successfully
     env_file:
+      # Noms simples → lus par `process.env` au boot pour la VALIDATION d'env
+      # (server/plugins/00.validate-env.ts ; packages/shared env schema).
       - ./env/.env
+    # ⚠️ Nuxt ne peuple `useRuntimeConfig()` au runtime QUE via des clés `NUXT_*`
+    # (`NUXT_PUBLIC_*` pour le bloc public). Les noms simples de l'`env_file`
+    # passent la validation mais N'ATTEIGNENT PAS la config runtime → sans ces
+    # mappings, Directus serait « non configuré », Turnstile/Cal.com/analytics
+    # muets et le baseUrl SEO vide EN PROD (le pont `process.env` de nuxt.config
+    # n'agit qu'au build/dev). Interpolation `${VAR}` depuis infra/env/.env
+    # (--env-file), comme le reste du compose. TOUTE nouvelle clé runtimeConfig
+    # doit être ajoutée ici.
+    environment:
+      # — Secrets serveur —
+      NUXT_APP_DATABASE_URL: ${APP_DATABASE_URL}
+      NUXT_DIRECTUS_READ_TOKEN: ${DIRECTUS_READ_TOKEN}
+      NUXT_STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      NUXT_STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      NUXT_STRIPE_SHIPPING_RATE_FR: ${STRIPE_SHIPPING_RATE_FR}
+      NUXT_RESEND_API_KEY: ${RESEND_API_KEY}
+      NUXT_RESEND_AUDIENCE_ID: ${RESEND_AUDIENCE_ID}
+      NUXT_NEWSLETTER_FROM: ${NEWSLETTER_FROM}
+      NUXT_CONTACT_NOTIFY_TO: ${CONTACT_NOTIFY_TO}
+      NUXT_TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+      # — Valeurs publiques (sérialisées vers le client) —
+      NUXT_PUBLIC_BASE_URL: ${BASE_URL}
+      NUXT_PUBLIC_DIRECTUS_PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+      NUXT_PUBLIC_TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY}
+      NUXT_PUBLIC_BOOKING_URL: ${BOOKING_URL}
+      NUXT_PUBLIC_ANALYTICS_SCRIPT_URL: ${ANALYTICS_SCRIPT_URL}
+      NUXT_PUBLIC_ANALYTICS_WEBSITE_ID: ${ANALYTICS_WEBSITE_ID}
+      NUXT_PUBLIC_VAT_ENABLED: ${VAT_ENABLED}
     healthcheck:
       # Image slim sans wget/curl → sonde via fetch natif (Node 26).
       test:
