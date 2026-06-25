@@ -14,6 +14,7 @@
       "!**/dist",
       "!**/coverage",
       "!**/node_modules",
+      "!**/.claude",
       "!packages/db/migrations",
       "!apps/web/assets/css"
     ]

@@ -50,11 +50,37 @@ export function resetRateLimits(): void {
   hits.clear();
 }
 
+/** Nombre de clés suivies (tests uniquement : observe la purge mémoire). */
+export function rateLimitSize(): number {
+  return hits.size;
+}
+
+/**
+ * Purge les clés dont le dernier hit est plus vieux que `STALE_AFTER_MS` (marge
+ * large > toute fenêtre configurée → ne supprime jamais une fenêtre active).
+ * Évite la croissance mémoire des IP vues une fois puis abandonnées.
+ */
+const STALE_AFTER_MS = 10 * 60_000;
+export function sweepRateLimits(now: number = Date.now()): void {
+  for (const [key, timestamps] of hits) {
+    const newest = timestamps[timestamps.length - 1];
+    if (newest === undefined || newest <= now - STALE_AFTER_MS) hits.delete(key);
+  }
+}
+
+// Balayage opportuniste : amorti sur les requêtes, pas de timer (mono-instance).
+let opsSinceSweep = 0;
+const SWEEP_EVERY = 500;
+
 /**
  * Applique le rate-limit sur un endpoint Nitro : lève `429` (enveloppe uniforme)
  * et pose l'en-tête `Retry-After` si la limite est dépassée.
  */
 export function enforceRateLimit(event: H3Event, scope: string, options: RateLimitOptions): void {
+  if (++opsSinceSweep >= SWEEP_EVERY) {
+    opsSinceSweep = 0;
+    sweepRateLimits();
+  }
   const ip = getClientIp(event);
   const result = consumeRateLimit(`${scope}:${ip}`, options);
   if (!result.allowed) {

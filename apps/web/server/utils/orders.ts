@@ -108,8 +108,17 @@ export async function applyRefund(db: Database, charge: Stripe.Charge): Promise<
   if (!paymentIntentId) return;
 
   const fullyRefunded = charge.amount_refunded >= charge.amount;
-  await db
+  const updated = await db
     .update(orders)
     .set({ status: fullyRefunded ? "refunded" : "partially_refunded" })
-    .where(eq(orders.stripePaymentIntentId, paymentIntentId));
+    .where(eq(orders.stripePaymentIntentId, paymentIntentId))
+    .returning({ id: orders.id });
+
+  // Aucune commande rapprochée : désync potentielle Stripe↔DB → on alerte
+  // (best-effort, pas d'échec : un refund orphelin ne doit pas faire rejouer).
+  if (updated.length === 0) {
+    console.warn(
+      `[stripe/webhook] charge.refunded sans commande correspondante (payment_intent ${paymentIntentId})`,
+    );
+  }
 }

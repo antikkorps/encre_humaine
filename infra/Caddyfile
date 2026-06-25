@@ -31,7 +31,16 @@ encrehumaine.fr, www.encrehumaine.fr {
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 	}
-	reverse_proxy web:3000
+	reverse_proxy web:3000 {
+		# Anti-spoofing du rate-limit : on ÉCRASE l'X-Forwarded-For entrant par
+		# l'IP réelle du pair (sinon un client forge `X-Forwarded-For: a.b.c.d`,
+		# Caddy l'append, et getClientIp() retiendrait la valeur forgée → bypass).
+		header_up X-Forwarded-For {http.request.remote.host}
+	}
+	# ⚠️ Si le site est proxifié par Cloudflare (orange cloud), `CF-Connecting-IP`
+	# est prioritaire côté app ET forgeable par quiconque atteint l'origine en
+	# direct → FIREWALLER l'origine Hetzner aux plages d'IP Cloudflare (sinon le
+	# rate-limit reste contournable malgré l'écrasement XFF ci-dessus).
 }
 
 # ── CMS Directus ─────────────────────────────────────────────────────────────

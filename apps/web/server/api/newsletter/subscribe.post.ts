@@ -36,9 +36,11 @@ export default defineEventHandler(async (event) => {
     .where(eq(newsletterSubscribers.email, payload.email))
     .limit(1);
 
-  // Déjà confirmé : idempotent, aucun nouveau mail (docs/03 §3.1).
+  // Déjà confirmé : idempotent, aucun nouveau mail (docs/03 §3.1). Réponse
+  // VOLONTAIREMENT identique au cas nominal (`pending`) pour ne pas révéler
+  // qu'un email est déjà inscrit (anti-énumération).
   if (existing?.status === "confirmed") {
-    return { status: "already_subscribed" as const };
+    return { status: "pending" as const };
   }
 
   const { token, tokenHash } = generateConfirmationToken();

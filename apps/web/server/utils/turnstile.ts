@@ -27,7 +27,14 @@ export async function verifyTurnstile(token: string, remoteIp?: string): Promise
   if (remoteIp) body.set("remoteip", remoteIp);
 
   try {
-    const res = await $fetch<SiteVerifyResponse>(SITEVERIFY_URL, { method: "POST", body });
+    // timeout court + pas de retry : siteverify lent/injoignable ⇒ échec rapide
+    // (fail-closed) plutôt que de laisser pendre la soumission du formulaire.
+    const res = await $fetch<SiteVerifyResponse>(SITEVERIFY_URL, {
+      method: "POST",
+      body,
+      timeout: 5000,
+      retry: 0,
+    });
     return res.success === true;
   } catch {
     return false; // fail-closed : pas de validation en cas d'incident

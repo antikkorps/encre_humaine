@@ -48,7 +48,9 @@ export default defineEventHandler(async (event) => {
     }
 
     default:
-      // Événement non géré : accusé de réception (docs/03 §1).
+      // Événement non géré : accusé de réception (docs/03 §1). On le trace pour
+      // repérer un signal Stripe inattendu (ex. litige) sans le faire rejouer.
+      console.warn(`[stripe/webhook] événement non géré : ${stripeEvent.type}`);
       return { received: true };
   }
 });
