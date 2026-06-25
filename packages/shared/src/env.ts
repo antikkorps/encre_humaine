@@ -58,6 +58,13 @@ export const ServerEnvSchema = v.object({
 
   // Prise de RDV (embed public — Cal.com, Calendly… ; nom agnostique du provider)
   BOOKING_URL: url(),
+
+  // Analytics auto-hébergé (Umami, cookieless) — public, agnostique du provider.
+  // Optionnels : renseignés après création du « website » dans le dashboard au
+  // déploiement (URL `https://stats.<domaine>/script.js` + id). Absents → aucun
+  // script injecté (dev/preview). Plain string (pas url()) pour tolérer le vide.
+  ANALYTICS_SCRIPT_URL: v.optional(v.string()),
+  ANALYTICS_WEBSITE_ID: v.optional(v.string()),
 });
 
 export type ServerEnv = v.InferOutput<typeof ServerEnvSchema>;

@@ -8,7 +8,78 @@ export default defineNuxtConfig({
 
   // reka-ui/nuxt : auto-import des primitives headless (Dialog, Accordion…) —
   // docs/00-global.md §Composants (NavMobile, FaqAccordion). a11y native.
-  modules: ["@nuxt/image", "@nuxt/fonts", "@nuxtjs/seo", "reka-ui/nuxt"],
+  // nuxt-security : CSP stricte à nonce + en-têtes sécurité (docs/06 §6) — owne
+  // les en-têtes du site public (Caddy ne les pose plus que pour cms./stats.).
+  modules: ["@nuxt/image", "@nuxt/fonts", "@nuxtjs/seo", "reka-ui/nuxt", "nuxt-security"],
+
+  // Sécurité — docs/06-security.md §6/§7. CSP **à nonce** (script-src sans
+  // 'unsafe-inline') : Nuxt émet un <script> inline de config qui DOIT porter le
+  // nonce — sinon l'app casse sous CSP stricte. Les styles gardent 'unsafe-inline'
+  // (Nuxt inline les styles SSR + attributs style= non nonçables). Allow-list
+  // alignée sur les tiers : Stripe / Cal.com / Turnstile / Umami / R2 / Directus.
+  security: {
+    nonce: true,
+    // Middlewares mutateurs DÉSACTIVÉS : ils liraient/altéreraient le body et
+    // casseraient des chemins testés (webhook Stripe = body BRUT signé ; contact
+    // accepte des caractères spéciaux). Rate-limit & anti-bot = déjà maison.
+    rateLimiter: false,
+    xssValidator: false,
+    requestSizeLimiter: false,
+    corsHandler: false,
+    headers: {
+      contentSecurityPolicy: {
+        "default-src": ["'self'"],
+        "script-src": [
+          "'self'",
+          "'nonce-{{nonce}}'",
+          "https://js.stripe.com",
+          "https://challenges.cloudflare.com",
+          "https://app.cal.com",
+          "https://stats.encrehumaine.fr",
+        ],
+        "style-src": ["'self'", "'unsafe-inline'"],
+        "img-src": [
+          "'self'",
+          "data:",
+          "blob:",
+          "https://cms.encrehumaine.fr",
+          "https://*.r2.cloudflarestorage.com",
+          "https://*.stripe.com",
+          "https://app.cal.com",
+        ],
+        "font-src": ["'self'", "data:"],
+        "connect-src": [
+          "'self'",
+          "https://api.stripe.com",
+          "https://cms.encrehumaine.fr",
+          "https://stats.encrehumaine.fr",
+          "https://challenges.cloudflare.com",
+          "https://app.cal.com",
+        ],
+        "frame-src": [
+          "https://js.stripe.com",
+          "https://checkout.stripe.com",
+          "https://challenges.cloudflare.com",
+          "https://cal.com",
+          "https://app.cal.com",
+        ],
+        "frame-ancestors": ["'self'"],
+        "base-uri": ["'self'"],
+        "form-action": ["'self'", "https://checkout.stripe.com"],
+        "object-src": ["'none'"],
+        "upgrade-insecure-requests": true,
+      },
+      strictTransportSecurity: { maxAge: 31536000, includeSubdomains: true, preload: true },
+      referrerPolicy: "strict-origin-when-cross-origin",
+      xContentTypeOptions: "nosniff",
+      xFrameOptions: "SAMEORIGIN",
+      crossOriginOpenerPolicy: "same-origin",
+      // COEP désactivé : 'require-corp'/'credentialless' casserait les iframes
+      // tierces (Cal.com, Stripe) qui n'envoient pas les en-têtes CORP attendus.
+      crossOriginEmbedderPolicy: false,
+      permissionsPolicy: { geolocation: [], microphone: [], camera: [] },
+    },
+  },
 
   css: ["~/assets/css/main.css"],
   vite: { plugins: [tailwindcss()] },
@@ -41,6 +112,10 @@ export default defineNuxtConfig({
       directusPublicUrl: process.env.DIRECTUS_PUBLIC_URL ?? "",
       turnstileSiteKey: process.env.TURNSTILE_SITE_KEY ?? "",
       bookingUrl: process.env.BOOKING_URL ?? "",
+      // Analytics auto-hébergé (Umami, cookieless) — agnostique du provider,
+      // optionnel (vide → aucun script injecté, cf. plugins/analytics.client.ts).
+      analyticsScriptUrl: process.env.ANALYTICS_SCRIPT_URL ?? "",
+      analyticsWebsiteId: process.env.ANALYTICS_WEBSITE_ID ?? "",
       vatEnabled: process.env.VAT_ENABLED === "true",
     },
   },

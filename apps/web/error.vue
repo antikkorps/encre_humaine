@@ -9,9 +9,7 @@ const props = defineProps<{ error: NuxtError }>();
 
 const code = computed(() => props.error?.status ?? 500);
 const is404 = computed(() => code.value === 404);
-const title = computed(() =>
-  is404.value ? "Page introuvable" : "Une erreur est survenue",
-);
+const title = computed(() => (is404.value ? "Page introuvable" : "Une erreur est survenue"));
 const message = computed(() =>
   is404.value
     ? "Cette page a changé d'adresse ou n'existe plus — le poulpe a dû l'emporter dans les profondeurs."

@@ -17,26 +17,16 @@
 	}
 }
 
-# ── CSP stricte avec allow-list des tiers (Stripe / Cal.com / Turnstile / Umami / R2) ─
-# Prise de RDV : Cal.com (embed.js sur app.cal.com, iframe sur cal.com/app.cal.com).
-(csp) {
-	header Content-Security-Policy "default-src 'self';
-		script-src 'self' https://js.stripe.com https://challenges.cloudflare.com https://app.cal.com https://stats.encrehumaine.fr;
-		style-src 'self' 'unsafe-inline';
-		img-src 'self' data: blob: https://cms.encrehumaine.fr https://*.r2.cloudflarestorage.com https://*.stripe.com https://app.cal.com;
-		font-src 'self' data:;
-		connect-src 'self' https://api.stripe.com https://cms.encrehumaine.fr https://stats.encrehumaine.fr https://challenges.cloudflare.com https://app.cal.com;
-		frame-src https://js.stripe.com https://checkout.stripe.com https://challenges.cloudflare.com https://cal.com https://app.cal.com;
-		frame-ancestors 'self';
-		base-uri 'self';
-		form-action 'self' https://checkout.stripe.com;
-		object-src 'none'"
-}
+# ── CSP & en-têtes du SITE PUBLIC : posés par l'app (module nuxt-security) ────
+# La CSP est **à nonce** (script-src sans 'unsafe-inline') : Nuxt émet un <script>
+# inline de config qui doit porter un nonce par requête — impossible à gérer
+# proprement depuis Caddy. nuxt-security pose donc CSP + HSTS + X-Frame-Options +
+# Referrer-Policy + Permissions-Policy + COOP sur les réponses du site (cf.
+# apps/web/nuxt.config.ts §security). Caddy ne double pas ces en-têtes ici (sinon
+# en-têtes dupliqués) ; il les garde pour cms./stats. qui ne passent PAS par Nuxt.
 
 # ── Site public (Nuxt/Nitro) ─────────────────────────────────────────────────
 encrehumaine.fr, www.encrehumaine.fr {
-	import security_headers
-	import csp
 	encode zstd gzip
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
