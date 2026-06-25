@@ -1,0 +1,42 @@
+# CI — lint + typecheck + tests + build (vérification). PAS de déploiement.
+# Forgejo Actions. Tourne sur le runner Docker dédié (hors prod).
+# docs/07-deploy.md §CI. Déploiement = .forgejo/workflows/deploy.yml (sur tag).
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    # ⚠️ Doit correspondre à un label annoncé par ton runner dédié
+    # (act_runner). Adapter si ton runner expose un autre label.
+    runs-on: docker
+    container:
+      # Aligné sur .node-version (26.0.0) + Dockerfile. Pas de corepack en Node 26.
+      image: node:26.0.0-bookworm-slim
+    steps:
+      # git/ca-certificates : requis par actions/checkout sur l'image slim.
+      - name: Dépendances système
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+
+      - uses: actions/checkout@v4
+
+      - name: Installer pnpm (aligné sur packageManager)
+        run: npm install -g pnpm@10.16.1
+
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (Biome)
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Tests (Vitest, tous les packages)
+        run: pnpm test
+
+      - name: Build de vérification (Nuxt/Nitro)
+        run: pnpm build

@@ -1,0 +1,45 @@
+# Déploiement prod — build SUR LE SERVEUR Hetzner (git pull + compose up --build).
+# Déclenché MANUELLEMENT : sur tag `v*` OU via le bouton « Run workflow »
+# (workflow_dispatch). Le runner ne fait que piloter le serveur en SSH ; aucun
+# secret applicatif ne transite (le `.env` est maintenu à la main sur l'hôte).
+# Pré-requis serveur + secrets : voir .forgejo/workflows/README.md.
+name: deploy
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: docker # ⚠️ même remarque que ci.yml : label de ton runner dédié
+    container:
+      image: alpine:3.20
+    steps:
+      - name: Client SSH
+        run: apk add --no-cache openssh-client
+
+      - name: Déploiement (SSH → git checkout + compose up --build)
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          # Tag (push tag) ou branche (run manuel = main).
+          DEPLOY_REF: ${{ github.ref_name }}
+        run: |
+          set -eu
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          # `--wait` : compose attend les healthchecks et ÉCHOUE si un service
+          # reste unhealthy → le déploiement échoue proprement (porte de santé).
+          ssh -i ~/.ssh/id_deploy -o IdentitiesOnly=yes "$SSH_USER@$SSH_HOST" \
+            "set -eu; \
+             cd '$DEPLOY_PATH'; \
+             git fetch --all --tags --prune; \
+             git checkout --force '$DEPLOY_REF'; \
+             docker compose --env-file infra/env/.env -f infra/docker-compose.yml up -d --build --wait; \
+             docker image prune -f"

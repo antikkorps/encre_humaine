@@ -12,6 +12,9 @@ export default defineVitestConfig({
   test: {
     name: "web",
     include: ["test/**/*.spec.ts"],
+    // Les suites PGlite (webhook Stripe, newsletter) ont un `beforeAll` lourd
+    // (démarrage Postgres-wasm à froid) qui peut dépasser 10s en CI/WSL.
+    hookTimeout: 60_000,
     environment: "nuxt",
     environmentOptions: {
       nuxt: { domEnvironment: "happy-dom" },

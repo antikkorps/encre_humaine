@@ -122,8 +122,8 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [x] Umami cookieless intégré — script injecté côté front via `plugins/analytics.client.ts` (chargé **sans consentement**, cookieless) + util pur `utils/analytics.ts` (`analyticsScript` → descripteur ou `null` si non configuré, **testé** `test/analytics.spec.ts`). 2 vars **publiques agnostiques** (cf. [[encre-humaine-nommage-agnostique]]) `ANALYTICS_SCRIPT_URL` + `ANALYTICS_WEBSITE_ID` (env schema **optionnelles**, runtimeConfig public, `.env.example`). CSP Caddy autorisait déjà `stats.encrehumaine.fr` (script-src/connect-src). ⚠️ **website id à créer dans le dashboard `stats.` au déploiement** puis renseigner `ANALYTICS_WEBSITE_ID` (vide → aucun script injecté).
 
 ### Déploiement — `docs/07-deploy.md`
-- [ ] CI Forgejo (lint + typecheck + tests bloquants → build → deploy)
-- [ ] Miroir GitHub
+- [x] CI Forgejo (lint + typecheck + tests bloquants → build → deploy) — 2 workflows `.forgejo/workflows/` : **`ci.yml`** (push `main` + PR → lint/typecheck/tests/build dans `node:26.0.0-bookworm-slim`, runner Docker dédié) + **`deploy.yml`** (tag `v*` ou `workflow_dispatch` → SSH Hetzner → `git checkout` + `docker compose up -d --build --wait`, **build sur le serveur**, `.env` maintenu à la main sur l'hôte). Tests PGlite fiabilisés (`hookTimeout: 60s`). README de setup (`.forgejo/workflows/README.md`) : secrets Forgejo `DEPLOY_*`, pré-requis serveur, durcissement firewall CF. ⚠️ **reste côté Franck** : enregistrer le runner (label `docker`), créer les secrets `DEPLOY_SSH_KEY`/`KNOWN_HOSTS`/`USER`/`HOST`/`PATH`, cloner le dépôt + créer `infra/env/.env` sur Hetzner. YAML validé + commandes éprouvées en local ; exécution Forgejo réelle non testée ici.
+- [x] Miroir GitHub — en place (configuré depuis Forgejo).
 - [ ] DNS Cloudflare (`@`, `cms`, `stats`) + token DNS scope
 - [ ] Restauration d'un dump testée avant prod
 
