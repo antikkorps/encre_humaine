@@ -35,8 +35,11 @@ export default defineEventHandler(async (event) => {
 
       // Le payload webhook ne contient pas les line_items : on récupère la
       // session complète (snapshot fidèle de la commande) avant persistance.
+      // Seul `line_items` doit être étendu : `customer_details` et
+      // `collected_information.shipping_details` sont inclus par défaut et ne
+      // sont PAS expandables (l'API récente rejette `expand: shipping_details`).
       const full = await stripe().checkout.sessions.retrieve(session.id, {
-        expand: ["line_items", "customer_details", "shipping_details"],
+        expand: ["line_items"],
       });
       await recordCheckoutSession(db, full, resendOrderEmailer());
       return { received: true };
