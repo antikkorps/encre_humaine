@@ -49,7 +49,7 @@ async function main(): Promise<void> {
     social_links: [{ platform: "LinkedIn", url: "https://www.linkedin.com/in/eleonore-moree" }],
     legal_name: "Eléonore Morée",
     legal_status: "Micro-entreprise",
-    siret: "À COMPLÉTER",
+    siret: "en cours d'immatriculation", // ⚠️ 1ER AOÛT : numéro SIRET réel
     legal_address: "Bouches-du-Rhône, France",
     vat_mention: "TVA non applicable, art. 293 B du CGI",
     host_info: "Hetzner Online GmbH — Industriestr. 25, 91710 Gunzenhausen, Allemagne",
@@ -440,10 +440,20 @@ async function main(): Promise<void> {
   // ── legal_documents ─────────────────────────────────────────────────────────
   // Bases RÉCONCILIÉES pour la stack réelle (Cal.com / Resend / Umami cookieless /
   // Hetzner / Stripe / Cloudflare R2), achat invité (pas de compte), franchise TVA
-  // 293 B, rétractation 14 j sur les jeux physiques. Les `[À COMPLÉTER : …]`
-  // (greppables) attendent l'identité légale de Franck (SIRET, adresse, médiateur…).
+  // 293 B, rétractation 14 j sur les jeux physiques.
   // ⚠️ Bases à faire relire par un professionnel avant mise en production.
-  const TODO = (label: string) => `<strong>[À COMPLÉTER : ${label}]</strong>`;
+  //
+  // ┌─ 1ER AOÛT (immatriculation micro-entreprise) ─────────────────────────────┐
+  // │ Remplacer ces valeurs INTÉRIMAIRES par l'identité réelle, PUIS activer la  │
+  // │ boutique (shop_page.shop_enabled = true). Mettre aussi à jour site_settings │
+  // │ (siret/legal_address). Jusque-là : vitrine en ligne, boutique désactivée.  │
+  // └────────────────────────────────────────────────────────────────────────────┘
+  const ID = {
+    siret: "en cours d'immatriculation", // → numéro SIRET réel
+    address: "Bouches-du-Rhône, France", // → adresse postale complète
+    // Médiateur conso : obligatoire dès l'ouverture de la boutique (B2C).
+    mediatorSentence: "un médiateur de la consommation sera désigné à l'ouverture de la boutique",
+  };
   const legalDocs: { slug: string; title: string; body: string }[] = [
     {
       slug: "mentions-legales",
@@ -453,10 +463,9 @@ async function main(): Promise<void> {
         `<p>Le site <a href="https://encrehumaine.fr">encrehumaine.fr</a> est édité par :</p>`,
         `<ul>`,
         `<li><strong>Eléonore Morée</strong>, entrepreneuse individuelle (micro-entreprise) ;</li>`,
-        `<li>Adresse : ${TODO("adresse postale complète")} ;</li>`,
-        `<li>SIRET : ${TODO("numéro SIRET")} ;</li>`,
+        `<li>Adresse : ${ID.address} ;</li>`,
+        `<li>SIRET : ${ID.siret} ;</li>`,
         `<li>Courriel : <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a> ;</li>`,
-        `<li>Téléphone : ${TODO("téléphone — optionnel, supprimer la ligne sinon")} ;</li>`,
         `<li>TVA : TVA non applicable, article 293 B du CGI (franchise en base de TVA).</li>`,
         `</ul>`,
         `<h2>Directrice de la publication</h2>`,
@@ -484,7 +493,7 @@ async function main(): Promise<void> {
         `<p>Les prix sont indiqués en euros. <strong>TVA non applicable, article 293 B du CGI</strong> (franchise en base) : les prix sont donc nets, sans TVA. Les éventuels frais de livraison sont indiqués avant la validation de la commande. La Vendeuse se réserve le droit de modifier ses prix à tout moment, le prix applicable étant celui en vigueur au moment de la commande.</p>`,
         `<h2>3. Produits physiques — commande, paiement et livraison</h2>`,
         `<p>La commande est validée après paiement intégral. Le paiement est traité par <strong>Stripe</strong> via une page de paiement sécurisée ; aucune donnée de carte bancaire ne transite ni n'est conservée par la Vendeuse. Une confirmation est adressée par courriel.</p>`,
-        `<p>Les produits sont livrés à l'adresse indiquée lors de la commande, dans un délai indicatif de ${TODO("délai de livraison — ex. 5 à 10 jours ouvrés")}. Les frais de livraison sont précisés avant paiement.</p>`,
+        `<p>Les produits sont livrés à l'adresse indiquée lors de la commande, dans un délai précisé avant la validation de celle-ci. Les frais de livraison sont indiqués avant paiement.</p>`,
         `<h2>4. Droit de rétractation (produits physiques)</h2>`,
         `<p>Conformément aux articles L.221-18 et suivants du Code de la consommation, le client consommateur dispose d'un délai de <strong>quatorze (14) jours</strong> à compter de la réception du produit pour exercer son droit de rétractation, sans avoir à justifier de motif.</p>`,
         `<p>Pour l'exercer, le client notifie sa décision par courriel à <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a> avant l'expiration du délai. Le produit est retourné dans son état d'origine ; les frais de retour restent à la charge du client. Le remboursement intervient dans les quatorze (14) jours suivant la récupération du produit (ou la preuve de son expédition), par le même moyen de paiement.</p>`,
@@ -494,7 +503,7 @@ async function main(): Promise<void> {
         `<p>Les prestations font l'objet d'un devis ou d'une proposition décrivant le périmètre, les modalités et le tarif. La prestation débute après accord et, le cas échéant, versement de l'acompte convenu. Les modalités d'annulation ou de report propres à chaque mission sont précisées au devis.</p>`,
         `<p>Pour les prestations de services commandées à distance par un consommateur, le droit de rétractation de quatorze (14) jours s'applique ; le client peut toutefois demander que l'exécution commence avant la fin de ce délai, ce qui peut, en cas de prestation pleinement exécutée, le priver de ce droit conformément à l'article L.221-28 du Code de la consommation.</p>`,
         `<h2>7. Réclamations et médiation de la consommation</h2>`,
-        `<p>Toute réclamation peut être adressée à <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>. Conformément à l'article L.612-1 du Code de la consommation, le consommateur peut recourir gratuitement à un médiateur de la consommation : ${TODO("nom et coordonnées du médiateur de la consommation")}. La plateforme européenne de règlement en ligne des litiges est par ailleurs accessible à l'adresse <a href="https://ec.europa.eu/consumers/odr">ec.europa.eu/consumers/odr</a>.</p>`,
+        `<p>Toute réclamation peut être adressée à <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>. Conformément à l'article L.612-1 du Code de la consommation, le consommateur peut recourir gratuitement à un médiateur de la consommation ; ${ID.mediatorSentence}. La plateforme européenne de règlement en ligne des litiges est par ailleurs accessible à l'adresse <a href="https://ec.europa.eu/consumers/odr">ec.europa.eu/consumers/odr</a>.</p>`,
         `<h2>8. Droit applicable</h2>`,
         `<p>Les présentes CGV sont soumises au droit français. À défaut de résolution amiable, les litiges relèvent des juridictions françaises compétentes.</p>`,
       ].join(""),
@@ -527,7 +536,7 @@ async function main(): Promise<void> {
       title: "Politique de confidentialité",
       body: [
         `<h2>1. Responsable de traitement</h2>`,
-        `<p>Le responsable des traitements est Eléonore Morée — ${TODO("adresse postale complète")} — <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>.</p>`,
+        `<p>Le responsable des traitements est Eléonore Morée — ${ID.address} — <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>.</p>`,
         `<h2>2. Données collectées, finalités et bases légales</h2>`,
         `<ul>`,
         `<li><strong>Formulaire de contact</strong> (nom, courriel, message) : pour répondre à votre demande. Base légale : mesures précontractuelles / intérêt légitime.</li>`,
@@ -550,7 +559,7 @@ async function main(): Promise<void> {
         `<p>Certains de ces prestataires peuvent traiter des données hors de l'Union européenne ; ces transferts sont alors encadrés par des garanties appropriées (clauses contractuelles types ou cadre de protection des données UE–États-Unis).</p>`,
         `<h2>5. Durées de conservation</h2>`,
         `<ul>`,
-        `<li>Demandes de contact : ${TODO("durée — ex. 3 ans à compter du dernier échange")} ;</li>`,
+        `<li>Demandes de contact : 3 ans à compter du dernier échange ;</li>`,
         `<li>Newsletter : jusqu'à votre désinscription (puis suppression) ; inscriptions non confirmées : 30 jours ;</li>`,
         `<li>Commandes et pièces comptables : durée légale de conservation applicable (jusqu'à 10 ans pour les documents comptables).</li>`,
         `</ul>`,
