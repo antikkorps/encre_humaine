@@ -90,7 +90,12 @@ if (product.value) {
 </script>
 
 <template>
-  <div v-if="product" class="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+  <div v-if="product" class="relative isolate mx-auto max-w-6xl overflow-x-clip px-4 py-12 sm:py-16">
+    <!-- Filigrane tentacule (ADN encre) — discret, derrière la colonne infos. -->
+    <TentacleAccent
+      name="tentacule-1-trait"
+      class="absolute -right-16 bottom-8 -z-10 hidden w-96 text-teal-600/[0.06] lg:block"
+    />
     <nav class="mb-6 text-sm font-medium text-teal-700" aria-label="Fil d'Ariane">
       <NuxtLink to="/boutique" class="underline-offset-2 hover:underline">← Boutique</NuxtLink>
     </nav>

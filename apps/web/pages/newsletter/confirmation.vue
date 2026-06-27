@@ -46,7 +46,12 @@ useSeoMeta({
 </script>
 
 <template>
-  <section class="mx-auto max-w-2xl px-4 py-24">
+  <section class="relative isolate mx-auto max-w-2xl overflow-hidden px-4 py-24">
+    <!-- Filigrane tentacule discret qui affleure derrière la carte (parité avec la confirmation de commande). -->
+    <TentacleAccent
+      name="tentacule-5-trait"
+      class="absolute -left-12 -bottom-8 -z-10 w-72 -rotate-6 text-teal-700/[0.08]"
+    />
     <div class="rounded-3xl border border-ink/5 bg-white p-10 text-center shadow-soft sm:p-12">
       <p class="text-5xl" aria-hidden="true">{{ state.icon }}</p>
       <h1 class="mt-6 font-display text-3xl font-bold text-ink">{{ state.title }}</h1>

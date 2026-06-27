@@ -40,7 +40,13 @@ useSeoMeta({
 </script>
 
 <template>
-  <div v-if="doc" class="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+  <div v-if="doc" class="relative isolate mx-auto max-w-6xl overflow-x-clip px-4 py-12 sm:py-16">
+    <!-- Filigrane tentacule (ADN encre) — discret, derrière le corps. overflow-x-clip
+         (et non overflow-hidden) pour ne pas casser le sticky du sommaire. -->
+    <TentacleAccent
+      name="tentacule-4-trait"
+      class="absolute -left-20 top-24 -z-10 hidden w-72 text-teal-700/[0.05] lg:block"
+    />
     <div class="lg:flex lg:justify-center lg:gap-12">
       <article class="w-full max-w-3xl">
         <p class="text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent">Informations</p>
