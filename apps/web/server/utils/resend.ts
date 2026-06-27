@@ -66,8 +66,10 @@ export async function sendNewsletterConfirmation(opts: {
   token: string;
 }): Promise<void> {
   const config = useRuntimeConfig();
-  // Lien vers l'endpoint de confirmation, qui valide puis redirige vers la page.
-  const link = new URL("/api/newsletter/confirm", config.public.baseUrl);
+  // Lien vers la PAGE de confirmation (GET inerte) : elle affiche un bouton qui
+  // POST l'action réelle. Un GET ne confirme jamais → scanners/prefetch d'emails
+  // ne peuvent pas auto-confirmer (audit sécu #3, double opt-in préservé).
+  const link = new URL("/newsletter/confirmation", config.public.baseUrl);
   link.searchParams.set("token", opts.token);
   link.searchParams.set("email", opts.email);
 
