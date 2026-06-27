@@ -51,4 +51,12 @@ export const config = {
   adminPassword: get("DIRECTUS_ADMIN_PASSWORD"),
   /** Token statique lecture seule (published-only) du rôle API consommé par Nuxt. */
   readToken: get("DIRECTUS_READ_TOKEN"),
+  /** Compte éditeur (Eléonore) — rôle Éditrice. */
+  editorEmail: get("DIRECTUS_EDITOR_EMAIL", "eleonore@encrehumaine.fr"),
+  /**
+   * Mot de passe INITIAL de l'éditrice (changé à la 1re connexion). OPTIONNEL :
+   * vide → le bootstrap ne crée pas le compte (cas dev/CI). Jamais réécrit sur un
+   * compte existant (re-runs idempotents sans réinitialiser son mot de passe).
+   */
+  editorPassword: process.env.DIRECTUS_EDITOR_PASSWORD ?? fileEnv.DIRECTUS_EDITOR_PASSWORD ?? "",
 };

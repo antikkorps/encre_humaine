@@ -43,6 +43,7 @@ openssl rand -hex 32   # pour chaque secret « interne »
 | `DIRECTUS_KEY`, `DIRECTUS_SECRET`, `UMAMI_APP_SECRET` | aléatoires |
 | `DIRECTUS_ADMIN_EMAIL` = `admin@encrehumaine.fr`, `DIRECTUS_ADMIN_PASSWORD` | admin du CMS (créé au 1er boot, volume neuf) |
 | `DIRECTUS_READ_TOKEN` | aléatoire **fixé AVANT le bootstrap** (le bootstrap crée l'utilisateur API lecture-seule avec CE token) |
+| `DIRECTUS_EDITOR_EMAIL` = `eleonore@encrehumaine.fr`, `DIRECTUS_EDITOR_PASSWORD` | compte éditrice (Eléonore) créé par le bootstrap ; mot de passe **initial** (elle le change à la 1re connexion) |
 | `STRIPE_SECRET_KEY` (`sk_live_…`), `STRIPE_WEBHOOK_SECRET` (`whsec_…`), `STRIPE_SHIPPING_RATE_FR` (`shr_…`) | Stripe **LIVE** — Phase 7 |
 | `RESEND_API_KEY`, `RESEND_AUDIENCE_ID` | console Resend ; `NEWSLETTER_FROM`/`CONTACT_NOTIFY_TO` = `eleonore@encrehumaine.fr` |
 | `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile (widget du domaine) |
@@ -143,10 +144,12 @@ DIRECTUS_URL=https://cms.encrehumaine.fr \
 DIRECTUS_ADMIN_EMAIL=admin@encrehumaine.fr \
 DIRECTUS_ADMIN_PASSWORD='<prod>' \
 DIRECTUS_READ_TOKEN='<le même que dans .env prod>' \
+DIRECTUS_EDITOR_PASSWORD='<mot de passe initial Eléonore>' \
 pnpm --filter @encre/directus bootstrap
 ```
 
-- ✅ `bootstrap` rejoué = **+0** (idempotent). Crée collections/champs/relations/rôles + l'utilisateur API lecture-seule au token `DIRECTUS_READ_TOKEN`.
+- ✅ `bootstrap` rejoué = **+0** (idempotent). Crée collections/champs/relations/rôles + l'utilisateur API lecture-seule (token `DIRECTUS_READ_TOKEN`) + le **compte éditrice d'Eléonore** (rôle Éditrice, `DIRECTUS_EDITOR_EMAIL`, mot de passe initial `DIRECTUS_EDITOR_PASSWORD` qu'elle change à la 1re connexion ; non réécrasé aux re-runs).
+- **Comptes** : toi = **admin** (`admin@encrehumaine.fr`, créé au 1er boot depuis le `.env`) ; Eléonore = **éditrice** (créée par le bootstrap, ne peut PAS toucher au schéma/réglages).
 - ▢ **Contenu réel** : saisir dans l'admin Directus (Eléonore). Le `seed` contient du contenu **démo** (témoignages/articles fictifs) **+** les **bases légales réelles** (`legal_documents`) avec marqueurs `[À COMPLÉTER]`. En prod : saisir le vrai contenu à la main ; reprendre les bases légales depuis le seed et **remplir l'identité** (SIRET, adresse, médiateur…). Renseigner aussi `site_settings` (siret/adresse) pour le footer.
 - ▢ Activer la boutique quand prête : `shop_page.shop_enabled = true`.
 
