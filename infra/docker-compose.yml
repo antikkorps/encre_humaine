@@ -169,6 +169,9 @@ services:
       NUXT_TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
       # — Valeurs publiques (sérialisées vers le client) —
       NUXT_PUBLIC_BASE_URL: ${BASE_URL}
+      # URL du site pour @nuxtjs/seo (canonical, sitemap, OG absolus) — lue au
+      # runtime par nuxt-site-config (le build Docker n'a pas de .env).
+      NUXT_PUBLIC_SITE_URL: ${BASE_URL}
       NUXT_PUBLIC_DIRECTUS_PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
       NUXT_PUBLIC_TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY}
       NUXT_PUBLIC_BOOKING_URL: ${BOOKING_URL}

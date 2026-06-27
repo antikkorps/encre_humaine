@@ -19,13 +19,16 @@ const publishedLabel = computed(() => {
 
 <template>
   <article class="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift">
-    <!-- @nuxt/image + provider Directus = phase 1 ; <img> dimensionné pour limiter le CLS. -->
+    <!-- NuxtImg → provider Directus (srcset + webp). width/height = CLS. -->
     <div v-if="article.coverImage" class="overflow-hidden">
-      <img
+      <NuxtImg
         :src="article.coverImage"
         :alt="article.coverAlt ?? ''"
         width="640"
         height="360"
+        fit="cover"
+        format="webp"
+        sizes="100vw sm:50vw lg:400px"
         loading="lazy"
         decoding="async"
         class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"

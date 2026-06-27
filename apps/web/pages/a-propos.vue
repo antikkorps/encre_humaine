@@ -18,6 +18,16 @@ useSeoMeta({
   ogType: "website",
   robots: () => (content.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
+
+// Person (Eléonore) — fondatrice, reliée à l'Organization du site (schemaOrg config).
+useSchemaOrg([
+  definePerson({
+    name: "Eléonore Morée",
+    jobTitle: "Conseil RH & accompagnement des parcours professionnels",
+    url: "/a-propos",
+    sameAs: ["https://www.linkedin.com/in/eleonore-moree"],
+  }),
+]);
 </script>
 
 <template>
@@ -42,9 +52,14 @@ useSeoMeta({
               aria-hidden="true"
               class="absolute -left-3 -top-3 -z-10 h-full w-full rounded-3xl bg-teal-100"
             ></span>
-            <img
+            <NuxtImg
               :src="content.story.photo.url"
               :alt="content.story.photo.alt"
+              width="480"
+              height="600"
+              fit="cover"
+              format="webp"
+              sizes="100vw md:50vw lg:480px"
               loading="lazy"
               decoding="async"
               class="aspect-[4/5] w-full rounded-3xl object-cover shadow-lift"
@@ -129,10 +144,15 @@ useSeoMeta({
         aria-label="Portrait"
       >
         <figure class="flex flex-col items-center gap-6 text-center">
-          <img
+          <NuxtImg
             v-if="content.portrait.photo"
             :src="content.portrait.photo.url"
             :alt="content.portrait.photo.alt"
+            width="160"
+            height="160"
+            fit="cover"
+            format="webp"
+            sizes="160px"
             loading="lazy"
             decoding="async"
             class="h-40 w-40 rounded-full object-cover shadow-lift ring-4 ring-teal-100"

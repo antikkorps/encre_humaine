@@ -86,6 +86,17 @@ if (product.value) {
       },
     ],
   });
+
+  // Fil d'Ariane structuré (Accueil > Boutique > produit).
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: "Accueil", item: "/" },
+        { name: "Boutique", item: "/boutique" },
+        { name: p.name },
+      ],
+    }),
+  ]);
 }
 </script>
 
@@ -103,12 +114,17 @@ if (product.value) {
     <div class="grid gap-10 md:grid-cols-2">
       <!-- Galerie -->
       <div>
-        <img
+        <NuxtImg
           v-if="product.images.length"
           :src="product.images[activeImage]"
           :alt="product.name"
           width="800"
           height="600"
+          fit="cover"
+          format="webp"
+          sizes="100vw md:50vw lg:560px"
+          preload
+          fetchpriority="high"
           class="aspect-[4/3] w-full rounded-3xl border border-ink/5 object-cover shadow-soft"
         />
         <div
@@ -128,7 +144,7 @@ if (product.value) {
               :aria-pressed="i === activeImage"
               @click="activeImage = i"
             >
-              <img :src="img" :alt="`${product.name} — visuel ${i + 1}`" width="72" height="72" class="h-16 w-16 object-cover" />
+              <NuxtImg :src="img" :alt="`${product.name} — visuel ${i + 1}`" width="72" height="72" fit="cover" format="webp" sizes="72px" class="h-16 w-16 object-cover" />
             </button>
           </li>
         </ul>

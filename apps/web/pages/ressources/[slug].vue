@@ -57,6 +57,17 @@ if (article.value) {
       },
     ],
   });
+
+  // Fil d'Ariane structuré (Accueil > Ressources > article).
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: "Accueil", item: "/" },
+        { name: "Ressources", item: "/ressources" },
+        { name: a.title },
+      ],
+    }),
+  ]);
 }
 </script>
 
@@ -95,12 +106,17 @@ if (article.value) {
             <span v-if="publishedLabel && article.readingTime" aria-hidden="true">·</span>
             <span v-if="article.readingTime">{{ article.readingTime }} min de lecture</span>
           </p>
-          <img
+          <NuxtImg
             v-if="article.cover"
             :src="article.cover.url"
             :alt="article.cover.alt"
             width="768"
             height="432"
+            fit="cover"
+            format="webp"
+            sizes="100vw lg:768px"
+            preload
+            fetchpriority="high"
             class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lift"
           />
         </header>

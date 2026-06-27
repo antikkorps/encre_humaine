@@ -126,8 +126,33 @@ export default defineNuxtConfig({
     scheduledTasks: { "0 3 * * *": ["newsletter:purge", "contact:purge"] },
   },
 
-  // @nuxtjs/seo : robots/sitemap/canonical/OG. Site renseigné via env au build.
+  // @nuxtjs/seo : robots/sitemap/canonical/OG. `site.url` est lu au BUILD ; en
+  // prod (build Docker sans .env) il est vide → l'URL réelle est injectée au
+  // RUNTIME via `NUXT_PUBLIC_SITE_URL` (mappé depuis BASE_URL dans le compose).
   site: { url: process.env.BASE_URL, name: "L'Encre Humaine" },
+
+  // Sitemap : routes statiques auto-découvertes + source dynamique pour les
+  // pages CMS (articles, offres, produits) — sinon absentes du sitemap.
+  sitemap: { sources: ["/api/__sitemap__/urls"] },
+
+  // Identité schema.org globale (Organization + WebSite + WebPage auto-injectés
+  // sur chaque page). Person (Eléonore) ajoutée sur /a-propos.
+  schemaOrg: {
+    identity: {
+      type: "Organization",
+      name: "L'Encre Humaine",
+      sameAs: ["https://www.linkedin.com/in/eleonore-moree"],
+    },
+  },
+
+  // @nuxt/image : provider Directus custom (transformations côté Directus, pas
+  // d'IPX/sharp dans le runtime slim). cf. providers/directus.ts.
+  image: {
+    provider: "directus",
+    providers: {
+      directus: { name: "directus", provider: "~/providers/directus.ts" },
+    },
+  },
 
   typescript: { strict: true },
 });

@@ -168,11 +168,14 @@ const heroTitle = computed(() => {
               aria-hidden="true"
               class="absolute -left-3 -top-3 -z-10 h-full w-full rounded-3xl bg-teal-100"
             ></span>
-            <img
+            <NuxtImg
               :src="content.intro.photo.url"
               :alt="content.intro.photo.alt"
-              :width="content.intro.photo.width ?? undefined"
-              :height="content.intro.photo.height ?? undefined"
+              :width="content.intro.photo.width ?? 640"
+              :height="content.intro.photo.height ?? 480"
+              fit="cover"
+              format="webp"
+              sizes="100vw md:50vw lg:560px"
               loading="lazy"
               decoding="async"
               class="aspect-[4/3] w-full rounded-3xl object-cover shadow-lift"
