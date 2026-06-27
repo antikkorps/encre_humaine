@@ -69,6 +69,16 @@ services:
       DATABASE_TYPE: postgresql
       DATABASE_URL: ${UMAMI_DB_URL}
       APP_SECRET: ${UMAMI_APP_SECRET}
+    healthcheck:
+      # Sonde via fetch natif (Node présent dans l'image Umami) → /api/heartbeat.
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/heartbeat').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
     networks: [internal]
 
   # Sauvegardes chiffrées (pg_dump → gpg → rclone → R2). Conteneur cron :
