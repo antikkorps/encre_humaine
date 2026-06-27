@@ -26,6 +26,10 @@ function redirectToPage(event: H3Event, status: ConfirmStatus) {
 }
 
 export default defineEventHandler(async (event) => {
+  // Throttle l'oracle d'énumération (statuts already/expired révèlent l'existence
+  // d'une adresse) : un humain ne confirme qu'une fois, un énumérateur est borné.
+  enforceRateLimit(event, "newsletter-confirm", { limit: 10, windowMs: 60_000 });
+
   const body = await readBody<Record<string, unknown>>(event);
   const parsed = v.safeParse(NewsletterConfirmSchema, body);
   if (!parsed.success) return redirectToPage(event, "invalid");

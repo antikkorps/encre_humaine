@@ -44,7 +44,7 @@ if (article.value) {
     script: [
       {
         type: "application/ld+json",
-        innerHTML: JSON.stringify({
+        innerHTML: serializeJsonLd({
           "@context": "https://schema.org",
           "@type": "Article",
           headline: a.title,

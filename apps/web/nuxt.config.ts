@@ -120,10 +120,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // Nitro : tâches planifiées (purge RGPD newsletter, docs/03 §3.4). Quotidien 03h.
+  // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.
   nitro: {
     experimental: { tasks: true },
-    scheduledTasks: { "0 3 * * *": ["newsletter:purge"] },
+    scheduledTasks: { "0 3 * * *": ["newsletter:purge", "contact:purge"] },
   },
 
   // @nuxtjs/seo : robots/sitemap/canonical/OG. Site renseigné via env au build.
