@@ -67,11 +67,20 @@ $EDITOR /srv/encre-humaine/infra/env/.env   # secrets réels — NE JAMAIS commi
 `compose up --wait` attend les healthchecks et fait **échouer** le déploiement
 si un service reste *unhealthy*.
 
-## 5. Durcissement réseau (audit sécurité #1 — à faire à la mise en prod)
+## 5. Durcissement réseau (audit sécurité #1 — défense en profondeur)
 
-Si le site est **proxifié par Cloudflare** (orange cloud), `CF-Connecting-IP`
-est de confiance **seulement** si l'origine n'est joignable que par Cloudflare.
-Sinon un attaquant atteint l'IP Hetzner en direct et **forge** cet en-tête →
-contournement du rate-limit. **Firewaller l'origine aux plages d'IP Cloudflare**
-(Hetzner Cloud Firewall ou `ufw`), ports 80/443 uniquement depuis
-`https://www.cloudflare.com/ips/`. Le port SSH reste restreint à tes IP d'admin.
+**Le contournement du rate-limit est déjà neutralisé côté code** : Caddy résout
+lui-même l'IP cliente (`trusted_proxies static <plages CF>` + `client_ip` dans
+`infra/Caddyfile`) et la pose dans `X-Forwarded-For` ; l'app ne lit plus que cet
+en-tête (`server/utils/client-ip.ts`). Un attaquant joignant l'origine en direct
+n'est **pas** un proxy de confiance → ses en-têtes (`CF-Connecting-IP` compris)
+sont **ignorés**. `CF-Connecting-IP` n'est donc **plus forgeable**, que le site
+finisse en orange cloud (proxifié) ou grey cloud (DNS-only). À la mise en prod,
+**revérifier les plages CF figées dans le Caddyfile** contre la liste canonique
+`https://www.cloudflare.com/ips/` (elles bougent rarement).
+
+**Reste recommandé** (défense en profondeur, surtout en orange cloud) :
+**firewaller l'origine aux plages d'IP Cloudflare** (Hetzner Cloud Firewall ou
+`ufw`), ports 80/443 uniquement depuis `https://www.cloudflare.com/ips/` — pour
+soustraire l'origine au scan/DDoS direct. Le port SSH reste restreint à tes IP
+d'admin.
