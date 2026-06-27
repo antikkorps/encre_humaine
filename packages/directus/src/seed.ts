@@ -437,35 +437,130 @@ async function main(): Promise<void> {
     meta_title: "Boutique — L'Encre Humaine",
   });
 
-  // ── legal_documents (PLACEHOLDER — contenu réel à réconcilier hors seed) ─────
-  const legalNote = P(
-    "<em>Contenu de démonstration</em> — à remplacer par le texte légal réel dans Directus.",
-  );
-  const legalDocs = [
+  // ── legal_documents ─────────────────────────────────────────────────────────
+  // Bases RÉCONCILIÉES pour la stack réelle (Cal.com / Resend / Umami cookieless /
+  // Hetzner / Stripe / Cloudflare R2), achat invité (pas de compte), franchise TVA
+  // 293 B, rétractation 14 j sur les jeux physiques. Les `[À COMPLÉTER : …]`
+  // (greppables) attendent l'identité légale de Franck (SIRET, adresse, médiateur…).
+  // ⚠️ Bases à faire relire par un professionnel avant mise en production.
+  const TODO = (label: string) => `<strong>[À COMPLÉTER : ${label}]</strong>`;
+  const legalDocs: { slug: string; title: string; body: string }[] = [
     {
       slug: "mentions-legales",
       title: "Mentions légales",
-      arts: ["Éditeur du site", "Hébergeur", "Propriété intellectuelle"],
+      body: [
+        `<h2>Éditeur du site</h2>`,
+        `<p>Le site <a href="https://encrehumaine.fr">encrehumaine.fr</a> est édité par :</p>`,
+        `<ul>`,
+        `<li><strong>Eléonore Morée</strong>, entrepreneuse individuelle (micro-entreprise) ;</li>`,
+        `<li>Adresse : ${TODO("adresse postale complète")} ;</li>`,
+        `<li>SIRET : ${TODO("numéro SIRET")} ;</li>`,
+        `<li>Courriel : <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a> ;</li>`,
+        `<li>Téléphone : ${TODO("téléphone — optionnel, supprimer la ligne sinon")} ;</li>`,
+        `<li>TVA : TVA non applicable, article 293 B du CGI (franchise en base de TVA).</li>`,
+        `</ul>`,
+        `<h2>Directrice de la publication</h2>`,
+        `<p>Eléonore Morée.</p>`,
+        `<h2>Hébergeur</h2>`,
+        `<p>Le site est hébergé par <strong>Hetzner Online GmbH</strong>, Industriestr. 25, 91710 Gunzenhausen, Allemagne — <a href="https://www.hetzner.com">hetzner.com</a>.</p>`,
+        `<h2>Propriété intellectuelle</h2>`,
+        `<p>L'ensemble des contenus du site (textes, illustrations, identité visuelle, serious games et supports associés) est protégé par le droit de la propriété intellectuelle et demeure la propriété exclusive d'Eléonore Morée, sauf mention contraire. Toute reproduction ou réutilisation sans autorisation écrite préalable est interdite.</p>`,
+        `<h2>Données personnelles et cookies</h2>`,
+        `<p>Les traitements de données réalisés via le site sont décrits dans la <a href="/confidentialite">Politique de confidentialité</a>. La mesure d'audience est assurée par Umami, une solution auto-hébergée <strong>sans cookie ni traceur</strong> ; le détail figure dans les <a href="/cgu">Conditions générales d'utilisation</a>.</p>`,
+      ].join(""),
     },
     {
       slug: "cgv",
       title: "Conditions générales de vente",
-      arts: ["Objet", "Tarifs et paiement", "Droit de rétractation"],
+      body: [
+        `<h2>1. Objet et champ d'application</h2>`,
+        `<p>Les présentes conditions générales de vente (CGV) régissent les ventes conclues sur le site <a href="https://encrehumaine.fr">encrehumaine.fr</a> par Eléonore Morée (ci-après « la Vendeuse ») :</p>`,
+        `<ul>`,
+        `<li>la vente de <strong>produits physiques</strong> (serious games et supports associés) via la boutique en ligne ;</li>`,
+        `<li>la fourniture de <strong>prestations</strong> de conseil RH et d'accompagnement.</li>`,
+        `</ul>`,
+        `<p>Toute commande ou tout devis accepté implique l'adhésion sans réserve aux présentes CGV. Aucun compte client n'est requis : les achats en boutique se font en mode invité.</p>`,
+        `<h2>2. Prix</h2>`,
+        `<p>Les prix sont indiqués en euros. <strong>TVA non applicable, article 293 B du CGI</strong> (franchise en base) : les prix sont donc nets, sans TVA. Les éventuels frais de livraison sont indiqués avant la validation de la commande. La Vendeuse se réserve le droit de modifier ses prix à tout moment, le prix applicable étant celui en vigueur au moment de la commande.</p>`,
+        `<h2>3. Produits physiques — commande, paiement et livraison</h2>`,
+        `<p>La commande est validée après paiement intégral. Le paiement est traité par <strong>Stripe</strong> via une page de paiement sécurisée ; aucune donnée de carte bancaire ne transite ni n'est conservée par la Vendeuse. Une confirmation est adressée par courriel.</p>`,
+        `<p>Les produits sont livrés à l'adresse indiquée lors de la commande, dans un délai indicatif de ${TODO("délai de livraison — ex. 5 à 10 jours ouvrés")}. Les frais de livraison sont précisés avant paiement.</p>`,
+        `<h2>4. Droit de rétractation (produits physiques)</h2>`,
+        `<p>Conformément aux articles L.221-18 et suivants du Code de la consommation, le client consommateur dispose d'un délai de <strong>quatorze (14) jours</strong> à compter de la réception du produit pour exercer son droit de rétractation, sans avoir à justifier de motif.</p>`,
+        `<p>Pour l'exercer, le client notifie sa décision par courriel à <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a> avant l'expiration du délai. Le produit est retourné dans son état d'origine ; les frais de retour restent à la charge du client. Le remboursement intervient dans les quatorze (14) jours suivant la récupération du produit (ou la preuve de son expédition), par le même moyen de paiement.</p>`,
+        `<h2>5. Garanties légales</h2>`,
+        `<p>Tous les produits bénéficient de la garantie légale de conformité (art. L.217-3 et s. du Code de la consommation) et de la garantie contre les vices cachés (art. 1641 et s. du Code civil), indépendamment de toute garantie commerciale.</p>`,
+        `<h2>6. Prestations de conseil et d'accompagnement</h2>`,
+        `<p>Les prestations font l'objet d'un devis ou d'une proposition décrivant le périmètre, les modalités et le tarif. La prestation débute après accord et, le cas échéant, versement de l'acompte convenu. Les modalités d'annulation ou de report propres à chaque mission sont précisées au devis.</p>`,
+        `<p>Pour les prestations de services commandées à distance par un consommateur, le droit de rétractation de quatorze (14) jours s'applique ; le client peut toutefois demander que l'exécution commence avant la fin de ce délai, ce qui peut, en cas de prestation pleinement exécutée, le priver de ce droit conformément à l'article L.221-28 du Code de la consommation.</p>`,
+        `<h2>7. Réclamations et médiation de la consommation</h2>`,
+        `<p>Toute réclamation peut être adressée à <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>. Conformément à l'article L.612-1 du Code de la consommation, le consommateur peut recourir gratuitement à un médiateur de la consommation : ${TODO("nom et coordonnées du médiateur de la consommation")}. La plateforme européenne de règlement en ligne des litiges est par ailleurs accessible à l'adresse <a href="https://ec.europa.eu/consumers/odr">ec.europa.eu/consumers/odr</a>.</p>`,
+        `<h2>8. Droit applicable</h2>`,
+        `<p>Les présentes CGV sont soumises au droit français. À défaut de résolution amiable, les litiges relèvent des juridictions françaises compétentes.</p>`,
+      ].join(""),
     },
     {
       slug: "cgu",
       title: "Conditions générales d'utilisation",
-      arts: ["Objet", "Accès au site", "Cookies"],
+      body: [
+        `<h2>1. Objet</h2>`,
+        `<p>Les présentes conditions régissent l'accès et l'utilisation du site <a href="https://encrehumaine.fr">encrehumaine.fr</a>. En naviguant sur le site, l'utilisateur en accepte les conditions.</p>`,
+        `<h2>2. Accès au site</h2>`,
+        `<p>Le site est accessible gratuitement. <strong>Aucune création de compte n'est nécessaire</strong> : la consultation des contenus, la prise de contact, l'inscription à la newsletter et les achats en boutique se font sans authentification (achat invité). La Vendeuse s'efforce d'assurer la disponibilité du site sans pouvoir la garantir, notamment lors d'opérations de maintenance.</p>`,
+        `<h2>3. Propriété intellectuelle</h2>`,
+        `<p>Les contenus du site sont protégés. Toute reproduction non autorisée est interdite (voir les <a href="/mentions-legales">Mentions légales</a>).</p>`,
+        `<h2>4. Mesure d'audience et cookies</h2>`,
+        `<p>Le site limite au strict nécessaire le recours aux traceurs :</p>`,
+        `<ul>`,
+        `<li><strong>Mesure d'audience (Umami)</strong> : statistiques de fréquentation réalisées avec une solution auto-hébergée, <strong>sans cookie et sans traceur</strong>, ne collectant aucune donnée permettant d'identifier les visiteurs. Conforme aux recommandations de la CNIL pour les outils de mesure exemptés, elle <strong>ne requiert pas de consentement</strong>.</li>`,
+        `<li><strong>Cookie de préférence</strong> : un cookie technique mémorise votre choix concernant les contenus tiers (voir ci-dessous). Il est strictement nécessaire au fonctionnement de cette préférence et n'est pas utilisé à des fins de suivi.</li>`,
+        `<li><strong>Contenus tiers soumis à consentement</strong> : la prise de rendez-vous (Cal.com) et le paiement (Stripe) reposent sur des services tiers qui ne sont chargés <strong>qu'après votre consentement explicite</strong>. En l'absence de consentement, ces contenus ne sont pas chargés.</li>`,
+        `</ul>`,
+        `<h2>5. Responsabilité</h2>`,
+        `<p>La Vendeuse ne saurait être tenue responsable des dommages résultant d'une mauvaise utilisation du site, d'une indisponibilité temporaire ou de la présence de liens vers des sites tiers dont elle ne maîtrise pas le contenu.</p>`,
+        `<h2>6. Droit applicable</h2>`,
+        `<p>Les présentes conditions sont soumises au droit français.</p>`,
+      ].join(""),
     },
     {
       slug: "confidentialite",
       title: "Politique de confidentialité",
-      arts: ["Données collectées", "Vos droits", "Sous-traitants"],
+      body: [
+        `<h2>1. Responsable de traitement</h2>`,
+        `<p>Le responsable des traitements est Eléonore Morée — ${TODO("adresse postale complète")} — <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>.</p>`,
+        `<h2>2. Données collectées, finalités et bases légales</h2>`,
+        `<ul>`,
+        `<li><strong>Formulaire de contact</strong> (nom, courriel, message) : pour répondre à votre demande. Base légale : mesures précontractuelles / intérêt légitime.</li>`,
+        `<li><strong>Newsletter</strong> (courriel, prénom facultatif, et preuve de consentement : date, adresse IP et agent utilisateur lors de l'inscription) : pour vous envoyer « Le Fil ». Base légale : votre consentement, recueilli par <strong>double opt-in</strong>.</li>`,
+        `<li><strong>Commandes</strong> (courriel, adresse de livraison, montant) : pour traiter et suivre vos achats. Base légale : exécution du contrat de vente. Les données de paiement sont traitées par Stripe et ne sont pas conservées par la Vendeuse.</li>`,
+        `<li><strong>Mesure d'audience</strong> : statistiques agrégées et anonymes (Umami, sans cookie ni traceur), ne permettant pas de vous identifier.</li>`,
+        `<li><strong>Sécurité</strong> : une protection anti-robot (Cloudflare Turnstile) et une limitation de débit utilisent temporairement l'adresse IP. Cette adresse n'est <strong>pas conservée</strong> sur les demandes de contact. Base légale : intérêt légitime à la sécurité du service.</li>`,
+        `</ul>`,
+        `<h2>3. Double opt-in et preuve de consentement</h2>`,
+        `<p>L'inscription à la newsletter n'est effective qu'après confirmation via un lien envoyé par courriel. La preuve de consentement est conservée. Les inscriptions non confirmées sont automatiquement supprimées après <strong>30 jours</strong>. Vous pouvez vous désinscrire à tout moment via le lien présent dans chaque envoi.</p>`,
+        `<h2>4. Destinataires et sous-traitants</h2>`,
+        `<p>Vos données ne sont jamais vendues. Elles sont susceptibles d'être traitées par les sous-traitants suivants, dans la seule mesure nécessaire :</p>`,
+        `<ul>`,
+        `<li><strong>Hetzner</strong> (Allemagne) : hébergement du site et de la base de données ;</li>`,
+        `<li><strong>Stripe</strong> : traitement des paiements ;</li>`,
+        `<li><strong>Resend</strong> : envoi des courriels (confirmation, notifications, newsletter) ;</li>`,
+        `<li><strong>Cloudflare</strong> : diffusion du site, protection anti-robot (Turnstile) et stockage chiffré des sauvegardes (R2) ;</li>`,
+        `<li><strong>Cal.com</strong> : prise de rendez-vous (uniquement si vous utilisez ce service).</li>`,
+        `</ul>`,
+        `<p>Certains de ces prestataires peuvent traiter des données hors de l'Union européenne ; ces transferts sont alors encadrés par des garanties appropriées (clauses contractuelles types ou cadre de protection des données UE–États-Unis).</p>`,
+        `<h2>5. Durées de conservation</h2>`,
+        `<ul>`,
+        `<li>Demandes de contact : ${TODO("durée — ex. 3 ans à compter du dernier échange")} ;</li>`,
+        `<li>Newsletter : jusqu'à votre désinscription (puis suppression) ; inscriptions non confirmées : 30 jours ;</li>`,
+        `<li>Commandes et pièces comptables : durée légale de conservation applicable (jusqu'à 10 ans pour les documents comptables).</li>`,
+        `</ul>`,
+        `<h2>6. Vos droits</h2>`,
+        `<p>Vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition, de limitation et de portabilité, ainsi que du droit de retirer votre consentement à tout moment. Pour les exercer, écrivez à <a href="mailto:contact@encrehumaine.fr">contact@encrehumaine.fr</a>. Vous pouvez également introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr">cnil.fr</a>).</p>`,
+      ].join(""),
     },
   ];
   for (const d of legalDocs) {
-    const body = legalNote + d.arts.map((a) => `<h2>${a}</h2>${P("Texte à compléter.")}`).join("");
-    await upsert("legal_documents", "slug", d.slug, { title: d.title, body, ...PUB });
+    await upsert("legal_documents", "slug", d.slug, { title: d.title, body: d.body, ...PUB });
   }
 
   console.log("✓ Seed terminé (contenu démo FR). Boutique : produits masqués sans prix Stripe.");
