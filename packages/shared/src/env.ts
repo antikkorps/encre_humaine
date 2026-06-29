@@ -32,6 +32,11 @@ export const ServerEnvSchema = v.object({
   // Domaine
   BASE_URL: url(),
 
+  // Mode « page d'attente » : quand "true", le middleware coming-soon masque
+  // tout le site (503 + noindex) sauf l'inscription newsletter. Bascule par
+  // simple redémarrage du conteneur, sans rebuild. Strictement "true"/"false".
+  COMING_SOON: boolFromEnv,
+
   // Postgres (schéma app uniquement)
   APP_DATABASE_URL: nonEmpty(),
 
