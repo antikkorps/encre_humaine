@@ -12,7 +12,7 @@ x-postgres-healthcheck: &pg-health
 
 services:
   postgres:
-    image: postgres:17.6-alpine
+    image: postgres:18.3-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -22,7 +22,7 @@ services:
       DIRECTUS_DB_PASSWORD: ${DIRECTUS_DB_PASSWORD}
       UMAMI_DB_PASSWORD: ${UMAMI_DB_PASSWORD}
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql
       - ./postgres/init.sh:/docker-entrypoint-initdb.d/10-init.sh:ro
       - ./postgres/init.sql:/opt/encre/init.sql:ro
     healthcheck: *pg-health
