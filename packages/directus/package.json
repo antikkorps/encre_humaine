@@ -15,9 +15,9 @@
     "seed": "tsx src/seed.ts"
   },
   "devDependencies": {
-    "@types/node": "^25.9.2",
-    "tsx": "^4.19.0",
-    "typescript": "^5.9.0",
-    "yaml": "^2.9.0"
+    "@types/node": "25.9.2",
+    "tsx": "4.22.4",
+    "typescript": "5.9.3",
+    "yaml": "2.9.0"
   }
 }
