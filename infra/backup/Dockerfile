@@ -2,7 +2,7 @@
 # Base = même version Postgres que le serveur (pg_dump/pg_restore doivent
 # correspondre au cluster source). + rclone (→ R2), gnupg (chiffrement),
 # coreutils (date GNU pour le calcul de semaine ISO de la rétention).
-FROM postgres:17.6-alpine
+FROM postgres:18.3-alpine
 
 RUN apk add --no-cache rclone gnupg coreutils
 

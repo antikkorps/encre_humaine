@@ -25,9 +25,9 @@
     "directus:types": "pnpm --filter @encre/directus types"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
-    "typescript": "^5.9.0",
-    "vitest": "^4.1.6"
+    "@biomejs/biome": "2.5.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.9"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

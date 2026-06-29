@@ -14,7 +14,7 @@ SRC=encre-backuptest-src
 DST=encre-backuptest-dst
 IMG=encre/backup:test
 HERE="$(cd "$(dirname "$0")" && pwd)"
-PG_IMAGE=postgres:17.6-alpine
+PG_IMAGE=postgres:18.3-alpine
 
 PASS="test-passphrase-not-a-secret"
 PGPW=srcpass
