@@ -4,10 +4,17 @@ import type { H3Event } from "h3";
 import * as v from "valibot";
 
 /**
- * Confirmation double opt-in — `GET /api/newsletter/confirm?token&email`
- * (docs/03-api-contracts.md §3.2). Valide le token (comparaison à temps constant,
- * expiration) puis redirige (302) vers la page d'état `/newsletter/confirmation`.
- * Aucune écriture sur token invalide/expiré.
+ * Confirmation double opt-in — `POST /api/newsletter/confirm` (docs/03-api §3.2).
+ *
+ * **POST volontaire** (et non GET) : le lien de l'email mène à une PAGE inerte
+ * `/newsletter/confirmation?token&email` qui affiche un bouton « Confirmer ».
+ * Seule la soumission du formulaire (POST) mute l'état → les scanners d'emails,
+ * prefetch et sécurités de messagerie (SafeLinks…) qui suivent les liens GET ne
+ * peuvent PLUS auto-confirmer une inscription (audit sécu #3). Le corps accepte
+ * l'urlencodé d'un `<form>` natif → fonctionne sans JS.
+ *
+ * Valide le token (comparaison à temps constant, expiration) puis redirige (302,
+ * Post/Redirect/Get) vers la page d'état. Aucune écriture sur token invalide/expiré.
  */
 type ConfirmStatus = "success" | "expired" | "invalid" | "already";
 
@@ -19,7 +26,12 @@ function redirectToPage(event: H3Event, status: ConfirmStatus) {
 }
 
 export default defineEventHandler(async (event) => {
-  const parsed = v.safeParse(NewsletterConfirmSchema, getQuery(event));
+  // Throttle l'oracle d'énumération (statuts already/expired révèlent l'existence
+  // d'une adresse) : un humain ne confirme qu'une fois, un énumérateur est borné.
+  enforceRateLimit(event, "newsletter-confirm", { limit: 10, windowMs: 60_000 });
+
+  const body = await readBody<Record<string, unknown>>(event);
+  const parsed = v.safeParse(NewsletterConfirmSchema, body);
   if (!parsed.success) return redirectToPage(event, "invalid");
   const { token, email } = parsed.output;
 

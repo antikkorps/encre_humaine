@@ -1,7 +1,9 @@
-// Rôles, policies & permissions (modèle d'accès Directus 11) — docs/02 §6.
+// Rôles, policies, permissions & utilisateurs (modèle d'accès Directus 11) — docs/02 §6.
 //  - Éditrice : CRUD sur tout le contenu + fichiers ; aucune structure/réglage.
+//    → compte d'Eléonore créé ici si DIRECTUS_EDITOR_PASSWORD est fourni.
 //  - API (lecture) : lecture seule, status=published uniquement → token statique (Nuxt).
-//  - Administrateur : rôle système par défaut (Franck), non recréé ici.
+//  - Administrateur : rôle système par défaut (Franck = DIRECTUS_ADMIN_EMAIL,
+//    créé au 1er boot Directus depuis le .env), non recréé ici.
 
 import { del, findPolicy, findRole, findUserByEmail, get, patch, post } from "./api.ts";
 import { config } from "./env.ts";
@@ -144,5 +146,25 @@ export async function bootstrapAccess(): Promise<void> {
       token: config.readToken,
       status: "active",
     });
+  }
+
+  // ── Utilisatrice éditrice (Eléonore) ──────────────────────────────────────
+  // Créée seulement si un mot de passe initial est fourni (sinon dev/CI : skip).
+  // Sur un compte existant on ne touche PAS au mot de passe (elle a pu le
+  // changer) — uniquement le rôle/statut.
+  if (config.editorPassword) {
+    const existingEditor = await findUserByEmail(config.editorEmail);
+    if (existingEditor) {
+      await patch(`/users/${existingEditor}`, { role: editorRole, status: "active" });
+    } else {
+      await post("/users", {
+        email: config.editorEmail,
+        first_name: "Eléonore",
+        last_name: "Morée",
+        role: editorRole,
+        status: "active",
+        password: config.editorPassword,
+      });
+    }
   }
 }

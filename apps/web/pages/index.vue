@@ -157,6 +157,10 @@ const heroTitle = computed(() => {
       <!-- 4. Qui je suis -->
       <section v-if="content.intro" class="relative isolate overflow-hidden bg-paper-2">
         <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/10" />
+        <TentacleAccent
+          name="tentacule-2-trait"
+          class="absolute -left-16 bottom-0 -z-10 hidden w-[34rem] rotate-6 text-teal-700/[0.08] lg:block"
+        />
         <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 md:grid-cols-2">
           <!-- alt vide admis : portrait illustratif jouxtant le titre/texte qui portent le sens (a11y). -->
           <div v-if="content.intro.photo" class="relative">
@@ -164,11 +168,14 @@ const heroTitle = computed(() => {
               aria-hidden="true"
               class="absolute -left-3 -top-3 -z-10 h-full w-full rounded-3xl bg-teal-100"
             ></span>
-            <img
+            <NuxtImg
               :src="content.intro.photo.url"
               :alt="content.intro.photo.alt"
-              :width="content.intro.photo.width ?? undefined"
-              :height="content.intro.photo.height ?? undefined"
+              :width="content.intro.photo.width ?? 640"
+              :height="content.intro.photo.height ?? 480"
+              fit="cover"
+              format="webp"
+              sizes="100vw md:50vw lg:560px"
               loading="lazy"
               decoding="async"
               class="aspect-[4/3] w-full rounded-3xl object-cover shadow-lift"
@@ -208,7 +215,11 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 6. Derniers articles — masquée si aucun -->
-      <section v-if="content.articles.length" class="bg-teal-50">
+      <section v-if="content.articles.length" class="relative isolate overflow-hidden bg-teal-50">
+        <TentacleAccent
+          name="tentacule-5-plein"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             title="Derniers articles"

@@ -116,20 +116,26 @@ Rappel `00`/`01` : Resend ne fournit pas le double opt-in ; on l'implémente. Re
 
 Lien de confirmation : `https://{domain}/newsletter/confirmation?token={token}&email={email}` (token en clair dans l'URL, comparé au hash).
 
-### 3.2 Confirmation — `GET /api/newsletter/confirm`
+### 3.2 Confirmation — `POST /api/newsletter/confirm`
 
-**Requête** : `?token=...&email=...`
+**POST (et non GET)** : le lien de l'email mène à la **page** inerte
+`/newsletter/confirmation?token&email`, qui affiche un bouton « Confirmer ». Seule
+la soumission du `<form>` (POST, urlencodé, sans-JS friendly) mute l'état. Un GET
+ne confirme jamais → les scanners/prefetch d'emails et sécurités de messagerie
+(SafeLinks…) ne peuvent pas auto-confirmer une inscription (double opt-in préservé).
+
+**Requête** : corps `token=...&email=...`
 
 **Traitement**
 ```
 1. Charger subscriber par email
-2. Si absent / déjà confirmed / expires_at < now → page d'état adaptée
+2. Si absent / déjà confirmed / expires_at < now → rediriger page d'état adaptée
 3. Comparer sha-256(token) au token_hash (comparaison constante)
 4. Si OK :
      - status=confirmed, confirmed_at=now, token_hash=null, expires_at=null
      - passer le contact Resend en SUBSCRIBED
      - (optionnel) email de bienvenue + ressource cadeau
-5. Rediriger vers page de confirmation (succès / lien expiré / invalide)
+5. Rediriger (302, Post/Redirect/Get) vers la page d'état (succès / expiré / invalide)
 ```
 
 ### 3.3 Désinscription

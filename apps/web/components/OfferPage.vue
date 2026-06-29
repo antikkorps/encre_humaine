@@ -57,6 +57,17 @@ useSeoMeta({
   ogType: "website",
   robots: () => (content.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
+
+// Fil d'Ariane structuré (Accueil > hub d'audience > offre).
+useSchemaOrg([
+  defineBreadcrumb({
+    itemListElement: [
+      { name: "Accueil", item: "/" },
+      { name: isB2c.value ? "Particuliers" : "Organisations", item: hub.value.to },
+      { name: heading.value },
+    ],
+  }),
+]);
 </script>
 
 <template>

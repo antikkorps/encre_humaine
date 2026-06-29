@@ -40,11 +40,14 @@ useSeoMeta({
     <template v-else-if="content">
       <!-- Illustration d'accroche optionnelle (Directus) — masquée si absente. -->
       <section v-if="content.accrochePhoto" class="mx-auto max-w-5xl px-4 pt-12">
-        <img
+        <NuxtImg
           :src="content.accrochePhoto.url"
           :alt="content.accrochePhoto.alt"
-          :width="content.accrochePhoto.width ?? undefined"
-          :height="content.accrochePhoto.height ?? undefined"
+          :width="content.accrochePhoto.width ?? 1120"
+          :height="content.accrochePhoto.height ?? 490"
+          fit="cover"
+          format="webp"
+          sizes="100vw lg:1024px"
           loading="lazy"
           decoding="async"
           class="aspect-[16/7] w-full rounded-3xl object-cover shadow-lift"

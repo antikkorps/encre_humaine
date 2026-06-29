@@ -44,7 +44,7 @@ if (article.value) {
     script: [
       {
         type: "application/ld+json",
-        innerHTML: JSON.stringify({
+        innerHTML: serializeJsonLd({
           "@context": "https://schema.org",
           "@type": "Article",
           headline: a.title,
@@ -57,11 +57,28 @@ if (article.value) {
       },
     ],
   });
+
+  // Fil d'Ariane structuré (Accueil > Ressources > article).
+  useSchemaOrg([
+    defineBreadcrumb({
+      itemListElement: [
+        { name: "Accueil", item: "/" },
+        { name: "Ressources", item: "/ressources" },
+        { name: a.title },
+      ],
+    }),
+  ]);
 }
 </script>
 
 <template>
-  <div v-if="article" class="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+  <div v-if="article" class="relative isolate mx-auto max-w-6xl overflow-x-clip px-4 py-12 sm:py-16">
+    <!-- Filigrane tentacule (ADN encre) — discret, teinté blog (orange). overflow-x-clip
+         pour préserver le sticky du sommaire. -->
+    <TentacleAccent
+      name="tentacule-2-trait"
+      class="absolute -left-20 top-32 -z-10 hidden w-72 text-orange-500/[0.06] lg:block"
+    />
     <!-- Colonne principale centrée + aside sommaire à droite (groupe centré). -->
     <div class="lg:flex lg:justify-center lg:gap-12">
       <div class="w-full max-w-3xl">
@@ -89,12 +106,17 @@ if (article.value) {
             <span v-if="publishedLabel && article.readingTime" aria-hidden="true">·</span>
             <span v-if="article.readingTime">{{ article.readingTime }} min de lecture</span>
           </p>
-          <img
+          <NuxtImg
             v-if="article.cover"
             :src="article.cover.url"
             :alt="article.cover.alt"
             width="768"
             height="432"
+            fit="cover"
+            format="webp"
+            sizes="100vw lg:768px"
+            preload
+            fetchpriority="high"
             class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lift"
           />
         </header>

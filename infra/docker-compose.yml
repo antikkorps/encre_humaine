@@ -12,7 +12,7 @@ x-postgres-healthcheck: &pg-health
 
 services:
   postgres:
-    image: postgres:17.6-alpine
+    image: postgres:18.3-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -22,7 +22,7 @@ services:
       DIRECTUS_DB_PASSWORD: ${DIRECTUS_DB_PASSWORD}
       UMAMI_DB_PASSWORD: ${UMAMI_DB_PASSWORD}
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql
       - ./postgres/init.sh:/docker-entrypoint-initdb.d/10-init.sh:ro
       - ./postgres/init.sql:/opt/encre/init.sql:ro
     healthcheck: *pg-health
@@ -43,6 +43,11 @@ services:
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
       PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+      # Cookie de session posé sur le domaine PARENT (.encrehumaine.fr) → il est
+      # aussi envoyé à l'app (encrehumaine.fr), ce qui permet au middleware
+      # « page d'attente » de reconnaître une session Directus valide et d'ouvrir
+      # le site en prévisualisation (apps/web server/utils/preview-session.ts).
+      SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN}
       # Assets → R2 (S3-compatible). docs/02 §7, docs/07 §6.
       STORAGE_LOCATIONS: r2
       STORAGE_R2_DRIVER: s3
@@ -69,6 +74,16 @@ services:
       DATABASE_TYPE: postgresql
       DATABASE_URL: ${UMAMI_DB_URL}
       APP_SECRET: ${UMAMI_APP_SECRET}
+    healthcheck:
+      # Sonde via fetch natif (Node présent dans l'image Umami) → /api/heartbeat.
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/heartbeat').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
     networks: [internal]
 
   # Sauvegardes chiffrées (pg_dump → gpg → rclone → R2). Conteneur cron :
@@ -159,6 +174,9 @@ services:
       NUXT_TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
       # — Valeurs publiques (sérialisées vers le client) —
       NUXT_PUBLIC_BASE_URL: ${BASE_URL}
+      # URL du site pour @nuxtjs/seo (canonical, sitemap, OG absolus) — lue au
+      # runtime par nuxt-site-config (le build Docker n'a pas de .env).
+      NUXT_PUBLIC_SITE_URL: ${BASE_URL}
       NUXT_PUBLIC_DIRECTUS_PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
       NUXT_PUBLIC_TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY}
       NUXT_PUBLIC_BOOKING_URL: ${BOOKING_URL}

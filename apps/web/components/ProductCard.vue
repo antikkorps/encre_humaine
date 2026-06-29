@@ -13,13 +13,16 @@ const unavailable = computed(() => props.product.available === false);
 <template>
   <article class="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift">
     <div class="relative overflow-hidden">
-      <!-- @nuxt/image + provider Directus = phase 1 ; <img> dimensionné (CLS). -->
-      <img
+      <!-- NuxtImg → provider Directus (srcset + webp). width/height = CLS. -->
+      <NuxtImg
         v-if="product.image"
         :src="product.image"
         :alt="product.imageAlt ?? product.name"
         width="640"
         height="480"
+        fit="cover"
+        format="webp"
+        sizes="100vw sm:50vw lg:400px"
         loading="lazy"
         decoding="async"
         class="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"

@@ -64,12 +64,17 @@ useSeoMeta({
       <!-- 2. Ressource gratuite en vedette -->
       <section v-if="content.featured" class="mx-auto max-w-5xl px-4 py-16">
         <article class="grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft md:grid-cols-2 md:p-8">
-          <img
+          <NuxtImg
             v-if="content.featured.coverUrl"
             :src="content.featured.coverUrl"
             :alt="content.featured.title"
             width="640"
             height="480"
+            fit="cover"
+            format="webp"
+            sizes="100vw md:50vw lg:480px"
+            loading="lazy"
+            decoding="async"
             class="aspect-[4/3] w-full rounded-2xl object-cover"
           />
           <div>

@@ -21,6 +21,26 @@ export function resend(): Resend {
   return client;
 }
 
+/** Charge utile d'un envoi (inférée du SDK → pas de type à maintenir à la main). */
+type EmailPayload = Parameters<ReturnType<typeof resend>["emails"]["send"]>[0];
+
+/**
+ * Envoie un email via Resend en FAISANT REMONTER les erreurs. Indispensable :
+ * le SDK ne lève PAS — `emails.send` renvoie `{ data, error }`. Sans ce contrôle,
+ * un refus (domaine non vérifié, quota, adresse invalide…) passerait pour un
+ * succès silencieux. On lève → l'appelant peut retenter / l'API répond en erreur
+ * au lieu d'un faux « envoyé » (docs/03 §3.1).
+ */
+async function sendEmail(payload: EmailPayload): Promise<void> {
+  const { error } = await resend().emails.send(payload);
+  if (error) {
+    throw createError({
+      statusCode: 502,
+      statusMessage: `Envoi email Resend échoué : ${error.message ?? error.name}`,
+    });
+  }
+}
+
 /**
  * Crée ou met à jour le contact Resend de l'audience (docs/03 §3.1-3.2).
  * `unsubscribed` pilote l'état de diffusion : `true` tant que le double opt-in
@@ -66,12 +86,14 @@ export async function sendNewsletterConfirmation(opts: {
   token: string;
 }): Promise<void> {
   const config = useRuntimeConfig();
-  // Lien vers l'endpoint de confirmation, qui valide puis redirige vers la page.
-  const link = new URL("/api/newsletter/confirm", config.public.baseUrl);
+  // Lien vers la PAGE de confirmation (GET inerte) : elle affiche un bouton qui
+  // POST l'action réelle. Un GET ne confirme jamais → scanners/prefetch d'emails
+  // ne peuvent pas auto-confirmer (audit sécu #3, double opt-in préservé).
+  const link = new URL("/newsletter/confirmation", config.public.baseUrl);
   link.searchParams.set("token", opts.token);
   link.searchParams.set("email", opts.email);
 
-  await resend().emails.send({
+  await sendEmail({
     from: config.newsletterFrom,
     to: opts.email,
     subject: "Confirmez votre inscription — L'Encre Humaine",
@@ -97,7 +119,7 @@ export async function sendNewsletterConfirmation(opts: {
  */
 export async function sendContactNotification(lead: ContactLead): Promise<void> {
   const config = useRuntimeConfig();
-  await resend().emails.send({
+  await sendEmail({
     from: config.newsletterFrom,
     to: config.contactNotifyTo,
     replyTo: lead.email,
@@ -139,7 +161,7 @@ export function resendOrderEmailer(): OrderEmailer {
 
   return {
     async sendCustomerConfirmation(order: Order) {
-      await resend().emails.send({
+      await sendEmail({
         from,
         to: order.email,
         subject: "Votre commande — L'Encre Humaine",
@@ -166,7 +188,7 @@ export function resendOrderEmailer(): OrderEmailer {
     },
 
     async sendOwnerNotification(order: Order) {
-      await resend().emails.send({
+      await sendEmail({
         from,
         to: owner,
         subject: `Nouvelle commande — ${formatAmount(order.amountTotal, order.currency)}`,

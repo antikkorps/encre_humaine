@@ -1,4 +1,18 @@
+import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
+import { config as loadEnv } from "dotenv";
+
+// Env en DEV LOCAL uniquement (docs/07 §5) : une seule source canonique
+// `infra/env/.env` (socle partagé : Resend, Stripe, Directus token…) + une fine
+// surcouche poste `apps/web/.env.local` (les ~quelques valeurs qui DOIVENT
+// différer sur l'hôte : localhost, ports exposés, clés Turnstile de test, etc.)
+// qui PRIME. → un seul fichier à maintenir, zéro duplication des secrets.
+// En prod, rien de tout ça : le conteneur reçoit ses NUXT_* via le compose.
+if (process.env.NODE_ENV !== "production") {
+  const here = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+  loadEnv({ path: here("../../infra/env/.env") }); // socle (ne réécrit rien d'existant)
+  loadEnv({ path: here(".env.local"), override: true }); // surcouche dev → prioritaire
+}
 
 // docs/00-global.md (SEO/perf/a11y) + docs/06 (sécurité) + docs/07 (env).
 // FR uniquement, SSG/ISR par défaut, hydratation minimale.
@@ -87,7 +101,19 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "fr-FR" },
-      meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "theme-color", content: "#f5f2eb" },
+      ],
+      // Favicons générés depuis OctopusMark (public/, cf. assets). SVG scalable
+      // d'abord, .ico en repli legacy, apple-touch + manifest pour iOS/PWA.
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
+        { rel: "icon", href: "/favicon.ico", sizes: "any" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        { rel: "manifest", href: "/site.webmanifest" },
+      ],
     },
   },
 
@@ -120,14 +146,39 @@ export default defineNuxtConfig({
     },
   },
 
-  // Nitro : tâches planifiées (purge RGPD newsletter, docs/03 §3.4). Quotidien 03h.
+  // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.
   nitro: {
     experimental: { tasks: true },
-    scheduledTasks: { "0 3 * * *": ["newsletter:purge"] },
+    scheduledTasks: { "0 3 * * *": ["newsletter:purge", "contact:purge"] },
   },
 
-  // @nuxtjs/seo : robots/sitemap/canonical/OG. Site renseigné via env au build.
+  // @nuxtjs/seo : robots/sitemap/canonical/OG. `site.url` est lu au BUILD ; en
+  // prod (build Docker sans .env) il est vide → l'URL réelle est injectée au
+  // RUNTIME via `NUXT_PUBLIC_SITE_URL` (mappé depuis BASE_URL dans le compose).
   site: { url: process.env.BASE_URL, name: "L'Encre Humaine" },
+
+  // Sitemap : routes statiques auto-découvertes + source dynamique pour les
+  // pages CMS (articles, offres, produits) — sinon absentes du sitemap.
+  sitemap: { sources: ["/api/__sitemap__/urls"] },
+
+  // Identité schema.org globale (Organization + WebSite + WebPage auto-injectés
+  // sur chaque page). Person (Eléonore) ajoutée sur /a-propos.
+  schemaOrg: {
+    identity: {
+      type: "Organization",
+      name: "L'Encre Humaine",
+      sameAs: ["https://www.linkedin.com/in/eleonore-moree"],
+    },
+  },
+
+  // @nuxt/image : provider Directus custom (transformations côté Directus, pas
+  // d'IPX/sharp dans le runtime slim). cf. providers/directus.ts.
+  image: {
+    provider: "directus",
+    providers: {
+      directus: { name: "directus", provider: "~/providers/directus.ts" },
+    },
+  },
 
   typescript: { strict: true },
 });

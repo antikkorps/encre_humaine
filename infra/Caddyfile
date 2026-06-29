@@ -3,6 +3,30 @@
 # Image Caddy custom (infra/caddy/Dockerfile) : Caddy + module caddy-dns/cloudflare.
 {
 	email admin@encrehumaine.fr
+
+	# ── IP cliente de confiance (audit sécu #1) ──────────────────────────────
+	# Caddy résout lui-même l'IP cliente réelle et la transmet à l'app, qui ne
+	# lit QUE l'X-Forwarded-For posé ici (cf. server/utils/client-ip.ts).
+	# `trusted_proxies static` = module intégré (aucun module à compiler).
+	#  • Requête venant d'une IP Cloudflare (proxy orange) → on lit `CF-Connecting-IP`.
+	#  • Requête en direct (grey cloud OU attaque sur l'origine) → l'expéditeur
+	#    n'est PAS un proxy de confiance → ses en-têtes sont IGNORÉS, l'IP retenue
+	#    est celle du pair. ⇒ `CF-Connecting-IP` n'est JAMAIS forgeable, même sans
+	#    firewall. Le firewall origine→IP CF reste recommandé en défense en
+	#    profondeur (cf. .forgejo/workflows/README.md §firewall).
+	# ⚠️ Plages CF figées ci-dessous : à revérifier au déploiement contre la
+	#    liste canonique https://www.cloudflare.com/ips/ (elles bougent rarement).
+	servers {
+		client_ip_headers Cf-Connecting-Ip
+		trusted_proxies static \
+ 173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 \
+ 141.101.64.0/18 108.162.192.0/18 190.93.240.0/20 188.114.96.0/20 \
+ 197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13 \
+ 104.24.0.0/14 172.64.0.0/13 131.0.72.0/22 \
+ 2400:cb00::/32 2606:4700::/32 2803:f800::/32 2405:b500::/32 \
+ 2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32 \
+ private_ranges
+	}
 }
 
 # ── En-têtes de sécurité communs (docs/06 §6) ────────────────────────────────
@@ -33,14 +57,12 @@ encrehumaine.fr, www.encrehumaine.fr {
 	}
 	reverse_proxy web:3000 {
 		# Anti-spoofing du rate-limit : on ÉCRASE l'X-Forwarded-For entrant par
-		# l'IP réelle du pair (sinon un client forge `X-Forwarded-For: a.b.c.d`,
-		# Caddy l'append, et getClientIp() retiendrait la valeur forgée → bypass).
-		header_up X-Forwarded-For {http.request.remote.host}
+		# l'IP cliente résolue par Caddy (`{client_ip}`, cf. global `servers`),
+		# non forgeable. On retire aussi le `CF-Connecting-IP` entrant : l'app ne
+		# le lit plus et il n'a rien à faire en amont.
+		header_up X-Forwarded-For {client_ip}
+		header_up -CF-Connecting-IP
 	}
-	# ⚠️ Si le site est proxifié par Cloudflare (orange cloud), `CF-Connecting-IP`
-	# est prioritaire côté app ET forgeable par quiconque atteint l'origine en
-	# direct → FIREWALLER l'origine Hetzner aux plages d'IP Cloudflare (sinon le
-	# rate-limit reste contournable malgré l'écrasement XFF ci-dessus).
 }
 
 # ── CMS Directus ─────────────────────────────────────────────────────────────
