@@ -43,6 +43,11 @@ services:
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
       PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+      # Cookie de session posé sur le domaine PARENT (.encrehumaine.fr) → il est
+      # aussi envoyé à l'app (encrehumaine.fr), ce qui permet au middleware
+      # « page d'attente » de reconnaître une session Directus valide et d'ouvrir
+      # le site en prévisualisation (apps/web server/utils/preview-session.ts).
+      SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN}
       # Assets → R2 (S3-compatible). docs/02 §7, docs/07 §6.
       STORAGE_LOCATIONS: r2
       STORAGE_R2_DRIVER: s3

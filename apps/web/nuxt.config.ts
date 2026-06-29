@@ -1,4 +1,18 @@
+import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
+import { config as loadEnv } from "dotenv";
+
+// Env en DEV LOCAL uniquement (docs/07 §5) : une seule source canonique
+// `infra/env/.env` (socle partagé : Resend, Stripe, Directus token…) + une fine
+// surcouche poste `apps/web/.env.local` (les ~quelques valeurs qui DOIVENT
+// différer sur l'hôte : localhost, ports exposés, clés Turnstile de test, etc.)
+// qui PRIME. → un seul fichier à maintenir, zéro duplication des secrets.
+// En prod, rien de tout ça : le conteneur reçoit ses NUXT_* via le compose.
+if (process.env.NODE_ENV !== "production") {
+  const here = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+  loadEnv({ path: here("../../infra/env/.env") }); // socle (ne réécrit rien d'existant)
+  loadEnv({ path: here(".env.local"), override: true }); // surcouche dev → prioritaire
+}
 
 // docs/00-global.md (SEO/perf/a11y) + docs/06 (sécurité) + docs/07 (env).
 // FR uniquement, SSG/ISR par défaut, hydratation minimale.
@@ -87,7 +101,19 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "fr-FR" },
-      meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "theme-color", content: "#f5f2eb" },
+      ],
+      // Favicons générés depuis OctopusMark (public/, cf. assets). SVG scalable
+      // d'abord, .ico en repli legacy, apple-touch + manifest pour iOS/PWA.
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
+        { rel: "icon", href: "/favicon.ico", sizes: "any" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        { rel: "manifest", href: "/site.webmanifest" },
+      ],
     },
   },
 
