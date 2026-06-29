@@ -5,7 +5,7 @@
 # d'exposer 80 pour la validation ACME). Version pinnée (politique de deps).
 # ─────────────────────────────────────────────────────────────────────────────
 
-ARG CADDY_VERSION=2.10.2
+ARG CADDY_VERSION=2.11.3
 
 # ── builder : xcaddy compile Caddy avec le module cloudflare ──────────────────
 FROM caddy:${CADDY_VERSION}-builder AS builder

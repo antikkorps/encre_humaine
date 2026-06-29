@@ -15,7 +15,7 @@ jobs:
     runs-on: docker
     container:
       # Aligné sur .node-version (26.0.0) + Dockerfile. Pas de corepack en Node 26.
-      image: node:26.0.0-bookworm-slim
+      image: node:26.2.0-bookworm-slim
     steps:
       # git/ca-certificates : requis par actions/checkout sur l'image slim.
       - name: Dépendances système

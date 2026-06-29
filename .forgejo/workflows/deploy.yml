@@ -14,7 +14,7 @@ jobs:
   deploy:
     runs-on: docker # ⚠️ même remarque que ci.yml : label de ton runner dédié
     container:
-      image: alpine:3.20
+      image: alpine:3.21
     steps:
       - name: Client SSH
         run: apk add --no-cache openssh-client
