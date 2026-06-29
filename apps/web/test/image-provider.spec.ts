@@ -6,8 +6,10 @@
 import { describe, expect, it } from "vitest";
 import { getImage } from "../providers/directus";
 
+// 3e arg = contexte @nuxt/image (ImageCTX), requis par le type ProviderGetImage
+// mais ignoré par notre implémentation (transformations déléguées à Directus).
 const call = (src: string, modifiers: Record<string, unknown>) =>
-  getImage(src, { modifiers } as never);
+  getImage(src, { modifiers } as never, {} as never);
 
 describe("provider image Directus", () => {
   it("ajoute les params de transformation à l'URL d'asset", () => {
