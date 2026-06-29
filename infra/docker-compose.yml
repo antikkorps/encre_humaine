@@ -10,6 +10,12 @@ x-postgres-healthcheck: &pg-health
   timeout: 5s
   retries: 5
 
+# URLs de connexion construites ICI à partir des composants (rôle + *_DB_PASSWORD)
+# pour qu'AUCUN mot de passe ne soit dupliqué dans le .env : la seule source de
+# vérité d'un mot de passe est sa variable `*_DB_PASSWORD`. Les rôles sont
+# cloisonnés par schéma (init.sql) ; le hostname interne est toujours `postgres`.
+x-app-db-url: &app-db-url postgres://app_user:${APP_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}?search_path=app
+
 services:
   postgres:
     image: postgres:18.3-alpine
@@ -38,7 +44,7 @@ services:
       KEY: ${DIRECTUS_KEY}
       SECRET: ${DIRECTUS_SECRET}
       DB_CLIENT: pg
-      DB_CONNECTION_STRING: ${DIRECTUS_DB_URL}
+      DB_CONNECTION_STRING: postgres://directus_user:${DIRECTUS_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
       DB_SEARCH_PATH: directus
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
@@ -72,7 +78,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_TYPE: postgresql
-      DATABASE_URL: ${UMAMI_DB_URL}
+      DATABASE_URL: postgres://umami_user:${UMAMI_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
       APP_SECRET: ${UMAMI_APP_SECRET}
     healthcheck:
       # Sonde via fetch natif (Node présent dans l'image Umami) → /api/heartbeat.
@@ -161,8 +167,12 @@ services:
     # (--env-file), comme le reste du compose. TOUTE nouvelle clé runtimeConfig
     # doit être ajoutée ici.
     environment:
+      # — App DB : construite à partir des composants (ancre), plus aucun mot de
+      #   passe dupliqué dans .env. `APP_DATABASE_URL` (nom simple) = validation
+      #   au boot ; `NUXT_APP_DATABASE_URL` = config runtime. Mêmes valeurs.
+      APP_DATABASE_URL: *app-db-url
+      NUXT_APP_DATABASE_URL: *app-db-url
       # — Secrets serveur —
-      NUXT_APP_DATABASE_URL: ${APP_DATABASE_URL}
       NUXT_DIRECTUS_READ_TOKEN: ${DIRECTUS_READ_TOKEN}
       NUXT_STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
       NUXT_STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
