@@ -101,7 +101,19 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "fr-FR" },
-      meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "theme-color", content: "#f5f2eb" },
+      ],
+      // Favicons générés depuis OctopusMark (public/, cf. assets). SVG scalable
+      // d'abord, .ico en repli legacy, apple-touch + manifest pour iOS/PWA.
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
+        { rel: "icon", href: "/favicon.ico", sizes: "any" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        { rel: "manifest", href: "/site.webmanifest" },
+      ],
     },
   },
 
