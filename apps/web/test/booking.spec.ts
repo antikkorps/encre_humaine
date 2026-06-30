@@ -5,17 +5,17 @@ import { describe, expect, it } from "vitest";
 import { parseBookingUrl } from "../utils/booking";
 
 describe("parseBookingUrl", () => {
-  it("décompose une URL Cal.com cloud en origin + calLink + embedSrc (app.cal.com)", () => {
+  it("vise app.cal.com (origin + script) pour Cal.com cloud", () => {
     expect(parseBookingUrl("https://cal.com/eleonore/decouverte")).toEqual({
-      origin: "https://cal.com",
+      origin: "https://app.cal.com",
       calLink: "eleonore/decouverte",
       embedSrc: "https://app.cal.com/embed/embed.js",
     });
   });
 
-  it("dérive app.cal.eu pour l'instance UE (RGPD)", () => {
+  it("vise app.cal.eu pour l'instance UE (RGPD ; l'apex cal.eu redirige)", () => {
     expect(parseBookingUrl("https://cal.eu/encrehumaine/rdv-decouverte")).toEqual({
-      origin: "https://cal.eu",
+      origin: "https://app.cal.eu",
       calLink: "encrehumaine/rdv-decouverte",
       embedSrc: "https://app.cal.eu/embed/embed.js",
     });

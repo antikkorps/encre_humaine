@@ -18,12 +18,15 @@ export function parseBookingUrl(raw: string | null | undefined): BookingTarget |
     const u = new URL(raw);
     const calLink = u.pathname.replace(/^\/+|\/+$/g, "");
     if (!calLink) return null;
-    // Cal.com cloud sert l'embed depuis `app.<domaine>` (cal.com → app.cal.com,
-    // cal.eu → app.cal.eu, instance UE/RGPD). Le self-hosting sert tout depuis le
-    // même origin → on ne préfixe `app.` que pour les domaines cloud connus.
+    // Cal.com cloud sert l'app/embed depuis `app.<domaine>` (cal.com → app.cal.com,
+    // cal.eu → app.cal.eu, instance UE/RGPD). L'apex redirige même en 307 vers
+    // `app.*` → si on vise l'apex pour l'`origin`, l'iframe redirige et le
+    // handshake postMessage de Cal échoue (origines différentes) ⇒ calendrier
+    // blanc. On vise donc `app.*` pour l'origin ET le script. Self-hosting : tout
+    // sur le même origin → on ne préfixe `app.` que pour les domaines cloud connus.
     const isCalCloud = u.host === "cal.com" || u.host === "cal.eu";
     const embedOrigin = isCalCloud ? `https://app.${u.host}` : u.origin;
-    return { origin: u.origin, calLink, embedSrc: `${embedOrigin}/embed/embed.js` };
+    return { origin: embedOrigin, calLink, embedSrc: `${embedOrigin}/embed/embed.js` };
   } catch {
     return null;
   }
