@@ -46,7 +46,15 @@ function bootstrapCal(embedSrc: string): CalQueue {
 }
 
 function mountWidget() {
-  if (initialised || !container.value || !target.value) return;
+  if (initialised || !thirdParty.value || !target.value) return;
+  // Le conteneur n'est pas toujours dans le DOM au 1er appel (ClientOnly +
+  // portail de la modale qui se monte) → on réessaie à la frame suivante tant
+  // qu'il manque, plutôt que d'abandonner (sinon calendrier vide si le
+  // consentement est déjà accordé à l'ouverture).
+  if (!container.value) {
+    requestAnimationFrame(mountWidget);
+    return;
+  }
   const cal = bootstrapCal(target.value.embedSrc);
   cal("init", { origin: target.value.origin });
   cal("inline", {
@@ -58,7 +66,7 @@ function mountWidget() {
 }
 
 watch(thirdParty, (granted) => {
-  if (granted) nextTick(mountWidget);
+  if (granted) mountWidget();
 });
 
 onMounted(() => {
