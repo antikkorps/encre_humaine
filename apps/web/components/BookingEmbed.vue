@@ -20,13 +20,12 @@ declare global {
 const props = defineProps<{ url: string; intro?: string }>();
 const { thirdParty, acceptThirdParty } = useConsent();
 
-const EMBED_SRC = "https://app.cal.com/embed/embed.js";
 const container = ref<HTMLElement | null>(null);
 const target = computed(() => parseBookingUrl(props.url));
 let initialised = false;
 
 /** Bootstrap de la file Cal (charge embed.js au 1er appel), façon snippet officiel. */
-function bootstrapCal(): CalQueue {
+function bootstrapCal(embedSrc: string): CalQueue {
   if (window.Cal) return window.Cal;
   const cal = ((...args: unknown[]) => {
     const c = window.Cal as CalQueue;
@@ -35,7 +34,7 @@ function bootstrapCal(): CalQueue {
       c.ns = {};
       c.q = c.q ?? [];
       const s = document.createElement("script");
-      s.src = EMBED_SRC;
+      s.src = embedSrc;
       s.async = true;
       document.head.appendChild(s);
     }
@@ -48,7 +47,7 @@ function bootstrapCal(): CalQueue {
 
 function mountWidget() {
   if (initialised || !container.value || !target.value) return;
-  const cal = bootstrapCal();
+  const cal = bootstrapCal(target.value.embedSrc);
   cal("init", { origin: target.value.origin });
   cal("inline", {
     elementOrSelector: container.value,
