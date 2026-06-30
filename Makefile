@@ -136,5 +136,5 @@ prod-umami-reset: ## PROD : repart d'un schéma umami vierge (corrige l'état pr
 	$(PROD_COMPOSE) stop umami
 	$(PROD_COMPOSE) exec -T postgres sh -c \
 	  'psql -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" \
-	   -c "DROP SCHEMA IF EXISTS umami CASCADE; CREATE SCHEMA umami AUTHORIZATION umami_user;"'
+	   -c "DROP SCHEMA IF EXISTS umami CASCADE; CREATE SCHEMA umami AUTHORIZATION umami_user; CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA umami;"'
 	$(PROD_COMPOSE) up -d --wait umami || $(PROD_COMPOSE) ps

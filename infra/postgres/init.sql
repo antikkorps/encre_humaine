@@ -54,5 +54,11 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA umami GRANT ALL ON SEQUENCES TO umami_user;
 ALTER ROLE umami_user SET search_path = umami;
 REVOKE ALL ON SCHEMA app, directus FROM umami_user;
 
+-- pgcrypto : requis par la migration Prisma `01_init` d'Umami (qui fait un
+-- CREATE EXTENSION). Or créer une extension exige le SUPERUSER → on la pré-crée
+-- ici (script d'init = superuser), dans le schéma `umami` (search_path d'umami_user).
+-- Ainsi le `CREATE EXTENSION IF NOT EXISTS pgcrypto` d'Umami devient un no-op.
+CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA umami;
+
 -- Empêcher la création d'objets dans `public` par les rôles applicatifs
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
