@@ -50,7 +50,6 @@ openssl rand -hex 32   # pour chaque secret « interne »
 | `BOOKING_URL` | Cal.com (déjà obtenu) |
 | `R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_ASSETS`, `R2_BUCKET_BACKUPS` | Cloudflare R2 |
 | `BACKUP_PASSPHRASE` | aléatoire **forte** — ⚠️ en garder une copie **HORS de l'hôte** (sinon backups irrécupérables) |
-| `CLOUDFLARE_API_TOKEN` | token Cloudflare avec **DNS edit** sur la zone (pour le challenge TLS DNS-01 de Caddy) |
 | `ANALYTICS_SCRIPT_URL` = `https://stats.encrehumaine.fr/script.js`, `ANALYTICS_WEBSITE_ID` | renseigné après création du site dans Umami (Phase 8) ; vide → aucun script injecté (dégradation propre) |
 | `BASE_URL` = `https://encrehumaine.fr`, `DIRECTUS_PUBLIC_URL` = `https://cms.encrehumaine.fr` | URLs publiques |
 | `VAT_ENABLED` = `false`, `VAT_RATE`, `BACKUP_CRON`, `BACKUP_KEEP_*` | reprendre les valeurs de `.env.example` |
@@ -66,7 +65,7 @@ actuelles y sont déjà.
 
 - ▢ **DNS** : enregistrements `A`/`AAAA` pour `@`, `cms`, `stats` → IP du serveur Hetzner.
 - ▢ **Proxy ORANGE** (nuage orange) sur ces 3 entrées. Mode SSL/TLS = **Full (strict)**.
-- ▢ **Token API DNS-01** : créer un token *Edit zone DNS* sur la zone → `CLOUDFLARE_API_TOKEN`. Caddy obtient ses certificats via DNS-01 (pas besoin du port 80 ouvert pour l'ACME).
+- ✅ **TLS** : Caddy obtient ses certificats en **HTTP-01** (image officielle, aucun token). Cloudflare orange laisse passer `/.well-known/acme-challenge` vers l'origine → le port 80 doit être ouvert aux IP Cloudflare (Phase 3 firewall).
 - ▢ **Turnstile** : créer un widget pour `encrehumaine.fr` → `TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY`.
 - ▢ **R2** : 2 buckets (assets + backups) + clés d'accès → variables `R2_*`.
 - ✅ Noter que la CSP (module `nuxt-security`) et le Caddyfile autorisent déjà `js.stripe.com`, `challenges.cloudflare.com`, `app.cal.com`, `stats.encrehumaine.fr`.

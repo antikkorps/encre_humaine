@@ -1,6 +1,9 @@
-# Caddyfile — reverse proxy + TLS (Cloudflare DNS-01) + en-têtes sécurité + CSP.
+# Caddyfile — reverse proxy + TLS (ACME HTTP-01) + en-têtes sécurité + CSP.
 # docs/07-deploy.md §2, docs/06-security.md §6.
-# Image Caddy custom (infra/caddy/Dockerfile) : Caddy + module caddy-dns/cloudflare.
+# TLS automatique Caddy (HTTP-01) : aucun token requis. Cloudflare en mode orange
+# laisse passer /.well-known/acme-challenge vers l'origine, donc le challenge
+# HTTP-01 fonctionne derrière le proxy (port 80 ouvert aux IP Cloudflare). Le
+# module caddy-dns/cloudflare et CLOUDFLARE_API_TOKEN ne sont donc plus requis.
 {
 	email admin@encrehumaine.fr
 
@@ -52,9 +55,6 @@
 # ── Site public (Nuxt/Nitro) ─────────────────────────────────────────────────
 encrehumaine.fr, www.encrehumaine.fr {
 	encode zstd gzip
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-	}
 	reverse_proxy web:3000 {
 		# Anti-spoofing du rate-limit : on ÉCRASE l'X-Forwarded-For entrant par
 		# l'IP cliente résolue par Caddy (`{client_ip}`, cf. global `servers`),
@@ -69,9 +69,6 @@ encrehumaine.fr, www.encrehumaine.fr {
 cms.encrehumaine.fr {
 	import security_headers
 	encode zstd gzip
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-	}
 	reverse_proxy directus:8055
 }
 
@@ -79,8 +76,5 @@ cms.encrehumaine.fr {
 stats.encrehumaine.fr {
 	import security_headers
 	encode zstd gzip
-	tls {
-		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-	}
 	reverse_proxy umami:3000
 }

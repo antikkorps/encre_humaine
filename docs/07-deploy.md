@@ -22,13 +22,12 @@ assets (directus) ──► R2 (externe)
 
 ## 2. Reverse proxy — Caddy
 
-- Image Caddy **buildée avec le module `caddy-dns/cloudflare`** (certificats via **DNS-01**, pas besoin d'exposer 80 pour la validation).
+- Image Caddy **officielle** (`caddy:2.11.3`) — TLS automatique via **ACME HTTP-01**, **aucun token requis**. Cloudflare (mode orange) laisse passer `/.well-known/acme-challenge` vers l'origine, donc le challenge fonctionne derrière le proxy (port 80 ouvert aux IP CF).
 - Mapping :
   - `encrehumaine.fr` → `web`
   - `cms.encrehumaine.fr` → `directus`
   - `stats.encrehumaine.fr` → `umami`
 - En-têtes de sécurité + CSP posés ici (cf. `06` §6). Compression (zstd/gzip), HTTP/2-3.
-- `CLOUDFLARE_API_TOKEN` (scopé DNS edit de la zone) en secret.
 
 ---
 
@@ -105,8 +104,7 @@ R2_BUCKET_BACKUPS=...
 UMAMI_DB_URL=postgres://umami_user:...@postgres:5432/...
 UMAMI_APP_SECRET=...
 
-# Caddy / Cloudflare
-CLOUDFLARE_API_TOKEN=...
+# Caddy : TLS via HTTP-01, aucun token Cloudflare requis.
 ```
 
 **Validation au boot** (`06` §5) : un schéma vérifie la présence/forme de ces variables ; `web` refuse de démarrer sinon.

@@ -206,9 +206,7 @@ services:
     networks: [internal]
 
   caddy:
-    build:
-      context: ./caddy
-    image: encre/caddy:dev
+    image: caddy:2.11.3
     restart: unless-stopped
     depends_on:
       - web
@@ -219,7 +217,6 @@ services:
       - "443:443"
       - "443:443/udp"
     environment:
-      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
       BASE_DOMAIN: encrehumaine.fr
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
