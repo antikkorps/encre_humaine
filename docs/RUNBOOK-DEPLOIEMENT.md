@@ -194,9 +194,45 @@ pnpm --filter @encre/directus bootstrap
 
 ## Exploitation courante
 
-- **Déployer une MAJ** : merger sur `main` (CI verte) → `git tag vX.Y.Z && git push origin vX.Y.Z` (ou « Run workflow »). `compose up --wait` = porte de santé (échoue si un service reste unhealthy).
-- **Logs** : `docker compose -f infra/docker-compose.yml logs -f web` (ou `caddy`, `directus`…).
-- **Rollback** : re-déployer un tag antérieur (`git push` du tag → run, ou checkout du tag côté serveur + `compose up -d --build`). La base n'est pas rollbackée — éviter les migrations destructives.
+### Déployer une mise à jour — méthode actuelle (manuelle, cibles Makefile)
+
+Le serveur (`167.233.136.107`) est **partagé** avec d'autres projets compose
+(myreport/noteapp/test) ; le dépôt est cloné en `/srv/encre-humaine`, le build
+se fait sur place. La longue commande `docker compose` est encapsulée dans des
+**cibles Makefile** (les terminaux qui coupent les lignes longues posaient
+problème). Après avoir mergé/poussé sur `main` :
+
+```sh
+ssh root@167.233.136.107
+cd /srv/encre-humaine
+make prod-deploy        # git pull (user deploy) + rebuild + attente healthchecks
+```
+
+`make prod-deploy` fait : `git fetch` + `reset --hard origin/main` (en tant que
+`deploy`, qui détient la clé Forgejo, via `sudo -u deploy -H`), puis
+`docker compose … up -d --build --wait`. **Si `make` répond `command not found`** :
+`apt install -y make`.
+
+Si jamais le `git pull` via la cible échoue (clé/HOME), le faire à la main :
+
+```sh
+cd /srv/encre-humaine
+sudo -u deploy -H git fetch --all --prune
+sudo -u deploy -H git reset --hard origin/main
+make prod-up            # rebuild + relance, sans git
+```
+
+Autres cibles prod : `make prod-ps` (état), `make prod-logs S=web` (logs suivis),
+`make prod-umami-reset` (repart d'un schéma umami vierge + extension pgcrypto).
+
+> **Cible visée (plus tard)** : brancher l'`act_runner` Forgejo existant (celui
+> de Renovate) sur `deploy.yml` → déploiement par **tag `v*`** ou bouton « Run
+> workflow », sans SSH. Les 5 secrets `DEPLOY_*` sont déjà créés.
+
+### Divers
+
+- **Logs** : `make prod-logs S=web` (ou `caddy`, `directus`, `umami`…).
+- **Rollback** : côté serveur, `sudo -u deploy -H git reset --hard <tag/sha>` puis `make prod-up`. La base n'est pas rollbackée — éviter les migrations destructives.
 - **Restauration désastre** : `make restore NAME=latest` (depuis un hôte avec la toolchain + accès R2 + `BACKUP_PASSPHRASE`).
 
 ---
