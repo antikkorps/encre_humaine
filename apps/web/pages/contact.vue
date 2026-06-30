@@ -45,8 +45,11 @@ useSeoMeta({
           <!-- Appel découverte (masqué si pas d'URL de RDV) -->
           <div v-if="content.booking">
             <SectionHeading title="Réserver un appel découverte" eyebrow="Prise de RDV" />
-            <div class="mt-6">
-              <BookingEmbed :url="content.booking.url" :intro="content.booking.intro ?? undefined" />
+            <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
+              <p class="mb-6 text-ink/70">
+                {{ content.booking.intro || "Réservez un premier échange en visio pour faire connaissance, sans engagement." }}
+              </p>
+              <BookingDialog :url="content.booking.url" />
             </div>
           </div>
 
