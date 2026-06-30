@@ -39,27 +39,46 @@ useSeoMeta({
     </p>
 
     <template v-else-if="content">
-      <!-- 2. Réserver un appel découverte (pleine largeur → calendrier lisible) -->
-      <section v-if="content.booking" class="mx-auto max-w-5xl px-4 pt-20">
-        <SectionHeading title="Réserver un appel découverte" eyebrow="Prise de RDV" />
-        <p class="mt-3 max-w-2xl text-ink/70">
-          {{ content.booking.intro || "Réservez un premier échange en visio pour faire connaissance, sans engagement." }}
-        </p>
-        <div class="mt-8">
-          <BookingEmbed :url="content.booking.url" />
-        </div>
-      </section>
+      <!-- 2. Deux voies de contact, en onglets (un seul bloc visible à la fois) -->
+      <section class="mx-auto max-w-5xl px-4 py-20">
+        <SectionHeading title="Me contacter" eyebrow="Échangeons" />
+        <TabsRoot :default-value="content.booking ? 'booking' : 'message'" class="mt-8">
+          <TabsList
+            class="mb-8 flex flex-wrap gap-1 border-b border-ink/10"
+            aria-label="Façons de me contacter"
+          >
+            <TabsTrigger
+              v-if="content.booking"
+              value="booking"
+              class="-mb-px border-b-2 border-transparent px-4 py-3 font-display text-base font-medium text-ink/55 transition-colors hover:text-ink data-[state=active]:border-teal-700 data-[state=active]:text-teal-800"
+            >
+              Réserver un appel
+            </TabsTrigger>
+            <TabsTrigger
+              value="message"
+              class="-mb-px border-b-2 border-transparent px-4 py-3 font-display text-base font-medium text-ink/55 transition-colors hover:text-ink data-[state=active]:border-teal-700 data-[state=active]:text-teal-800"
+            >
+              M'envoyer un message
+            </TabsTrigger>
+          </TabsList>
 
-      <!-- 2bis. M'envoyer un message -->
-      <section class="mx-auto max-w-xl px-4 py-20">
-        <SectionHeading title="M'envoyer un message" eyebrow="Formulaire" />
-        <p class="mt-2 text-sm text-ink/55">
-          Vos données servent uniquement à traiter votre demande
-          (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
-        </p>
-        <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
-          <ContactForm />
-        </div>
+          <TabsContent v-if="content.booking" value="booking" class="focus:outline-none">
+            <p class="mb-6 max-w-2xl text-ink/70">
+              {{ content.booking.intro || "Réservez un premier échange en visio pour faire connaissance, sans engagement." }}
+            </p>
+            <BookingEmbed :url="content.booking.url" />
+          </TabsContent>
+
+          <TabsContent value="message" class="mx-auto max-w-xl focus:outline-none">
+            <p class="mb-6 text-sm text-ink/55">
+              Vos données servent uniquement à traiter votre demande
+              (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
+            </p>
+            <div class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
+              <ContactForm />
+            </div>
+          </TabsContent>
+        </TabsRoot>
       </section>
 
       <!-- 3. Ce qui se passe ensuite -->
