@@ -78,7 +78,10 @@ services:
         condition: service_healthy
     environment:
       DATABASE_TYPE: postgresql
-      DATABASE_URL: postgres://umami_user:${UMAMI_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      # `?schema=umami` : Prisma confine ses tables (dont `_prisma_migrations`) au
+      # schéma `umami` (umami_user a search_path=umami + CREATE dessus, cf. init.sql).
+      # Sans ça, Prisma vise `public` → conflit `_prisma_migrations already exists`.
+      DATABASE_URL: postgres://umami_user:${UMAMI_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=umami
       APP_SECRET: ${UMAMI_APP_SECRET}
     healthcheck:
       # Sonde via fetch natif (Node présent dans l'image Umami) → /api/heartbeat.

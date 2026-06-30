@@ -17,7 +17,8 @@ export HOST_DIRECTUS_PORT
 .DEFAULT_GOAL := help
 .PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
         cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply cms-types cms-seed \
-        backup-build backup-run restore
+        backup-build backup-run restore \
+        prod-deploy prod-up prod-ps prod-logs prod-umami-reset
 
 help: ## Liste les cibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -109,3 +110,31 @@ clean: ## DANGER : stoppe la stack ET supprime les volumes (perte de données)
 	@printf "⚠️  Supprime tous les volumes (Postgres, Caddy). Continuer ? [y/N] "; \
 	read ans; [ "$$ans" = "y" ] || { echo "Annulé."; exit 1; }
 	$(COMPOSE) down -v
+
+# ── Production — à lancer SUR le serveur Hetzner (en root, dans /srv/encre-humaine) ──
+# La prod n'utilise QUE docker-compose.yml (pas l'overlay dev). Ces cibles évitent
+# de taper la longue commande compose à la main (terminaux qui coupent les lignes).
+PROD_COMPOSE := docker compose --env-file $(ENV_FILE) -f infra/docker-compose.yml
+
+prod-deploy: ## PROD : git pull (user deploy) + rebuild + attente healthchecks
+	sudo -u deploy -H git -C $(CURDIR) fetch --all --prune
+	sudo -u deploy -H git -C $(CURDIR) reset --hard origin/main
+	$(PROD_COMPOSE) up -d --build --wait
+	$(PROD_COMPOSE) ps
+
+prod-up: ## PROD : rebuild + relance (sans git pull)
+	$(PROD_COMPOSE) up -d --build --wait
+	$(PROD_COMPOSE) ps
+
+prod-ps: ## PROD : état des conteneurs
+	$(PROD_COMPOSE) ps
+
+prod-logs: ## PROD : logs en suivi — ex: make prod-logs S=web
+	$(PROD_COMPOSE) logs -f $(S)
+
+prod-umami-reset: ## PROD : repart d'un schéma umami vierge (corrige l'état prisma cassé)
+	$(PROD_COMPOSE) stop umami
+	$(PROD_COMPOSE) exec -T postgres sh -c \
+	  'psql -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" \
+	   -c "DROP SCHEMA IF EXISTS umami CASCADE; CREATE SCHEMA umami AUTHORIZATION umami_user;"'
+	$(PROD_COMPOSE) up -d --wait umami || $(PROD_COMPOSE) ps
