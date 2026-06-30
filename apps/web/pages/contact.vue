@@ -39,31 +39,26 @@ useSeoMeta({
     </p>
 
     <template v-else-if="content">
-      <!-- 2. Deux façons de me contacter -->
-      <section class="mx-auto max-w-6xl px-4 py-20">
-        <div class="grid gap-8 md:grid-cols-2 md:gap-10">
-          <!-- Appel découverte (masqué si pas d'URL de RDV) -->
-          <div v-if="content.booking">
-            <SectionHeading title="Réserver un appel découverte" eyebrow="Prise de RDV" />
-            <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
-              <p class="mb-6 text-ink/70">
-                {{ content.booking.intro || "Réservez un premier échange en visio pour faire connaissance, sans engagement." }}
-              </p>
-              <BookingDialog :url="content.booking.url" />
-            </div>
-          </div>
+      <!-- 2. Réserver un appel découverte (pleine largeur → calendrier lisible) -->
+      <section v-if="content.booking" class="mx-auto max-w-5xl px-4 pt-20">
+        <SectionHeading title="Réserver un appel découverte" eyebrow="Prise de RDV" />
+        <p class="mt-3 max-w-2xl text-ink/70">
+          {{ content.booking.intro || "Réservez un premier échange en visio pour faire connaissance, sans engagement." }}
+        </p>
+        <div class="mt-8">
+          <BookingEmbed :url="content.booking.url" />
+        </div>
+      </section>
 
-          <!-- Message -->
-          <div :class="content.booking ? '' : 'mx-auto w-full max-w-xl'">
-            <SectionHeading title="M'envoyer un message" eyebrow="Formulaire" />
-            <p class="mt-2 text-sm text-ink/55">
-              Vos données servent uniquement à traiter votre demande
-              (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
-            </p>
-            <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
-              <ContactForm />
-            </div>
-          </div>
+      <!-- 2bis. M'envoyer un message -->
+      <section class="mx-auto max-w-xl px-4 py-20">
+        <SectionHeading title="M'envoyer un message" eyebrow="Formulaire" />
+        <p class="mt-2 text-sm text-ink/55">
+          Vos données servent uniquement à traiter votre demande
+          (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
+        </p>
+        <div class="mt-6 rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
+          <ContactForm />
         </div>
       </section>
 
