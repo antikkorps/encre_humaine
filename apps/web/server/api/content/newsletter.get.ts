@@ -4,8 +4,4 @@
  * Consommé par `/newsletter` via `useFetch`. L'inscription passe par son propre
  * canal (`POST /api/newsletter/subscribe`, double opt-in).
  */
-export default defineCachedEventHandler(() => loadNewsletterContent(), {
-  maxAge: 60,
-  name: "content-newsletter",
-  getKey: () => "newsletter",
-});
+export default cachedContent("newsletter", () => loadNewsletterContent());

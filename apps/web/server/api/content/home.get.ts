@@ -3,8 +3,4 @@
  * Cache court (60s) pour amortir Directus (SSG/ISR) ; le token lecture reste
  * strictement serveur (docs/06 §1). La page consomme ce contrat via `useFetch`.
  */
-export default defineCachedEventHandler(() => loadHomeContent(), {
-  maxAge: 60,
-  name: "content-home",
-  getKey: () => "home",
-});
+export default cachedContent("home", () => loadHomeContent());

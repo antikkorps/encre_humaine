@@ -18,6 +18,17 @@ const DEFAULT_MODULE_BAR: ModuleBarItem[] = [
 
 const UMAMI_LINK_ID = "umami";
 
+/** Route publique de chaque singleton → Preview URL Directus (Live Preview). */
+const SINGLETON_PREVIEW_PATHS: Record<string, string> = {
+  home_page: "/",
+  about_page: "/a-propos",
+  org_hub_page: "/organisations",
+  b2c_hub_page: "/particuliers",
+  resources_page: "/ressources",
+  newsletter_page: "/newsletter",
+  contact_page: "/contact",
+};
+
 interface RawSettings {
   project_url: string | null;
   module_bar: ModuleBarItem[] | null;
@@ -50,6 +61,19 @@ export async function bootstrapSettings(): Promise<void> {
     }
   }
 
-  if (Object.keys(body).length === 0) return;
-  await patch("/settings", body);
+  if (Object.keys(body).length > 0) await patch("/settings", body);
+
+  // 3. Preview URL par singleton → Live Preview (panneau « page live » à côté du
+  //    formulaire). `?preview=true` fait sauter le cache serveur (cachedContent).
+  if (config.siteUrl) {
+    for (const [collection, path] of Object.entries(SINGLETON_PREVIEW_PATHS)) {
+      const url = `${config.siteUrl}${path}?preview=true`;
+      const cur = await get<{ meta: { preview_url?: string | null } | null }>(
+        `/collections/${collection}?fields=meta.preview_url`,
+      );
+      if (cur.meta?.preview_url !== url) {
+        await patch(`/collections/${collection}`, { meta: { preview_url: url } });
+      }
+    }
+  }
 }

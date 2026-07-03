@@ -128,7 +128,7 @@ async function main(): Promise<void> {
   console.log("  rôles : Éditrice + API (lecture, published-only) + token statique");
   console.log("→ Réglages projet…");
   await bootstrapSettings();
-  console.log("  réglages : Project URL (logo → site) + lien Umami (barre de modules)");
+  console.log("  réglages : Project URL + lien Umami + preview URLs (Live Preview)");
   console.log("✓ Bootstrap terminé.");
 }
 

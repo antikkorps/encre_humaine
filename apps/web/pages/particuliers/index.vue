@@ -3,7 +3,9 @@
 // `b2c_hub_page` + faq_items (scope=b2c) + témoignage b2c, via l'endpoint
 // serveur caché `/api/content/b2c-hub` (rich text déjà assaini serveur).
 // Ton empathique, accent orange. Sections vides masquées ; échec → message sobre.
-const { data: content, error } = await useFetch("/api/content/b2c-hub");
+const { data: content, error } = await useFetch("/api/content/b2c-hub", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 const heading = computed(() => content.value?.accrocheTitle ?? "Pour les particuliers");

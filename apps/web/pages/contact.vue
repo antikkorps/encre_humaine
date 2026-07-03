@@ -4,7 +4,9 @@
 // Deux voies : prise de RDV (BookingEmbed, Cal.com, chargé au consentement) et
 // formulaire (ContactForm, validation partagée + Turnstile serveur). Page chaude :
 // simple et rassurante. Sections vides masquées ; échec fetch → message sobre.
-const { data: content, error } = await useFetch("/api/content/contact");
+const { data: content, error } = await useFetch("/api/content/contact", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 const heading = computed(() => content.value?.accrocheTitle ?? "Travaillons ensemble");
