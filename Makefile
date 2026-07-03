@@ -18,7 +18,7 @@ export HOST_DIRECTUS_PORT
 .PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
         cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply cms-types cms-seed \
         backup-build backup-run restore \
-        prod-deploy prod-up prod-ps prod-logs prod-umami-reset
+        prod-deploy prod-up prod-ps prod-logs prod-umami-reset prod-backup prod-backup-logs
 
 help: ## Liste les cibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -138,3 +138,9 @@ prod-umami-reset: ## PROD : repart d'un schéma umami vierge (corrige l'état pr
 	  'psql -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" \
 	   -c "DROP SCHEMA IF EXISTS umami CASCADE; CREATE SCHEMA umami AUTHORIZATION umami_user; CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA umami;"'
 	$(PROD_COMPOSE) up -d --wait umami || $(PROD_COMPOSE) ps
+
+prod-backup: ## PROD : sauvegarde immédiate (pg_dump chiffré → R2) — vérifie la chaîne
+	$(PROD_COMPOSE) run --rm --entrypoint /usr/local/bin/backup.sh backup
+
+prod-backup-logs: ## PROD : logs du conteneur backup (cron) — confirme la planification
+	$(PROD_COMPOSE) logs --tail 50 backup

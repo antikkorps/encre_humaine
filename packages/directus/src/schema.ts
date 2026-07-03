@@ -73,30 +73,86 @@ const singletons: CollectionDef[] = [
     singleton: true,
     icon: "home",
     fields: [
+      // — Hero (nommage CTA agnostique : principal = RDV, secondaire = ancre offres) —
       f.input("hero_title"),
       f.textarea("hero_subtitle"),
-      f.input("hero_cta_b2b_label", { half: true }),
-      f.input("hero_cta_b2c_label", { half: true }),
+      f.tags("hero_tagline", { note: "Domaines (ex. Audit RH • GEPP • Management)" }),
+      f.input("hero_cta_primary_label", { half: true, note: "CTA principal → /contact (RDV)" }),
+      f.input("hero_cta_secondary_label", {
+        half: true,
+        note: "CTA secondaire → section offres (#offres)",
+      }),
+      f.tags("hero_proofs", { note: "Micro-preuves ✓ sous le hero" }),
       f.repeater("stats", [{ field: "value" }, { field: "label" }], {
         note: "Ligne de crédibilité (ex. « 10+ » / « ans »)",
       }),
-      f.divider("b2b_divider", "Ce que je fais — Organisations"),
-      f.input("block_b2b_title"),
-      f.textarea("block_b2b_text"),
-      f.tags("block_b2b_tags"),
-      f.divider("b2c_divider", "Ce que je fais — Particuliers"),
-      f.input("block_b2c_title"),
-      f.textarea("block_b2c_text"),
-      f.tags("block_b2c_tags"),
-      f.divider("intro_divider", "Qui je suis"),
+      // — Problème : vous vous reconnaissez ? —
+      f.divider("recognition_divider", "Vous vous reconnaissez ?"),
+      f.input("recognition_title"),
+      f.textarea("recognition_subtitle"),
+      f.repeater("recognition_items", [{ field: "text", interface: "input-multiline" }], {
+        note: "Problématiques (5–6, une par entrée)",
+      }),
+      f.textarea("recognition_conclusion"),
+      // — Promesse / Offre : ce que je vous aide à construire (ancre #offres) —
+      f.divider("build_divider", "Promesse / Offre (#offres)"),
+      f.input("build_title"),
+      f.repeater(
+        "build_blocks",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Blocs services (titre + texte)" },
+      ),
+      f.input("build_cta_label", { half: true, note: "CTA section (ex. « Explorer »)" }),
+      f.input("build_cta_url", { half: true, note: "Cible du CTA (défaut /organisations)" }),
+      // — Ma méthode (ancre #approche, étapes numérotées automatiquement) —
+      f.divider("method_divider", "Ma méthode (#approche)"),
+      f.input("method_title"),
+      f.textarea("method_subtitle"),
+      f.repeater(
+        "method_steps",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Étapes (numérotées à l'affichage)" },
+      ),
+      // — Signature / Positionnement (double expertise) —
+      f.divider("why_divider", "Signature / Positionnement"),
+      f.input("why_title"),
+      f.textarea("why_subtitle"),
+      f.repeater(
+        "why_items",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Piliers (double expertise)" },
+      ),
+      f.textarea("why_conclusion"),
+      // — À propos —
+      f.divider("intro_divider", "À propos"),
       f.input("intro_title"),
       f.textarea("intro_text"),
       f.imageFile("intro_photo"),
+      f.input("intro_cta_label", { note: "Défaut : « Découvrir mon parcours »" }),
+      // — Vous êtes un particulier ? —
+      f.divider("b2c_section_divider", "Vous êtes un particulier ?"),
+      f.input("b2c_section_title"),
+      f.textarea("b2c_section_text"),
+      f.repeater(
+        "b2c_cards",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Cartes accompagnement particuliers" },
+      ),
+      f.input("b2c_cta_label"),
+      // — Témoignage vedette —
+      f.divider("testimonial_divider", "Témoignage vedette"),
       f.m2o("featured_testimonial", "testimonials", {
         note: "Témoignage vedette (masqué si vide)",
       }),
+      // — Ressources (3 derniers articles) —
+      f.divider("resources_divider", "Ressources"),
+      f.input("resources_title"),
+      f.textarea("resources_subtitle"),
+      f.input("resources_cta_label"),
+      // — CTA final (phrase de clôture + réassurance) —
       f.divider("home_cta_divider", "CTA final"),
       f.input("final_cta_title"),
+      f.textarea("final_cta_description", { note: "Sous-texte rassurant (réassurance)" }),
       f.input("final_cta_label"),
       ...f.seoBlock(),
     ],

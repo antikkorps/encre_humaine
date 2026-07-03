@@ -68,6 +68,7 @@ export interface B2cHubPage {
   id: string;
   accroche_title: string | null;
   accroche_body: string | null;
+  accroche_photo: string | DirectusFile | null;
   situation_a_title: string | null;
   situation_a_body: string | null;
   situation_a_cta_label: string | null;
@@ -83,20 +84,19 @@ export interface B2cHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
-  accroche_photo: string | DirectusFile | null;
 }
 
 export interface ContactPage {
   id: string;
   accroche_title: string | null;
   accroche_body: string | null;
+  booking_intro: string | null;
   next_steps: unknown | null;
   response_time_note: string | null;
   meta_title: string | null;
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
-  booking_intro: string | null;
 }
 
 export interface FaqItems {
@@ -116,15 +116,7 @@ export interface HomePage {
   id: string;
   hero_title: string | null;
   hero_subtitle: string | null;
-  hero_cta_b2b_label: string | null;
-  hero_cta_b2c_label: string | null;
   stats: unknown | null;
-  block_b2b_title: string | null;
-  block_b2b_text: string | null;
-  block_b2b_tags: unknown | null;
-  block_b2c_title: string | null;
-  block_b2c_text: string | null;
-  block_b2c_tags: unknown | null;
   intro_title: string | null;
   intro_text: string | null;
   intro_photo: string | DirectusFile | null;
@@ -135,6 +127,34 @@ export interface HomePage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  hero_tagline: unknown | null;
+  hero_cta_primary_label: string | null;
+  hero_cta_secondary_label: string | null;
+  hero_proofs: unknown | null;
+  recognition_title: string | null;
+  recognition_subtitle: string | null;
+  recognition_items: unknown | null;
+  recognition_conclusion: string | null;
+  build_title: string | null;
+  build_blocks: unknown | null;
+  build_cta_label: string | null;
+  build_cta_url: string | null;
+  method_title: string | null;
+  method_subtitle: string | null;
+  method_steps: unknown | null;
+  why_title: string | null;
+  why_subtitle: string | null;
+  why_items: unknown | null;
+  why_conclusion: string | null;
+  intro_cta_label: string | null;
+  b2c_section_title: string | null;
+  b2c_section_text: string | null;
+  b2c_cards: unknown | null;
+  b2c_cta_label: string | null;
+  resources_title: string | null;
+  resources_subtitle: string | null;
+  resources_cta_label: string | null;
+  final_cta_description: string | null;
 }
 
 export interface LegalDocuments {
@@ -199,6 +219,7 @@ export interface OrgHubPage {
   id: string;
   accroche_title: string | null;
   accroche_body: string | null;
+  accroche_photo: string | DirectusFile | null;
   method_steps: unknown | null;
   audience_items: unknown | null;
   cta_title: string | null;
@@ -207,7 +228,6 @@ export interface OrgHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
-  accroche_photo: string | DirectusFile | null;
 }
 
 export interface Products {
@@ -291,6 +311,7 @@ export interface SiteSettings {
   tagline: string | null;
   contact_email: string | null;
   linkedin_url: string | null;
+  booking_url: string | null;
   location_label: string | null;
   social_links: unknown | null;
   legal_name: string | null;
@@ -301,7 +322,6 @@ export interface SiteSettings {
   host_info: string | null;
   default_og_image: string | DirectusFile | null;
   default_meta_description: string | null;
-  booking_url: string | null;
 }
 
 export interface Testimonials {
