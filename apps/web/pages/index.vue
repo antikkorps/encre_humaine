@@ -22,13 +22,11 @@ const hero = computed(
     content.value?.hero ?? {
       title: siteName,
       subtitle: null,
-      ctaB2bLabel: "Je suis une organisation",
-      ctaB2cLabel: "Je suis un particulier",
+      tagline: [] as string[],
+      proofs: [] as string[],
+      ctaPrimaryLabel: "Prendre rendez-vous",
+      ctaSecondaryLabel: "Découvrir l'approche",
     },
-);
-
-const blocks = computed(() =>
-  [content.value?.blockB2b, content.value?.blockB2c].filter((b) => b != null),
 );
 
 // Met le dernier mot du titre en avant (souligné « encre ») — effet générique
@@ -67,20 +65,48 @@ const heroTitle = computed(() => {
         <p v-if="hero.subtitle" class="mx-auto mt-6 max-w-2xl text-lg text-paper/80 sm:text-xl">
           {{ hero.subtitle }}
         </p>
+        <!-- Ligne d'expertise (domaines couverts) -->
+        <p
+          v-if="hero.tagline.length"
+          class="mx-auto mt-5 max-w-2xl text-sm font-medium uppercase tracking-[0.1em] text-teal-200/90"
+        >
+          {{ hero.tagline.join(" • ") }}
+        </p>
         <div class="mt-10 flex flex-wrap justify-center gap-3">
           <NuxtLink
-            to="/organisations"
+            to="/contact"
             class="rounded-full bg-paper px-6 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-white"
           >
-            {{ hero.ctaB2bLabel }}
+            {{ hero.ctaPrimaryLabel }}
           </NuxtLink>
-          <NuxtLink
-            to="/particuliers"
-            class="rounded-full bg-orange-500 px-6 py-3.5 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-orange-600"
+          <a
+            href="#approche"
+            class="rounded-full border border-paper/25 bg-paper/5 px-6 py-3.5 font-semibold text-paper transition-colors hover:bg-paper/10"
           >
-            {{ hero.ctaB2cLabel }}
-          </NuxtLink>
+            {{ hero.ctaSecondaryLabel }}
+          </a>
         </div>
+        <!-- Micro-preuves rapides -->
+        <ul
+          v-if="hero.proofs.length"
+          class="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-paper/75"
+        >
+          <li v-for="proof in hero.proofs" :key="proof" class="inline-flex items-center gap-1.5">
+            <svg
+              class="h-4 w-4 shrink-0 text-teal-300"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.3 3.3 6.8-6.8a1 1 0 0 1 1.4 0Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ proof }}
+          </li>
+        </ul>
       </div>
 
       <!-- Transition « vague d'encre » du hero sombre vers le fond papier. -->
@@ -102,59 +128,123 @@ const heroTitle = computed(() => {
         <StatRow :stats="content.stats" />
       </section>
 
-      <!-- 3. Ce que je fais : deux blocs B2B / B2C -->
-      <section v-if="blocks.length" class="mx-auto max-w-6xl px-4 py-16">
-        <div class="grid gap-6 md:grid-cols-2">
-          <article
-            v-for="block in blocks"
-            :key="block.to"
-            class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+      <!-- 3. Problème : « Vous vous reconnaissez ? » -->
+      <section v-if="content.recognition" class="bg-paper-2">
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.recognition.title"
+            :subtitle="content.recognition.subtitle ?? undefined"
+            eyebrow="Le constat"
+            align="center"
+          />
+          <ul
+            v-if="content.recognition.items.length"
+            class="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3"
           >
-            <span
-              aria-hidden="true"
-              class="absolute inset-y-0 left-0 w-1.5"
-              :class="block.to.includes('organisations') ? 'bg-teal-500' : 'bg-orange-400'"
-            ></span>
-            <p
-              class="text-xs font-semibold uppercase tracking-[0.12em]"
-              :class="block.to.includes('organisations') ? 'text-teal-700' : 'text-orange-600'"
+            <li
+              v-for="(item, i) in content.recognition.items"
+              :key="i"
+              class="flex gap-3 rounded-2xl border border-ink/5 bg-white p-5 shadow-soft"
             >
-              {{ block.to.includes("organisations") ? "Organisations" : "Particuliers" }}
-            </p>
-            <h2 class="mt-1.5 font-display text-2xl font-bold text-ink">{{ block.title }}</h2>
-            <p v-if="block.text" class="mt-3 flex-1 leading-relaxed text-ink/65">{{ block.text }}</p>
-            <ul v-if="block.tags.length" class="mt-5 flex flex-wrap gap-2">
-              <li
-                v-for="tag in block.tags"
-                :key="tag"
-                class="rounded-full px-3 py-1 text-xs font-medium"
-                :class="
-                  block.to.includes('organisations')
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'bg-orange-50 text-orange-700'
-                "
-              >
-                {{ tag }}
-              </li>
-            </ul>
-            <NuxtLink
-              :to="block.to"
-              class="mt-6 inline-flex items-center gap-1.5 font-semibold transition-colors"
-              :class="
-                block.to.includes('organisations')
-                  ? 'text-teal-700 hover:text-teal-800'
-                  : 'text-orange-600 hover:text-orange-700'
-              "
-            >
-              En savoir plus
-              <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
-              <span class="sr-only"> — {{ block.title }}</span>
-            </NuxtLink>
-          </article>
+              <span
+                aria-hidden="true"
+                class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-400"
+              ></span>
+              <span class="leading-relaxed text-ink/75">{{ item }}</span>
+            </li>
+          </ul>
+          <p
+            v-if="content.recognition.conclusion"
+            class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
+          >
+            {{ content.recognition.conclusion }}
+          </p>
         </div>
       </section>
 
-      <!-- 4. Qui je suis -->
+      <!-- 4. Promesse / Offre : « Ce que je vous aide à construire » (#offres) -->
+      <section v-if="content.build" id="offres" class="scroll-mt-24">
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading :title="content.build.title" eyebrow="Mon offre" align="center" />
+          <div class="mt-12 grid gap-6 md:grid-cols-3">
+            <article
+              v-for="(block, i) in content.build.blocks"
+              :key="i"
+              class="flex flex-col rounded-3xl border border-ink/5 bg-white p-8 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+            >
+              <span aria-hidden="true" class="h-1.5 w-10 rounded-full bg-teal-500"></span>
+              <h3 class="mt-4 font-display text-xl font-bold text-ink">{{ block.title }}</h3>
+              <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
+                {{ block.body }}
+              </p>
+            </article>
+          </div>
+          <div v-if="content.build.ctaLabel" class="mt-10 text-center">
+            <NuxtLink
+              :to="content.build.ctaUrl"
+              class="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+            >
+              {{ content.build.ctaLabel }}
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Ma méthode (#approche) — étapes numérotées -->
+      <section
+        v-if="content.method"
+        id="approche"
+        class="relative isolate scroll-mt-24 overflow-hidden bg-teal-50"
+      >
+        <TentacleAccent
+          name="tentacule-5-plein"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.method.title"
+            :subtitle="content.method.subtitle ?? undefined"
+            eyebrow="Ma méthode"
+            align="center"
+          />
+          <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
+              <span class="font-display text-5xl font-bold text-teal-600/30">{{ i + 1 }}</span>
+              <h3 class="mt-2 font-display text-xl font-bold text-ink">{{ step.title }}</h3>
+              <p v-if="step.body" class="mt-2 leading-relaxed text-ink/70">{{ step.body }}</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 6. Signature / Positionnement : double expertise -->
+      <section v-if="content.why" class="mx-auto max-w-6xl px-4 py-20">
+        <SectionHeading
+          :title="content.why.title"
+          :subtitle="content.why.subtitle ?? undefined"
+          eyebrow="Ma signature"
+          align="center"
+        />
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <article
+            v-for="(item, i) in content.why.items"
+            :key="i"
+            class="rounded-3xl border border-ink/5 bg-white p-8 shadow-soft"
+          >
+            <h3 class="font-display text-xl font-bold text-ink">{{ item.title }}</h3>
+            <p v-if="item.body" class="mt-3 leading-relaxed text-ink/65">{{ item.body }}</p>
+          </article>
+        </div>
+        <p
+          v-if="content.why.conclusion"
+          class="mx-auto mt-10 max-w-3xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
+        >
+          {{ content.why.conclusion }}
+        </p>
+      </section>
+
+      <!-- 7. À propos -->
       <section v-if="content.intro" class="relative isolate overflow-hidden bg-paper-2">
         <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/10" />
         <TentacleAccent
@@ -188,21 +278,60 @@ const heroTitle = computed(() => {
             <h2 class="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">
               {{ content.intro.title }}
             </h2>
-            <p v-if="content.intro.text" class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70">
+            <p
+              v-if="content.intro.text"
+              class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
+            >
               {{ content.intro.text }}
             </p>
             <NuxtLink
               to="/a-propos"
               class="mt-6 inline-flex items-center gap-1.5 font-semibold text-teal-700 transition-colors hover:text-teal-800"
             >
-              En savoir plus sur moi
+              {{ content.intro.ctaLabel }}
               <span aria-hidden="true">→</span>
             </NuxtLink>
           </div>
         </div>
       </section>
 
-      <!-- 5. Témoignage vedette — section masquée si absent -->
+      <!-- 8. Particuliers : 2 axes d'accompagnement -->
+      <section v-if="content.b2c" class="relative isolate overflow-hidden bg-orange-50">
+        <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading :title="content.b2c.title" eyebrow="Particuliers" align="center" />
+          <p
+            v-if="content.b2c.text"
+            class="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed text-ink/70"
+          >
+            {{ content.b2c.text }}
+          </p>
+          <div
+            v-if="content.b2c.cards.length"
+            class="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2"
+          >
+            <article
+              v-for="(card, i) in content.b2c.cards"
+              :key="i"
+              class="rounded-3xl border border-orange-200/60 bg-white p-8 shadow-soft"
+            >
+              <h3 class="font-display text-xl font-bold text-ink">{{ card.title }}</h3>
+              <p v-if="card.body" class="mt-2 leading-relaxed text-ink/65">{{ card.body }}</p>
+            </article>
+          </div>
+          <div class="mt-10 text-center">
+            <NuxtLink
+              to="/particuliers"
+              class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-7 py-3.5 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-orange-600"
+            >
+              {{ content.b2c.ctaLabel }}
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Témoignage vedette — section masquée si absent -->
       <section
         v-if="content.featuredTestimonial"
         class="mx-auto max-w-3xl px-4 py-20"
@@ -214,18 +343,14 @@ const heroTitle = computed(() => {
         <TestimonialCard :testimonial="content.featuredTestimonial" />
       </section>
 
-      <!-- 6. Derniers articles — masquée si aucun -->
+      <!-- 10. Ressources — 3 derniers articles, masquée si aucun -->
       <section v-if="content.articles.length" class="relative isolate overflow-hidden bg-teal-50">
         <TentacleAccent
-          name="tentacule-5-plein"
-          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
+          name="tentacule-3-trait"
+          class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading
-            title="Derniers articles"
-            eyebrow="Ressources"
-            subtitle="Des repères concrets sur les organisations et les transitions."
-          />
+          <SectionHeading :title="content.resources.title" eyebrow="Ressources" :subtitle="content.resources.subtitle ?? undefined" />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <ArticleCard
               v-for="article in content.articles"
@@ -233,13 +358,23 @@ const heroTitle = computed(() => {
               :article="article"
             />
           </div>
+          <div class="mt-10">
+            <NuxtLink
+              to="/ressources"
+              class="inline-flex items-center gap-1.5 font-semibold text-teal-700 transition-colors hover:text-teal-800"
+            >
+              {{ content.resources.ctaLabel }}
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
         </div>
       </section>
 
-      <!-- 7. CTA final -->
+      <!-- 11. CTA final -->
       <section v-if="content.finalCta" class="mx-auto max-w-6xl px-4 py-20">
         <CtaBlock
           :title="content.finalCta.title"
+          :description="content.finalCta.description ?? undefined"
           :cta-label="content.finalCta.label"
           to="/contact"
           variant="orange"
