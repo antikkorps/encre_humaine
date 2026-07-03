@@ -4,7 +4,9 @@
 // l'endpoint serveur caché `/api/content/org-hub`. Rendu SSG/ISR. La page
 // oriente (résumé + lien par offre), elle ne détaille pas. Sections vides
 // masquées ; en cas d'échec de fetch, message sobre (docs/00 §États).
-const { data: content, error } = await useFetch("/api/content/org-hub");
+const { data: content, error } = await useFetch("/api/content/org-hub", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 const heading = computed(() => content.value?.accrocheTitle ?? "Pour les organisations");

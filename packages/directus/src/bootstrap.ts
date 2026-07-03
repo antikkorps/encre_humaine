@@ -15,6 +15,7 @@ import {
   listRelations,
 } from "./api.ts";
 import { allCollections, type CollectionDef } from "./schema.ts";
+import { bootstrapSettings } from "./settings.ts";
 
 type Json = Record<string, unknown>;
 
@@ -125,6 +126,9 @@ async function main(): Promise<void> {
   console.log("→ Rôles & permissions…");
   await bootstrapAccess();
   console.log("  rôles : Éditrice + API (lecture, published-only) + token statique");
+  console.log("→ Réglages projet…");
+  await bootstrapSettings();
+  console.log("  réglages : Project URL + lien Umami + preview URLs (Live Preview)");
   console.log("✓ Bootstrap terminé.");
 }
 

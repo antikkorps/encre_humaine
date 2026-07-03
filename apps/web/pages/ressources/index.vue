@@ -3,7 +3,9 @@
 // + articles publiés + ressource vedette, via l'endpoint caché `/api/content/resources`.
 // Fonctionne avec 0 article (état vide propre). Filtres par groupe de catégorie
 // (côté client). Ressource vedette : téléchargement direct OU gating newsletter.
-const { data: content, error } = await useFetch("/api/content/resources");
+const { data: content, error } = await useFetch("/api/content/resources", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 const heading = computed(() => content.value?.accrocheTitle ?? "Ressources");

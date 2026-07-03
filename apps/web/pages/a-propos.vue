@@ -3,7 +3,9 @@
 // serveur caché `/api/content/about` (rich text déjà assaini serveur). Rendu
 // SSG/ISR, 2 colonnes desktop / empilé mobile. Sections vides masquées ;
 // en cas d'échec de fetch, message sobre (docs/00 §États).
-const { data: content, error } = await useFetch("/api/content/about");
+const { data: content, error } = await useFetch("/api/content/about", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 // h1 = titre de l'accroche (docs/02 §A11y) ; fallback d'affichage si vide.

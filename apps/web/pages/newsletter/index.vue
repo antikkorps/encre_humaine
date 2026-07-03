@@ -3,7 +3,9 @@
 // via l'endpoint caché `/api/content/newsletter` (promesse rich text assainie
 // serveur). Inscription via `NewsletterForm` (double opt-in, Turnstile). Sections
 // vides masquées ; échec fetch → message sobre.
-const { data: content, error } = await useFetch("/api/content/newsletter");
+const { data: content, error } = await useFetch("/api/content/newsletter", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 const heading = computed(() => content.value?.name ?? "La newsletter");

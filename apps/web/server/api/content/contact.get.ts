@@ -4,8 +4,4 @@
  * Consommé par `/contact` via `useFetch`. La soumission du formulaire et la prise
  * de RDV passent par leurs propres canaux (`/api/contact`, embed Cal.com).
  */
-export default defineCachedEventHandler(() => loadContactContent(), {
-  maxAge: 60,
-  name: "content-contact",
-  getKey: () => "contact",
-});
+export default cachedContent("contact", () => loadContactContent());

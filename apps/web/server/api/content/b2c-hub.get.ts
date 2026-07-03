@@ -4,8 +4,4 @@
  * serveur, token Directus strictement serveur (docs/06 §1). Consommé par
  * `/particuliers` via `useFetch`.
  */
-export default defineCachedEventHandler(() => loadB2cHubContent(), {
-  maxAge: 60,
-  name: "content-b2c-hub",
-  getKey: () => "b2c-hub",
-});
+export default cachedContent("b2c-hub", () => loadB2cHubContent());

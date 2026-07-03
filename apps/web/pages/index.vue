@@ -3,7 +3,9 @@
 // + témoignage vedette, via l'endpoint serveur caché `/api/content/home` (le token
 // Directus reste serveur). Rendu SSG/ISR. Les sections dynamiques se masquent
 // proprement si vides ; en cas d'échec de fetch, message sobre (docs/00 §États).
-const { data: content, error } = await useFetch("/api/content/home");
+const { data: content, error } = await useFetch("/api/content/home", {
+  query: usePreviewQuery(),
+});
 
 const siteName = "L'Encre Humaine";
 
