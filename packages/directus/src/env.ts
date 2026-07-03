@@ -59,4 +59,11 @@ export const config = {
    * compte existant (re-runs idempotents sans réinitialiser son mot de passe).
    */
   editorPassword: process.env.DIRECTUS_EDITOR_PASSWORD ?? fileEnv.DIRECTUS_EDITOR_PASSWORD ?? "",
+  /** URL publique du site → Project URL Directus (logo cliquable vers le site). Vide = ignoré. */
+  siteUrl: process.env.BASE_URL ?? fileEnv.BASE_URL ?? "",
+  /** Tableau de bord Umami (dérivé de ANALYTICS_SCRIPT_URL) → lien barre de modules. Vide = ignoré. */
+  umamiUrl: (process.env.ANALYTICS_SCRIPT_URL ?? fileEnv.ANALYTICS_SCRIPT_URL ?? "").replace(
+    /\/script\.js$/,
+    "",
+  ),
 };
