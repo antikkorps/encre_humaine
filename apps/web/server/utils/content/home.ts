@@ -10,9 +10,11 @@ import {
   mapSeo,
   mapStringList,
   mapTestimonialItem,
+  mapTitledItems,
   type RawSiteDefaults,
   records,
   str,
+  type TitledItem,
 } from "./_shared";
 
 /**
@@ -52,20 +54,40 @@ export interface RawArticle {
 export interface RawHome {
   hero_title?: string | null;
   hero_subtitle?: string | null;
-  hero_cta_b2b_label?: string | null;
-  hero_cta_b2c_label?: string | null;
+  hero_tagline?: unknown;
+  hero_proofs?: unknown;
+  hero_cta_primary_label?: string | null;
+  hero_cta_secondary_label?: string | null;
   stats?: unknown;
-  block_b2b_title?: string | null;
-  block_b2b_text?: string | null;
-  block_b2b_tags?: unknown;
-  block_b2c_title?: string | null;
-  block_b2c_text?: string | null;
-  block_b2c_tags?: unknown;
+  recognition_title?: string | null;
+  recognition_subtitle?: string | null;
+  recognition_items?: unknown;
+  recognition_conclusion?: string | null;
+  build_title?: string | null;
+  build_blocks?: unknown;
+  build_cta_label?: string | null;
+  build_cta_url?: string | null;
+  method_title?: string | null;
+  method_subtitle?: string | null;
+  method_steps?: unknown;
+  why_title?: string | null;
+  why_subtitle?: string | null;
+  why_items?: unknown;
+  why_conclusion?: string | null;
   intro_title?: string | null;
   intro_text?: string | null;
   intro_photo?: FileField;
+  intro_cta_label?: string | null;
+  b2c_section_title?: string | null;
+  b2c_section_text?: string | null;
+  b2c_cards?: unknown;
+  b2c_cta_label?: string | null;
   featured_testimonial?: RawTestimonial | string | null;
+  resources_title?: string | null;
+  resources_subtitle?: string | null;
+  resources_cta_label?: string | null;
   final_cta_title?: string | null;
+  final_cta_description?: string | null;
   final_cta_label?: string | null;
   meta_title?: string | null;
   meta_description?: string | null;
@@ -73,30 +95,54 @@ export interface RawHome {
   no_index?: boolean | null;
 }
 
-// — Forme exposée à la page —
-
-export interface HomeBlock {
-  title: string;
-  text: string | null;
-  tags: string[];
-  /** Lien vers le hub correspondant. */
-  to: string;
-}
+// — Forme exposée à la page (sections optionnelles = null → masquées) —
 
 export interface HomeContent {
   hero: {
     title: string;
     subtitle: string | null;
-    ctaB2bLabel: string;
-    ctaB2cLabel: string;
+    /** Ligne d'expertise (Audit RH • GEPP • …). */
+    tagline: string[];
+    /** Micro-preuves ✓. */
+    proofs: string[];
+    /** Principal → /contact (RDV). */
+    ctaPrimaryLabel: string;
+    /** Secondaire → section méthode (#approche). */
+    ctaSecondaryLabel: string;
   };
   stats: Stat[];
-  blockB2b: HomeBlock | null;
-  blockB2c: HomeBlock | null;
-  intro: { title: string; text: string | null; photo: ContentPhoto | null } | null;
+  recognition: {
+    title: string;
+    subtitle: string | null;
+    items: string[];
+    conclusion: string | null;
+  } | null;
+  build: {
+    title: string;
+    blocks: TitledItem[];
+    /** CTA de section (« Explorer »), `null` si non renseigné. */
+    ctaLabel: string | null;
+    ctaUrl: string;
+  } | null;
+  method: { title: string; subtitle: string | null; steps: TitledItem[] } | null;
+  why: {
+    title: string;
+    subtitle: string | null;
+    items: TitledItem[];
+    conclusion: string | null;
+  } | null;
+  intro: {
+    title: string;
+    text: string | null;
+    photo: ContentPhoto | null;
+    ctaLabel: string;
+  } | null;
+  b2c: { title: string; text: string | null; cards: TitledItem[]; ctaLabel: string } | null;
   featuredTestimonial: TestimonialItem | null;
   articles: ArticleSummary[];
-  finalCta: { title: string; label: string } | null;
+  /** Toujours présent (titres à défaut) ; la section se masque si aucun article. */
+  resources: { title: string; subtitle: string | null; ctaLabel: string };
+  finalCta: { title: string; description: string | null; label: string } | null;
   seo: ContentSeo;
 }
 
@@ -109,16 +155,60 @@ export function mapStats(raw: unknown): Stat[] {
     .filter((s) => s.value !== "" && s.label !== "");
 }
 
-/** Bloc « Ce que je fais » : masqué si pas de titre (docs/01 §3). */
-export function mapBlock(
-  title: unknown,
-  text: unknown,
-  tags: unknown,
-  to: string,
-): HomeBlock | null {
-  const t = str(title);
-  if (!t) return null;
-  return { title: t, text: str(text) || null, tags: mapStringList(tags), to };
+/** Problème « Vous vous reconnaissez ? » : masqué si totalement vide (docs/01 §2). */
+export function mapRecognition(home: RawHome): HomeContent["recognition"] {
+  const title = str(home.recognition_title);
+  const subtitle = str(home.recognition_subtitle);
+  const items = mapStringList(home.recognition_items);
+  const conclusion = str(home.recognition_conclusion);
+  if (!title && !subtitle && !items.length && !conclusion) return null;
+  return { title, subtitle: subtitle || null, items, conclusion: conclusion || null };
+}
+
+/** Promesse / Offre : 3 blocs services + CTA de section (docs/01 §3). */
+export function mapBuild(home: RawHome): HomeContent["build"] {
+  const title = str(home.build_title);
+  const blocks = mapTitledItems(home.build_blocks);
+  if (!title && !blocks.length) return null;
+  return {
+    title,
+    blocks,
+    ctaLabel: str(home.build_cta_label) || null,
+    ctaUrl: str(home.build_cta_url) || "/organisations",
+  };
+}
+
+/** Méthode : étapes numérotées à l'affichage (docs/01 §4). */
+export function mapMethod(home: RawHome): HomeContent["method"] {
+  const title = str(home.method_title);
+  const subtitle = str(home.method_subtitle);
+  const steps = mapTitledItems(home.method_steps);
+  if (!title && !subtitle && !steps.length) return null;
+  return { title, subtitle: subtitle || null, steps };
+}
+
+/** Signature / Positionnement : piliers de la double expertise (docs/01 §5). */
+export function mapWhy(home: RawHome): HomeContent["why"] {
+  const title = str(home.why_title);
+  const subtitle = str(home.why_subtitle);
+  const items = mapTitledItems(home.why_items);
+  const conclusion = str(home.why_conclusion);
+  if (!title && !subtitle && !items.length && !conclusion) return null;
+  return { title, subtitle: subtitle || null, items, conclusion: conclusion || null };
+}
+
+/** Particuliers : 2 axes d'accompagnement (docs/01 §7). */
+export function mapB2c(home: RawHome): HomeContent["b2c"] {
+  const title = str(home.b2c_section_title);
+  const text = str(home.b2c_section_text);
+  const cards = mapTitledItems(home.b2c_cards);
+  if (!title && !text && !cards.length) return null;
+  return {
+    title,
+    text: text || null,
+    cards,
+    ctaLabel: str(home.b2c_cta_label) || "Découvrir les accompagnements",
+  };
 }
 
 /** Témoignage vedette : requiert une citation, sinon section masquée (docs/01 §5). */
@@ -149,14 +239,20 @@ export function mapArticles(raws: unknown, assetBase: string): ArticleSummary[] 
     .filter((a) => a.slug !== "");
 }
 
-function mapIntro(home: RawHome, assetBase: string): HomeContent["intro"] {
+/** À propos : incarné (photo + texte), masqué si ni titre ni texte (docs/01 §6). */
+export function mapIntro(home: RawHome, assetBase: string): HomeContent["intro"] {
   const title = str(home.intro_title);
   const text = str(home.intro_text);
   if (!title && !text) return null;
-  return { title, text: text || null, photo: mapPhoto(home.intro_photo, assetBase) };
+  return {
+    title,
+    text: text || null,
+    photo: mapPhoto(home.intro_photo, assetBase),
+    ctaLabel: str(home.intro_cta_label) || "Découvrir mon parcours",
+  };
 }
 
-/** Compose le payload de la page (pur). */
+/** Compose le payload de la page (pur). Fallbacks = garde-fous d'affichage, jamais du contenu éditorial. */
 export function mapHomeContent(
   home: RawHome,
   articles: unknown,
@@ -166,30 +262,33 @@ export function mapHomeContent(
   const finalTitle = str(home.final_cta_title);
   return {
     hero: {
-      // Fallbacks = garde-fous d'affichage (hero toujours visible), pas du contenu éditorial.
       title: str(home.hero_title) || "L'Encre Humaine",
       subtitle: str(home.hero_subtitle) || null,
-      ctaB2bLabel: str(home.hero_cta_b2b_label) || "Je suis une organisation",
-      ctaB2cLabel: str(home.hero_cta_b2c_label) || "Je suis un particulier",
+      tagline: mapStringList(home.hero_tagline),
+      proofs: mapStringList(home.hero_proofs),
+      ctaPrimaryLabel: str(home.hero_cta_primary_label) || "Prendre rendez-vous",
+      ctaSecondaryLabel: str(home.hero_cta_secondary_label) || "Découvrir l'approche",
     },
     stats: mapStats(home.stats),
-    blockB2b: mapBlock(
-      home.block_b2b_title,
-      home.block_b2b_text,
-      home.block_b2b_tags,
-      "/organisations",
-    ),
-    blockB2c: mapBlock(
-      home.block_b2c_title,
-      home.block_b2c_text,
-      home.block_b2c_tags,
-      "/particuliers",
-    ),
+    recognition: mapRecognition(home),
+    build: mapBuild(home),
+    method: mapMethod(home),
+    why: mapWhy(home),
     intro: mapIntro(home, assetBase),
+    b2c: mapB2c(home),
     featuredTestimonial: mapTestimonial(home.featured_testimonial),
     articles: mapArticles(articles, assetBase),
+    resources: {
+      title: str(home.resources_title) || "Réflexions, outils et retours de terrain.",
+      subtitle: str(home.resources_subtitle) || null,
+      ctaLabel: str(home.resources_cta_label) || "Voir toutes les ressources",
+    },
     finalCta: finalTitle
-      ? { title: finalTitle, label: str(home.final_cta_label) || "Travaillons ensemble" }
+      ? {
+          title: finalTitle,
+          description: str(home.final_cta_description) || null,
+          label: str(home.final_cta_label) || "Prendre rendez-vous",
+        }
       : null,
     seo: mapSeo(home, settings, assetBase),
   };
@@ -206,19 +305,35 @@ export async function loadHomeContent(): Promise<HomeContent> {
         fields: [
           "hero_title",
           "hero_subtitle",
-          "hero_cta_b2b_label",
-          "hero_cta_b2c_label",
+          "hero_tagline",
+          "hero_proofs",
+          "hero_cta_primary_label",
+          "hero_cta_secondary_label",
           "stats",
-          "block_b2b_title",
-          "block_b2b_text",
-          "block_b2b_tags",
-          "block_b2c_title",
-          "block_b2c_text",
-          "block_b2c_tags",
+          "recognition_title",
+          "recognition_subtitle",
+          "recognition_items",
+          "recognition_conclusion",
+          "build_title",
+          "build_blocks",
+          "build_cta_label",
+          "build_cta_url",
+          "method_title",
+          "method_subtitle",
+          "method_steps",
+          "why_title",
+          "why_subtitle",
+          "why_items",
+          "why_conclusion",
           "intro_title",
           "intro_text",
           // Champs fichier = ID brut (directus_files hors Schema typé, cf. shop.ts) → URL d'asset.
           "intro_photo",
+          "intro_cta_label",
+          "b2c_section_title",
+          "b2c_section_text",
+          "b2c_cards",
+          "b2c_cta_label",
           {
             featured_testimonial: [
               "quote",
@@ -229,7 +344,11 @@ export async function loadHomeContent(): Promise<HomeContent> {
               "audience",
             ],
           },
+          "resources_title",
+          "resources_subtitle",
+          "resources_cta_label",
           "final_cta_title",
+          "final_cta_description",
           "final_cta_label",
           "meta_title",
           "meta_description",
