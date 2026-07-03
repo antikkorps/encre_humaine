@@ -12,7 +12,8 @@
     "snapshot": "tsx src/snapshot.ts",
     "apply": "tsx src/apply.ts",
     "types": "tsx src/types-gen.ts",
-    "seed": "tsx src/seed.ts"
+    "seed": "tsx src/seed.ts",
+    "seed:home": "tsx src/seed-home.ts"
   },
   "devDependencies": {
     "@types/node": "25.9.2",
