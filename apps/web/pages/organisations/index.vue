@@ -60,6 +60,7 @@ useSeoMeta({
       <!-- Texte d'accroche + phrase signature + CTA -->
       <section
         v-if="content.accrocheBody || content.accrocheSignature"
+        v-reveal
         class="mx-auto max-w-3xl px-4 py-16 text-center"
       >
         <p
@@ -84,7 +85,7 @@ useSeoMeta({
       </section>
 
       <!-- 2. Ce que j'observe -->
-      <section v-if="content.observe" class="bg-paper-2">
+      <section v-if="content.observe" v-reveal class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.observe.title || 'Ce que j\'observe'"
@@ -114,7 +115,7 @@ useSeoMeta({
       </section>
 
       <!-- 3. Les offres B2B (dynamique depuis `offers`) -->
-      <section v-if="content.offers.length" class="mx-auto max-w-6xl px-4 py-20">
+      <section v-if="content.offers.length" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading :title="content.offersTitle" eyebrow="Accompagnement" align="center" />
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <OfferCard v-for="offer in content.offers" :key="offer.slug" :offer="offer" />
@@ -122,7 +123,7 @@ useSeoMeta({
       </section>
 
       <!-- 4. Ma façon de travailler -->
-      <section v-if="content.method" class="bg-teal-50">
+      <section v-if="content.method" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-5xl px-4 py-20">
           <SectionHeading
             :title="content.method.title || 'Ma façon de travailler'"
@@ -153,13 +154,13 @@ useSeoMeta({
       </section>
 
       <!-- 5. Ce qui différencie mon approche -->
-      <section v-if="content.differentiator" class="mx-auto max-w-3xl px-4 py-20">
+      <section v-if="content.differentiator" v-reveal class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading :title="content.differentiator.title || 'Mon approche'" />
         <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
       </section>
 
       <!-- 6. Cet accompagnement est fait pour vous si… -->
-      <section v-if="content.audience" class="bg-teal-50">
+      <section v-if="content.audience" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading :title="content.audience.title || 'Pour qui ?'" />
           <ul v-if="content.audience.items.length" class="mt-8 space-y-3">
@@ -186,7 +187,12 @@ useSeoMeta({
       </section>
 
       <!-- 7. Témoignages B2B — masqués si vides -->
-      <section v-if="content.testimonials.length" class="bg-paper-2" aria-label="Témoignages">
+      <section
+        v-if="content.testimonials.length"
+        v-reveal
+        class="bg-paper-2"
+        aria-label="Témoignages"
+      >
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.testimonialsTitle" align="center" />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -200,7 +206,7 @@ useSeoMeta({
       </section>
 
       <!-- 8. CTA final -->
-      <section class="mx-auto max-w-6xl px-4 py-16">
+      <section v-reveal class="mx-auto max-w-6xl px-4 py-16">
         <CtaBlock
           :title="content.cta.title"
           :description="content.cta.body ?? undefined"

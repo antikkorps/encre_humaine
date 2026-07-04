@@ -34,7 +34,7 @@ const markup = computed(() => {
 <template>
   <span
     aria-hidden="true"
-    class="tentacle-accent pointer-events-none select-none"
+    class="tentacle-accent motion-drift-slow pointer-events-none select-none"
     v-html="markup"
   />
 </template>

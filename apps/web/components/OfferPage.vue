@@ -92,6 +92,7 @@ useSchemaOrg([
     <!-- Texte d'accroche + signature + CTA -->
     <section
       v-if="content.accrocheBody || content.accrocheSignature"
+      v-reveal
       class="mx-auto max-w-3xl px-4 py-16 text-center"
     >
       <p v-if="content.accrocheBody" class="whitespace-pre-line text-lg leading-relaxed text-ink/75">
@@ -114,7 +115,7 @@ useSchemaOrg([
     </section>
 
     <!-- 2. Ce que ça change (bénéfices) -->
-    <section v-if="content.outcomes.length" class="bg-teal-50">
+    <section v-if="content.outcomes.length" v-reveal class="bg-teal-50">
       <div class="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading
           :title="content.outcomesTitle || 'Ce que vous en retirez'"
@@ -137,7 +138,7 @@ useSchemaOrg([
     </section>
 
     <!-- 3. Ce que je vois souvent (contexte) -->
-    <section v-if="content.context" class="mx-auto max-w-6xl px-4 py-20">
+    <section v-if="content.context" v-reveal class="mx-auto max-w-6xl px-4 py-20">
       <SectionHeading :title="content.context.title || 'Ce que je vois souvent'" align="center" />
       <div v-if="content.context.items.length" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <article
@@ -160,7 +161,7 @@ useSchemaOrg([
     </section>
 
     <!-- 4. Ce que comprend la mission -->
-    <section v-if="content.missionIncludes.length" class="bg-paper-2">
+    <section v-if="content.missionIncludes.length" v-reveal class="bg-paper-2">
       <div class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading :title="content.missionTitle || missionHeading" />
         <ul class="mt-8 space-y-5">
@@ -185,13 +186,17 @@ useSchemaOrg([
     </section>
 
     <!-- 5. Comment ça se passe (optionnel) — rich text assaini -->
-    <section v-if="content.formatBodyHtml" class="mx-auto max-w-3xl px-4 py-20">
+    <section v-if="content.formatBodyHtml" v-reveal class="mx-auto max-w-3xl px-4 py-20">
       <SectionHeading :title="formatHeading" />
       <RichText :html="content.formatBodyHtml" class="mt-5" />
     </section>
 
     <!-- 6. Pour qui -->
-    <section v-if="content.audienceFit.length || content.audienceFitConclusion" class="bg-teal-50">
+    <section
+      v-if="content.audienceFit.length || content.audienceFitConclusion"
+      v-reveal
+      class="bg-teal-50"
+    >
       <div class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading :title="content.audienceFitTitle || 'Pour qui ?'" />
         <ul v-if="content.audienceFit.length" class="mt-8 space-y-3">
@@ -221,6 +226,7 @@ useSchemaOrg([
     <!-- 7. Investissement — libellé libre + mention franchise en base (293 B) -->
     <section
       v-if="content.priceLabel || content.priceNote || content.durationLabel"
+      v-reveal
       class="mx-auto max-w-3xl px-4 py-20"
     >
       <SectionHeading title="Investissement" />
@@ -244,7 +250,7 @@ useSchemaOrg([
     </section>
 
     <!-- 8. FAQ (faq_items par scope) -->
-    <section v-if="content.faq.length" class="bg-teal-50">
+    <section v-if="content.faq.length" v-reveal class="bg-teal-50">
       <div class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading title="Questions fréquentes" align="center" />
         <div class="mt-10">
@@ -256,6 +262,7 @@ useSchemaOrg([
     <!-- 9. Témoignage — masqué si vide -->
     <section
       v-if="content.testimonial"
+      v-reveal
       class="mx-auto max-w-3xl px-4 py-20"
       aria-label="Témoignage"
     >
@@ -263,7 +270,7 @@ useSchemaOrg([
     </section>
 
     <!-- 10. CTA → contact -->
-    <section class="mx-auto max-w-6xl px-4 py-20">
+    <section v-reveal class="mx-auto max-w-6xl px-4 py-20">
       <CtaBlock
         :title="content.ctaTitle || 'Travaillons ensemble'"
         :description="content.ctaBody ?? undefined"

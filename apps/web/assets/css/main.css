@@ -152,3 +152,45 @@
   color: var(--color-teal-800);
   font-style: italic;
 }
+
+/*
+ * Mouvement (décor + reveal au scroll) — docs/00 §a11y.
+ * Compositeur uniquement (transform/opacity → zéro CLS, zéro reflow, aucun impact
+ * Lighthouse). TOUT est désactivé sous `prefers-reduced-motion: reduce`. Le reveal
+ * s'appuie sur IntersectionObserver natif (plugins/reveal.ts), aucune dépendance.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  /* Dérive lente du décor (encre, poulpe, tentacules). L'animation porte sur
+   * `transform` : en Tailwind v4, translate/rotate sont des propriétés DISTINCTES,
+   * donc la dérive s'AJOUTE au positionnement sans le remplacer. */
+  @keyframes ink-drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -14px, 0);
+    }
+  }
+  .motion-drift {
+    animation: ink-drift 11s ease-in-out infinite;
+  }
+  .motion-drift-slow {
+    animation: ink-drift 17s ease-in-out infinite;
+  }
+
+  /* Reveal au scroll : l'état initial n'est posé (via `data-reveal`) par la
+   * directive `v-reveal` QUE pour les éléments sous le pli → aucun flash au-dessus,
+   * et contenu pleinement visible sans JS (SSR ne pose pas l'attribut). */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+  [data-reveal="in"] {
+    opacity: 1;
+    transform: none;
+  }
+}
