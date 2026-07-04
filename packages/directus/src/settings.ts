@@ -8,12 +8,16 @@ import { config } from "./env.ts";
 
 type ModuleBarItem = Record<string, unknown>;
 
-/** Barre de modules par défaut de Directus (base de repli si non personnalisée). */
+/** Barre de modules par défaut de Directus (base de repli si non personnalisée).
+ *  IMPÉRATIF : inclure le module `settings` — une barre écrite sans lui masque
+ *  l'engrenage Settings à TOUT LE MONDE, admin compris (la barre prime sur
+ *  `admin_access`). */
 const DEFAULT_MODULE_BAR: ModuleBarItem[] = [
   { type: "module", id: "content", enabled: true },
   { type: "module", id: "users", enabled: true },
   { type: "module", id: "files", enabled: true },
   { type: "module", id: "insights", enabled: true },
+  { type: "module", id: "settings", enabled: true, locked: true },
 ];
 
 const UMAMI_LINK_ID = "umami";
@@ -43,12 +47,21 @@ export async function bootstrapSettings(): Promise<void> {
     body.project_url = config.siteUrl;
   }
 
-  // 2. Lien Umami dans la barre de modules (ajouté une seule fois, barre préservée).
-  if (config.umamiUrl) {
-    const bar = current.module_bar ?? DEFAULT_MODULE_BAR;
-    const present = bar.some((i) => i.id === UMAMI_LINK_ID || i.url === config.umamiUrl);
-    if (!present) {
-      body.module_bar = [
+  // 2. Barre de modules : garantit le module `settings` (auto-réparation) + le
+  //    lien Umami (ajouté une seule fois). Idempotent, préserve une barre déjà
+  //    personnalisée. Le settings est ré-inséré s'il manque — indispensable pour
+  //    réparer une barre écrite sans lui (Umami déjà présent → l'ancien code ne
+  //    repatchait plus, l'engrenage restait masqué).
+  {
+    let bar = current.module_bar ?? DEFAULT_MODULE_BAR;
+    const before = JSON.stringify(bar);
+    if (!bar.some((i) => i.id === "settings")) {
+      const modules = bar.filter((i) => i.type === "module");
+      const links = bar.filter((i) => i.type !== "module");
+      bar = [...modules, { type: "module", id: "settings", enabled: true, locked: true }, ...links];
+    }
+    if (config.umamiUrl && !bar.some((i) => i.id === UMAMI_LINK_ID || i.url === config.umamiUrl)) {
+      bar = [
         ...bar,
         {
           type: "link",
@@ -59,6 +72,7 @@ export async function bootstrapSettings(): Promise<void> {
         },
       ];
     }
+    if (JSON.stringify(bar) !== before) body.module_bar = bar;
   }
 
   if (Object.keys(body).length > 0) await patch("/settings", body);

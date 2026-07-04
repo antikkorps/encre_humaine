@@ -54,6 +54,11 @@ services:
       # « page d'attente » de reconnaître une session Directus valide et d'ouvrir
       # le site en prévisualisation (apps/web server/utils/preview-session.ts).
       SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN}
+      # Live Preview : autorise Directus à afficher le site en iframe dans le
+      # panneau de prévisualisation. Sans ça, la CSP par défaut de Directus
+      # (child-src 'self', pas de frame-src) bloque le cadrage de tout domaine
+      # externe → « contenu bloqué ». On ouvre frame-src à 'self' + le site.
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: "array:'self',${BASE_URL}"
       # Assets → R2 (S3-compatible). docs/02 §7, docs/07 §6.
       STORAGE_LOCATIONS: r2
       STORAGE_R2_DRIVER: s3

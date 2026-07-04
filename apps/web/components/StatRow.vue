@@ -9,9 +9,9 @@ defineProps<{ stats: Stat[] }>();
 <template>
   <dl
     v-if="stats.length"
-    class="flex flex-wrap justify-center gap-x-10 gap-y-8 sm:gap-x-16"
+    class="flex flex-col items-center gap-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-16 sm:gap-y-8"
   >
-    <div v-for="(stat, i) in stats" :key="i" class="w-[40%] text-center sm:w-auto sm:min-w-[8rem]">
+    <div v-for="(stat, i) in stats" :key="i" class="text-center sm:min-w-[8rem]">
       <dt class="sr-only">{{ stat.label }}</dt>
       <dd>
         <span
