@@ -210,9 +210,26 @@ const singletons: CollectionDef[] = [
     icon: "corporate_fare",
     note: "Offres & témoignages branchés dynamiquement (audience=organisation)",
     fields: [
+      // §1 Accroche
       f.input("accroche_title"),
+      f.textarea("accroche_subtitle"),
       f.textarea("accroche_body"),
+      f.input("accroche_signature", { note: "Phrase signature" }),
       f.imageFile("accroche_photo"),
+      // §2 Ce que j'observe
+      f.input("observe_title"),
+      f.textarea("observe_intro"),
+      f.repeater(
+        "observe_items",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Constats (titre + corps)" },
+      ),
+      f.textarea("observe_conclusion"),
+      // §3 Offres (cartes dynamiques depuis `offers`) — titre de section
+      f.input("offers_title"),
+      // §4 Ma façon de travailler
+      f.input("method_title"),
+      f.textarea("method_intro"),
       f.repeater(
         "method_steps",
         [
@@ -220,13 +237,22 @@ const singletons: CollectionDef[] = [
           { field: "title" },
           { field: "description", interface: "input-multiline" },
         ],
-        {
-          note: "Cadrage / Diagnostic / Construction / Restitution",
-        },
+        { note: "Comprendre / Clarifier / Construire / Ancrer" },
       ),
-      f.repeater("audience_items", [{ field: "text" }], { note: "Pour qui" }),
+      // §5 Ce qui différencie l'approche
+      f.input("differentiator_title"),
+      f.richtext("differentiator_body"),
+      // §6 Fait pour vous si…
+      f.input("audience_title"),
+      f.repeater("audience_items", [{ field: "text" }], { note: "Pour qui (✓)" }),
+      f.textarea("audience_conclusion"),
+      // §7 Témoignages (dynamiques) — titre de section
+      f.input("testimonials_title"),
+      // §8 CTA final
       f.input("cta_title"),
+      f.textarea("cta_body"),
       f.input("cta_label"),
+      f.input("cta_subtext", { note: "Sous-texte rassurant sous le bouton" }),
       ...f.seoBlock(),
     ],
   },

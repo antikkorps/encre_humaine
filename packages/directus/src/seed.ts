@@ -176,35 +176,78 @@ async function main(): Promise<void> {
   }
 
   // ── offers (5 documentées) ──────────────────────────────────────────────────
-  const offers = [
+  type OfferSeed = {
+    slug: string;
+    audience: string;
+    title: string;
+    icon: string;
+    short_description: string;
+    duration_label: string;
+    price_label: string;
+    featured_testimonial: string | null;
+    accroche_title?: string;
+    accroche_body?: string;
+    outcomes?: { title: string; body?: string }[];
+  };
+  const offers: OfferSeed[] = [
     {
       slug: "audit-rh",
       audience: "organisation",
-      title: "Audit RH",
+      title: "Audit RH & feuille de route",
       icon: "search",
-      short_description: "Un état des lieux clair de vos pratiques RH et des priorités d'action.",
-      duration_label: "3 à 4 semaines",
-      price_label: "1 500 – 2 500 € HT",
+      short_description:
+        "Retrouver de la visibilité : faire le point sur vos pratiques RH et identifier les priorités les plus utiles.",
+      duration_label: "à partir de 4 semaines",
+      price_label: "Sur devis",
+      accroche_title: "Retrouver de la visibilité",
+      accroche_body:
+        "Lorsque vous sentez que certaines choses doivent évoluer mais que vous ne savez pas par où commencer.\n\nJ'analyse vos pratiques RH, votre organisation, vos enjeux et vos priorités afin de construire une feuille de route claire, réaliste et directement exploitable.",
+      outcomes: [
+        { title: "Identifier les priorités RH" },
+        { title: "Prendre du recul sur votre fonctionnement" },
+        { title: "Clarifier les prochaines étapes" },
+        { title: "Sécuriser les décisions à venir" },
+      ],
       featured_testimonial: tMarie,
     },
     {
       slug: "competences-parcours",
       audience: "organisation",
-      title: "Compétences & parcours",
+      title: "GEPP, compétences & parcours",
       icon: "route",
-      short_description: "Cartographie des compétences et structuration des parcours (GEPP, PDC).",
-      duration_label: "6 à 10 semaines",
+      short_description:
+        "Structurer les compétences et les parcours : mieux identifier, développer et transmettre les compétences clés.",
+      duration_label: "à partir de 8 semaines",
       price_label: "Sur devis",
+      accroche_title: "Structurer les compétences et les parcours",
+      accroche_body:
+        "Lorsque votre organisation a besoin de mieux identifier, développer et transmettre les compétences qui la font fonctionner.\n\nJ'accompagne la mise en place de démarches GEPP adaptées à la réalité des PME : cartographie des compétences, entretiens professionnels, développement des compétences et construction de parcours professionnels.",
+      outcomes: [
+        { title: "Mieux anticiper les besoins futurs" },
+        { title: "Développer les compétences clés" },
+        { title: "Donner davantage de visibilité aux équipes" },
+        { title: "Soutenir la croissance de l'organisation" },
+      ],
       featured_testimonial: tMarie,
     },
     {
       slug: "managers-equipes",
       audience: "organisation",
-      title: "Managers & équipes",
+      title: "Management & cohésion d'équipe",
       icon: "groups",
-      short_description: "Accompagnement managérial concret pour des équipes qui coopèrent.",
-      duration_label: "Cycle de 3 mois",
-      price_label: "Sur devis",
+      short_description:
+        "Donner des repères aux managers pour accompagner leurs équipes avec clarté et sérénité.",
+      duration_label: "à partir de 2 jours",
+      price_label: "à partir de 750 € HT / jour",
+      accroche_title: "Donner des repères aux managers",
+      accroche_body:
+        "Lorsque les managers ont besoin d'outils, de méthodes ou d'espaces de réflexion pour accompagner leurs équipes.\n\nÀ travers des ateliers et accompagnements sur mesure, je les aide à développer une posture managériale plus claire, plus sereine et plus adaptée à leurs responsabilités.",
+      outcomes: [
+        { title: "Renforcer la posture managériale" },
+        { title: "Fluidifier les relations de travail" },
+        { title: "Développer l'autonomie des équipes" },
+        { title: "Favoriser la cohésion" },
+      ],
       featured_testimonial: null,
     },
     {
@@ -238,14 +281,14 @@ async function main(): Promise<void> {
       duration_label: o.duration_label,
       price_label: o.price_label,
       price_note: "Acompte de 30 % à la signature. Séance découverte offerte.",
-      accroche_title: o.title,
-      accroche_body: o.short_description,
+      accroche_title: o.accroche_title ?? o.title,
+      accroche_body: o.accroche_body ?? o.short_description,
       mission_includes: [
         { text: "Un cadrage initial de vos enjeux" },
         { text: "Des livrables actionnables" },
         { text: "Un point de suivi à la fin" },
       ],
-      outcomes: [
+      outcomes: o.outcomes ?? [
         { title: "De la clarté", body: "Vous savez quoi faire et dans quel ordre." },
         { title: "De l'autonomie", body: "Des outils que vous gardez après la mission." },
       ],
@@ -407,21 +450,101 @@ async function main(): Promise<void> {
   });
 
   await setSingleton("org_hub_page", {
-    accroche_title: "Pour les organisations",
-    accroche_body: "Structurez vos pratiques RH et accompagnez vos équipes, avec méthode.",
+    // §1 Accroche
+    accroche_title: "Quand votre organisation évolue, vos pratiques RH doivent évoluer avec elle.",
+    accroche_subtitle:
+      "Les équipes grandissent. Les responsabilités se développent. Les besoins changent.\n\nEt pourtant, les pratiques RH restent souvent celles d'une structure plus petite, d'une autre époque ou d'un autre contexte.\n\nCe n'est généralement pas un problème d'engagement. C'est un problème de visibilité, de priorisation et de structuration.",
+    accroche_body:
+      "Les compétences existent mais ne sont pas toujours identifiées. Les managers portent davantage de responsabilités sans disposer des repères nécessaires. Les entretiens professionnels sont réalisés mais peinent à produire des effets concrets. Les recrutements s'enchaînent sans vision claire des parcours à construire. Petit à petit, les équipes avancent, mais sans toujours savoir où elles vont.\n\nMon rôle consiste à remettre de la clarté dans cet ensemble pour construire des pratiques RH cohérentes, utiles et adaptées à votre réalité.",
+    accroche_signature: "Structurer sans déshumaniser. Clarifier sans complexifier.",
+    // §2 Ce que j'observe
+    observe_title: "Derrière les outils RH, il y a souvent un besoin de clarté.",
+    observe_intro:
+      "Les organisations qui me sollicitent ne manquent généralement ni d'idées ni d'implication.\nElles manquent surtout de temps pour prendre du recul et structurer ce qui s'est construit progressivement au fil de leur développement.",
+    observe_items: [
+      {
+        title: "Les compétences sont présentes mais peu visibles",
+        body: "Les savoir-faire existent, mais ils ne sont pas suffisamment identifiés pour être développés, transmis ou valorisés.",
+      },
+      {
+        title: "Les managers avancent sans repères communs",
+        body: "Ils portent une part croissante des enjeux RH mais disposent rarement d'un cadre clair pour accompagner leurs équipes.",
+      },
+      {
+        title: "Les outils RH existent mais ne produisent pas toujours les effets attendus",
+        body: "Entretiens professionnels, référentiels, plans d'action ou dispositifs de formation restent parfois déconnectés des réalités du terrain.",
+      },
+      {
+        title: "Les décisions sont prises dans l'urgence",
+        body: "Le quotidien laisse peu de place à la réflexion stratégique et à l'anticipation.",
+      },
+    ],
+    observe_conclusion:
+      "Ce que recherchent la plupart des organisations n'est pas une accumulation d'outils supplémentaires.\nC'est une manière plus simple, plus lisible et plus cohérente de faire vivre leurs pratiques RH.",
+    // §3 Offres (cartes dynamiques)
+    offers_title: "Trois façons d'apporter davantage de clarté à votre organisation.",
+    // §4 Ma façon de travailler
+    method_title: "Une démarche construite à partir de votre réalité.",
+    method_intro:
+      "Je ne travaille pas avec des modèles standardisés ou des solutions prêtes à l'emploi. Chaque organisation possède son histoire, sa culture, ses contraintes et ses ressources. C'est à partir de cette réalité que nous construisons les solutions les plus pertinentes.",
     method_steps: [
-      { number: 1, title: "Cadrage", description: "On pose le besoin et les objectifs." },
-      { number: 2, title: "Diagnostic", description: "État des lieux et priorités." },
-      { number: 3, title: "Construction", description: "On bâtit les outils ensemble." },
-      { number: 4, title: "Restitution", description: "Plan d'action et transmission." },
+      {
+        number: "01",
+        title: "Comprendre",
+        description:
+          "J'écoute, j'observe et j'analyse votre fonctionnement avant toute recommandation.",
+      },
+      {
+        number: "02",
+        title: "Clarifier",
+        description:
+          "Nous identifions ensemble les besoins réels, les priorités et les objectifs à atteindre.",
+      },
+      {
+        number: "03",
+        title: "Construire",
+        description:
+          "Je conçois des outils, des démarches ou des dispositifs adaptés à votre contexte.",
+      },
+      {
+        number: "04",
+        title: "Ancrer",
+        description:
+          "Je transmets, j'accompagne et je veille à ce que les solutions puissent vivre durablement dans votre organisation.",
+      },
     ],
+    // §5 Ce qui différencie l'approche
+    differentiator_title: "Structurer les RH sans perdre de vue les personnes.",
+    differentiator_body: P(
+      "Mon parcours m'a conduite à travailler dans l'insertion professionnelle, la formation, le développement des compétences et les ressources humaines.",
+      "Cette diversité d'expériences me permet d'aborder les organisations avec une double lecture : les enjeux de structure, de compétences et d'organisation ; et les réalités humaines vécues par les collaborateurs et les managers.",
+      "Je ne vois pas les RH comme une succession de procédures. Je les considère comme un ensemble de repères qui permettent aux personnes de mieux comprendre leur place, leur rôle et leurs perspectives.",
+      "Parce qu'une organisation fonctionne rarement mieux que le niveau de clarté qu'elle est capable d'offrir à ceux qui la composent.",
+    ),
+    // §6 Fait pour vous si…
+    audience_title: "Vous vous reconnaîtrez probablement dans l'une de ces situations.",
     audience_items: [
-      { text: "PME qui structurent leur RH" },
-      { text: "Équipes en croissance" },
-      { text: "Dirigeants qui veulent du concret" },
+      { text: "Votre organisation grandit plus vite que ses pratiques RH" },
+      {
+        text: "Vous souhaitez mettre en place une démarche GEPP mais ne savez pas par où commencer",
+      },
+      { text: "Vos compétences clés ne sont pas suffisamment identifiées" },
+      { text: "Vos managers manquent de repères communs" },
+      { text: "Vos entretiens professionnels n'apportent pas les résultats attendus" },
+      { text: "Vous avez besoin d'un accompagnement RH externe sur un projet spécifique" },
+      { text: "Vous cherchez à structurer sans créer une usine à gaz" },
     ],
-    cta_title: "Travaillons ensemble",
+    audience_conclusion:
+      "Que vous soyez dirigeant, DRH, responsable RH ou manager, l'objectif reste le même : créer davantage de clarté pour permettre aux équipes d'avancer dans la même direction.",
+    // §7 Témoignages
+    testimonials_title: "Ce qu'en disent les organisations accompagnées",
+    // §8 CTA final
+    cta_title:
+      "Vous savez qu'il faut structurer certaines choses, mais vous ne savez pas encore par où commencer ?",
+    cta_body:
+      "C'est précisément dans ce type de situation qu'un regard extérieur est le plus utile.\nUn premier échange permet souvent d'identifier rapidement les enjeux, les priorités et les pistes d'action possibles.",
     cta_label: "Prendre rendez-vous",
+    cta_subtext: "30 minutes d'échange, sans engagement, pour faire le point sur votre situation.",
     meta_title: "Pour les organisations — L'Encre Humaine",
   });
 

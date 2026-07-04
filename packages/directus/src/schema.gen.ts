@@ -238,6 +238,22 @@ export interface OrgHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_subtitle: string | null;
+  accroche_signature: string | null;
+  observe_title: string | null;
+  observe_intro: string | null;
+  observe_items: unknown | null;
+  observe_conclusion: string | null;
+  offers_title: string | null;
+  method_title: string | null;
+  method_intro: string | null;
+  differentiator_title: string | null;
+  differentiator_body: string | null;
+  audience_title: string | null;
+  audience_conclusion: string | null;
+  testimonials_title: string | null;
+  cta_body: string | null;
+  cta_subtext: string | null;
 }
 
 export interface Products {
