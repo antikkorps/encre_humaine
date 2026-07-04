@@ -111,8 +111,13 @@ const heroTitle = computed(() => {
         </ul>
       </div>
 
-      <!-- Transition « vague d'encre » du hero sombre vers le fond papier. -->
-      <InkWave class="text-paper" height="h-12 sm:h-20" />
+      <!-- La vague « coule » vers la 1re section claire, quelle qu'elle soit :
+           fond crème des stats si présentes, sinon la section Problème (paper-2).
+           Robuste si les stats reviennent — pas de liseré au raccord. -->
+      <InkWave
+        :class="content?.stats.length ? 'text-paper' : 'text-paper-2'"
+        height="h-12 sm:h-20"
+      />
     </section>
 
     <!-- État d'erreur sobre : le hero reste affiché, le reste est remplacé par un mot. -->
@@ -131,6 +136,8 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 3. Problème : « Vous vous reconnaissez ? » -->
+      <!-- Pas de v-reveal ici : la translation rouvrirait un liseré sous la vague
+           du hero (le raccord doit rester collé). -->
       <section v-if="content.recognition" class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -165,7 +172,7 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 4. Promesse / Offre : « Ce que je vous aide à construire » (#offres) -->
-      <section v-if="content.build" id="offres" class="scroll-mt-24">
+      <section v-if="content.build" id="offres" v-reveal class="scroll-mt-24">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.build.title" eyebrow="Mon offre" align="center" />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
@@ -197,6 +204,7 @@ const heroTitle = computed(() => {
       <section
         v-if="content.method"
         id="approche"
+        v-reveal
         class="relative isolate scroll-mt-24 overflow-hidden bg-teal-50"
       >
         <TentacleAccent
@@ -221,7 +229,7 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 6. Signature / Positionnement : double expertise -->
-      <section v-if="content.why" class="mx-auto max-w-6xl px-4 py-20">
+      <section v-if="content.why" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading
           :title="content.why.title"
           :subtitle="content.why.subtitle ?? undefined"
@@ -247,7 +255,7 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 7. À propos -->
-      <section v-if="content.intro" class="relative isolate overflow-hidden bg-paper-2">
+      <section v-if="content.intro" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/10" />
         <TentacleAccent
           name="tentacule-2-trait"
@@ -298,7 +306,7 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 8. Particuliers : 2 axes d'accompagnement -->
-      <section v-if="content.b2c" class="relative isolate overflow-hidden bg-orange-50">
+      <section v-if="content.b2c" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.b2c.title" eyebrow="Particuliers" align="center" />
@@ -346,7 +354,7 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 10. Ressources — 3 derniers articles, masquée si aucun -->
-      <section v-if="content.articles.length" class="relative isolate overflow-hidden bg-teal-50">
+      <section v-if="content.articles.length" v-reveal class="relative isolate overflow-hidden bg-teal-50">
         <TentacleAccent
           name="tentacule-3-trait"
           class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
@@ -373,7 +381,7 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 11. CTA final -->
-      <section v-if="content.finalCta" class="mx-auto max-w-6xl px-4 py-20">
+      <section v-if="content.finalCta" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <CtaBlock
           :title="content.finalCta.title"
           :description="content.finalCta.description ?? undefined"

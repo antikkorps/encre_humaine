@@ -9,5 +9,5 @@
 </script>
 
 <template>
-  <OctopusLogo class="pointer-events-none select-none" />
+  <OctopusLogo class="motion-drift-slow pointer-events-none select-none" />
 </template>

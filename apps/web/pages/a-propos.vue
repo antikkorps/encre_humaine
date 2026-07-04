@@ -45,12 +45,12 @@ useSchemaOrg([
     </p>
 
     <template v-else-if="content">
-      <section v-if="content.accroche?.bodyHtml" class="mx-auto max-w-3xl px-4 pt-16">
+      <section v-if="content.accroche?.bodyHtml" v-reveal class="mx-auto max-w-3xl px-4 pt-16">
         <RichText :html="content.accroche.bodyHtml" />
       </section>
 
       <!-- 2. Mon parcours (photo gauche / texte droite desktop) -->
-      <section v-if="content.story" class="mx-auto max-w-6xl px-4 py-20">
+      <section v-if="content.story" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <div class="grid items-start gap-10 md:grid-cols-2">
           <div v-if="content.story.photo" class="relative">
             <span
@@ -78,7 +78,7 @@ useSchemaOrg([
       </section>
 
       <!-- 3. Pourquoi L'Encre Humaine ? -->
-      <section v-if="content.why" class="bg-teal-50">
+      <section v-if="content.why" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading :title="content.why.title || 'Pourquoi L\'Encre Humaine ?'" />
           <RichText :html="content.why.bodyHtml" class="mt-5" />
@@ -86,7 +86,7 @@ useSchemaOrg([
       </section>
 
       <!-- 3b. Le poulpe (clin d'œil à la mascotte) -->
-      <section v-if="content.octopus" class="relative isolate overflow-hidden">
+      <section v-if="content.octopus" v-reveal class="relative isolate overflow-hidden">
         <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-20 md:grid-cols-[auto_1fr]">
           <OctopusLogo class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
           <div>
@@ -100,7 +100,7 @@ useSchemaOrg([
       </section>
 
       <!-- 4. Mes convictions -->
-      <section v-if="content.convictions" class="bg-paper-2">
+      <section v-if="content.convictions" v-reveal class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.convictions.title || 'Mes convictions'" align="center" />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2">
@@ -124,7 +124,7 @@ useSchemaOrg([
       </section>
 
       <!-- 5. Ma manière d'accompagner -->
-      <section v-if="content.work" class="mx-auto max-w-3xl px-4 py-20">
+      <section v-if="content.work" v-reveal class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading :title="content.work.title || 'Comment je travaille'" />
         <p
           v-if="content.work.intro"
@@ -155,7 +155,7 @@ useSchemaOrg([
       </section>
 
       <!-- 6. Ce que je ne fais pas -->
-      <section v-if="content.whatIDontDo" class="bg-teal-50">
+      <section v-if="content.whatIDontDo" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading :title="content.whatIDontDo.title || 'Ce que je ne fais pas'" />
           <ul class="mt-8 space-y-3">
@@ -178,6 +178,7 @@ useSchemaOrg([
       <!-- 7. Portrait + citation (optionnel) -->
       <section
         v-if="content.portrait"
+        v-reveal
         class="mx-auto max-w-4xl px-4 py-20"
         aria-label="Portrait"
       >
@@ -204,7 +205,7 @@ useSchemaOrg([
       </section>
 
       <!-- 8. CTA -->
-      <section class="mx-auto max-w-6xl px-4 pb-20">
+      <section v-reveal class="mx-auto max-w-6xl px-4 pb-20">
         <CtaBlock
           :title="content.cta.title || 'Travaillons ensemble'"
           :description="content.cta.body ?? undefined"
