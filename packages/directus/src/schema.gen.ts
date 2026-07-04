@@ -207,7 +207,6 @@ export interface Offers {
   price_note: string | null;
   accroche_title: string | null;
   accroche_body: string | null;
-  mission_includes: unknown | null;
   outcomes: unknown | null;
   audience_fit: unknown | null;
   format_body: string | null;
@@ -223,6 +222,20 @@ export interface Offers {
   date_updated: string | null;
   user_created: string | null;
   user_updated: string | null;
+  accroche_subtitle: string | null;
+  accroche_signature: string | null;
+  outcomes_title: string | null;
+  outcomes_intro: string | null;
+  context_title: string | null;
+  context_items: unknown | null;
+  context_conclusion: string | null;
+  mission_title: string | null;
+  mission_includes: unknown | null;
+  audience_fit_title: string | null;
+  audience_fit_conclusion: string | null;
+  cta_title: string | null;
+  cta_body: string | null;
+  cta_subtext: string | null;
 }
 
 export interface OrgHubPage {

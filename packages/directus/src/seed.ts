@@ -161,8 +161,31 @@ async function main(): Promise<void> {
       scope: "b2c",
     },
     {
-      q: "Que contient un audit RH ?",
-      a: P("Un état des lieux des pratiques, des risques et des priorités d'action."),
+      q: "Est-ce un audit de contrôle ?",
+      a: P(
+        "Non. Il ne s'agit pas de juger vos pratiques, mais de comprendre votre fonctionnement pour vous aider à y voir plus clair.",
+      ),
+      scope: "audit",
+    },
+    {
+      q: "Dois-je préparer des documents ?",
+      a: P(
+        "Non. J'adapte mon analyse à ce qui existe déjà. Si vous avez des documents (entretiens, fiches de poste, plans de formation…), ils sont simplement des supports complémentaires.",
+      ),
+      scope: "audit",
+    },
+    {
+      q: "Combien de temps cela mobilise-t-il côté client ?",
+      a: P(
+        "Environ 2 à 3 heures d'échanges réparties sur la mission. Le reste est pris en charge de mon côté.",
+      ),
+      scope: "audit",
+    },
+    {
+      q: "Peut-on poursuivre après l'audit ?",
+      a: P(
+        "Oui. L'audit peut être un point de départ vers une structuration des compétences (GEPP), un travail sur les managers, ou un accompagnement global des pratiques RH. Nous en discutons ensemble à la restitution.",
+      ),
       scope: "audit",
     },
     {
@@ -176,6 +199,7 @@ async function main(): Promise<void> {
   }
 
   // ── offers (5 documentées) ──────────────────────────────────────────────────
+  type TB = { title: string; body?: string };
   type OfferSeed = {
     slug: string;
     audience: string;
@@ -184,10 +208,28 @@ async function main(): Promise<void> {
     short_description: string;
     duration_label: string;
     price_label: string;
+    price_note?: string;
     featured_testimonial: string | null;
     accroche_title?: string;
+    accroche_subtitle?: string;
     accroche_body?: string;
-    outcomes?: { title: string; body?: string }[];
+    accroche_signature?: string;
+    outcomes_title?: string;
+    outcomes_intro?: string;
+    outcomes?: TB[];
+    context_title?: string;
+    context_items?: TB[];
+    context_conclusion?: string;
+    mission_title?: string;
+    mission_includes?: TB[];
+    format_body?: string;
+    audience_fit_title?: string;
+    audience_fit?: { text: string }[];
+    audience_fit_conclusion?: string;
+    cta_title?: string;
+    cta_body?: string;
+    cta_label?: string;
+    cta_subtext?: string;
   };
   const offers: OfferSeed[] = [
     {
@@ -199,15 +241,100 @@ async function main(): Promise<void> {
         "Retrouver de la visibilité : faire le point sur vos pratiques RH et identifier les priorités les plus utiles.",
       duration_label: "à partir de 4 semaines",
       price_label: "Sur devis",
-      accroche_title: "Retrouver de la visibilité",
+      price_note: "Forfait défini avant démarrage. Acompte de 30 % à la signature.",
+      accroche_title: "Avant de structurer vos RH, encore faut-il savoir où vous en êtes vraiment.",
+      accroche_subtitle:
+        "Dans beaucoup de PME, les pratiques RH se sont construites progressivement, au rythme de la croissance : recrutement, management, formation, entretiens, organisation…\n\nRien n'est totalement absent. Mais tout n'est pas toujours lisible. Et c'est précisément là que les difficultés apparaissent.",
       accroche_body:
-        "Lorsque vous sentez que certaines choses doivent évoluer mais que vous ne savez pas par où commencer.\n\nJ'analyse vos pratiques RH, votre organisation, vos enjeux et vos priorités afin de construire une feuille de route claire, réaliste et directement exploitable.",
+        "On retrouve souvent la même situation : des outils RH qui existent mais qui ne produisent pas les effets attendus, des managers qui font de leur mieux mais sans cadre commun, des compétences présentes mais peu visibles ou peu structurées, des décisions prises dans l'urgence, faute de recul.\n\nCe n'est pas un manque de volonté. C'est un manque de clarté.",
+      accroche_signature: "L'audit RH n'est pas un contrôle. C'est un point de clarté.",
+      outcomes_title: "Retrouver de la clarté pour décider plus sereinement.",
+      outcomes_intro:
+        "L'objectif n'est pas de produire un document théorique. Il est de vous permettre de comprendre rapidement où vous en êtes, ce qui fonctionne déjà, ce qui freine votre organisation, et par quoi commencer.",
       outcomes: [
-        { title: "Identifier les priorités RH" },
-        { title: "Prendre du recul sur votre fonctionnement" },
-        { title: "Clarifier les prochaines étapes" },
-        { title: "Sécuriser les décisions à venir" },
+        {
+          title: "Voir clairement votre situation RH",
+          body: "Vous obtenez une lecture structurée de vos pratiques actuelles, sans jargon ni jugement.",
+        },
+        {
+          title: "Identifier les vrais leviers d'action",
+          body: "Pas une liste de recommandations, mais ce qui aura réellement un impact dans votre contexte.",
+        },
+        {
+          title: "Prioriser ce qui compte vraiment",
+          body: "Ce qui est urgent, ce qui est important, et ce qui peut attendre.",
+        },
+        {
+          title: "Poser une base solide pour la suite",
+          body: "Que vous poursuiviez ensuite seul ou accompagné, vous repartez avec une vision claire et exploitable.",
+        },
       ],
+      context_title: "Derrière chaque audit RH, on retrouve des situations très similaires.",
+      context_items: [
+        {
+          title: "Compétences peu lisibles",
+          body: "Les savoir-faire existent, mais ils ne sont pas formalisés ni partagés.",
+        },
+        {
+          title: "Managers en sur-sollicitation",
+          body: "Ils portent beaucoup de responsabilités sans cadre commun ni outils stabilisés.",
+        },
+        {
+          title: "Outils RH sous-exploités",
+          body: "Entretiens, formation, procédures… présents, mais peu structurants dans le quotidien.",
+        },
+        {
+          title: "Organisation en croissance rapide",
+          body: "L'entreprise évolue plus vite que ses pratiques internes.",
+        },
+        {
+          title: "Pilotage à court terme",
+          body: "Le quotidien prend le dessus sur la structuration.",
+        },
+      ],
+      context_conclusion: "L'audit permet justement de remettre de la lecture dans cet ensemble.",
+      mission_title: "Un audit RH complet, structuré et directement exploitable.",
+      mission_includes: [
+        {
+          title: "Analyse de votre organisation RH",
+          body: "Recrutement, intégration, formation, entretiens, compétences, management.",
+        },
+        {
+          title: "Entretiens avec les parties prenantes clés",
+          body: "Direction, managers, fonctions support selon votre organisation.",
+        },
+        {
+          title: "Lecture des écarts et enjeux",
+          body: "Entre vos pratiques actuelles et vos besoins réels de développement.",
+        },
+        {
+          title: "Feuille de route priorisée",
+          body: "Une vision claire : court terme (actions immédiates), moyen terme, structuration long terme.",
+        },
+        {
+          title: "Restitution orale",
+          body: "Un temps d'échange pour repartir avec une vision claire et actionnable.",
+        },
+      ],
+      format_body: "",
+      audience_fit_title: "Cette mission est faite pour vous si…",
+      audience_fit: [
+        { text: "Votre entreprise grandit plus vite que ses pratiques RH" },
+        { text: "Vous n'avez pas de RH dédié, ou seulement partiellement" },
+        { text: "Vous reprenez une structure et souhaitez comprendre l'existant" },
+        { text: "Vous sentez des tensions ou des déséquilibres sans pouvoir les expliquer" },
+        { text: "Vous préparez une phase de croissance ou de structuration" },
+        {
+          text: "Vous voulez poser des bases solides avant d'aller plus loin (GEPP, compétences, management)",
+        },
+      ],
+      audience_fit_conclusion:
+        "L'audit est souvent le point de départ d'une structuration RH plus cohérente. Mais il peut aussi être une étape autonome, simplement pour retrouver de la clarté.",
+      cta_title: "Vous avez besoin de comprendre clairement où vous en êtes ?",
+      cta_body:
+        "Avant de transformer une organisation, il faut d'abord pouvoir la lire. C'est exactement l'objectif de cet audit.",
+      cta_label: "Prendre rendez-vous",
+      cta_subtext: "30 minutes d'échange, sans engagement, pour clarifier votre situation.",
       featured_testimonial: tMarie,
     },
     {
@@ -280,28 +407,43 @@ async function main(): Promise<void> {
       short_description: o.short_description,
       duration_label: o.duration_label,
       price_label: o.price_label,
-      price_note: "Acompte de 30 % à la signature. Séance découverte offerte.",
+      price_note: o.price_note ?? "Acompte de 30 % à la signature. Séance découverte offerte.",
       accroche_title: o.accroche_title ?? o.title,
+      accroche_subtitle: o.accroche_subtitle ?? "",
       accroche_body: o.accroche_body ?? o.short_description,
-      mission_includes: [
-        { text: "Un cadrage initial de vos enjeux" },
-        { text: "Des livrables actionnables" },
-        { text: "Un point de suivi à la fin" },
-      ],
+      accroche_signature: o.accroche_signature ?? "",
+      outcomes_title: o.outcomes_title ?? "",
+      outcomes_intro: o.outcomes_intro ?? "",
       outcomes: o.outcomes ?? [
         { title: "De la clarté", body: "Vous savez quoi faire et dans quel ordre." },
         { title: "De l'autonomie", body: "Des outils que vous gardez après la mission." },
       ],
-      audience_fit: [
+      context_title: o.context_title ?? "",
+      context_items: o.context_items ?? [],
+      context_conclusion: o.context_conclusion ?? "",
+      mission_title: o.mission_title ?? "",
+      mission_includes: o.mission_includes ?? [
+        { title: "Un cadrage initial de vos enjeux" },
+        { title: "Des livrables actionnables" },
+        { title: "Un point de suivi à la fin" },
+      ],
+      format_body:
+        o.format_body ??
+        P(
+          "On démarre par un échange pour cadrer le besoin réel.",
+          "Puis on avance par étapes courtes, avec des points réguliers.",
+        ),
+      audience_fit_title: o.audience_fit_title ?? "",
+      audience_fit: o.audience_fit ?? [
         { text: "Pour vous si vous voulez du concret" },
         { text: "Pas pour vous si vous cherchez une recette magique" },
       ],
-      format_body: P(
-        "On démarre par un échange pour cadrer le besoin réel.",
-        "Puis on avance par étapes courtes, avec des points réguliers.",
-      ),
+      audience_fit_conclusion: o.audience_fit_conclusion ?? "",
       featured_testimonial: o.featured_testimonial,
-      cta_label: "En discuter",
+      cta_title: o.cta_title ?? "",
+      cta_body: o.cta_body ?? "",
+      cta_label: o.cta_label ?? "Prendre rendez-vous",
+      cta_subtext: o.cta_subtext ?? "",
       sort: sort++,
       ...PUB,
     });

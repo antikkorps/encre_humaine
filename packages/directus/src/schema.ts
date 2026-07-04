@@ -367,18 +367,45 @@ const collections: CollectionDef[] = [
       f.input("duration_label", { half: true }),
       f.input("price_label", { note: "Texte libre — ex. « 1 500 – 2 500 € HT »", half: true }),
       f.input("price_note"),
+      // Accroche
       f.input("accroche_title"),
+      f.textarea("accroche_subtitle"),
       f.textarea("accroche_body"),
-      f.repeater("mission_includes", [{ field: "text" }], { note: "La mission inclut" }),
+      f.input("accroche_signature", { note: "Phrase signature" }),
+      // Ce que ça change (bénéfices)
+      f.input("outcomes_title"),
+      f.textarea("outcomes_intro"),
       f.repeater(
         "outcomes",
         [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Résultats" },
+        { note: "Bénéfices (titre + corps)" },
       ),
-      f.repeater("audience_fit", [{ field: "text" }], { note: "Pour qui" }),
-      f.richtext("format_body"),
+      // Ce que je vois souvent (contexte)
+      f.input("context_title"),
+      f.repeater(
+        "context_items",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Situations récurrentes (titre + corps)" },
+      ),
+      f.textarea("context_conclusion"),
+      // Ce que comprend la mission
+      f.input("mission_title"),
+      f.repeater(
+        "mission_includes",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "La mission inclut (titre + corps)" },
+      ),
+      f.richtext("format_body", { note: "Comment ça se passe (optionnel)" }),
+      // Pour qui
+      f.input("audience_fit_title"),
+      f.repeater("audience_fit", [{ field: "text" }], { note: "Pour qui (✓)" }),
+      f.textarea("audience_fit_conclusion"),
+      // Témoignage + CTA
       f.m2o("featured_testimonial", "testimonials"),
+      f.input("cta_title"),
+      f.textarea("cta_body"),
       f.input("cta_label"),
+      f.input("cta_subtext", { note: "Sous-texte sous le bouton" }),
       ...f.seoBlock(),
       ...publishable(),
     ],

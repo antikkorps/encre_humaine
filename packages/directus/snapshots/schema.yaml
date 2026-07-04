@@ -7769,55 +7769,6 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: offers
-    field: mission_includes
-    type: json
-    meta:
-      collection: offers
-      conditions: null
-      display: null
-      display_options: null
-      field: mission_includes
-      group: null
-      hidden: false
-      interface: list
-      note: La mission inclut
-      options:
-        fields:
-          - field: text
-            meta:
-              field: text
-              interface: input
-              width: full
-            name: text
-            type: string
-      readonly: false
-      required: false
-      searchable: true
-      sort: 12
-      special:
-        - cast-json
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: mission_includes
-      table: offers
-      data_type: json
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: offers
     field: outcomes
     type: json
     meta:
@@ -8479,6 +8430,598 @@ fields:
       data_type: uuid
       default_value: null
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: accroche_subtitle
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_subtitle
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 29
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_subtitle
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: accroche_signature
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_signature
+      group: null
+      hidden: false
+      interface: input
+      note: Phrase signature
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 30
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_signature
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: outcomes_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: outcomes_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: outcomes_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: outcomes_intro
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: outcomes_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 32
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: outcomes_intro
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: context_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: context_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: context_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: context_items
+    type: json
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: context_items
+      group: null
+      hidden: false
+      interface: list
+      note: Situations récurrentes (titre + corps)
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: context_items
+      table: offers
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: context_conclusion
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: context_conclusion
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 35
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: context_conclusion
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: mission_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: mission_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 36
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: mission_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: mission_includes
+    type: json
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: mission_includes
+      group: null
+      hidden: false
+      interface: list
+      note: La mission inclut (titre + corps)
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 37
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: mission_includes
+      table: offers
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: audience_fit_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: audience_fit_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 38
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: audience_fit_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: audience_fit_conclusion
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: audience_fit_conclusion
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 39
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: audience_fit_conclusion
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: cta_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 40
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: cta_body
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 41
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_body
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: cta_subtext
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_subtext
+      group: null
+      hidden: false
+      interface: input
+      note: Sous-texte sous le bouton
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 42
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_subtext
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
