@@ -82,7 +82,9 @@ export default defineNuxtConfig({
           "https://app.cal.com",
           "https://app.cal.eu",
         ],
-        "frame-ancestors": ["'self'"],
+        // 'self' + admin Directus : autorise le Live Preview (iframe cms. → site).
+        // Toute autre origine reste bloquée (protection clickjacking préservée).
+        "frame-ancestors": ["'self'", "https://cms.encrehumaine.fr"],
         "base-uri": ["'self'"],
         "form-action": ["'self'", "https://checkout.stripe.com"],
         "object-src": ["'none'"],
@@ -91,7 +93,10 @@ export default defineNuxtConfig({
       strictTransportSecurity: { maxAge: 31536000, includeSubdomains: true, preload: true },
       referrerPolicy: "strict-origin-when-cross-origin",
       xContentTypeOptions: "nosniff",
-      xFrameOptions: "SAMEORIGIN",
+      // Désactivé au profit de `frame-ancestors` (CSP) : X-Frame-Options ne sait
+      // pas autoriser une origine tierce précise (cms.) et bloquerait le Live
+      // Preview. Le contrôle d'embed est porté par frame-ancestors ci-dessus.
+      xFrameOptions: false,
       crossOriginOpenerPolicy: "same-origin",
       // COEP désactivé : 'require-corp'/'credentialless' casserait les iframes
       // tierces (Cal.com, Stripe) qui n'envoient pas les en-têtes CORP attendus.
