@@ -10,7 +10,9 @@ import type { Audience } from "@encre/shared/validation";
 const props = defineProps<{ audience: Audience }>();
 
 const route = useRoute();
-const { data: content, error } = await useFetch(() => `/api/content/offer/${route.params.slug}`);
+const { data: content, error } = await useFetch(() => `/api/content/offer/${route.params.slug}`, {
+  query: usePreviewQuery(),
+});
 
 // Indisponibilité (Directus injoignable, 5xx) : on propage le statut réel plutôt
 // que de la masquer en 404 (panne transitoire ≠ offre inexistante).
@@ -72,10 +74,10 @@ useSchemaOrg([
 
 <template>
   <div v-if="content">
-    <!-- 1. Accroche (h1) + fil d'Ariane (hub → offre) -->
+    <!-- 1. Accroche (h1 + sous-titre) + fil d'Ariane (hub → offre) -->
     <PageHero
       :title="heading"
-      :body="content.accrocheBody || undefined"
+      :body="content.accrocheSubtitle || undefined"
       :variant="variant"
     >
       <template #top>
@@ -87,69 +89,136 @@ useSchemaOrg([
       </template>
     </PageHero>
 
-    <!-- 2. Ce que comprend la mission / Ce qu'on fait ensemble -->
-    <section v-if="content.missionIncludes.length" class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="missionHeading" />
-      <ul class="mt-8 space-y-3">
-        <li
-          v-for="(item, i) in content.missionIncludes"
-          :key="i"
-          class="flex items-start gap-3 text-ink/80"
-        >
-          <span
-            class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full text-sm font-bold"
-            :class="theme.chip"
-            aria-hidden="true"
-            >✓</span
-          >
-          <span>{{ item }}</span>
-        </li>
-      </ul>
+    <!-- Texte d'accroche + signature + CTA -->
+    <section
+      v-if="content.accrocheBody || content.accrocheSignature"
+      class="mx-auto max-w-3xl px-4 py-16 text-center"
+    >
+      <p v-if="content.accrocheBody" class="whitespace-pre-line text-lg leading-relaxed text-ink/75">
+        {{ content.accrocheBody }}
+      </p>
+      <p
+        v-if="content.accrocheSignature"
+        class="mt-8 font-display text-2xl font-semibold"
+        :class="theme.accent"
+      >
+        {{ content.accrocheSignature }}
+      </p>
+      <NuxtLink
+        to="/contact"
+        class="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+      >
+        {{ content.ctaLabel }}
+        <span aria-hidden="true">→</span>
+      </NuxtLink>
     </section>
 
-    <!-- 3. Comment ça se passe (B2B) / Le format (B2C) — rich text assaini -->
-    <section v-if="content.formatBodyHtml" class="bg-teal-50">
-      <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading :title="formatHeading" />
-        <RichText :html="content.formatBodyHtml" class="mt-5" />
-      </div>
-    </section>
-
-    <!-- 4. Ce que vous en retirez -->
-    <section v-if="content.outcomes.length" class="mx-auto max-w-6xl px-4 py-20">
-      <SectionHeading title="Ce que vous en retirez" align="center" />
-      <ul class="mt-10 grid gap-6 sm:grid-cols-2">
-        <li
-          v-for="(outcome, i) in content.outcomes"
-          :key="i"
-          class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
-        >
-          <h3 v-if="outcome.title" class="font-display text-lg font-semibold text-ink">
-            {{ outcome.title }}
-          </h3>
-          <p v-if="outcome.body" class="mt-2 leading-relaxed text-ink/65">{{ outcome.body }}</p>
-        </li>
-      </ul>
-    </section>
-
-    <!-- 5. Pour qui (et pas pour qui) -->
-    <section v-if="content.audienceFit.length" class="bg-paper-2">
-      <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading title="Pour qui ?" />
-        <ul class="mt-8 space-y-3">
+    <!-- 2. Ce que ça change (bénéfices) -->
+    <section v-if="content.outcomes.length" class="bg-teal-50">
+      <div class="mx-auto max-w-6xl px-4 py-20">
+        <SectionHeading
+          :title="content.outcomesTitle || 'Ce que vous en retirez'"
+          :subtitle="content.outcomesIntro ?? undefined"
+          align="center"
+        />
+        <ul class="mt-10 grid gap-6 sm:grid-cols-2">
           <li
-            v-for="(item, i) in content.audienceFit"
+            v-for="(outcome, i) in content.outcomes"
             :key="i"
-            class="flex items-start gap-3 text-ink/80"
+            class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
           >
-            <span class="mt-0.5 font-bold" :class="theme.accent" aria-hidden="true">→</span>
-            <span>{{ item }}</span>
+            <h3 v-if="outcome.title" class="font-display text-lg font-semibold text-ink">
+              {{ outcome.title }}
+            </h3>
+            <p v-if="outcome.body" class="mt-2 leading-relaxed text-ink/65">{{ outcome.body }}</p>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- 6. Investissement — libellé libre + mention franchise en base (293 B) -->
+    <!-- 3. Ce que je vois souvent (contexte) -->
+    <section v-if="content.context" class="mx-auto max-w-6xl px-4 py-20">
+      <SectionHeading :title="content.context.title || 'Ce que je vois souvent'" align="center" />
+      <div v-if="content.context.items.length" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <article
+          v-for="(item, i) in content.context.items"
+          :key="i"
+          class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft"
+        >
+          <h3 v-if="item.title" class="font-display text-base font-semibold text-ink">
+            {{ item.title }}
+          </h3>
+          <p v-if="item.body" class="mt-1.5 text-sm leading-relaxed text-ink/65">{{ item.body }}</p>
+        </article>
+      </div>
+      <p
+        v-if="content.context.conclusion"
+        class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
+      >
+        {{ content.context.conclusion }}
+      </p>
+    </section>
+
+    <!-- 4. Ce que comprend la mission -->
+    <section v-if="content.missionIncludes.length" class="bg-paper-2">
+      <div class="mx-auto max-w-3xl px-4 py-20">
+        <SectionHeading :title="content.missionTitle || missionHeading" />
+        <ul class="mt-8 space-y-5">
+          <li
+            v-for="(item, i) in content.missionIncludes"
+            :key="i"
+            class="flex items-start gap-3"
+          >
+            <span
+              class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full text-sm font-bold"
+              :class="theme.chip"
+              aria-hidden="true"
+              >✓</span
+            >
+            <div>
+              <p v-if="item.title" class="font-display font-semibold text-ink">{{ item.title }}</p>
+              <p v-if="item.body" class="mt-0.5 leading-relaxed text-ink/65">{{ item.body }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Comment ça se passe (optionnel) — rich text assaini -->
+    <section v-if="content.formatBodyHtml" class="mx-auto max-w-3xl px-4 py-20">
+      <SectionHeading :title="formatHeading" />
+      <RichText :html="content.formatBodyHtml" class="mt-5" />
+    </section>
+
+    <!-- 6. Pour qui -->
+    <section v-if="content.audienceFit.length || content.audienceFitConclusion" class="bg-teal-50">
+      <div class="mx-auto max-w-3xl px-4 py-20">
+        <SectionHeading :title="content.audienceFitTitle || 'Pour qui ?'" />
+        <ul v-if="content.audienceFit.length" class="mt-8 space-y-3">
+          <li
+            v-for="(item, i) in content.audienceFit"
+            :key="i"
+            class="flex items-start gap-3 text-ink/80"
+          >
+            <span
+              class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full text-sm font-bold"
+              :class="theme.chip"
+              aria-hidden="true"
+              >✓</span
+            >
+            <span>{{ item }}</span>
+          </li>
+        </ul>
+        <p
+          v-if="content.audienceFitConclusion"
+          class="mt-8 whitespace-pre-line leading-relaxed text-ink/80"
+        >
+          {{ content.audienceFitConclusion }}
+        </p>
+      </div>
+    </section>
+
+    <!-- 7. Investissement — libellé libre + mention franchise en base (293 B) -->
     <section
       v-if="content.priceLabel || content.priceNote || content.durationLabel"
       class="mx-auto max-w-3xl px-4 py-20"
@@ -166,13 +235,15 @@ useSchemaOrg([
         >
           {{ content.priceLabel }}
         </p>
-        <p v-if="content.priceNote" class="mt-2 leading-relaxed text-ink/70">{{ content.priceNote }}</p>
+        <p v-if="content.priceNote" class="mt-2 whitespace-pre-line leading-relaxed text-ink/70">
+          {{ content.priceNote }}
+        </p>
         <!-- Franchise en base de TVA (docs/05 §6, ADR #4) — affichée près du prix. -->
         <p class="mt-4 text-xs text-ink/45">TVA non applicable, art. 293 B du CGI.</p>
       </div>
     </section>
 
-    <!-- 7. FAQ (faq_items par scope) -->
+    <!-- 8. FAQ (faq_items par scope) -->
     <section v-if="content.faq.length" class="bg-teal-50">
       <div class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading title="Questions fréquentes" align="center" />
@@ -182,7 +253,7 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 8. Témoignage — masqué si vide -->
+    <!-- 9. Témoignage — masqué si vide -->
     <section
       v-if="content.testimonial"
       class="mx-auto max-w-3xl px-4 py-20"
@@ -191,14 +262,18 @@ useSchemaOrg([
       <TestimonialCard :testimonial="content.testimonial" />
     </section>
 
-    <!-- 9. CTA → contact -->
+    <!-- 10. CTA → contact -->
     <section class="mx-auto max-w-6xl px-4 py-20">
       <CtaBlock
-        title="Travaillons ensemble"
+        :title="content.ctaTitle || 'Travaillons ensemble'"
+        :description="content.ctaBody ?? undefined"
         :cta-label="content.ctaLabel"
         to="/contact"
         :variant="variant"
       />
+      <p v-if="content.ctaSubtext" class="mt-4 text-center text-sm text-ink/55">
+        {{ content.ctaSubtext }}
+      </p>
     </section>
   </div>
 </template>

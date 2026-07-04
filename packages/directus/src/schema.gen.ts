@@ -16,15 +16,12 @@ export interface DirectusFile {
 
 export interface AboutPage {
   id: string;
-  accroche: string | null;
   story_photo: string | DirectusFile | null;
   story_body: string | null;
   why_title: string | null;
   why_body: string | null;
   octopus_body: string | null;
   convictions: unknown | null;
-  how_i_work: unknown | null;
-  what_i_dont_do: string | null;
   portrait_photo: string | DirectusFile | null;
   personal_quote: string | null;
   cta_label: string | null;
@@ -32,6 +29,19 @@ export interface AboutPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_title: string | null;
+  accroche_body: string | null;
+  story_title: string | null;
+  octopus_subtitle: string | null;
+  convictions_title: string | null;
+  work_title: string | null;
+  work_intro: string | null;
+  how_i_work: unknown | null;
+  location: string | null;
+  what_i_dont_do_title: string | null;
+  what_i_dont_do: unknown | null;
+  cta_title: string | null;
+  cta_body: string | null;
 }
 
 export interface ArticleCategories {
@@ -197,7 +207,6 @@ export interface Offers {
   price_note: string | null;
   accroche_title: string | null;
   accroche_body: string | null;
-  mission_includes: unknown | null;
   outcomes: unknown | null;
   audience_fit: unknown | null;
   format_body: string | null;
@@ -213,6 +222,20 @@ export interface Offers {
   date_updated: string | null;
   user_created: string | null;
   user_updated: string | null;
+  accroche_subtitle: string | null;
+  accroche_signature: string | null;
+  outcomes_title: string | null;
+  outcomes_intro: string | null;
+  context_title: string | null;
+  context_items: unknown | null;
+  context_conclusion: string | null;
+  mission_title: string | null;
+  mission_includes: unknown | null;
+  audience_fit_title: string | null;
+  audience_fit_conclusion: string | null;
+  cta_title: string | null;
+  cta_body: string | null;
+  cta_subtext: string | null;
 }
 
 export interface OrgHubPage {
@@ -228,6 +251,22 @@ export interface OrgHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_subtitle: string | null;
+  accroche_signature: string | null;
+  observe_title: string | null;
+  observe_intro: string | null;
+  observe_items: unknown | null;
+  observe_conclusion: string | null;
+  offers_title: string | null;
+  method_title: string | null;
+  method_intro: string | null;
+  differentiator_title: string | null;
+  differentiator_body: string | null;
+  audience_title: string | null;
+  audience_conclusion: string | null;
+  testimonials_title: string | null;
+  cta_body: string | null;
+  cta_subtext: string | null;
 }
 
 export interface Products {

@@ -37,13 +37,26 @@ export interface RawOfferFull {
   price_label?: string | null;
   price_note?: string | null;
   accroche_title?: string | null;
+  accroche_subtitle?: string | null;
   accroche_body?: string | null;
-  mission_includes?: unknown; // répéteur { text }
+  accroche_signature?: string | null;
+  outcomes_title?: string | null;
+  outcomes_intro?: string | null;
   outcomes?: unknown; // répéteur { title, body }
-  audience_fit?: unknown; // répéteur { text }
+  context_title?: string | null;
+  context_items?: unknown; // répéteur { title, body }
+  context_conclusion?: string | null;
+  mission_title?: string | null;
+  mission_includes?: unknown; // répéteur { title, body }
   format_body?: string | null; // rich text
+  audience_fit_title?: string | null;
+  audience_fit?: unknown; // répéteur { text }
+  audience_fit_conclusion?: string | null;
   featured_testimonial?: unknown; // m2o testimonials (résolu) ou string
+  cta_title?: string | null;
+  cta_body?: string | null;
   cta_label?: string | null;
+  cta_subtext?: string | null;
   meta_title?: string | null;
   meta_description?: string | null;
   og_image?: FileField;
@@ -55,23 +68,35 @@ export interface OfferContent {
   audience: Audience | null;
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
+  accrocheSubtitle: string | null;
   accrocheBody: string | null;
-  /** « Ce que comprend la mission / Ce qu'on fait ensemble ». */
-  missionIncludes: string[];
-  /** « Comment ça se passe » (B2B) / « Le format » (B2C) — assaini ; "" si vide. */
-  formatBodyHtml: string;
-  /** « Ce que vous en retirez / repartez avec ». */
+  accrocheSignature: string | null;
+  /** « Ce que ça change » (bénéfices). */
+  outcomesTitle: string | null;
+  outcomesIntro: string | null;
   outcomes: TitledItem[];
-  /** « Pour qui (et pas pour qui) ». */
+  /** « Ce que je vois souvent » (contexte récurrent). */
+  context: { title: string; items: TitledItem[]; conclusion: string | null } | null;
+  /** « Ce que comprend la mission » (titre + items titre/corps). */
+  missionTitle: string | null;
+  missionIncludes: TitledItem[];
+  /** « Comment ça se passe » (optionnel) — assaini ; "" si vide. */
+  formatBodyHtml: string;
+  /** « Pour qui » (liste + conclusion). */
+  audienceFitTitle: string | null;
   audienceFit: string[];
+  audienceFitConclusion: string | null;
   durationLabel: string | null;
   /** « Investissement » — libellé libre, jamais un montant calculé. */
   priceLabel: string | null;
   priceNote: string | null;
   faq: FaqItem[];
   testimonial: TestimonialItem | null;
-  /** Toujours présent (conversion) ; fallback = garde-fou d'affichage. */
+  /** CTA final ; `ctaLabel` toujours présent (garde-fou d'affichage). */
+  ctaTitle: string | null;
+  ctaBody: string | null;
   ctaLabel: string;
+  ctaSubtext: string | null;
   seo: ContentSeo;
 }
 
@@ -105,20 +130,37 @@ export function mapOfferContent(
   assetBase: string,
   sanitize: Sanitize,
 ): OfferContent {
+  const contextItems = mapTitledItems(raw.context_items);
+  const contextTitle = str(raw.context_title);
+  const contextConclusion = str(raw.context_conclusion);
   return {
     audience: asAudience(raw.audience) ?? null,
     accrocheTitle: str(raw.accroche_title) || null,
+    accrocheSubtitle: str(raw.accroche_subtitle) || null,
     accrocheBody: str(raw.accroche_body) || null,
-    missionIncludes: mapStringList(raw.mission_includes),
-    formatBodyHtml: sanitize(raw.format_body),
+    accrocheSignature: str(raw.accroche_signature) || null,
+    outcomesTitle: str(raw.outcomes_title) || null,
+    outcomesIntro: str(raw.outcomes_intro) || null,
     outcomes: mapTitledItems(raw.outcomes),
+    context:
+      contextTitle || contextItems.length || contextConclusion
+        ? { title: contextTitle, items: contextItems, conclusion: contextConclusion || null }
+        : null,
+    missionTitle: str(raw.mission_title) || null,
+    missionIncludes: mapTitledItems(raw.mission_includes),
+    formatBodyHtml: sanitize(raw.format_body),
+    audienceFitTitle: str(raw.audience_fit_title) || null,
     audienceFit: mapStringList(raw.audience_fit),
+    audienceFitConclusion: str(raw.audience_fit_conclusion) || null,
     durationLabel: str(raw.duration_label) || null,
     priceLabel: str(raw.price_label) || null,
     priceNote: str(raw.price_note) || null,
     faq: mapFaqItems(faqRaw, sanitize),
     testimonial: mapTestimonialItem(raw.featured_testimonial),
+    ctaTitle: str(raw.cta_title) || null,
+    ctaBody: str(raw.cta_body) || null,
     ctaLabel: str(raw.cta_label) || "Prendre rendez-vous",
+    ctaSubtext: str(raw.cta_subtext) || null,
     seo: mapSeo(raw, settings, assetBase),
   };
 }
@@ -143,11 +185,21 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "price_label",
         "price_note",
         "accroche_title",
+        "accroche_subtitle",
         "accroche_body",
-        "mission_includes",
+        "accroche_signature",
+        "outcomes_title",
+        "outcomes_intro",
         "outcomes",
-        "audience_fit",
+        "context_title",
+        "context_items",
+        "context_conclusion",
+        "mission_title",
+        "mission_includes",
         "format_body",
+        "audience_fit_title",
+        "audience_fit",
+        "audience_fit_conclusion",
         // m2o testimonials : relation vers une vraie collection → sélection imbriquée OK.
         {
           featured_testimonial: [
@@ -159,7 +211,10 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
             "audience",
           ],
         },
+        "cta_title",
+        "cta_body",
         "cta_label",
+        "cta_subtext",
         "meta_title",
         "meta_description",
         // Champ fichier = ID brut (directus_files hors Schema typé, cf. shop.ts) → URL d'asset.

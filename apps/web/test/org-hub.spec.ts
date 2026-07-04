@@ -1,50 +1,98 @@
 // @vitest-environment node
 //
 // Composition du hub Organisations — docs/03-organisations-hub.md.
-// Vérifie : offres dynamiques (résumé + audience), méthode, « pour qui »,
-// témoignages b2b masqués si vides, CTA avec fallbacks, SEO.
+// Vérifie : accroche, constats, offres dynamiques (résumé + audience), méthode,
+// différenciateur (rich text assaini), pour-qui, témoignages b2b masqués si
+// vides, CTA (titre/texte/sous-texte) avec fallbacks, SEO.
 import { describe, expect, it } from "vitest";
 import { mapOrgHubContent } from "../server/utils/content/org-hub";
 
 const BASE = "https://cms.example.fr";
+const wrap = (h?: string | null) => (h ? `clean(${h})` : "");
 
 describe("mapOrgHubContent", () => {
-  it("hub vide : listes vides, CTA replié sur ses fallbacks", () => {
-    const c = mapOrgHubContent({}, [], [], {}, BASE);
+  it("hub vide : sections masquées, CTA replié sur ses fallbacks", () => {
+    const c = mapOrgHubContent({}, [], [], {}, BASE, wrap);
     expect(c.accrocheTitle).toBeNull();
-    expect(c.accrocheBody).toBeNull();
+    expect(c.observe).toBeNull();
     expect(c.offers).toEqual([]);
-    expect(c.methodSteps).toEqual([]);
-    expect(c.audienceItems).toEqual([]);
+    expect(c.offersTitle).toBe("Mes offres pour les organisations");
+    expect(c.method).toBeNull();
+    expect(c.differentiator).toBeNull();
+    expect(c.audience).toBeNull();
     expect(c.testimonials).toEqual([]);
-    expect(c.cta).toEqual({ title: "Travaillons ensemble", label: "Prendre rendez-vous" });
+    expect(c.cta).toEqual({
+      title: "Travaillons ensemble",
+      body: null,
+      label: "Prendre rendez-vous",
+      subtext: null,
+    });
   });
 
-  it("compose offres b2b, méthode, pour-qui, témoignages et CTA réel", () => {
+  it("compose accroche, constats, offres, méthode, différenciateur (assaini), CTA", () => {
     const c = mapOrgHubContent(
       {
-        accroche_title: "Donner de l'élan à vos équipes",
-        accroche_body: "Conseil RH sur mesure.",
-        method_steps: [{ number: 1, title: "Cadrage", description: "Le besoin." }],
-        audience_items: [{ text: "PME en croissance" }, "Associations"],
-        cta_title: "Un projet RH ?",
-        cta_label: "Échangeons",
+        accroche_title: "Vos pratiques RH doivent évoluer",
+        accroche_subtitle: "Les équipes grandissent.",
+        observe_title: "Un besoin de clarté",
+        observe_items: [{ title: "Compétences peu visibles", body: "Pas identifiées." }],
+        observe_conclusion: "Plus de lisibilité.",
+        method_title: "Ma démarche",
+        method_steps: [{ number: "01", title: "Comprendre", description: "J'écoute." }],
+        differentiator_title: "Sans perdre les personnes",
+        differentiator_body: "<p>double lecture</p>",
+        audience_title: "Fait pour vous si…",
+        audience_items: [{ text: "Vous grandissez vite" }, "Vous voulez structurer"],
+        audience_conclusion: "Avancer ensemble.",
+        offers_title: "Trois façons d'aider",
+        testimonials_title: "Elles en parlent",
+        cta_title: "On commence ?",
+        cta_body: "Un regard extérieur aide.",
+        cta_label: "Prendre RDV",
+        cta_subtext: "30 min sans engagement.",
       },
       [
         { title: "Audit RH", slug: "audit-rh", short_description: "État des lieux." },
-        { slug: "sans-titre" }, // filtré
+        { slug: "sans-titre" }, // filtré (pas de titre)
       ],
       [{ quote: "Un vrai partenaire.", author_name: "Marie", audience: "organisation" }],
       { brand_name: "L'Encre Humaine" },
       BASE,
+      wrap,
     );
-    expect(c.accrocheTitle).toBe("Donner de l'élan à vos équipes");
+    expect(c.accrocheTitle).toBe("Vos pratiques RH doivent évoluer");
+    expect(c.accrocheSubtitle).toBe("Les équipes grandissent.");
+    expect(c.observe).toEqual({
+      title: "Un besoin de clarté",
+      intro: null,
+      items: [{ title: "Compétences peu visibles", body: "Pas identifiées." }],
+      conclusion: "Plus de lisibilité.",
+    });
     expect(c.offers).toHaveLength(1);
     expect(c.offers[0]).toMatchObject({ slug: "audit-rh", audience: "organisation" });
-    expect(c.methodSteps).toEqual([{ number: "1", title: "Cadrage", description: "Le besoin." }]);
-    expect(c.audienceItems).toEqual(["PME en croissance", "Associations"]);
+    expect(c.offersTitle).toBe("Trois façons d'aider");
+    expect(c.method).toEqual({
+      title: "Ma démarche",
+      intro: null,
+      steps: [{ number: "01", title: "Comprendre", description: "J'écoute." }],
+    });
+    expect(c.differentiator).toEqual({
+      title: "Sans perdre les personnes",
+      bodyHtml: "clean(<p>double lecture</p>)",
+    });
+    expect(c.audience).toEqual({
+      title: "Fait pour vous si…",
+      items: ["Vous grandissez vite", "Vous voulez structurer"],
+      conclusion: "Avancer ensemble.",
+    });
     expect(c.testimonials).toHaveLength(1);
-    expect(c.cta).toEqual({ title: "Un projet RH ?", label: "Échangeons" });
+    expect(c.testimonialsTitle).toBe("Elles en parlent");
+    expect(c.cta).toEqual({
+      title: "On commence ?",
+      body: "Un regard extérieur aide.",
+      label: "Prendre RDV",
+      subtext: "30 min sans engagement.",
+    });
     expect(c.seo.title).toBe("L'Encre Humaine");
   });
 });
