@@ -162,21 +162,44 @@ const singletons: CollectionDef[] = [
     singleton: true,
     icon: "person",
     fields: [
-      f.textarea("accroche", { note: "Texte court mis en avant" }),
-      f.imageFile("story_photo"),
-      f.richtext("story_body", { note: "Mon histoire" }),
+      // §1 Accroche (h1 + chapeau)
+      f.input("accroche_title"),
+      f.richtext("accroche_body"),
+      // §2 Mon parcours
+      f.input("story_title"),
+      f.imageFile("story_photo", { note: "Portrait (optionnel, masqué si vide)" }),
+      f.richtext("story_body", { note: "Mon parcours" }),
+      // §3 Pourquoi L'Encre Humaine ? + le poulpe
       f.input("why_title"),
-      f.richtext("why_body"),
-      f.richtext("octopus_body", { note: "Le poulpe — avec humour" }),
+      f.richtext("why_body", { note: "L'encre" }),
+      f.input("octopus_subtitle", { note: "Ex. « Et pourquoi un poulpe ? »" }),
+      f.richtext("octopus_body", { note: "Le poulpe" }),
+      // §4 Convictions
+      f.input("convictions_title"),
       f.repeater(
         "convictions",
         [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Ce en quoi je crois" },
+        { note: "Convictions professionnelles (titre + corps)" },
       ),
-      f.repeater("how_i_work", [{ field: "text" }]),
-      f.richtext("what_i_dont_do"),
-      f.imageFile("portrait_photo"),
+      // §5 Ma manière d'accompagner
+      f.input("work_title"),
+      f.textarea("work_intro"),
+      f.repeater(
+        "how_i_work",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Principes : affirmation (titre) + explication (corps)" },
+      ),
+      f.textarea("location", { note: "Zone d'intervention" }),
+      // §6 Ce que je ne fais pas
+      f.input("what_i_dont_do_title"),
+      f.repeater("what_i_dont_do", [{ field: "text", interface: "input-multiline" }], {
+        note: "Liste (une entrée par ligne, ✗ ajouté à l'affichage)",
+      }),
+      // §7 Portrait + citation (optionnels) + CTA
+      f.imageFile("portrait_photo", { note: "Portrait (optionnel, section citation)" }),
       f.textarea("personal_quote"),
+      f.input("cta_title"),
+      f.textarea("cta_body"),
       f.input("cta_label"),
       ...f.seoBlock(),
     ],

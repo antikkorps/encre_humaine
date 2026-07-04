@@ -17,7 +17,7 @@ collections:
       icon: person
       item_duplication_fields: null
       note: null
-      preview_url: null
+      preview_url: https://encrehumaine.fr/a-propos?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -89,7 +89,7 @@ collections:
       icon: diversity_3
       item_duplication_fields: null
       note: FAQ branchée dynamiquement (faq_items scope=b2c)
-      preview_url: null
+      preview_url: https://encrehumaine.fr/particuliers?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -113,7 +113,7 @@ collections:
       icon: alternate_email
       item_duplication_fields: null
       note: FAQ branchée dynamiquement (faq_items scope=contact)
-      preview_url: null
+      preview_url: https://encrehumaine.fr/contact?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -161,7 +161,7 @@ collections:
       icon: home
       item_duplication_fields: null
       note: null
-      preview_url: null
+      preview_url: https://encrehumaine.fr/?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -209,7 +209,7 @@ collections:
       icon: mail
       item_duplication_fields: null
       note: null
-      preview_url: null
+      preview_url: https://encrehumaine.fr/newsletter?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -257,7 +257,7 @@ collections:
       icon: corporate_fare
       item_duplication_fields: null
       note: Offres & témoignages branchés dynamiquement (audience=organisation)
-      preview_url: null
+      preview_url: https://encrehumaine.fr/organisations?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -355,7 +355,7 @@ collections:
       icon: menu_book
       item_duplication_fields: null
       note: Catégories branchées dynamiquement (article_categories)
-      preview_url: null
+      preview_url: https://encrehumaine.fr/ressources?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -475,46 +475,6 @@ fields:
       is_unique: true
       is_indexed: false
       is_primary_key: true
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: about_page
-    field: accroche
-    type: text
-    meta:
-      collection: about_page
-      conditions: null
-      display: null
-      display_options: null
-      field: accroche
-      group: null
-      hidden: false
-      interface: input-multiline
-      note: Texte court mis en avant
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 2
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: accroche
-      table: about_page
-      data_type: text
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
       is_generated: false
       generation_expression: null
       has_auto_increment: false
@@ -764,95 +724,6 @@ fields:
       name: convictions
       table: about_page
       data_type: json
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: about_page
-    field: how_i_work
-    type: json
-    meta:
-      collection: about_page
-      conditions: null
-      display: null
-      display_options: null
-      field: how_i_work
-      group: null
-      hidden: false
-      interface: list
-      note: null
-      options:
-        fields:
-          - field: text
-            meta:
-              field: text
-              interface: input
-              width: full
-            name: text
-            type: string
-      readonly: false
-      required: false
-      searchable: true
-      sort: 9
-      special:
-        - cast-json
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: how_i_work
-      table: about_page
-      data_type: json
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: about_page
-    field: what_i_dont_do
-    type: text
-    meta:
-      collection: about_page
-      conditions: null
-      display: null
-      display_options: null
-      field: what_i_dont_do
-      group: null
-      hidden: false
-      interface: input-rich-text-html
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 10
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: what_i_dont_do
-      table: about_page
-      data_type: text
       default_value: null
       max_length: null
       numeric_precision: null
@@ -1167,6 +1038,551 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: accroche_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: accroche_body
+    type: text
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_body
+      table: about_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: story_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: story_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: story_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: octopus_subtitle
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: octopus_subtitle
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « Et pourquoi un poulpe ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: octopus_subtitle
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: convictions_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: convictions_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: convictions_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: work_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: work_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: work_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: work_intro
+    type: text
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: work_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: work_intro
+      table: about_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: how_i_work
+    type: json
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: how_i_work
+      group: null
+      hidden: false
+      interface: list
+      note: 'Principes : affirmation (titre) + explication (corps)'
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: how_i_work
+      table: about_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: location
+    type: text
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: location
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Zone d'intervention
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: location
+      table: about_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: what_i_dont_do_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: what_i_dont_do_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 28
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: what_i_dont_do_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: what_i_dont_do
+    type: json
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: what_i_dont_do
+      group: null
+      hidden: false
+      interface: list
+      note: Liste (une entrée par ligne, ✗ ajouté à l'affichage)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 29
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: what_i_dont_do
+      table: about_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: cta_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 30
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: cta_body
+    type: text
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_body
+      table: about_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false

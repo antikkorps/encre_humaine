@@ -16,15 +16,12 @@ export interface DirectusFile {
 
 export interface AboutPage {
   id: string;
-  accroche: string | null;
   story_photo: string | DirectusFile | null;
   story_body: string | null;
   why_title: string | null;
   why_body: string | null;
   octopus_body: string | null;
   convictions: unknown | null;
-  how_i_work: unknown | null;
-  what_i_dont_do: string | null;
   portrait_photo: string | DirectusFile | null;
   personal_quote: string | null;
   cta_label: string | null;
@@ -32,6 +29,19 @@ export interface AboutPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_title: string | null;
+  accroche_body: string | null;
+  story_title: string | null;
+  octopus_subtitle: string | null;
+  convictions_title: string | null;
+  work_title: string | null;
+  work_intro: string | null;
+  how_i_work: unknown | null;
+  location: string | null;
+  what_i_dont_do_title: string | null;
+  what_i_dont_do: unknown | null;
+  cta_title: string | null;
+  cta_body: string | null;
 }
 
 export interface ArticleCategories {

@@ -307,29 +307,102 @@ async function main(): Promise<void> {
   });
 
   await setSingleton("about_page", {
-    accroche: "Donner du sens et de la méthode au travail.",
+    // §1 Accroche
+    accroche_title:
+      "J'aide à remettre de la clarté là où les personnes et les organisations avancent dans le flou.",
+    accroche_body: P(
+      "Au fil de mon parcours, j'ai observé une constante.",
+      "Les difficultés professionnelles naissent rarement d'un manque de bonne volonté.",
+      "Elles apparaissent lorsque les repères deviennent flous : des collaborateurs qui ne savent plus où ils vont, des managers qui avancent sans cadre, des organisations qui grandissent sans structurer leurs pratiques, des personnes qui cherchent leur place sans parvenir à la trouver.",
+      "C'est dans ces moments-là que la clarté devient essentielle.",
+      "Et c'est pour contribuer à la créer que j'ai fondé L'Encre Humaine.",
+    ),
+    // §2 Mon parcours
+    story_title: "Comprendre les parcours avant de structurer les organisations.",
     story_body: P(
-      "Après plus de dix ans en RH, j'ai créé L'Encre Humaine pour accompagner autrement.",
-      "Mon fil rouge : du concret, de l'écoute, et zéro bullshit.",
+      "Mon parcours dans les ressources humaines a commencé là où les enjeux humains se révèlent souvent avec le plus d'intensité : l'accompagnement vers l'emploi.",
+      "En Mission Locale puis à France Travail, j'ai accompagné des personnes confrontées à des questions fondamentales : trouver leur place, identifier leurs compétences, construire un projet professionnel ou retrouver confiance dans leur avenir.",
+      "Cette expérience m'a appris quelque chose qui ne m'a jamais quittée : on n'accompagne pas une situation avant d'avoir compris la personne qui la vit.",
+      "J'ai appris à écouter avant de conseiller. À comprendre les trajectoires plutôt qu'à chercher des solutions rapides. À voir derrière chaque CV une histoire, des ressources et parfois des obstacles invisibles.",
+      "Puis j'ai découvert une autre facette du monde du travail : celle des organisations.",
+      "J'ai évolué dans les domaines de la formation professionnelle, du développement des compétences et des ressources humaines. J'ai piloté des projets liés à la formation, à la qualité, à la GEPP, aux plans de développement des compétences, à l'accompagnement des managers et à la structuration des pratiques RH.",
+      "J'y ai retrouvé les mêmes problématiques sous une autre forme. Lorsque les repères manquent, les organisations aussi avancent dans le flou. Les compétences existent mais ne sont pas identifiées. Les managers portent des responsabilités sans cadre clair. Les outils RH sont présents mais peinent à produire leurs effets. Les équipes avancent, mais sans toujours savoir dans quelle direction.",
+      "C'est là que j'ai compris que les parcours individuels et les organisations étaient finalement confrontés à la même question : comment avancer lorsqu'on manque de visibilité ?",
+      "Puis est arrivé un licenciement économique. Un événement que l'on vit d'abord comme une rupture. Avant qu'il ne devienne une occasion de prendre du recul.",
+      "J'ai alors traversé moi-même ce que j'avais accompagné pendant des années chez d'autres : l'incertitude, le questionnement, la reconstruction et le choix d'une nouvelle direction.",
+      "Cette expérience a renforcé une conviction déjà présente : on accompagne différemment ce que l'on a réellement vécu.",
+      "C'est à ce moment-là qu'est née L'Encre Humaine.",
     ),
-    why_title: "Pourquoi L'Encre Humaine",
-    why_body: P("Parce que le travail mérite mieux que des process plaqués."),
+    // §3 Pourquoi L'Encre Humaine ? + le poulpe
+    why_title: "Pourquoi « L'Encre Humaine » ?",
+    why_body: P(
+      "L'encre transforme une idée en quelque chose de visible. Elle permet de mettre des mots sur ce qui était encore confus. De rendre lisible ce qui semblait complexe. De laisser une trace durable.",
+      "C'est exactement ce que je cherche à faire dans mon métier. Apporter de la clarté. Structurer. Mettre en lumière. Donner des repères.",
+    ),
+    octopus_subtitle: "Et pourquoi un poulpe ?",
     octopus_body: P(
-      "Le poulpe ? Huit bras pour faire plein de choses à la fois, et beaucoup d'adaptabilité. 🐙",
+      "Parce qu'il représente assez bien ma manière de travailler.",
+      "Le poulpe évolue dans des environnements complexes. Il observe avant d'agir. Il s'adapte sans perdre sa direction. Il mobilise plusieurs ressources en même temps. Et surtout, il sait naviguer dans des situations où tout n'est pas parfaitement prévisible.",
+      "Après plusieurs années passées entre insertion professionnelle, formation, développement des compétences et conseil RH, cette capacité d'adaptation est devenue l'une de mes forces.",
     ),
+    // §4 Mes convictions
+    convictions_title: "Mes convictions professionnelles.",
     convictions: [
-      { title: "Écoute d'abord", body: "On part du réel, pas d'un modèle." },
-      { title: "Du concret", body: "Des livrables utiles, pas des slides." },
-      { title: "De l'autonomie", body: "Vous gardez les outils après." },
+      {
+        title: "Les pratiques RH peuvent être humaines et efficaces.",
+        body: "Je n'ai jamais adhéré à l'idée qu'il faudrait choisir entre performance et considération des personnes.\nLes organisations fonctionnent mieux lorsque les collaborateurs comprennent leur rôle, disposent de repères clairs et peuvent se projeter dans leur évolution.\nL'humanité n'est pas l'opposé de l'efficacité. Elle en est souvent une condition.",
+      },
+      {
+        title: "La clarté est une forme de respect.",
+        body: "Un collaborateur qui comprend ce que l'on attend de lui. Un manager qui sait comment accompagner son équipe. Un candidat qui sait où il en est. Une organisation qui explicite ses attentes.\nLa clarté réduit les incompréhensions, les tensions et les pertes d'énergie. Elle permet aux personnes d'avancer.",
+      },
+      {
+        title: "Le terrain reste toujours le meilleur point de départ.",
+        body: "Les méthodes ont leur utilité. Les outils aussi. Mais aucune recommandation n'a de valeur si elle ne tient pas compte de la réalité vécue.\nC'est pourquoi je cherche toujours à comprendre avant de proposer. Observer avant de conclure. Écouter avant de construire.",
+      },
+      {
+        title: "Les parcours professionnels ne sont jamais linéaires.",
+        body: "Je l'ai observé chez les personnes que j'ai accompagnées. Je l'ai vécu moi-même.\nLes transitions, les doutes, les changements de direction et les remises en question font partie des trajectoires professionnelles. L'important n'est pas d'éviter ces périodes. C'est de parvenir à leur donner du sens.",
+      },
     ],
+    // §5 Ma manière d'accompagner
+    work_title: "Concrètement, comment je travaille.",
+    work_intro:
+      "Mon objectif n'est pas de vous rendre dépendant d'un consultant.\nMon objectif est de vous aider à avancer avec davantage d'autonomie, de clarté et de confiance.",
     how_i_work: [
-      { text: "Cadrer le besoin réel" },
-      { text: "Co-construire" },
-      { text: "Transmettre" },
+      {
+        title: "J'écoute avant de recommander.",
+        body: "Parce qu'une bonne réponse commence toujours par une bonne compréhension de la situation.",
+      },
+      {
+        title: "Je construis avec vous, pas à votre place.",
+        body: "Vous connaissez votre organisation, votre métier ou votre parcours mieux que personne. Mon rôle consiste à apporter du recul, de la méthode et des outils.",
+      },
+      {
+        title: "Je privilégie les solutions simples et durables.",
+        body: "Je préfère un outil utilisé pendant trois ans qu'un dispositif complexe abandonné après trois semaines.",
+      },
+      {
+        title: "Je sais aussi dire quand je ne suis pas la bonne personne.",
+        body: "L'accompagnement de qualité passe parfois par une réorientation vers un autre professionnel.",
+      },
     ],
-    what_i_dont_do: P("Pas de recette magique, pas de jargon, pas de promesses irréalistes."),
-    personal_quote: "Le travail va mieux quand on remet de l'humain au centre.",
-    cta_label: "Travaillons ensemble",
+    location:
+      "Basée dans les Bouches-du-Rhône, j'accompagne des organisations et des particuliers partout en France, à distance ou en présentiel selon les besoins.",
+    // §6 Ce que je ne fais pas
+    what_i_dont_do_title: "Ce que je ne fais pas.",
+    what_i_dont_do: [
+      { text: "Des solutions RH standardisées appliquées à tous les contextes" },
+      { text: "Des formations catalogue déconnectées de votre réalité" },
+      { text: "Des recommandations impossibles à mettre en œuvre" },
+      { text: "Des outils complexes qui finissent dans un dossier oublié" },
+      { text: "Des réponses toutes faites à des situations qui méritent d'être comprises" },
+    ],
+    // §7 CTA
+    cta_title: "Si vous cherchez davantage de clarté, nous avons déjà un point commun.",
+    cta_body:
+      "Que vous soyez une organisation en phase de structuration ou une personne en transition professionnelle, un premier échange permet souvent de mieux comprendre la situation et d'identifier les prochaines étapes.",
+    cta_label: "Échangeons ensemble",
     meta_title: "À propos — L'Encre Humaine",
   });
 

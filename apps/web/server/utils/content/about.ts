@@ -15,25 +15,35 @@ import {
 /**
  * Contenu de la page « À propos » — docs/02-a-propos.md, docs/02-content-model.md §4.
  * Source : `about_page` (singleton) + `site_settings` (défauts SEO). Tout le contenu
- * provient de Directus (critère d'acceptation). Les 4 champs `input-rich-text-html`
- * (`story_body`, `why_body`, `octopus_body`, `what_i_dont_do`) sont **assainis côté
- * serveur** au fetch (docs/06 §1, contrat `RichText`) : le sanitizer est *injecté*
- * dans le mapper pur (testable sans la dépendance), `loadAboutContent` passe le vrai.
- * Les sections vides se masquent proprement (docs/00 §États).
+ * provient de Directus (critère d'acceptation). Les champs `input-rich-text-html`
+ * (`accroche_body`, `story_body`, `why_body`, `octopus_body`) sont **assainis côté
+ * serveur** au fetch (docs/06 §1) : le sanitizer est *injecté* dans le mapper pur
+ * (testable sans la dépendance), `loadAboutContent` passe le vrai. Les sections
+ * vides se masquent proprement (docs/00 §États).
  */
 
 export interface RawAbout {
-  accroche?: string | null;
+  accroche_title?: string | null;
+  accroche_body?: string | null; // rich text
+  story_title?: string | null;
   story_photo?: FileField;
   story_body?: string | null; // rich text
   why_title?: string | null;
   why_body?: string | null; // rich text
+  octopus_subtitle?: string | null;
   octopus_body?: string | null; // rich text
+  convictions_title?: string | null;
   convictions?: unknown; // répéteur { title, body }
-  how_i_work?: unknown; // répéteur { text }
-  what_i_dont_do?: string | null; // rich text
+  work_title?: string | null;
+  work_intro?: string | null;
+  how_i_work?: unknown; // répéteur { title, body } (principes)
+  location?: string | null;
+  what_i_dont_do_title?: string | null;
+  what_i_dont_do?: unknown; // répéteur { text }
   portrait_photo?: FileField;
   personal_quote?: string | null;
+  cta_title?: string | null;
+  cta_body?: string | null;
   cta_label?: string | null;
   meta_title?: string | null;
   meta_description?: string | null;
@@ -41,28 +51,33 @@ export interface RawAbout {
   no_index?: boolean | null;
 }
 
-/** « Ce en quoi je crois » : item titre + corps (forme commune `TitledItem`). */
+/** Item « titre + corps » (convictions, principes de travail) — forme `TitledItem`. */
 export type AboutConviction = TitledItem;
 
 export interface AboutContent {
-  /** Source du `h1` (null = fallback d'affichage côté page). */
-  accroche: string | null;
-  story: { photo: ContentPhoto | null; bodyHtml: string } | null;
+  /** Accroche : `title` = source du `h1` (fallback d'affichage côté page). */
+  accroche: { title: string; bodyHtml: string } | null;
+  story: { title: string; photo: ContentPhoto | null; bodyHtml: string } | null;
   why: { title: string; bodyHtml: string } | null;
-  octopusHtml: string | null;
-  convictions: AboutConviction[];
-  howIWork: string[];
-  whatIDontDoHtml: string | null;
+  octopus: { subtitle: string; bodyHtml: string } | null;
+  convictions: { title: string; items: AboutConviction[] } | null;
+  work: {
+    title: string;
+    intro: string | null;
+    principles: TitledItem[];
+    location: string | null;
+  } | null;
+  whatIDontDo: { title: string; items: string[] } | null;
   portrait: { photo: ContentPhoto | null; quote: string | null } | null;
-  /** Toujours présent (section de conversion) ; fallback = garde-fous d'affichage. */
-  ctaLabel: string;
+  /** Toujours présent (section de conversion) ; `label` = garde-fou d'affichage. */
+  cta: { title: string; body: string | null; label: string };
   seo: ContentSeo;
 }
 
 /** Signature du sanitizer injecté (cf. `sanitizeRichText`). */
 type Sanitize = (html?: string | null) => string;
 
-/** « Ce en quoi je crois » : items avec au moins un titre ou un corps (docs/02 §5). */
+/** Items « titre + corps » avec au moins un des deux (convictions, docs/02 §5). */
 export function mapConvictions(raw: unknown): AboutConviction[] {
   return mapTitledItems(raw);
 }
@@ -74,23 +89,49 @@ export function mapAboutContent(
   assetBase: string,
   sanitize: Sanitize,
 ): AboutContent {
+  const accrocheTitle = str(raw.accroche_title);
+  const accrocheHtml = sanitize(raw.accroche_body);
+  const storyTitle = str(raw.story_title);
   const storyHtml = sanitize(raw.story_body);
   const storyPhoto = mapPhoto(raw.story_photo, assetBase);
   const whyTitle = str(raw.why_title);
   const whyHtml = sanitize(raw.why_body);
+  const octoSubtitle = str(raw.octopus_subtitle);
+  const octoHtml = sanitize(raw.octopus_body);
+  const convictions = mapConvictions(raw.convictions);
+  const principles = mapTitledItems(raw.how_i_work);
+  const workTitle = str(raw.work_title);
+  const workIntro = str(raw.work_intro);
+  const location = str(raw.location);
+  const dontItems = mapStringList(raw.what_i_dont_do);
   const portraitPhoto = mapPhoto(raw.portrait_photo, assetBase);
   const quote = str(raw.personal_quote) || null;
 
   return {
-    accroche: str(raw.accroche) || null,
-    story: storyHtml || storyPhoto ? { photo: storyPhoto, bodyHtml: storyHtml } : null,
+    accroche:
+      accrocheTitle || accrocheHtml ? { title: accrocheTitle, bodyHtml: accrocheHtml } : null,
+    story:
+      storyTitle || storyHtml || storyPhoto
+        ? { title: storyTitle, photo: storyPhoto, bodyHtml: storyHtml }
+        : null,
     why: whyTitle || whyHtml ? { title: whyTitle, bodyHtml: whyHtml } : null,
-    octopusHtml: sanitize(raw.octopus_body) || null,
-    convictions: mapConvictions(raw.convictions),
-    howIWork: mapStringList(raw.how_i_work),
-    whatIDontDoHtml: sanitize(raw.what_i_dont_do) || null,
+    octopus: octoSubtitle || octoHtml ? { subtitle: octoSubtitle, bodyHtml: octoHtml } : null,
+    convictions: convictions.length
+      ? { title: str(raw.convictions_title), items: convictions }
+      : null,
+    work:
+      workTitle || workIntro || principles.length || location
+        ? { title: workTitle, intro: workIntro || null, principles, location: location || null }
+        : null,
+    whatIDontDo: dontItems.length
+      ? { title: str(raw.what_i_dont_do_title), items: dontItems }
+      : null,
     portrait: portraitPhoto || quote ? { photo: portraitPhoto, quote } : null,
-    ctaLabel: str(raw.cta_label) || "Travaillons ensemble",
+    cta: {
+      title: str(raw.cta_title),
+      body: str(raw.cta_body) || null,
+      label: str(raw.cta_label) || "Travaillons ensemble",
+    },
     seo: mapSeo(raw, settings, assetBase),
   };
 }
@@ -104,18 +145,28 @@ export async function loadAboutContent(): Promise<AboutContent> {
     client.request(
       readSingleton("about_page", {
         fields: [
-          "accroche",
+          "accroche_title",
+          "accroche_body",
+          "story_title",
           // Champs fichier = ID brut (directus_files hors Schema typé) → URL d'asset.
           "story_photo",
           "story_body",
           "why_title",
           "why_body",
+          "octopus_subtitle",
           "octopus_body",
+          "convictions_title",
           "convictions",
+          "work_title",
+          "work_intro",
           "how_i_work",
+          "location",
+          "what_i_dont_do_title",
           "what_i_dont_do",
           "portrait_photo",
           "personal_quote",
+          "cta_title",
+          "cta_body",
           "cta_label",
           "meta_title",
           "meta_description",
