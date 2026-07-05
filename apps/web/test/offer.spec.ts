@@ -43,8 +43,11 @@ describe("mapOfferContent", () => {
     expect(c.outcomesIntro).toBeNull();
     expect(c.outcomes).toEqual([]);
     expect(c.context).toBeNull();
+    expect(c.approche).toBeNull();
     expect(c.missionTitle).toBeNull();
+    expect(c.missionIntro).toBeNull();
     expect(c.missionIncludes).toEqual([]);
+    expect(c.formatTitle).toBeNull();
     expect(c.formatBodyHtml).toBe("");
     expect(c.audienceFitTitle).toBeNull();
     expect(c.audienceFit).toEqual([]);
@@ -70,10 +73,21 @@ describe("mapOfferContent", () => {
     expect(mapOfferContent({ audience: "autre" }, [], {}, BASE, wrap).audience).toBeNull();
   });
 
-  it("assainit format_body via le sanitizer injecté", () => {
-    expect(
-      mapOfferContent({ format_body: "<p>Étapes</p>" }, [], {}, BASE, wrap).formatBodyHtml,
-    ).toBe("clean(<p>Étapes</p>)");
+  it("assainit format_body via le sanitizer injecté ; titre format & intro mission surchargeables", () => {
+    const c = mapOfferContent(
+      {
+        format_body: "<p>Étapes</p>",
+        format_title: "Le déroulé",
+        mission_intro: "Sur mesure.",
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.formatBodyHtml).toBe("clean(<p>Étapes</p>)");
+    expect(c.formatTitle).toBe("Le déroulé");
+    expect(c.missionIntro).toBe("Sur mesure.");
   });
 
   it("mappe mission/outcomes (titre/corps), audience_fit (liste) et le contexte", () => {
@@ -104,6 +118,31 @@ describe("mapOfferContent", () => {
       title: "Situations fréquentes",
       items: [{ title: "Compétences peu lisibles", body: "Pas formalisées." }],
       conclusion: "L'audit remet de la lecture.",
+    });
+  });
+
+  it("mappe la section « approche » (corps rich-text assaini) ; masquée si tout est vide", () => {
+    const c = mapOfferContent(
+      {
+        approche_title: "Parce qu'une compétence n'existe jamais seule.",
+        approche_body: "<p>Derrière chaque compétence, il y a une personne.</p>",
+        approche_signature: "Structurer sans déshumaniser.",
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.approche).toEqual({
+      title: "Parce qu'une compétence n'existe jamais seule.",
+      bodyHtml: "clean(<p>Derrière chaque compétence, il y a une personne.</p>)",
+      signature: "Structurer sans déshumaniser.",
+    });
+    // Signature seule suffit à afficher la section (titre/corps facultatifs).
+    expect(mapOfferContent({ approche_signature: "x" }, [], {}, BASE, wrap).approche).toEqual({
+      title: null,
+      bodyHtml: "",
+      signature: "x",
     });
   });
 

@@ -236,6 +236,11 @@ export interface Offers {
   cta_title: string | null;
   cta_body: string | null;
   cta_subtext: string | null;
+  approche_title: string | null;
+  approche_body: string | null;
+  approche_signature: string | null;
+  mission_intro: string | null;
+  format_title: string | null;
 }
 
 export interface OrgHubPage {

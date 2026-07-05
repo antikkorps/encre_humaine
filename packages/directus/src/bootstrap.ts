@@ -13,6 +13,7 @@ import {
   listCollections,
   listFields,
   listRelations,
+  syncFieldOrder,
 } from "./api.ts";
 import { allCollections, type CollectionDef } from "./schema.ts";
 import { bootstrapSettings } from "./settings.ts";
@@ -42,7 +43,7 @@ function collectionMeta(def: CollectionDef): Json {
   };
 }
 
-const created = { collections: 0, fields: 0, relations: 0 };
+const created = { collections: 0, fields: 0, relations: 0, sorted: 0 };
 
 async function ensureSchema(): Promise<void> {
   // Pass A — collections (avec seulement la pk ; les champs suivent, idempotents).
@@ -73,6 +74,13 @@ async function ensureSchema(): Promise<void> {
         created.fields++;
       }
     }
+    // Resync de l'ordre d'affichage (meta.sort) sur l'ordre de schema.ts — cosmétique,
+    // n'altère pas la structure des champs (cf. syncFieldOrder). Corrige les champs
+    // recréés/ajoutés qui atterrissaient en fin de formulaire admin.
+    created.sorted += await syncFieldOrder(
+      def.collection,
+      def.fields.map((s) => s.field),
+    );
   }
 
   // Pass C — relations & collections de jonction (M2M fichiers).
@@ -121,7 +129,7 @@ async function main(): Promise<void> {
   console.log("→ Bootstrap schéma Directus (docs/02)…");
   await ensureSchema();
   console.log(
-    `  schéma : +${created.collections} collections, +${created.fields} champs, +${created.relations} relations`,
+    `  schéma : +${created.collections} collections, +${created.fields} champs, +${created.relations} relations, ~${created.sorted} ordres`,
   );
   console.log("→ Rôles & permissions…");
   await bootstrapAccess();

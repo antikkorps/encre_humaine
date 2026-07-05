@@ -160,10 +160,32 @@ useSchemaOrg([
       </p>
     </section>
 
+    <!-- 3bis. Une approche qui relie (optionnel) — narratif + encadré signature -->
+    <section v-if="content.approche" v-reveal class="mx-auto max-w-3xl px-4 py-20">
+      <SectionHeading :title="content.approche.title || 'Mon approche'" />
+      <RichText
+        v-if="content.approche.bodyHtml"
+        :html="content.approche.bodyHtml"
+        class="mt-5"
+      />
+      <aside
+        v-if="content.approche.signature"
+        class="mt-8 rounded-3xl border-l-4 p-6 shadow-soft"
+        :class="isB2c ? 'border-orange-300 bg-orange-50' : 'border-teal-400 bg-teal-50'"
+      >
+        <p class="whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
+          {{ content.approche.signature }}
+        </p>
+      </aside>
+    </section>
+
     <!-- 4. Ce que comprend la mission -->
     <section v-if="content.missionIncludes.length" v-reveal class="bg-paper-2">
       <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading :title="content.missionTitle || missionHeading" />
+        <SectionHeading
+          :title="content.missionTitle || missionHeading"
+          :subtitle="content.missionIntro ?? undefined"
+        />
         <ul class="mt-8 space-y-5">
           <li
             v-for="(item, i) in content.missionIncludes"
@@ -187,7 +209,7 @@ useSchemaOrg([
 
     <!-- 5. Comment ça se passe (optionnel) — rich text assaini -->
     <section v-if="content.formatBodyHtml" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="formatHeading" />
+      <SectionHeading :title="content.formatTitle || formatHeading" />
       <RichText :html="content.formatBodyHtml" class="mt-5" />
     </section>
 

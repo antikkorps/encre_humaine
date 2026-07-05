@@ -84,6 +84,29 @@ export async function ensureField(
   return true;
 }
 
+/**
+ * Resynchronise l'ordre d'affichage des champs (`meta.sort`) d'une collection sur
+ * l'ordre de `schema.ts`. Purement cosmétique (formulaire admin) : la STRUCTURE des
+ * champs n'est jamais touchée — on n'écrit que `meta.sort`. C'est le seul assouplissement
+ * de l'invariant additif-only du bootstrap (décision 2026-07-05). Idempotent : ne PATCH
+ * que les champs dont le sort diffère. Renvoie le nombre de champs réordonnés.
+ */
+export async function syncFieldOrder(collection: string, orderedFields: string[]): Promise<number> {
+  const data = await get<{ field: string; meta: { sort: number | null } | null }[]>(
+    `/fields/${collection}`,
+  );
+  const current = new Map(data.map((f) => [f.field, f.meta?.sort ?? null]));
+  let changed = 0;
+  for (let i = 0; i < orderedFields.length; i++) {
+    const field = orderedFields[i];
+    const want = i + 1;
+    if (!field || !current.has(field) || current.get(field) === want) continue;
+    await patch(`/fields/${collection}/${field}`, { meta: { sort: want } });
+    changed++;
+  }
+  return changed;
+}
+
 /** Crée une relation si absente (clé `collection.field`). */
 export async function ensureRelation(
   payload: Json & { collection: string; field: string },
