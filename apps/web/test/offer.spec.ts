@@ -45,7 +45,9 @@ describe("mapOfferContent", () => {
     expect(c.context).toBeNull();
     expect(c.approche).toBeNull();
     expect(c.missionTitle).toBeNull();
+    expect(c.missionIntro).toBeNull();
     expect(c.missionIncludes).toEqual([]);
+    expect(c.formatTitle).toBeNull();
     expect(c.formatBodyHtml).toBe("");
     expect(c.audienceFitTitle).toBeNull();
     expect(c.audienceFit).toEqual([]);
@@ -71,10 +73,21 @@ describe("mapOfferContent", () => {
     expect(mapOfferContent({ audience: "autre" }, [], {}, BASE, wrap).audience).toBeNull();
   });
 
-  it("assainit format_body via le sanitizer injecté", () => {
-    expect(
-      mapOfferContent({ format_body: "<p>Étapes</p>" }, [], {}, BASE, wrap).formatBodyHtml,
-    ).toBe("clean(<p>Étapes</p>)");
+  it("assainit format_body via le sanitizer injecté ; titre format & intro mission surchargeables", () => {
+    const c = mapOfferContent(
+      {
+        format_body: "<p>Étapes</p>",
+        format_title: "Le déroulé",
+        mission_intro: "Sur mesure.",
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.formatBodyHtml).toBe("clean(<p>Étapes</p>)");
+    expect(c.formatTitle).toBe("Le déroulé");
+    expect(c.missionIntro).toBe("Sur mesure.");
   });
 
   it("mappe mission/outcomes (titre/corps), audience_fit (liste) et le contexte", () => {

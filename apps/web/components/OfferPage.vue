@@ -182,7 +182,10 @@ useSchemaOrg([
     <!-- 4. Ce que comprend la mission -->
     <section v-if="content.missionIncludes.length" v-reveal class="bg-paper-2">
       <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading :title="content.missionTitle || missionHeading" />
+        <SectionHeading
+          :title="content.missionTitle || missionHeading"
+          :subtitle="content.missionIntro ?? undefined"
+        />
         <ul class="mt-8 space-y-5">
           <li
             v-for="(item, i) in content.missionIncludes"
@@ -206,7 +209,7 @@ useSchemaOrg([
 
     <!-- 5. Comment ça se passe (optionnel) — rich text assaini -->
     <section v-if="content.formatBodyHtml" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="formatHeading" />
+      <SectionHeading :title="content.formatTitle || formatHeading" />
       <RichText :html="content.formatBodyHtml" class="mt-5" />
     </section>
 
