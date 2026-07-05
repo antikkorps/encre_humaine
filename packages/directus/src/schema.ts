@@ -388,6 +388,10 @@ const collections: CollectionDef[] = [
         { note: "Situations récurrentes (titre + corps)" },
       ),
       f.textarea("context_conclusion"),
+      // Une approche qui relie compétences et parcours (optionnel)
+      f.input("approche_title"),
+      f.richtext("approche_body", { note: "Texte narratif (puces possibles)" }),
+      f.textarea("approche_signature", { note: "Encadré signature (facultatif)" }),
       // Ce que comprend la mission
       f.input("mission_title"),
       f.repeater(

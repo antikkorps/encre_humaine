@@ -46,6 +46,9 @@ export interface RawOfferFull {
   context_title?: string | null;
   context_items?: unknown; // répéteur { title, body }
   context_conclusion?: string | null;
+  approche_title?: string | null;
+  approche_body?: string | null; // rich text
+  approche_signature?: string | null;
   mission_title?: string | null;
   mission_includes?: unknown; // répéteur { title, body }
   format_body?: string | null; // rich text
@@ -77,6 +80,8 @@ export interface OfferContent {
   outcomes: TitledItem[];
   /** « Ce que je vois souvent » (contexte récurrent). */
   context: { title: string; items: TitledItem[]; conclusion: string | null } | null;
+  /** « Une approche qui relie » (optionnel) — corps rich text assaini + encadré signature. */
+  approche: { title: string | null; bodyHtml: string; signature: string | null } | null;
   /** « Ce que comprend la mission » (titre + items titre/corps). */
   missionTitle: string | null;
   missionIncludes: TitledItem[];
@@ -133,6 +138,9 @@ export function mapOfferContent(
   const contextItems = mapTitledItems(raw.context_items);
   const contextTitle = str(raw.context_title);
   const contextConclusion = str(raw.context_conclusion);
+  const approcheTitle = str(raw.approche_title);
+  const approcheBodyHtml = sanitize(raw.approche_body);
+  const approcheSignature = str(raw.approche_signature);
   return {
     audience: asAudience(raw.audience) ?? null,
     accrocheTitle: str(raw.accroche_title) || null,
@@ -145,6 +153,14 @@ export function mapOfferContent(
     context:
       contextTitle || contextItems.length || contextConclusion
         ? { title: contextTitle, items: contextItems, conclusion: contextConclusion || null }
+        : null,
+    approche:
+      approcheTitle || approcheBodyHtml || approcheSignature
+        ? {
+            title: approcheTitle || null,
+            bodyHtml: approcheBodyHtml,
+            signature: approcheSignature || null,
+          }
         : null,
     missionTitle: str(raw.mission_title) || null,
     missionIncludes: mapTitledItems(raw.mission_includes),
@@ -194,6 +210,9 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "context_title",
         "context_items",
         "context_conclusion",
+        "approche_title",
+        "approche_body",
+        "approche_signature",
         "mission_title",
         "mission_includes",
         "format_body",

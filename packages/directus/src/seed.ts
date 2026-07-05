@@ -189,6 +189,39 @@ async function main(): Promise<void> {
       scope: "audit",
     },
     {
+      q: "Nous avons déjà un logiciel RH. Est-ce compatible ?",
+      a: P(
+        "Oui.",
+        "Je travaille à partir de vos outils existants et j'adapte la démarche à votre environnement.",
+      ),
+      scope: "competences",
+    },
+    {
+      q: "Nos managers ont peu de temps. Est-ce réaliste ?",
+      a: P(
+        "Oui.",
+        "L'objectif est justement de construire des outils simples, utilisables et adaptés au terrain.",
+        "Les temps de contribution sont anticipés et limités au strict nécessaire.",
+      ),
+      scope: "competences",
+    },
+    {
+      q: "Est-ce réservé aux entreprises soumises à la GEPP ?",
+      a: P(
+        "Non.",
+        "Même lorsqu'il n'existe aucune obligation légale, comprendre ses compétences et ses parcours reste un enjeu stratégique de développement.",
+      ),
+      scope: "competences",
+    },
+    {
+      q: "Faut-il commencer par un audit RH ?",
+      a: P(
+        "Pas forcément.",
+        "Mais lorsque les besoins sont encore flous, l'audit RH constitue souvent un excellent point de départ.",
+      ),
+      scope: "competences",
+    },
+    {
       q: "Intervenez-vous partout en France ?",
       a: P("Oui, à distance, et en présentiel dans la région PACA."),
       scope: "general",
@@ -220,6 +253,9 @@ async function main(): Promise<void> {
     context_title?: string;
     context_items?: TB[];
     context_conclusion?: string;
+    approche_title?: string;
+    approche_body?: string;
+    approche_signature?: string;
     mission_title?: string;
     mission_includes?: TB[];
     format_body?: string;
@@ -340,22 +376,147 @@ async function main(): Promise<void> {
     {
       slug: "competences-parcours",
       audience: "organisation",
-      title: "GEPP, compétences & parcours",
+      title: "Compétences & parcours",
       icon: "route",
       short_description:
-        "Structurer les compétences et les parcours : mieux identifier, développer et transmettre les compétences clés.",
-      duration_label: "à partir de 8 semaines",
+        "Rendre les compétences visibles et donner de la perspective aux parcours, pour de meilleures décisions RH.",
+      // S7 — Format : 4 à 8 semaines. Tarif « à partir de XXX € » d'Éléonore = placeholder →
+      // « Sur devis » tant que le montant n'est pas arrêté (ne pas publier « XXX »).
+      duration_label: "4 à 8 semaines d'accompagnement",
       price_label: "Sur devis",
-      accroche_title: "Structurer les compétences et les parcours",
+      price_note:
+        "Le périmètre est ajusté à la taille de votre organisation, à vos enjeux et à vos objectifs.",
+      // S1 — Accroche
+      accroche_title: "Rendre les compétences visibles. Donner de la perspective aux parcours.",
+      accroche_subtitle:
+        "Les compétences sont partout dans votre organisation.\n\nElles permettent de produire, d'innover, de transmettre, de manager et de se développer.\n\nPourtant, elles restent souvent peu visibles.\n\nOn sait qu'elles existent.\n\nOn sait qu'elles sont importantes.\n\nMais on peine parfois à identifier précisément où elles se trouvent, comment elles évoluent et ce qu'il faudra développer demain.",
       accroche_body:
-        "Lorsque votre organisation a besoin de mieux identifier, développer et transmettre les compétences qui la font fonctionner.\n\nJ'accompagne la mise en place de démarches GEPP adaptées à la réalité des PME : cartographie des compétences, entretiens professionnels, développement des compétences et construction de parcours professionnels.",
+        "Lorsque les compétences ne sont pas clairement identifiées :\n\n— les recrutements deviennent plus complexes ;\n— les besoins de formation sont difficiles à prioriser ;\n— les managers manquent de repères ;\n— les collaborateurs ont du mal à se projeter ;\n— les départs ou évolutions créent des fragilités inattendues.\n\nÀ l'inverse, une organisation qui comprend ses compétences et ses parcours professionnels prend de meilleures décisions.\n\nElle anticipe davantage.\n\nElle développe ses équipes plus efficacement.\n\nEt elle donne à chacun une vision plus claire de sa place et de ses perspectives.",
+      accroche_signature: "Structurer les compétences sans oublier les personnes qui les portent.",
+      // S2 — Ce que cet accompagnement change concrètement
+      outcomes_title: "Plus de visibilité aujourd'hui. Plus de capacité d'anticipation demain.",
+      outcomes_intro:
+        "L'objectif n'est pas de produire un référentiel supplémentaire qui finira dans un dossier partagé.\n\nL'objectif est de rendre les compétences réellement utiles à votre organisation.",
       outcomes: [
-        { title: "Mieux anticiper les besoins futurs" },
-        { title: "Développer les compétences clés" },
-        { title: "Donner davantage de visibilité aux équipes" },
-        { title: "Soutenir la croissance de l'organisation" },
+        {
+          title: "Mieux comprendre vos ressources internes",
+          body: "Vous identifiez clairement les compétences présentes dans votre organisation et les expertises sur lesquelles vous pouvez vous appuyer.",
+        },
+        {
+          title: "Sécuriser votre développement",
+          body: "Vous repérez les compétences critiques, les risques de dépendance et les besoins futurs.",
+        },
+        {
+          title: "Donner des repères aux managers",
+          body: "Les managers disposent d'un langage commun pour accompagner leurs équipes et conduire les entretiens professionnels.",
+        },
+        {
+          title: "Donner de la visibilité aux collaborateurs",
+          body: "Les parcours deviennent plus lisibles.\nLes possibilités d'évolution sont mieux comprises.\nLes discussions professionnelles gagnent en qualité.",
+        },
+        {
+          title: "Aligner formation et besoins réels",
+          body: "Le développement des compétences répond à des enjeux concrets plutôt qu'à une logique de catalogue.",
+        },
       ],
-      featured_testimonial: tMarie,
+      // S3 — Ce que j'observe le plus souvent (situations sans titre → carte à corps seul)
+      context_title: "Les compétences sont rarement absentes. Elles sont surtout peu visibles.",
+      context_items: [
+        {
+          title: "",
+          body: "Certaines compétences clés reposent sur quelques personnes sans être suffisamment formalisées ou transmises.",
+        },
+        {
+          title: "",
+          body: "Les managers connaissent leurs équipes mais manquent d'outils pour objectiver les besoins de développement.",
+        },
+        {
+          title: "",
+          body: "Les entretiens professionnels existent mais débouchent rarement sur des actions concrètes.",
+        },
+        {
+          title: "",
+          body: "Les besoins de recrutement et de formation sont traités séparément alors qu'ils répondent aux mêmes enjeux.",
+        },
+        {
+          title: "",
+          body: "Les collaborateurs peinent à comprendre comment évoluer au sein de l'organisation.",
+        },
+      ],
+      context_conclusion:
+        "La question n'est généralement pas de créer davantage d'outils RH.\n\nLa question est de rendre les compétences plus lisibles pour permettre de meilleures décisions.",
+      // S4 — Une approche qui relie compétences et parcours
+      approche_title: "Parce qu'une compétence n'existe jamais seule.",
+      approche_body:
+        "<p>Derrière chaque compétence, il y a une personne.</p>" +
+        "<p>Derrière chaque évolution professionnelle, il y a un parcours.</p>" +
+        "<p>C'est pourquoi mon approche ne se limite pas à la construction d'un référentiel ou à une démarche GEPP.</p>" +
+        "<p>Elle consiste à relier :</p>" +
+        "<ul><li>les besoins de l'organisation ;</li><li>les compétences disponibles ;</li><li>les aspirations professionnelles ;</li><li>les perspectives d'évolution.</li></ul>" +
+        "<p>Cette double lecture me permet de construire des démarches qui répondent à la fois aux enjeux RH et aux réalités humaines.</p>",
+      approche_signature:
+        "Structurer sans déshumaniser.\n\nLes outils n'ont de valeur que s'ils aident les personnes à mieux comprendre leur rôle, leur développement et leur place dans l'organisation.",
+      // S5 — Ce que comprend la mission
+      mission_title: "Une démarche de gestion des compétences adaptée à votre réalité.",
+      mission_includes: [
+        {
+          title: "Cartographie des compétences",
+          body: "Identifier les compétences présentes, leur niveau de maîtrise et leur contribution aux enjeux de l'organisation.",
+        },
+        {
+          title: "Référentiel de compétences",
+          body: "Construire ou faire évoluer un référentiel adapté à vos métiers et à votre culture.",
+        },
+        {
+          title: "Analyse des écarts",
+          body: "Identifier les compétences à développer, transmettre ou renforcer.",
+        },
+        {
+          title: "Plan de Développement des Compétences",
+          body: "Construire un PDC cohérent, priorisé et aligné avec vos objectifs.",
+        },
+        {
+          title: "Entretiens professionnels et parcours",
+          body: "Outiller les managers et structurer les échanges autour des évolutions professionnelles.",
+        },
+        {
+          title: "Outils de pilotage",
+          body: "Tableaux de bord, trames d'entretien, outils de suivi et supports opérationnels.",
+        },
+        {
+          title: "Transmission",
+          body: "Rendre votre organisation autonome dans l'utilisation des outils construits.",
+        },
+      ],
+      // Pas de section « Comment ça se passe » distincte pour cette offre.
+      format_body: "",
+      // S6 — Pour qui ?
+      audience_fit_title: "Cet accompagnement est particulièrement pertinent si…",
+      audience_fit: [
+        { text: "Votre organisation compte entre 20 et 300 salariés" },
+        {
+          text: "Vous souhaitez mettre en place une démarche GEPP sans créer une usine à gaz",
+        },
+        { text: "Vos compétences clés ne sont pas clairement identifiées" },
+        { text: "Vous préparez une phase de croissance ou de transformation" },
+        { text: "Vous avez des difficultés de recrutement ou de fidélisation" },
+        {
+          text: "Vos managers manquent de repères pour accompagner les parcours professionnels",
+        },
+        { text: "Vos entretiens professionnels n'apportent pas les résultats attendus" },
+        { text: "Vous souhaitez développer les compétences de façon plus stratégique" },
+      ],
+      audience_fit_conclusion:
+        "Que l'objectif soit d'anticiper, de transmettre ou de développer les compétences, tout commence par une meilleure visibilité de l'existant.",
+      // S10 — Appel à l'action
+      cta_title: "Et si vous aviez enfin une vision claire de vos compétences et de vos parcours ?",
+      cta_body:
+        "Les meilleures décisions RH reposent rarement sur l'intuition seule.\n\nElles reposent sur une compréhension claire de ce qui existe déjà et de ce qu'il faut construire pour demain.",
+      cta_label: "Prendre rendez-vous",
+      cta_subtext:
+        "30 minutes d'échange pour faire le point sur vos enjeux de compétences, de GEPP et de développement des parcours.",
+      // S9 — Témoignage à intégrer après les premières missions (placeholder Éléonore).
+      featured_testimonial: null,
     },
     {
       slug: "managers-equipes",
@@ -421,6 +582,9 @@ async function main(): Promise<void> {
       context_title: o.context_title ?? "",
       context_items: o.context_items ?? [],
       context_conclusion: o.context_conclusion ?? "",
+      approche_title: o.approche_title ?? "",
+      approche_body: o.approche_body ?? "",
+      approche_signature: o.approche_signature ?? "",
       mission_title: o.mission_title ?? "",
       mission_includes: o.mission_includes ?? [
         { title: "Un cadrage initial de vos enjeux" },
