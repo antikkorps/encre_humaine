@@ -152,13 +152,31 @@ async function main(): Promise<void> {
       scope: "contact",
     },
     {
-      q: "Comment se passe un accompagnement individuel ?",
-      a: P("En visio ou présentiel, en 4 à 6 séances selon le besoin."),
+      q: "Puis-je utiliser mon CPF ?",
+      a: P(
+        "Non.",
+        "Ces accompagnements ne sont pas éligibles au CPF.",
+        "Ils relèvent d'une démarche personnelle et volontaire.",
+      ),
       scope: "b2c",
     },
     {
-      q: "Est-ce adapté si je ne sais pas encore quoi faire ?",
-      a: P("C'est même le point de départ idéal : on clarifie ensemble."),
+      q: "Cet accompagnement est-il fait pour moi ?",
+      a: P(
+        "Il s'adresse aux personnes qui souhaitent avancer dans leur réflexion ou leur projet professionnel.",
+        "En revanche, il ne remplace pas un accompagnement thérapeutique lorsqu'une souffrance psychologique importante est présente.",
+      ),
+      scope: "b2c",
+    },
+    {
+      q: "Que se passe-t-il lors du premier échange ?",
+      a: P(
+        "Nous faisons connaissance.",
+        "Vous m'expliquez votre situation, vos interrogations et vos besoins.",
+        "Je vous explique ma façon de travailler.",
+        "Et nous regardons ensemble si l'accompagnement est pertinent pour vous.",
+        "Sans engagement. Sans pression.",
+      ),
       scope: "b2c",
     },
     {
@@ -1011,22 +1029,133 @@ async function main(): Promise<void> {
   });
 
   await setSingleton("b2c_hub_page", {
-    accroche_title: "Pour les particuliers",
-    accroche_body: "Un accompagnement bienveillant pour clarifier votre cap et avancer.",
-    situation_a_title: "Je veux y voir plus clair",
-    situation_a_body: "Vous sentez qu'il faut bouger mais ne savez pas vers quoi.",
-    situation_a_cta_label: "Clarifier & avancer",
+    // 1. Accroche
+    accroche_title:
+      "Quand le parcours professionnel devient flou, retrouver de la clarté change tout.",
+    accroche_subtitle:
+      "Reconversion professionnelle, perte de sens, évolution de carrière, recherche d'emploi, questionnement sur la suite…\n\n" +
+      "Certaines périodes de la vie professionnelle nous obligent à ralentir pour comprendre ce qui se joue vraiment.\n\n" +
+      "Et lorsqu'on est directement concerné, il est souvent difficile d'y voir clair seul.",
+    accroche_body:
+      "Vous avez peut-être l'impression de tourner en rond.\n\n" +
+      "De ne plus être à votre place.\n\n" +
+      "De savoir que quelque chose doit évoluer sans parvenir à identifier quoi.\n\n" +
+      "Ou au contraire, vous avez déjà un projet en tête mais vous ne savez pas comment le concrétiser.\n\n" +
+      "Dans les deux cas, la difficulté n'est pas toujours de trouver une solution.\n\n" +
+      "C'est souvent de retrouver suffisamment de clarté pour avancer dans une direction qui a du sens pour vous.",
+    accroche_signature:
+      "Parce qu'un parcours professionnel n'a pas besoin d'être parfait. Il a besoin d'être compris.",
+    accroche_cta_label: "Réserver un premier échange",
+    // 2. Ce que vous venez chercher (bénéfices)
+    outcomes_title: "Avant de prendre une décision, il faut souvent comprendre ce qui se passe.",
+    outcomes_intro:
+      "Les personnes que j'accompagne arrivent rarement avec une demande technique. Elles arrivent avec des questions. Parfois très simples. Parfois très profondes.",
+    outcomes: [
+      {
+        title: "Retrouver de la clarté",
+        body: "Mettre des mots sur ce qui bloque, ce qui manque ou ce qui appelle un changement.",
+      },
+      {
+        title: "Comprendre son parcours",
+        body: "Prendre du recul sur son histoire professionnelle et identifier les fils conducteurs souvent invisibles au quotidien.",
+      },
+      {
+        title: "Faire des choix plus sereinement",
+        body: "Explorer les possibilités et prendre des décisions plus alignées avec ses aspirations et sa réalité.",
+      },
+      {
+        title: "Reprendre confiance",
+        body: "Valoriser ses compétences, ses expériences et ses ressources pour retrouver une dynamique d'action.",
+      },
+      {
+        title: "Passer à l'action",
+        body: "Transformer les réflexions en démarches concrètes et réalistes.",
+      },
+    ],
+    // 3. Deux situations, deux accompagnements
+    situations_title: "Chaque transition professionnelle est différente.",
+    situations_intro:
+      "Certaines personnes cherchent d'abord à comprendre. D'autres savent déjà où elles veulent aller. L'accompagnement s'adapte à votre situation.",
+    situation_a_title: "Clarifier & Avancer",
+    situation_a_body: "",
+    situation_a_audience:
+      "Vous traversez une période de questionnement professionnel, de reconversion, d'évolution de carrière ou de perte de sens.",
+    situation_a_items: [
+      { text: "Comprendre ce qui se joue dans votre situation actuelle" },
+      { text: "Identifier vos besoins et vos motivations" },
+      { text: "Explorer les pistes possibles" },
+      { text: "Construire un projet professionnel réaliste" },
+      { text: "Retrouver une direction claire" },
+    ],
+    situation_a_result:
+      "Vous repartez avec une vision plus lisible de votre parcours et des prochaines étapes à engager.",
+    situation_a_cta_label: "Découvrir l'accompagnement",
     situation_a_cta_link: "/particuliers/clarifier-avancer",
-    situation_b_title: "Je cherche un emploi",
-    situation_b_body: "Vous voulez une recherche plus efficace et plus sereine.",
-    situation_b_cta_label: "Booster sa recherche",
+    situation_b_title: "Booster sa recherche",
+    situation_b_body: "",
+    situation_b_audience:
+      "Vous avez déjà un objectif professionnel mais vous avez besoin d'aide pour le concrétiser.",
+    situation_b_items: [
+      { text: "CV et candidature" },
+      { text: "Profil LinkedIn" },
+      { text: "Valorisation des compétences" },
+      { text: "Préparation aux entretiens" },
+      { text: "Stratégie de recherche d'emploi" },
+      { text: "Réseau professionnel" },
+    ],
+    situation_b_result:
+      "Vous gagnez en cohérence, en visibilité et en efficacité dans vos démarches.",
+    situation_b_cta_label: "Découvrir l'accompagnement",
     situation_b_cta_link: "/particuliers/booster-recherche",
+    // 4. Ma façon d'accompagner
+    how_i_work_title: "Ni recettes toutes faites. Ni injonctions à changer de vie.",
     how_i_work_body: P(
-      "On avance à votre rythme, avec des outils simples et des objectifs clairs.",
+      "Chaque parcours est différent.",
+      "C'est pourquoi je ne pars jamais d'une méthode standardisée ou d'un projet préconçu.",
+      "Je commence par comprendre votre situation, votre histoire professionnelle et ce qui vous amène aujourd'hui.",
+      "Mon rôle n'est pas de décider à votre place.",
+      "Mon rôle est de vous aider à voir plus clair pour que vous puissiez prendre vos propres décisions.",
     ),
-    testimonial: tSophie,
-    cta_label: "Prendre rendez-vous",
+    how_i_work_signature:
+      "Structurer sans déshumaniser.\n\n" +
+      "Même lorsqu'il s'agit d'un parcours individuel, la clarté reste souvent le meilleur point de départ.",
+    // 5. Pourquoi c'est différent
+    why_different_title: "Un regard à la croisée des parcours, de l'emploi et des RH.",
+    why_different_body:
+      P(
+        "Depuis plus de 10 ans, j'accompagne des personnes confrontées à des transitions professionnelles.",
+        "J'ai travaillé dans :",
+      ) +
+      "<ul><li>l'insertion professionnelle ;</li><li>l'accompagnement vers l'emploi ;</li><li>la formation ;</li><li>les ressources humaines ;</li><li>le développement des compétences.</li></ul>" +
+      P(
+        "J'ai accompagné des jeunes, des salariés, des demandeurs d'emploi, des personnes en reconversion ou confrontées à une rupture professionnelle.",
+        "Cette diversité de situations m'a appris une chose :",
+        "Les parcours professionnels sont rarement linéaires.",
+        "Et derrière chaque période de doute se cachent souvent des ressources qui demandent simplement à être révélées.",
+      ),
+    // 6. Comment se déroule l'accompagnement
+    format_title: "Un accompagnement à votre rythme.",
+    format_items: [
+      { text: "Séances individuelles d'une heure" },
+      { text: "À distance en visioconférence" },
+      { text: "Exercices et réflexions entre les séances" },
+      { text: "Accompagnement personnalisé" },
+    ],
+    format_body:
+      "Les exercices proposés ne sont pas des devoirs.\n\n" +
+      "Ils servent à prolonger la réflexion dans votre quotidien et à transformer progressivement les prises de conscience en actions concrètes.",
+    // 8. Témoignage — à compléter après les premiers accompagnements
+    testimonial: null,
+    // 9. Appel à l'action
+    cta_title: "Et si vous vous accordiez enfin un espace pour y voir plus clair ?",
+    cta_body:
+      "Une transition professionnelle n'exige pas toujours des réponses immédiates. Elle demande souvent un temps pour comprendre, prendre du recul et retrouver une direction.",
+    cta_label: "Réserver une séance découverte",
+    cta_subtext:
+      "Un premier échange gratuit pour faire le point sur votre situation et voir comment je peux vous accompagner.",
     meta_title: "Pour les particuliers — L'Encre Humaine",
+    meta_description:
+      "Reconversion, perte de sens, évolution de carrière ou recherche d'emploi : un accompagnement pour retrouver de la clarté et avancer dans une direction qui a du sens.",
   });
 
   await setSingleton("resources_page", {

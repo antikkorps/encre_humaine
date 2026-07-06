@@ -2711,7 +2711,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 2
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -2751,7 +2751,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 6
       special:
         - file
       translations: null
@@ -2793,7 +2793,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 14
       special:
         - alias
         - no-data
@@ -2818,7 +2818,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -2858,7 +2858,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -2898,7 +2898,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -2938,7 +2938,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -2979,7 +2979,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 22
       special:
         - alias
         - no-data
@@ -3004,7 +3004,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -3044,7 +3044,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -3084,7 +3084,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -3124,7 +3124,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -3164,7 +3164,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -3204,7 +3204,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 41
       special:
         - m2o
       translations: null
@@ -3245,7 +3245,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 45
       special: null
       translations: null
       validation: null
@@ -3286,7 +3286,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 47
       special:
         - alias
         - no-data
@@ -3311,7 +3311,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -3351,7 +3351,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -3391,7 +3391,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 50
       special:
         - file
       translations: null
@@ -3432,7 +3432,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 51
       special:
         - cast-boolean
       translations: null
@@ -3448,6 +3448,1165 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: accroche_subtitle
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_subtitle
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Sous-titre empathique sous le h1
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_subtitle
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: accroche_signature
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_signature
+      group: null
+      hidden: false
+      interface: input
+      note: Phrase signature
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_signature
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: accroche_cta_label
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: CTA d'accroche → /contact
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_cta_label
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: outcomes_divider
+    type: alias
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: outcomes_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Ce que vous venez chercher
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: b2c_hub_page
+    field: outcomes_title
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: outcomes_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: outcomes_title
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: outcomes_intro
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: outcomes_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: outcomes_intro
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: outcomes
+    type: json
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: outcomes
+      group: null
+      hidden: false
+      interface: list
+      note: Bénéfices (titre + corps)
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: outcomes
+      table: b2c_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situations_divider
+    type: alias
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situations_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Deux situations, deux accompagnements
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: b2c_hub_page
+    field: situations_title
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situations_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situations_title
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situations_intro
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situations_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situations_intro
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situation_a_audience
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_audience
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Pour qui ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_audience
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situation_a_items
+    type: json
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_items
+      group: null
+      hidden: false
+      interface: list
+      note: « Ce que nous travaillons » (liste)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_items
+      table: b2c_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situation_a_result
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Résultat »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_result
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situation_b_audience
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_audience
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Pour qui ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_audience
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situation_b_items
+    type: json
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_items
+      group: null
+      hidden: false
+      interface: list
+      note: « Ce que nous travaillons » (liste)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_items
+      table: b2c_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: situation_b_result
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Résultat »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_result
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: how_i_work_divider
+    type: alias
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: how_i_work_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Ma façon d'accompagner
+      readonly: false
+      required: false
+      searchable: true
+      sort: 30
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: b2c_hub_page
+    field: how_i_work_title
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: how_i_work_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: how_i_work_title
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: how_i_work_signature
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: how_i_work_signature
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Encadré signature (facultatif)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: how_i_work_signature
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: why_different_divider
+    type: alias
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_different_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Pourquoi c'est différent
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: b2c_hub_page
+    field: why_different_title
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_different_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 35
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: why_different_title
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: why_different_body
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_different_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: Texte narratif (liste possible)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 36
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: why_different_body
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: format_divider
+    type: alias
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: format_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Comment se déroule l'accompagnement
+      readonly: false
+      required: false
+      searchable: true
+      sort: 37
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: b2c_hub_page
+    field: format_title
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: format_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 38
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: format_title
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: format_items
+    type: json
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: format_items
+      group: null
+      hidden: false
+      interface: list
+      note: Format (visio, rythme…)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 39
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: format_items
+      table: b2c_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: format_body
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: format_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 40
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: format_body
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: cta_divider
+    type: alias
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Appel à l'action
+      readonly: false
+      required: false
+      searchable: true
+      sort: 42
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: b2c_hub_page
+    field: cta_title
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 43
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_title
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: cta_body
+    type: text
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 44
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_body
+      table: b2c_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: b2c_hub_page
+    field: cta_subtext
+    type: string
+    meta:
+      collection: b2c_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_subtext
+      group: null
+      hidden: false
+      interface: input
+      note: Sous-texte rassurant sous le bouton
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 46
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_subtext
+      table: b2c_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false

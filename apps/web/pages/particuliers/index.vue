@@ -2,7 +2,8 @@
 // Hub Particuliers (B2C) — docs/04-particuliers-hub.md. Contenu depuis
 // `b2c_hub_page` + faq_items (scope=b2c) + témoignage b2c, via l'endpoint
 // serveur caché `/api/content/b2c-hub` (rich text déjà assaini serveur).
-// Ton empathique, accent orange. Sections vides masquées ; échec → message sobre.
+// Ton empathique, accent orange. 9 sections ; sections vides masquées ;
+// échec → message sobre (panne transitoire ≠ page inexistante).
 const { data: content, error } = await useFetch("/api/content/b2c-hub", {
   query: usePreviewQuery(),
 });
@@ -23,11 +24,11 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Accroche empathique (h1) -->
+    <!-- 1. Accroche empathique (h1 + sous-titre) -->
     <PageHero
       :title="heading"
       eyebrow="Particuliers"
-      :body="content?.accrocheBody ?? undefined"
+      :body="content?.accrocheSubtitle ?? undefined"
       variant="orange"
     />
 
@@ -56,9 +57,64 @@ useSeoMeta({
         />
       </section>
 
-      <!-- 2. Deux situations, deux offres -->
-      <section v-if="content.situations.length" class="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading title="Où en êtes-vous ?" eyebrow="Accompagnement" />
+      <!-- Texte d'accroche + signature + CTA -->
+      <section
+        v-if="content.accrocheBody || content.accrocheSignature || content.accrocheCtaLabel"
+        v-reveal
+        class="mx-auto max-w-3xl px-4 py-16 text-center"
+      >
+        <p
+          v-if="content.accrocheBody"
+          class="whitespace-pre-line text-lg leading-relaxed text-ink/75"
+        >
+          {{ content.accrocheBody }}
+        </p>
+        <p
+          v-if="content.accrocheSignature"
+          class="mt-8 font-display text-2xl font-semibold text-orange-600"
+        >
+          {{ content.accrocheSignature }}
+        </p>
+        <NuxtLink
+          v-if="content.accrocheCtaLabel"
+          to="/contact"
+          class="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+        >
+          {{ content.accrocheCtaLabel }}
+          <span aria-hidden="true">→</span>
+        </NuxtLink>
+      </section>
+
+      <!-- 2. Ce que vous venez chercher (bénéfices) -->
+      <section v-if="content.outcomes.length" v-reveal class="bg-orange-50">
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.outcomesTitle || 'Ce que vous venez chercher'"
+            :subtitle="content.outcomesIntro ?? undefined"
+            align="center"
+          />
+          <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <li
+              v-for="(outcome, i) in content.outcomes"
+              :key="i"
+              class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
+            >
+              <h3 v-if="outcome.title" class="font-display text-lg font-semibold text-ink">
+                {{ outcome.title }}
+              </h3>
+              <p v-if="outcome.body" class="mt-2 leading-relaxed text-ink/65">{{ outcome.body }}</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3. Deux situations, deux accompagnements (cartes détaillées) -->
+      <section v-if="content.situations.length" v-reveal class="mx-auto max-w-6xl px-4 py-20">
+        <SectionHeading
+          :title="content.situationsTitle || 'Où en êtes-vous ?'"
+          :subtitle="content.situationsIntro ?? undefined"
+          eyebrow="Accompagnement"
+        />
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <article
             v-for="(situation, i) in content.situations"
@@ -67,8 +123,42 @@ useSeoMeta({
           >
             <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-orange-400"></span>
             <h2 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h2>
-            <p v-if="situation.body" class="mt-3 flex-1 whitespace-pre-line leading-relaxed text-ink/65">
+            <p
+              v-if="situation.body"
+              class="mt-3 whitespace-pre-line leading-relaxed text-ink/65"
+            >
               {{ situation.body }}
+            </p>
+            <div v-if="situation.audience" class="mt-5">
+              <p class="text-xs font-semibold uppercase tracking-wide text-orange-600">Pour qui ?</p>
+              <p class="mt-1 whitespace-pre-line leading-relaxed text-ink/70">
+                {{ situation.audience }}
+              </p>
+            </div>
+            <div v-if="situation.items.length" class="mt-5">
+              <p class="text-xs font-semibold uppercase tracking-wide text-orange-600">
+                Ce que nous travaillons
+              </p>
+              <ul class="mt-2 space-y-2">
+                <li
+                  v-for="(item, j) in situation.items"
+                  :key="j"
+                  class="flex items-start gap-2.5 text-ink/75"
+                >
+                  <span
+                    class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-orange-100 text-xs font-bold text-orange-700"
+                    aria-hidden="true"
+                    >✓</span
+                  >
+                  <span>{{ item }}</span>
+                </li>
+              </ul>
+            </div>
+            <p
+              v-if="situation.result"
+              class="mt-5 rounded-2xl bg-orange-50 p-4 text-sm leading-relaxed text-ink/75"
+            >
+              <span class="font-semibold text-orange-700">Résultat — </span>{{ situation.result }}
             </p>
             <NuxtLink
               v-if="situation.ctaLabel"
@@ -82,25 +172,69 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 3. Comment je travaille (rich text assaini) -->
-      <section v-if="content.howIWorkHtml" class="bg-teal-50">
+      <!-- 4. Ma façon d'accompagner (rich text assaini + encadré signature) -->
+      <section
+        v-if="content.howIWorkHtml || content.howIWorkSignature"
+        v-reveal
+        class="bg-teal-50"
+      >
         <div class="mx-auto max-w-3xl px-4 py-20">
-          <SectionHeading title="Comment je travaille" />
-          <RichText :html="content.howIWorkHtml" class="mt-5" />
+          <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" />
+          <RichText v-if="content.howIWorkHtml" :html="content.howIWorkHtml" class="mt-5" />
+          <aside
+            v-if="content.howIWorkSignature"
+            class="mt-8 rounded-3xl border-l-4 border-orange-300 bg-orange-50 p-6 shadow-soft"
+          >
+            <p class="whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
+              {{ content.howIWorkSignature }}
+            </p>
+          </aside>
         </div>
       </section>
 
-      <!-- 4. Témoignage — masqué si vide -->
+      <!-- 5. Pourquoi cet accompagnement est différent -->
       <section
-        v-if="content.testimonial"
+        v-if="content.whyDifferentHtml"
+        v-reveal
         class="mx-auto max-w-3xl px-4 py-20"
-        aria-label="Témoignage"
       >
-        <TestimonialCard :testimonial="content.testimonial" />
+        <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" />
+        <RichText :html="content.whyDifferentHtml" class="mt-5" />
       </section>
 
-      <!-- 5. FAQ (faq_items scope=b2c) -->
-      <section v-if="content.faq.length" class="bg-paper-2">
+      <!-- 6. Comment se déroule l'accompagnement (format + texte) -->
+      <section
+        v-if="content.formatItems.length || content.formatBody"
+        v-reveal
+        class="bg-paper-2"
+      >
+        <div class="mx-auto max-w-3xl px-4 py-20">
+          <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" />
+          <ul v-if="content.formatItems.length" class="mt-8 space-y-3">
+            <li
+              v-for="(item, i) in content.formatItems"
+              :key="i"
+              class="flex items-start gap-3 text-ink/80"
+            >
+              <span
+                class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-sm font-bold text-orange-700"
+                aria-hidden="true"
+                >✓</span
+              >
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+          <p
+            v-if="content.formatBody"
+            class="mt-8 whitespace-pre-line leading-relaxed text-ink/75"
+          >
+            {{ content.formatBody }}
+          </p>
+        </div>
+      </section>
+
+      <!-- 7. FAQ (faq_items scope=b2c) -->
+      <section v-if="content.faq.length" v-reveal class="bg-orange-50">
         <div class="mx-auto max-w-3xl px-4 py-20">
           <SectionHeading title="Questions fréquentes" align="center" />
           <div class="mt-10">
@@ -109,14 +243,28 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 6. CTA -->
-      <section class="mx-auto max-w-6xl px-4 py-16">
+      <!-- 8. Témoignage — masqué si vide -->
+      <section
+        v-if="content.testimonial"
+        v-reveal
+        class="mx-auto max-w-3xl px-4 py-20"
+        aria-label="Témoignage"
+      >
+        <TestimonialCard :testimonial="content.testimonial" />
+      </section>
+
+      <!-- 9. Appel à l'action -->
+      <section v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <CtaBlock
-          title="Prêt·e à avancer ?"
+          :title="content.ctaTitle || 'Et si vous vous accordiez un espace pour y voir plus clair ?'"
+          :description="content.ctaBody ?? undefined"
           :cta-label="content.ctaLabel"
           to="/contact"
           variant="orange"
         />
+        <p v-if="content.ctaSubtext" class="mt-4 text-center text-sm text-ink/55">
+          {{ content.ctaSubtext }}
+        </p>
       </section>
     </template>
   </div>
