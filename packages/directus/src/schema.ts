@@ -446,6 +446,11 @@ const collections: CollectionDef[] = [
         [{ field: "title" }, { field: "body", interface: "input-multiline" }],
         { note: "La mission inclut (titre + corps)" },
       ),
+      // Un regard / une expérience (optionnel — récit narratif avec listes)
+      f.input("background_title"),
+      f.richtext("background_body", {
+        note: "Récit d'expérience / regard terrain (puces possibles)",
+      }),
       f.input("format_title", {
         note: "Titre de la section format (défaut : « Comment ça se passe »)",
       }),
@@ -453,7 +458,16 @@ const collections: CollectionDef[] = [
       // Pour qui
       f.input("audience_fit_title"),
       f.repeater("audience_fit", [{ field: "text" }], { note: "Pour qui (✓)" }),
+      f.repeater("audience_fit_exclude", [{ field: "text", interface: "input-multiline" }], {
+        note: "Pas pour vous (✗) — optionnel",
+      }),
       f.textarea("audience_fit_conclusion"),
+      // Ce que vous emportez (livrables — optionnel)
+      f.input("takeaways_title"),
+      f.textarea("takeaways_intro"),
+      f.repeater("takeaways", [{ field: "text", interface: "input-multiline" }], {
+        note: "Ce que vous emportez (✓)",
+      }),
       // Témoignage + CTA
       f.m2o("featured_testimonial", "testimonials"),
       f.input("cta_title"),

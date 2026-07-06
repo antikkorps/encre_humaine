@@ -47,11 +47,14 @@ describe("mapOfferContent", () => {
     expect(c.missionTitle).toBeNull();
     expect(c.missionIntro).toBeNull();
     expect(c.missionIncludes).toEqual([]);
+    expect(c.background).toBeNull();
     expect(c.formatTitle).toBeNull();
     expect(c.formatBodyHtml).toBe("");
     expect(c.audienceFitTitle).toBeNull();
     expect(c.audienceFit).toEqual([]);
+    expect(c.audienceFitExclude).toEqual([]);
     expect(c.audienceFitConclusion).toBeNull();
+    expect(c.takeaways).toBeNull();
     expect(c.durationLabel).toBeNull();
     expect(c.priceLabel).toBeNull();
     expect(c.priceNote).toBeNull();
@@ -144,6 +147,56 @@ describe("mapOfferContent", () => {
       bodyHtml: "",
       signature: "x",
     });
+  });
+
+  it("mappe le récit d'expérience (rich-text assaini) ; masqué si titre+corps vides", () => {
+    const c = mapOfferContent(
+      {
+        background_title: "Une expérience du terrain",
+        background_body: "<p>10 ans.</p><ul><li>RH</li></ul>",
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.background).toEqual({
+      title: "Une expérience du terrain",
+      bodyHtml: "clean(<p>10 ans.</p><ul><li>RH</li></ul>)",
+    });
+    // Corps seul suffit (titre facultatif) ; tout vide → null.
+    expect(mapOfferContent({ background_body: "<p>x</p>" }, [], {}, BASE, wrap).background).toEqual(
+      {
+        title: null,
+        bodyHtml: "clean(<p>x</p>)",
+      },
+    );
+    expect(mapOfferContent({ background_title: "" }, [], {}, BASE, wrap).background).toBeNull();
+  });
+
+  it("mappe la liste ✗ « pas pour vous » et les livrables « ce que vous emportez »", () => {
+    const c = mapOfferContent(
+      {
+        audience_fit_exclude: [{ text: "Vous voulez une réponse toute faite" }, { text: "" }],
+        takeaways_title: "Des réponses, mais surtout une direction.",
+        takeaways_intro: "Vous repartez avec :",
+        takeaways: [{ text: "Un plan d'action concret" }, { text: "" }],
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.audienceFitExclude).toEqual(["Vous voulez une réponse toute faite"]);
+    expect(c.takeaways).toEqual({
+      title: "Des réponses, mais surtout une direction.",
+      intro: "Vous repartez avec :",
+      items: ["Un plan d'action concret"],
+    });
+    // Livrables masqués si la liste est vide (titre/intro seuls ne suffisent pas).
+    expect(
+      mapOfferContent({ takeaways_title: "T", takeaways: [] }, [], {}, BASE, wrap).takeaways,
+    ).toBeNull();
   });
 
   it("assainit la FAQ et masque le témoignage non résolu (string)", () => {

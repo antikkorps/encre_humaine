@@ -52,11 +52,17 @@ export interface RawOfferFull {
   mission_title?: string | null;
   mission_intro?: string | null;
   mission_includes?: unknown; // répéteur { title, body }
+  background_title?: string | null;
+  background_body?: string | null; // rich text
   format_title?: string | null;
   format_body?: string | null; // rich text
   audience_fit_title?: string | null;
   audience_fit?: unknown; // répéteur { text }
+  audience_fit_exclude?: unknown; // répéteur { text } (✗)
   audience_fit_conclusion?: string | null;
+  takeaways_title?: string | null;
+  takeaways_intro?: string | null;
+  takeaways?: unknown; // répéteur { text }
   featured_testimonial?: unknown; // m2o testimonials (résolu) ou string
   cta_title?: string | null;
   cta_body?: string | null;
@@ -88,13 +94,18 @@ export interface OfferContent {
   missionTitle: string | null;
   missionIntro: string | null;
   missionIncludes: TitledItem[];
+  /** « Un regard / une expérience » (optionnel) — titre + corps rich text assaini. */
+  background: { title: string | null; bodyHtml: string } | null;
   /** « Comment ça se passe » (optionnel) — titre surchargeable + corps assaini ("" si vide). */
   formatTitle: string | null;
   formatBodyHtml: string;
-  /** « Pour qui » (liste + conclusion). */
+  /** « Pour qui » (liste ✓ + liste ✗ « pas pour vous » + conclusion). */
   audienceFitTitle: string | null;
   audienceFit: string[];
+  audienceFitExclude: string[];
   audienceFitConclusion: string | null;
+  /** « Ce que vous emportez » (livrables) — titre + intro + liste ✓ ; masqué si liste vide. */
+  takeaways: { title: string | null; intro: string | null; items: string[] } | null;
   durationLabel: string | null;
   /** « Investissement » — libellé libre, jamais un montant calculé. */
   priceLabel: string | null;
@@ -145,6 +156,11 @@ export function mapOfferContent(
   const approcheTitle = str(raw.approche_title);
   const approcheBodyHtml = sanitize(raw.approche_body);
   const approcheSignature = str(raw.approche_signature);
+  const backgroundTitle = str(raw.background_title);
+  const backgroundBodyHtml = sanitize(raw.background_body);
+  const takeaways = mapStringList(raw.takeaways);
+  const takeawaysTitle = str(raw.takeaways_title);
+  const takeawaysIntro = str(raw.takeaways_intro);
   return {
     audience: asAudience(raw.audience) ?? null,
     accrocheTitle: str(raw.accroche_title) || null,
@@ -169,11 +185,19 @@ export function mapOfferContent(
     missionTitle: str(raw.mission_title) || null,
     missionIntro: str(raw.mission_intro) || null,
     missionIncludes: mapTitledItems(raw.mission_includes),
+    background:
+      backgroundTitle || backgroundBodyHtml
+        ? { title: backgroundTitle || null, bodyHtml: backgroundBodyHtml }
+        : null,
     formatTitle: str(raw.format_title) || null,
     formatBodyHtml: sanitize(raw.format_body),
     audienceFitTitle: str(raw.audience_fit_title) || null,
     audienceFit: mapStringList(raw.audience_fit),
+    audienceFitExclude: mapStringList(raw.audience_fit_exclude),
     audienceFitConclusion: str(raw.audience_fit_conclusion) || null,
+    takeaways: takeaways.length
+      ? { title: takeawaysTitle || null, intro: takeawaysIntro || null, items: takeaways }
+      : null,
     durationLabel: str(raw.duration_label) || null,
     priceLabel: str(raw.price_label) || null,
     priceNote: str(raw.price_note) || null,
@@ -222,11 +246,17 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "mission_title",
         "mission_intro",
         "mission_includes",
+        "background_title",
+        "background_body",
         "format_title",
         "format_body",
         "audience_fit_title",
         "audience_fit",
+        "audience_fit_exclude",
         "audience_fit_conclusion",
+        "takeaways_title",
+        "takeaways_intro",
+        "takeaways",
         // m2o testimonials : relation vers une vraie collection → sélection imbriquée OK.
         {
           featured_testimonial: [

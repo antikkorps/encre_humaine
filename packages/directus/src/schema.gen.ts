@@ -265,6 +265,12 @@ export interface Offers {
   approche_signature: string | null;
   mission_intro: string | null;
   format_title: string | null;
+  background_title: string | null;
+  background_body: string | null;
+  audience_fit_exclude: unknown | null;
+  takeaways_title: string | null;
+  takeaways_intro: string | null;
+  takeaways: unknown | null;
 }
 
 export interface OrgHubPage {

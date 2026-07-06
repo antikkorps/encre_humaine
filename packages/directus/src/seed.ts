@@ -70,7 +70,9 @@ async function main(): Promise<void> {
     featured: true,
     ...PUB,
   });
-  const tSophie = await upsert("testimonials", "author_name", "Sophie Lambert", {
+  // Témoignage démo B2C — seedé pour l'admin ; non rattaché à une offre tant
+  // qu'Éléonore n'a pas fourni de vrai retour client (offres B2C : testimonial null).
+  await upsert("testimonials", "author_name", "Sophie Lambert", {
     quote:
       "J'étais perdue dans ma reconversion. En quelques séances, j'ai retrouvé un cap clair et la confiance pour avancer.",
     author_title: "En reconversion",
@@ -300,11 +302,17 @@ async function main(): Promise<void> {
     mission_title?: string;
     mission_intro?: string;
     mission_includes?: TB[];
+    background_title?: string;
+    background_body?: string;
     format_title?: string;
     format_body?: string;
     audience_fit_title?: string;
     audience_fit?: { text: string }[];
+    audience_fit_exclude?: { text: string }[];
     audience_fit_conclusion?: string;
+    takeaways_title?: string;
+    takeaways_intro?: string;
+    takeaways?: { text: string }[];
     cta_title?: string;
     cta_body?: string;
     cta_label?: string;
@@ -716,9 +724,159 @@ async function main(): Promise<void> {
       title: "Clarifier & avancer",
       icon: "explore",
       short_description: "Retrouver un cap professionnel clair et un plan d'action réaliste.",
-      duration_label: "4 à 6 séances",
-      price_label: "À partir de 90 € / séance",
-      featured_testimonial: tSophie,
+      // S7 — Format
+      duration_label: "6 séances d'une heure",
+      // S9 — Investissement (« Sur demande » d'Éléonore ; pas de montant publié)
+      price_label: "Sur demande",
+      price_note:
+        "Paiement en 2 ou 3 fois possible.\n\nSéance découverte offerte.\n\nSans engagement après le premier échange.",
+      // S1 — Accroche
+      accroche_title:
+        "Vous n'avez pas besoin d'avoir déjà trouvé la réponse. Vous avez besoin de retrouver de la clarté.",
+      accroche_subtitle:
+        "Questionnement professionnel, reconversion, perte de sens, évolution de carrière, licenciement, envie de changement…\n\n" +
+        "Certaines périodes de la vie professionnelle nous obligent à nous arrêter pour comprendre ce qui se joue réellement.\n\n" +
+        "Et lorsqu'on est directement concerné, il est souvent difficile de prendre du recul seul.",
+      accroche_body:
+        "Vous avez peut-être l'impression de tourner en rond.\n\n" +
+        "De vous poser les mêmes questions sans parvenir à avancer.\n\n" +
+        "Vous hésitez entre rester et partir.\n\n" +
+        "Changer ou continuer.\n\n" +
+        "Explorer une nouvelle voie ou sécuriser celle que vous connaissez déjà.\n\n" +
+        "Dans ces moments-là, la difficulté n'est pas toujours de trouver une solution.\n\n" +
+        "C'est souvent de retrouver suffisamment de clarté pour comprendre ce que vous vivez, ce qui compte réellement pour vous et ce que vous souhaitez construire ensuite.",
+      accroche_signature:
+        "Parce qu'il est plus facile d'avancer quand on comprend enfin où l'on se trouve.",
+      // S2 — Ce que cet accompagnement peut changer (bénéfices)
+      outcomes_title: "Passer du brouillard à une direction plus claire.",
+      outcomes_intro:
+        "Vous n'avez pas besoin de repartir avec un plan de carrière sur dix ans. Vous avez besoin de comprendre ce qui se passe aujourd'hui pour pouvoir décider de la suite.",
+      outcomes: [
+        {
+          title: "Mettre des mots sur ce que vous vivez",
+          body: "Comprendre ce qui génère le doute, la frustration ou l'envie de changement.",
+        },
+        {
+          title: "Relire votre parcours autrement",
+          body: "Identifier les expériences, compétences et motivations qui ont réellement façonné votre trajectoire professionnelle.",
+        },
+        {
+          title: "Retrouver confiance dans vos ressources",
+          body: "Prendre conscience de ce que vous savez faire, de ce que vous apportez et de ce que vous pouvez construire.",
+        },
+        {
+          title: "Explorer des pistes réalistes",
+          body: "Ouvrir le champ des possibles sans perdre de vue votre réalité personnelle, professionnelle ou financière.",
+        },
+        {
+          title: "Reprendre une dynamique d'action",
+          body: "Passer progressivement de la réflexion à des choix concrets et assumés.",
+        },
+      ],
+      // S3 — Derrière le flou, il y a souvent déjà des réponses (récit + signature)
+      approche_title:
+        "Vous n'êtes peut-être pas perdu·e. Vous êtes peut-être à un moment charnière.",
+      approche_body: P(
+        "Lorsqu'une transition professionnelle s'installe, beaucoup de personnes pensent qu'elles doivent repartir de zéro.",
+        "C'est rarement le cas.",
+        "La plupart du temps, les réponses existent déjà en partie.",
+        "Elles sont simplement dispersées dans votre expérience, vos réussites, vos difficultés, vos envies ou vos contraintes.",
+        "L'accompagnement consiste à les rendre plus visibles.",
+        "À relier les éléments entre eux.",
+        "À donner du sens à ce qui paraît encore confus.",
+      ),
+      approche_signature:
+        "Structurer sans déshumaniser.\n\nMême lorsqu'il s'agit d'un parcours individuel, il est possible d'apporter du cadre sans enfermer les choix.",
+      // S4 — Ce que nous travaillons ensemble
+      mission_title:
+        "Un accompagnement de transition professionnelle construit autour de votre réalité.",
+      mission_includes: [
+        {
+          title: "Faire le point sur votre parcours",
+          body: "Comprendre ce que vous avez vécu, appris et construit au fil de vos expériences.",
+        },
+        {
+          title: "Identifier vos ressources",
+          body: "Repérer vos compétences, vos forces, vos moteurs et vos besoins professionnels.",
+        },
+        {
+          title: "Clarifier vos priorités",
+          body: "Faire la différence entre ce que vous souhaitez réellement et ce qui relève des attentes extérieures.",
+        },
+        {
+          title: "Explorer plusieurs scénarios",
+          body: "Construire des pistes d'évolution professionnelle cohérentes avec votre situation.",
+        },
+        {
+          title: "Définir une direction",
+          body: "Transformer les réflexions en choix concrets et progressifs.",
+        },
+        {
+          title: "Construire un plan d'action",
+          body: "Identifier les premières étapes pour avancer de manière réaliste et durable.",
+        },
+      ],
+      // S5 — Une approche à la croisée des parcours et des RH (récit d'expérience)
+      background_title:
+        "Je ne vous accompagne pas seulement avec des outils. Je vous accompagne avec une expérience du terrain.",
+      background_body:
+        P(
+          "Depuis plus de 10 ans, j'évolue dans les domaines de l'insertion professionnelle, de la formation et des ressources humaines.",
+          "J'ai accompagné :",
+        ) +
+        "<ul><li>des personnes en recherche d'emploi ;</li><li>des salariés en reconversion professionnelle ;</li><li>des personnes confrontées à une rupture de parcours ;</li><li>des collaborateurs en évolution de carrière ;</li><li>des organisations qui cherchent à développer les compétences de leurs équipes.</li></ul>" +
+        P("Cette expérience me permet de porter un double regard :") +
+        "<ul><li>celui des parcours professionnels individuels ;</li><li>celui des réalités du marché du travail et des entreprises.</li></ul>" +
+        P(
+          "Mon rôle n'est pas de vous dire quoi faire.",
+          "Mon rôle est de vous aider à comprendre votre situation pour que vos décisions vous appartiennent réellement.",
+        ),
+      // S7 — Le format
+      format_title: "Un accompagnement à votre rythme.",
+      format_body:
+        "<ul><li>6 séances individuelles d'une heure</li><li>En visioconférence</li><li>Rythme personnalisé</li><li>Exercices et réflexions entre les séances</li></ul>" +
+        P(
+          "Certaines personnes retrouvent rapidement de la clarté.",
+          "D'autres ont besoin de davantage de temps pour explorer leur situation.",
+          "Le rythme s'adapte à votre besoin et à l'avancement de votre réflexion.",
+        ),
+      // S6 — Pour qui ? (✓ et ✗)
+      audience_fit_title: "Cet accompagnement est particulièrement adapté si…",
+      audience_fit: [
+        { text: "Vous traversez une période de questionnement professionnel" },
+        { text: "Vous envisagez une reconversion professionnelle" },
+        { text: "Vous avez perdu votre emploi et souhaitez réfléchir à la suite" },
+        { text: "Vous ressentez une perte de sens dans votre activité actuelle" },
+        { text: "Vous avez plusieurs pistes et ne savez pas laquelle explorer" },
+        { text: "Vous souhaitez construire un projet professionnel plus cohérent" },
+        {
+          text: "Vous avez besoin de prendre une décision importante concernant votre avenir professionnel",
+        },
+      ],
+      audience_fit_exclude: [
+        { text: "Vous cherchez simplement à valider une décision déjà prise" },
+        { text: "Vous recherchez une réponse toute faite" },
+        {
+          text: "Vous traversez une souffrance psychologique nécessitant un accompagnement thérapeutique spécialisé",
+        },
+      ],
+      // S8 — Ce que vous emportez avec vous
+      takeaways_title: "Des réponses, mais surtout une direction.",
+      takeaways_intro: "À l'issue de l'accompagnement, vous repartez avec :",
+      takeaways: [
+        { text: "Une meilleure compréhension de votre situation" },
+        { text: "Une vision plus claire de vos besoins professionnels" },
+        { text: "Un projet ou plusieurs scénarios d'évolution réalistes" },
+        { text: "Un plan d'action concret" },
+        { text: "Des outils de réflexion réutilisables par la suite" },
+        { text: "Davantage de confiance dans vos décisions" },
+      ],
+      // CTA final (Éléonore n'en fournit pas ; wording léger au ton du site, à valider)
+      cta_title: "Et si vous vous accordiez un temps pour y voir plus clair ?",
+      cta_label: "Réserver une séance découverte",
+      cta_subtext: "Séance découverte offerte, sans engagement après le premier échange.",
+      // S10 — Témoignage à compléter avec les premiers retours clients
+      featured_testimonial: null,
     },
     {
       slug: "booster-recherche",
@@ -764,6 +922,8 @@ async function main(): Promise<void> {
         { title: "Des livrables actionnables" },
         { title: "Un point de suivi à la fin" },
       ],
+      background_title: o.background_title ?? "",
+      background_body: o.background_body ?? "",
       format_title: o.format_title ?? "",
       format_body:
         o.format_body ??
@@ -776,7 +936,11 @@ async function main(): Promise<void> {
         { text: "Pour vous si vous voulez du concret" },
         { text: "Pas pour vous si vous cherchez une recette magique" },
       ],
+      audience_fit_exclude: o.audience_fit_exclude ?? [],
       audience_fit_conclusion: o.audience_fit_conclusion ?? "",
+      takeaways_title: o.takeaways_title ?? "",
+      takeaways_intro: o.takeaways_intro ?? "",
+      takeaways: o.takeaways ?? [],
       featured_testimonial: o.featured_testimonial,
       cta_title: o.cta_title ?? "",
       cta_body: o.cta_body ?? "",

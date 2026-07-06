@@ -5,16 +5,21 @@
 
 > **Gabarit unique** pour les 5 pages (DRY). Schéma posé en phase 1 ; contenu détaillé rédigé en phase 2. Les routes et le gabarit existent dès la phase 1 pour ne pas refondre la nav.
 
-## Sections (ordre, champs `offers`)
-1. **Accroche** — `accroche_title` + `accroche_body`.
-2. **Ce que comprend la mission / Ce qu'on fait ensemble** — `mission_includes` (répéteur).
-3. **(B2B) Comment ça se passe** — étapes (réutilise `method_steps` du hub ou champ dédié) · **(B2C) Le format** — `format_body`.
-4. **Ce que vous en retirez / repartez avec** — `outcomes` (répéteur title/body).
-5. **Pour qui (et pas pour qui)** — `audience_fit` (répéteur).
-6. **Investissement** — `price_label` + `price_note` (ex. acompte 30 %, paiement 2×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
-7. **FAQ** — `faq` (M2M `faq_items` ou filtre par scope).
-8. **Témoignage** — `featured_testimonial` ; masqué si vide.
-9. **CTA** — `cta_label` → `/contact` (ou prise de RDV pour B2C : séance découverte).
+## Sections (ordre de rendu, champs `offers`)
+Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en remplit qu'une partie).
+1. **Accroche** — `accroche_title` + `accroche_subtitle` (hero) + `accroche_body` + `accroche_signature` + CTA (`cta_label`).
+2. **Ce que ça change (bénéfices)** — `outcomes_title` / `_intro` / `outcomes` (répéteur title/body).
+3. **Ce que je vois souvent (contexte)** — `context_title` / `context_items` / `context_conclusion`.
+4. **Une approche qui relie** — `approche_title` / `approche_body` (rich text) / `approche_signature` (encadré).
+5. **Ce que comprend la mission / Ce qu'on fait ensemble** — `mission_title` / `mission_intro` / `mission_includes`.
+6. **Un regard / une expérience** (optionnel) — `background_title` / `background_body` (rich text, listes possibles). *Récit terrain, surtout B2C.*
+7. **Comment ça se passe / Le format** — `format_title` / `format_body` (rich text).
+8. **Pour qui (✓) et pas pour vous (✗)** — `audience_fit` (✓) + `audience_fit_exclude` (✗, optionnel) + `audience_fit_conclusion`.
+9. **Ce que vous emportez** (optionnel) — `takeaways_title` / `_intro` / `takeaways` (répéteur, ✓).
+10. **Investissement** — `price_label` + `price_note` (ex. paiement 2-3×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
+11. **FAQ** — `faq_items` filtrés par scope (`FAQ_SCOPE_BY_SLUG` + `general`).
+12. **Témoignage** — `featured_testimonial` ; masqué si vide.
+13. **CTA final** — `cta_title` / `cta_body` / `cta_label` → `/contact`.
 
 ## Renvois croisés (bonne pratique du brief)
 - `booster-recherche` → encart « Pas encore sûr de votre cap ? Commencez par *Clarifier & Avancer* ».

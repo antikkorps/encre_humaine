@@ -9008,7 +9008,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 30
       special:
         - cast-json
       translations: null
@@ -9049,7 +9049,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -9089,7 +9089,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 30
+      sort: 36
       special:
         - m2o
       translations: null
@@ -9130,7 +9130,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 33
+      sort: 39
       special: null
       translations: null
       validation: null
@@ -9171,7 +9171,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 35
+      sort: 41
       special:
         - alias
         - no-data
@@ -9196,7 +9196,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 36
+      sort: 42
       special: null
       translations: null
       validation: null
@@ -9236,7 +9236,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 37
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -9276,7 +9276,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 44
       special:
         - file
       translations: null
@@ -9317,7 +9317,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 45
       special:
         - cast-boolean
       translations: null
@@ -9373,7 +9373,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 46
       special: null
       translations: null
       validation: null
@@ -9413,7 +9413,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 41
+      sort: 47
       special: null
       translations: null
       validation: null
@@ -9453,7 +9453,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 42
+      sort: 48
       special:
         - date-created
       translations: null
@@ -9494,7 +9494,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 43
+      sort: 49
       special:
         - date-updated
       translations: null
@@ -9535,7 +9535,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 44
+      sort: 50
       special:
         - user-created
       translations: null
@@ -9576,7 +9576,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 45
+      sort: 51
       special:
         - user-updated
       translations: null
@@ -10009,7 +10009,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -10049,7 +10049,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -10089,7 +10089,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 31
+      sort: 37
       special: null
       translations: null
       validation: null
@@ -10129,7 +10129,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 32
+      sort: 38
       special: null
       translations: null
       validation: null
@@ -10169,7 +10169,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 34
+      sort: 40
       special: null
       translations: null
       validation: null
@@ -10369,7 +10369,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 27
       special: null
       translations: null
       validation: null
@@ -10381,6 +10381,264 @@ fields:
       data_type: character varying
       default_value: null
       max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: background_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: background_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: background_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: background_body
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: background_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: Récit d'expérience / regard terrain (puces possibles)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: background_body
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: audience_fit_exclude
+    type: json
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: audience_fit_exclude
+      group: null
+      hidden: false
+      interface: list
+      note: Pas pour vous (✗) — optionnel
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: audience_fit_exclude
+      table: offers
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: takeaways_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: takeaways_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: takeaways_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: takeaways_intro
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: takeaways_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: takeaways_intro
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: takeaways
+    type: json
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: takeaways
+      group: null
+      hidden: false
+      interface: list
+      note: Ce que vous emportez (✓)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 35
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: takeaways
+      table: offers
+      data_type: json
+      default_value: null
+      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: true

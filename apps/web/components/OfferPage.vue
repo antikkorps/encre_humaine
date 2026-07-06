@@ -207,15 +207,25 @@ useSchemaOrg([
       </div>
     </section>
 
+    <!-- 4bis. Un regard / une expérience (optionnel) — narratif rich text -->
+    <section v-if="content.background" v-reveal class="mx-auto max-w-3xl px-4 py-20">
+      <SectionHeading :title="content.background.title || 'Mon expérience'" />
+      <RichText
+        v-if="content.background.bodyHtml"
+        :html="content.background.bodyHtml"
+        class="mt-5"
+      />
+    </section>
+
     <!-- 5. Comment ça se passe (optionnel) — rich text assaini -->
     <section v-if="content.formatBodyHtml" v-reveal class="mx-auto max-w-3xl px-4 py-20">
       <SectionHeading :title="content.formatTitle || formatHeading" />
       <RichText :html="content.formatBodyHtml" class="mt-5" />
     </section>
 
-    <!-- 6. Pour qui -->
+    <!-- 6. Pour qui (✓) + Pas pour vous (✗) -->
     <section
-      v-if="content.audienceFit.length || content.audienceFitConclusion"
+      v-if="content.audienceFit.length || content.audienceFitExclude.length || content.audienceFitConclusion"
       v-reveal
       class="bg-teal-50"
     >
@@ -236,6 +246,25 @@ useSchemaOrg([
             <span>{{ item }}</span>
           </li>
         </ul>
+        <template v-if="content.audienceFitExclude.length">
+          <p class="mt-10 font-display font-semibold text-ink">
+            Cet accompagnement n'est probablement pas adapté si…
+          </p>
+          <ul class="mt-4 space-y-3">
+            <li
+              v-for="(item, i) in content.audienceFitExclude"
+              :key="i"
+              class="flex items-start gap-3 text-ink/60"
+            >
+              <span
+                class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-ink/5 text-sm font-bold text-ink/50"
+                aria-hidden="true"
+                >✗</span
+              >
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </template>
         <p
           v-if="content.audienceFitConclusion"
           class="mt-8 whitespace-pre-line leading-relaxed text-ink/80"
@@ -243,6 +272,29 @@ useSchemaOrg([
           {{ content.audienceFitConclusion }}
         </p>
       </div>
+    </section>
+
+    <!-- 6bis. Ce que vous emportez (livrables, ✓) — masqué si vide -->
+    <section v-if="content.takeaways" v-reveal class="mx-auto max-w-3xl px-4 py-20">
+      <SectionHeading
+        :title="content.takeaways.title || 'Ce que vous emportez'"
+        :subtitle="content.takeaways.intro ?? undefined"
+      />
+      <ul class="mt-8 space-y-3">
+        <li
+          v-for="(item, i) in content.takeaways.items"
+          :key="i"
+          class="flex items-start gap-3 text-ink/80"
+        >
+          <span
+            class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full text-sm font-bold"
+            :class="theme.chip"
+            aria-hidden="true"
+            >✓</span
+          >
+          <span>{{ item }}</span>
+        </li>
+      </ul>
     </section>
 
     <!-- 7. Investissement — libellé libre + mention franchise en base (293 B) -->
