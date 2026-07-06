@@ -243,14 +243,21 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 8. Témoignage — masqué si vide -->
+      <!-- 8. Témoignages (centralisés, audience=particulier) — masqué si vide -->
       <section
-        v-if="content.testimonial"
+        v-if="content.testimonials.length"
         v-reveal
-        class="mx-auto max-w-3xl px-4 py-20"
-        aria-label="Témoignage"
+        class="mx-auto max-w-5xl px-4 py-20"
+        aria-label="Témoignages"
       >
-        <TestimonialCard :testimonial="content.testimonial" />
+        <SectionHeading title="Ce qu'en disent les personnes accompagnées" align="center" />
+        <div class="mt-10 grid gap-6 md:grid-cols-2">
+          <TestimonialCard
+            v-for="(testimonial, i) in content.testimonials"
+            :key="i"
+            :testimonial="testimonial"
+          />
+        </div>
       </section>
 
       <!-- 9. Appel à l'action -->

@@ -338,9 +338,21 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 9. Témoignage — masqué si vide -->
-    <section v-if="content.testimonial" v-reveal class="mx-auto max-w-3xl px-4 py-20" aria-label="Témoignage">
-      <TestimonialCard :testimonial="content.testimonial" />
+    <!-- 9. Témoignages (centralisés par audience de l'offre) — masqué si vide -->
+    <section
+      v-if="content.testimonials.length"
+      v-reveal
+      class="mx-auto max-w-5xl px-4 py-20"
+      aria-label="Témoignages"
+    >
+      <SectionHeading title="Ce qu'en disent les personnes accompagnées" align="center" />
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <TestimonialCard
+          v-for="(testimonial, i) in content.testimonials"
+          :key="i"
+          :testimonial="testimonial"
+        />
+      </div>
     </section>
 
     <!-- 10. CTA final → contact (bandeau marine) -->

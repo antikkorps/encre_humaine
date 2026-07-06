@@ -14,6 +14,8 @@ import {
   type NumberedStep,
   type RawSiteDefaults,
   str,
+  TESTIMONIAL_FIELDS,
+  TESTIMONIAL_SORT,
   type TitledItem,
 } from "./_shared";
 
@@ -206,9 +208,9 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
     client.request(
       readItems("testimonials", {
         filter: { status: { _eq: "published" }, audience: { _eq: "organisation" } },
-        sort: ["sort"],
+        sort: [...TESTIMONIAL_SORT],
         limit: -1,
-        fields: ["quote", "author_name", "author_title", "company", "context", "audience"],
+        fields: [...TESTIMONIAL_FIELDS],
       }),
     ),
     client.request(

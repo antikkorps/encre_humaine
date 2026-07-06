@@ -18,7 +18,7 @@ Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en r
 9. **Ce que vous emportez** (optionnel) — `takeaways_title` / `_intro` / `takeaways` (répéteur, ✓).
 10. **Investissement** — `price_label` + `price_note` (ex. paiement 2-3×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
 11. **FAQ** — `faq_items` filtrés par scope (`FAQ_SCOPE_BY_SLUG` + `general`).
-12. **Témoignage** — `featured_testimonial` ; masqué si vide.
+12. **Témoignages** — **centralisés** : liste `testimonials` filtrée par `audience` de l'offre (B2B → organisation, B2C → particulier), vedettes d'abord (`-featured, sort`) ; masqué si vide. (Plus de pin M2O par offre — voir `04` §Centralisation.)
 13. **CTA final** — `cta_title` / `cta_body` / `cta_label` → `/contact`.
 
 ## Mise en forme (éditoriale — navy + or)

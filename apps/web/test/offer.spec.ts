@@ -35,7 +35,7 @@ describe("faqScopesForSlug", () => {
 
 describe("mapOfferContent", () => {
   it("offre minimale : sections vides masquées, audience nulle, CTA replié", () => {
-    const c = mapOfferContent({}, [], {}, BASE, wrap);
+    const c = mapOfferContent({}, [], [], {}, BASE, wrap);
     expect(c.audience).toBeNull();
     expect(c.title).toBeNull();
     expect(c.accrocheTitle).toBeNull();
@@ -62,7 +62,7 @@ describe("mapOfferContent", () => {
     expect(c.priceLabel).toBeNull();
     expect(c.priceNote).toBeNull();
     expect(c.faq).toEqual([]);
-    expect(c.testimonial).toBeNull();
+    expect(c.testimonials).toEqual([]);
     expect(c.ctaTitle).toBeNull();
     expect(c.ctaBody).toBeNull();
     expect(c.ctaLabel).toBe("Prendre rendez-vous");
@@ -70,13 +70,13 @@ describe("mapOfferContent", () => {
   });
 
   it("borne l'audience (valide conservée, invalide → null)", () => {
-    expect(mapOfferContent({ audience: "organisation" }, [], {}, BASE, wrap).audience).toBe(
+    expect(mapOfferContent({ audience: "organisation" }, [], [], {}, BASE, wrap).audience).toBe(
       "organisation",
     );
-    expect(mapOfferContent({ audience: "particulier" }, [], {}, BASE, wrap).audience).toBe(
+    expect(mapOfferContent({ audience: "particulier" }, [], [], {}, BASE, wrap).audience).toBe(
       "particulier",
     );
-    expect(mapOfferContent({ audience: "autre" }, [], {}, BASE, wrap).audience).toBeNull();
+    expect(mapOfferContent({ audience: "autre" }, [], [], {}, BASE, wrap).audience).toBeNull();
   });
 
   it("assainit format_body via le sanitizer injecté ; titre format & intro mission surchargeables", () => {
@@ -86,6 +86,7 @@ describe("mapOfferContent", () => {
         format_title: "Le déroulé",
         mission_intro: "Sur mesure.",
       },
+      [],
       [],
       {},
       BASE,
@@ -113,6 +114,7 @@ describe("mapOfferContent", () => {
         context_conclusion: "L'audit remet de la lecture.",
       },
       [],
+      [],
       {},
       BASE,
       wrap,
@@ -137,6 +139,7 @@ describe("mapOfferContent", () => {
         approche_signature: "Structurer sans déshumaniser.",
       },
       [],
+      [],
       {},
       BASE,
       wrap,
@@ -147,7 +150,7 @@ describe("mapOfferContent", () => {
       signature: "Structurer sans déshumaniser.",
     });
     // Signature seule suffit à afficher la section (titre/corps facultatifs).
-    expect(mapOfferContent({ approche_signature: "x" }, [], {}, BASE, wrap).approche).toEqual({
+    expect(mapOfferContent({ approche_signature: "x" }, [], [], {}, BASE, wrap).approche).toEqual({
       title: null,
       bodyHtml: "",
       signature: "x",
@@ -161,6 +164,7 @@ describe("mapOfferContent", () => {
         background_body: "<p>10 ans.</p><ul><li>RH</li></ul>",
       },
       [],
+      [],
       {},
       BASE,
       wrap,
@@ -170,13 +174,13 @@ describe("mapOfferContent", () => {
       bodyHtml: "clean(<p>10 ans.</p><ul><li>RH</li></ul>)",
     });
     // Corps seul suffit (titre facultatif) ; tout vide → null.
-    expect(mapOfferContent({ background_body: "<p>x</p>" }, [], {}, BASE, wrap).background).toEqual(
-      {
-        title: null,
-        bodyHtml: "clean(<p>x</p>)",
-      },
-    );
-    expect(mapOfferContent({ background_title: "" }, [], {}, BASE, wrap).background).toBeNull();
+    expect(
+      mapOfferContent({ background_body: "<p>x</p>" }, [], [], {}, BASE, wrap).background,
+    ).toEqual({
+      title: null,
+      bodyHtml: "clean(<p>x</p>)",
+    });
+    expect(mapOfferContent({ background_title: "" }, [], [], {}, BASE, wrap).background).toBeNull();
   });
 
   it("mappe la liste ✗ « pas pour vous » et les livrables « ce que vous emportez »", () => {
@@ -187,6 +191,7 @@ describe("mapOfferContent", () => {
         takeaways_intro: "Vous repartez avec :",
         takeaways: [{ text: "Un plan d'action concret" }, { text: "" }],
       },
+      [],
       [],
       {},
       BASE,
@@ -200,14 +205,15 @@ describe("mapOfferContent", () => {
     });
     // Livrables masqués si la liste est vide (titre/intro seuls ne suffisent pas).
     expect(
-      mapOfferContent({ takeaways_title: "T", takeaways: [] }, [], {}, BASE, wrap).takeaways,
+      mapOfferContent({ takeaways_title: "T", takeaways: [] }, [], [], {}, BASE, wrap).takeaways,
     ).toBeNull();
   });
 
-  it("assainit la FAQ et masque le témoignage non résolu (string)", () => {
+  it("assainit la FAQ (rich text) et mappe les témoignages centralisés (liste)", () => {
     const c = mapOfferContent(
-      { featured_testimonial: "uuid-non-resolu" },
+      {},
       [{ question: "Combien de temps ?", answer: "<p>4 semaines.</p>" }],
+      [{ quote: "Décisif.", author_name: "Marie", audience: "organisation" }, { quote: "" }],
       {},
       BASE,
       wrap,
@@ -215,21 +221,13 @@ describe("mapOfferContent", () => {
     expect(c.faq).toEqual([
       { question: "Combien de temps ?", answer: "clean(<p>4 semaines.</p>)" },
     ]);
-    expect(c.testimonial).toBeNull();
-  });
-
-  it("mappe le témoignage vedette résolu", () => {
-    const c = mapOfferContent(
-      {
-        featured_testimonial: { quote: "Décisif.", author_name: "Marie", audience: "organisation" },
-      },
-      [],
-      {},
-      BASE,
-      wrap,
-    );
-    expect(c.testimonial?.quote).toBe("Décisif.");
-    expect(c.testimonial?.authorName).toBe("Marie");
+    // liste filtrée par audience en amont ; entrées sans citation exclues
+    expect(c.testimonials).toHaveLength(1);
+    expect(c.testimonials[0]).toMatchObject({
+      quote: "Décisif.",
+      authorName: "Marie",
+      audience: "organisation",
+    });
   });
 
   it("mappe accroche, CTA, prix/durée et le SEO (fallback site_settings)", () => {
@@ -250,6 +248,7 @@ describe("mapOfferContent", () => {
         cta_subtext: "30 min sans engagement.",
         meta_title: "",
       },
+      [],
       [],
       { brand_name: "L'Encre Humaine", default_meta_description: "Conseil RH." },
       BASE,

@@ -8,10 +8,12 @@ import {
   mapPhoto,
   mapSeo,
   mapStringList,
-  mapTestimonialItem,
+  mapTestimonials,
   mapTitledItems,
   type RawSiteDefaults,
   str,
+  TESTIMONIAL_FIELDS,
+  TESTIMONIAL_SORT,
   type TitledItem,
 } from "./_shared";
 
@@ -60,7 +62,6 @@ export interface RawB2cHub {
   format_title?: string | null;
   format_items?: unknown; // répéteur { text }
   format_body?: string | null;
-  testimonial?: unknown; // M2O testimonials (objet résolu ou string)
   cta_title?: string | null;
   cta_body?: string | null;
   cta_label?: string | null;
@@ -114,7 +115,8 @@ export interface B2cHubContent {
   formatTitle: string | null;
   formatItems: string[];
   formatBody: string | null;
-  testimonial: TestimonialItem | null;
+  /** Témoignages centralisés (audience=particulier, vedettes d'abord) ; masqué si vide. */
+  testimonials: TestimonialItem[];
   faq: FaqItem[];
   /** CTA final ; `ctaLabel` toujours présent (garde-fou d'affichage). */
   ctaTitle: string | null;
@@ -163,6 +165,7 @@ export function mapSituation(
 export function mapB2cHubContent(
   hub: RawB2cHub,
   faq: unknown,
+  testimonialsRaw: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
   sanitize: Sanitize,
@@ -215,7 +218,7 @@ export function mapB2cHubContent(
     formatTitle: str(hub.format_title) || null,
     formatItems: mapStringList(hub.format_items),
     formatBody: str(hub.format_body) || null,
-    testimonial: mapTestimonialItem(hub.testimonial),
+    testimonials: mapTestimonials(testimonialsRaw),
     faq: mapFaqItems(faq, sanitize),
     ctaTitle: str(hub.cta_title) || null,
     ctaBody: str(hub.cta_body) || null,
@@ -230,7 +233,7 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
   const client = directusServer();
   const assetBase = useRuntimeConfig().public.directusPublicUrl;
 
-  const [hub, faq, settings] = await Promise.all([
+  const [hub, faq, testimonials, settings] = await Promise.all([
     client.request(
       readSingleton("b2c_hub_page", {
         fields: [
@@ -267,9 +270,6 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
           "format_title",
           "format_items",
           "format_body",
-          {
-            testimonial: ["quote", "author_name", "author_title", "company", "context", "audience"],
-          },
           "cta_title",
           "cta_body",
           "cta_label",
@@ -290,6 +290,14 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
       }),
     ),
     client.request(
+      readItems("testimonials", {
+        filter: { status: { _eq: "published" }, audience: { _eq: "particulier" } },
+        sort: [...TESTIMONIAL_SORT],
+        limit: -1,
+        fields: [...TESTIMONIAL_FIELDS],
+      }),
+    ),
+    client.request(
       readSingleton("site_settings", {
         fields: ["brand_name", "default_meta_description", "default_og_image"],
       }),
@@ -299,6 +307,7 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
   return mapB2cHubContent(
     hub as unknown as RawB2cHub,
     faq,
+    testimonials,
     settings as unknown as RawSiteDefaults,
     assetBase,
     sanitizeRichText,

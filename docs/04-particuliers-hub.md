@@ -13,7 +13,12 @@ Accueillir avec empathie, orienter vers la bonne offre. **Ton différent du B2B*
 5. **Pourquoi c'est différent** — `why_different_title` + `why_different_body` (rich text, liste possible).
 6. **Comment se déroule l'accompagnement** — `format_title` + `format_items` (puces) + `format_body`.
 7. **FAQ** — `faq_items` (scope=b2c) via `FaqAccordion` (CPF non, c'est pour qui, 1ᵉʳ échange).
-8. **Témoignage** — `testimonial` (M2O b2c) ; **masqué si vide**.
+8. **Témoignages** — **centralisés** : liste `testimonials` filtrée `audience=particulier`, vedettes d'abord (`-featured, sort`) ; **masqué si vide**.
+
+> **Centralisation (2026-07) :** les témoignages ne sont plus pinnés par page (M2O). Chaque surface
+> (org hub, hub particuliers, pages offres) tire la liste `testimonials` filtrée par `audience`
+> (helpers `TESTIMONIAL_FIELDS` / `TESTIMONIAL_SORT` dans `_shared`). Tagger un témoignage `audience` +
+> `featured` suffit pour qu'il apparaisse au bon endroit. L'accueil garde son témoignage vedette (M2O).
 9. **Appel à l'action** — `cta_title` + `cta_body` + `cta_label` + `cta_subtext`, bouton → `/contact`.
 
 Les deux champs rich text (`how_i_work_body`, `why_different_body`) et les réponses FAQ sont **assainis côté serveur** (docs/06 §1). Sections vides **masquées proprement**.

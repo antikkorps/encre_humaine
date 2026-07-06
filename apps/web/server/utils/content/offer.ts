@@ -8,10 +8,12 @@ import {
   mapFaqItems,
   mapSeo,
   mapStringList,
-  mapTestimonialItem,
+  mapTestimonials,
   mapTitledItems,
   type RawSiteDefaults,
   str,
+  TESTIMONIAL_FIELDS,
+  TESTIMONIAL_SORT,
   type TitledItem,
 } from "./_shared";
 
@@ -63,7 +65,6 @@ export interface RawOfferFull {
   takeaways_title?: string | null;
   takeaways_intro?: string | null;
   takeaways?: unknown; // répéteur { text }
-  featured_testimonial?: unknown; // m2o testimonials (résolu) ou string
   cta_title?: string | null;
   cta_body?: string | null;
   cta_label?: string | null;
@@ -113,7 +114,8 @@ export interface OfferContent {
   priceLabel: string | null;
   priceNote: string | null;
   faq: FaqItem[];
-  testimonial: TestimonialItem | null;
+  /** Témoignages centralisés (filtrés par audience de l'offre, vedettes d'abord). */
+  testimonials: TestimonialItem[];
   /** CTA final ; `ctaLabel` toujours présent (garde-fou d'affichage). */
   ctaTitle: string | null;
   ctaBody: string | null;
@@ -150,6 +152,7 @@ export function faqScopesForSlug(slug: string): string[] {
 export function mapOfferContent(
   raw: RawOfferFull,
   faqRaw: unknown,
+  testimonialsRaw: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
   sanitize: Sanitize,
@@ -207,7 +210,7 @@ export function mapOfferContent(
     priceLabel: str(raw.price_label) || null,
     priceNote: str(raw.price_note) || null,
     faq: mapFaqItems(faqRaw, sanitize),
-    testimonial: mapTestimonialItem(raw.featured_testimonial),
+    testimonials: mapTestimonials(testimonialsRaw),
     ctaTitle: str(raw.cta_title) || null,
     ctaBody: str(raw.cta_body) || null,
     ctaLabel: str(raw.cta_label) || "Prendre rendez-vous",
@@ -262,17 +265,6 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "takeaways_title",
         "takeaways_intro",
         "takeaways",
-        // m2o testimonials : relation vers une vraie collection → sélection imbriquée OK.
-        {
-          featured_testimonial: [
-            "quote",
-            "author_name",
-            "author_title",
-            "company",
-            "context",
-            "audience",
-          ],
-        },
         "cta_title",
         "cta_body",
         "cta_label",
@@ -288,13 +280,25 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
 
   if (!offer) return null;
 
-  const [faq, settings] = await Promise.all([
+  // Témoignages centralisés : filtrés sur l'audience de l'offre (B2B → organisation,
+  // B2C → particulier), vedettes d'abord (plus de pin M2O par offre).
+  const offerAudience = str((offer as { audience?: string | null }).audience);
+
+  const [faq, testimonials, settings] = await Promise.all([
     client.request(
       readItems("faq_items", {
         filter: { status: { _eq: "published" }, scope: { _in: faqScopesForSlug(slug) } },
         sort: ["sort"],
         limit: -1,
         fields: ["question", "answer"],
+      }),
+    ),
+    client.request(
+      readItems("testimonials", {
+        filter: { status: { _eq: "published" }, audience: { _eq: offerAudience } },
+        sort: [...TESTIMONIAL_SORT],
+        limit: -1,
+        fields: [...TESTIMONIAL_FIELDS],
       }),
     ),
     client.request(
@@ -307,6 +311,7 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
   return mapOfferContent(
     offer as unknown as RawOfferFull,
     faq,
+    testimonials,
     settings as unknown as RawSiteDefaults,
     assetBase,
     sanitizeRichText,

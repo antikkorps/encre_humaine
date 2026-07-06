@@ -49,7 +49,7 @@ describe("mapSituation", () => {
 
 describe("mapB2cHubContent", () => {
   it("hub vide : sections masquées, CTA replié sur son fallback", () => {
-    const c = mapB2cHubContent({}, [], {}, BASE, wrap);
+    const c = mapB2cHubContent({}, [], [], {}, BASE, wrap);
     expect(c.accrocheTitle).toBeNull();
     expect(c.accrocheCtaLabel).toBeNull();
     expect(c.outcomes).toEqual([]);
@@ -57,7 +57,7 @@ describe("mapB2cHubContent", () => {
     expect(c.howIWorkHtml).toBeNull();
     expect(c.whyDifferentHtml).toBeNull();
     expect(c.formatItems).toEqual([]);
-    expect(c.testimonial).toBeNull();
+    expect(c.testimonials).toEqual([]);
     expect(c.faq).toEqual([]);
     expect(c.ctaLabel).toBe("Réserver une séance découverte gratuite");
   });
@@ -85,13 +85,13 @@ describe("mapB2cHubContent", () => {
         format_title: "À votre rythme",
         format_items: [{ text: "Séances d'une heure" }, { text: "En visio" }],
         format_body: "Pas des devoirs.",
-        testimonial: { quote: "Ça m'a aidée.", author_name: "Léa", audience: "particulier" },
         cta_title: "Un espace pour y voir clair ?",
         cta_body: "Prendre du recul.",
         cta_label: "Réserver",
         cta_subtext: "Échange gratuit.",
       },
       [{ question: "CPF ?", answer: "<p>Non.</p>" }],
+      [{ quote: "Ça m'a aidée.", author_name: "Léa", audience: "particulier" }],
       { brand_name: "L'Encre Humaine" },
       BASE,
       wrap,
@@ -119,8 +119,9 @@ describe("mapB2cHubContent", () => {
     // format
     expect(c.formatItems).toEqual(["Séances d'une heure", "En visio"]);
     expect(c.formatBody).toBe("Pas des devoirs.");
-    // témoignage + FAQ + CTA final
-    expect(c.testimonial).toMatchObject({ quote: "Ça m'a aidée.", audience: "particulier" });
+    // témoignages centralisés (liste, audience=particulier) + FAQ + CTA final
+    expect(c.testimonials).toHaveLength(1);
+    expect(c.testimonials[0]).toMatchObject({ quote: "Ça m'a aidée.", audience: "particulier" });
     expect(c.faq).toEqual([{ question: "CPF ?", answer: "clean(<p>Non.</p>)" }]);
     expect(c.ctaTitle).toBe("Un espace pour y voir clair ?");
     expect(c.ctaBody).toBe("Prendre du recul.");
