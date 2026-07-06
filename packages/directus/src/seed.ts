@@ -264,6 +264,76 @@ async function main(): Promise<void> {
       ),
       scope: "managers",
     },
+    // Booster sa recherche — FAQ dédiée (scope propre pour ne pas fuiter sur le hub / clarifier)
+    {
+      q: "Est-ce que cet accompagnement garantit de trouver un emploi ?",
+      a: P(
+        "Non.",
+        "Et aucun accompagnement sérieux ne peut le garantir.",
+        "En revanche, il augmente votre lisibilité auprès des recruteurs, la cohérence de votre candidature et l'efficacité de votre stratégie de recherche.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce qu'on revoit uniquement mon CV ?",
+      a: P(
+        "Non.",
+        "Le CV est un support parmi d'autres. Nous travaillons aussi votre positionnement, votre profil LinkedIn, votre stratégie de recherche et votre posture en entretien.",
+        "L'objectif n'est pas d'avoir un « beau CV », mais une recherche d'emploi efficace et cohérente.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Quelle est la différence avec « Clarifier & Avancer » ?",
+      a: P(
+        "Clarifier & Avancer sert à comprendre votre direction professionnelle, explorer vos options et construire un projet.",
+        "Booster sa recherche sert à structurer une recherche déjà définie, rendre votre profil visible et lisible, et optimiser vos candidatures.",
+        "En résumé : Clarifier = comprendre où aller ; Booster = savoir comment y arriver.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce que ça marche si je n'ai pas postulé depuis longtemps ?",
+      a: P(
+        "Oui.",
+        "C'est même un cas fréquent. On reprend ensemble les codes actuels du marché du travail et on reconstruit une stratégie adaptée à votre situation actuelle.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce que vous m'aidez à trouver des offres ?",
+      a: P(
+        "Je ne suis pas un cabinet de recrutement.",
+        "En revanche, je vous aide à mieux cibler les bons postes, activer votre réseau, comprendre où et comment chercher, et rendre vos candidatures plus efficaces.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce que cet accompagnement est adapté à une reconversion ?",
+      a: P(
+        "Oui, si votre projet est déjà clarifié.",
+        "Sinon, il est préférable de commencer par « Clarifier & Avancer », pour éviter de « booster » une direction qui n'est pas encore stable.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce finançable par le CPF ?",
+      a: P(
+        "Non.",
+        "Cet accompagnement n'est pas éligible au CPF.",
+        "Il s'agit d'un accompagnement individuel en stratégie de recherche d'emploi et repositionnement professionnel.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Que se passe-t-il lors de la séance découverte ?",
+      a: P(
+        "On fait un point sur votre situation actuelle, vos candidatures, vos difficultés et vos objectifs.",
+        "Puis je vous indique si cet accompagnement est adapté ou si une autre approche serait plus pertinente.",
+        "Sans engagement.",
+      ),
+      scope: "booster",
+    },
     {
       q: "Intervenez-vous partout en France ?",
       a: P("Oui, à distance, et en présentiel dans la région PACA."),
@@ -884,8 +954,148 @@ async function main(): Promise<void> {
       title: "Booster sa recherche",
       icon: "rocket_launch",
       short_description: "CV, posture et stratégie pour une recherche d'emploi efficace.",
-      duration_label: "3 à 5 séances",
-      price_label: "À partir de 90 € / séance",
+      // S6 — Format
+      duration_label: "4 séances d'1h",
+      // S9 — Investissement
+      price_label: "À partir de 600 € TTC",
+      price_note:
+        "Paiement en 2 fois possible.\n\nSéance découverte offerte.\n\nSans engagement après le premier échange.",
+      // S1 — Accroche
+      accroche_title:
+        "Vous avez un cap professionnel. Mais votre recherche d'emploi ne le reflète pas encore.",
+      accroche_subtitle:
+        "Recherche d'emploi, transition professionnelle, évolution de carrière…\n\n" +
+        "Vous postulez, mais les retours sont rares.\n\n" +
+        "Ou vous décrochez des entretiens, sans transformation derrière.\n\n" +
+        "Vous avez le sentiment de faire « les bonnes choses », sans comprendre ce qui bloque réellement du côté des recruteurs.",
+      accroche_body:
+        "Dans une recherche d'emploi, le problème n'est pas toujours le niveau.\n\n" +
+        "Ni les compétences.\n\n" +
+        "Ni même l'expérience.\n\n" +
+        "Le plus souvent, c'est un décalage de lecture.\n\n" +
+        "Entre ce que vous pensez dire de vous.\n\n" +
+        "Et ce que les recruteurs comprennent réellement.\n\n" +
+        "Cet accompagnement sert à réduire ce décalage.\n\n" +
+        "Pas en « refaisant un CV ».\n\n" +
+        "Mais en reconstruisant une stratégie de recherche lisible, cohérente et efficace.",
+      accroche_signature:
+        "Parce qu'un bon profil ne suffit pas s'il n'est pas lisible par ceux qui le lisent.",
+      // S2 — Ce qui se joue vraiment (ce qui bloque)
+      outcomes_title:
+        "Ce n'est pas seulement votre CV qui est évalué. C'est votre lisibilité professionnelle.",
+      outcomes_intro:
+        "Avec 10 ans d'expérience en insertion professionnelle et en ressources humaines, j'ai vu une constante : les candidats ne sont pas « hors sujet », ils sont souvent mal alignés avec les codes de lecture du marché du travail. Une recherche d'emploi efficace n'est pas une question d'énergie : c'est une question de lisibilité.",
+      outcomes: [
+        {
+          title: "Votre valeur n'est pas immédiatement lisible",
+          body: "Vos compétences existent, mais elles ne ressortent pas clairement dans vos supports.",
+        },
+        {
+          title: "Votre candidature ne raconte pas la bonne histoire",
+          body: "Le CV, LinkedIn et le discours ne sont pas alignés entre eux.",
+        },
+        {
+          title: "Vous ciblez des postes sans stratégie claire",
+          body: "Vous postulez beaucoup, mais sans logique de positionnement.",
+        },
+        {
+          title: "Vous ne parlez pas le langage des recruteurs",
+          body: "Les entreprises ne lisent pas un parcours comme vous le vivez. Elles le lisent en termes de compétences transférables, de signaux de stabilité, de cohérence de trajectoire et d'adéquation poste / profil.",
+        },
+        {
+          title: "Votre posture en entretien ne reflète pas votre valeur",
+          body: "Vous savez faire, mais vous ne le démontrez pas toujours au bon moment.",
+        },
+      ],
+      // S3 — Clarifier vs Booster (renvoi croisé)
+      context_title: "Avant d'optimiser une recherche d'emploi, il faut savoir où on en est.",
+      context_items: [
+        {
+          title: "Clarifier & Avancer",
+          body: "Si vous êtes encore en questionnement. Vous avez besoin de comprendre votre direction, vos envies, vos options.",
+        },
+        {
+          title: "Booster sa recherche",
+          body: "Si votre cap est déjà posé. Vous savez ce que vous cherchez, mais vous avez besoin de le rendre visible, lisible et convaincant pour les recruteurs.",
+        },
+      ],
+      context_conclusion: "Clarifier construit la direction. Booster construit la visibilité.",
+      // S4 — Ce qu'on fait ensemble
+      mission_title: "Transformer votre recherche d'emploi en stratégie lisible.",
+      mission_includes: [
+        {
+          title: "Repositionner votre CV",
+          body: "On ne « refait pas un CV » : on clarifie votre valeur perçue — compétences clés, logique de parcours, éléments différenciants, accroche lisible par un recruteur.",
+        },
+        {
+          title: "Optimiser votre profil LinkedIn",
+          body: "On travaille votre présence comme un outil de visibilité professionnelle : cohérence du parcours, lisibilité immédiate, mots-clés recruteurs (SEO emploi), crédibilité du positionnement.",
+        },
+        {
+          title: "Construire votre pitch professionnel",
+          body: "Une présentation claire, naturelle et structurée de votre profil, compréhensible en 30 secondes par un recruteur.",
+        },
+        {
+          title: "Structurer votre stratégie de recherche d'emploi",
+          body: "On sort du « je postule partout » pour aller vers un ciblage cohérent, une lecture du marché, une priorisation des opportunités et l'activation du réseau.",
+        },
+        {
+          title: "Préparer vos entretiens",
+          body: "On travaille les attentes implicites des recruteurs, les questions pièges, votre posture et la cohérence discours / parcours.",
+        },
+      ],
+      // S5 — La lecture RH des recruteurs (récit d'expérience)
+      background_title: "Ce que les recruteurs lisent vraiment dans une candidature.",
+      background_body:
+        P(
+          "Avec mon expérience en RH, formation et insertion professionnelle, je vous apporte un deuxième regard : celui de ceux qui recrutent.",
+          "Un recruteur ne lit pas un CV comme un récit personnel. Il le lit comme un système de signaux :",
+        ) +
+        "<ul><li>est-ce que ce profil est lisible rapidement ?</li><li>est-ce que le parcours est cohérent ?</li><li>est-ce que le poste est un bon « fit » ?</li><li>est-ce que la personne saura tenir le rôle ?</li></ul>" +
+        P(
+          "Cet accompagnement consiste à traduire votre parcours dans ce langage-là, sans vous dénaturer.",
+          "Structurer sans déshumaniser, même dans une recherche d'emploi.",
+        ),
+      // S6 — Format
+      format_title: "Un travail concret, structuré et opérationnel.",
+      format_body:
+        "<ul><li>4 séances d'1h</li><li>Visioconférence</li><li>Exercices entre les séances</li><li>Relecture et ajustements des supports</li></ul>" +
+        P(
+          "Chaque séance fait avancer un élément concret de votre recherche.",
+          "L'objectif n'est pas de réfléchir plus : c'est de rendre votre recherche plus efficace et plus lisible.",
+        ),
+      // S8 — Pour qui ? (✓ et ✗)
+      audience_fit_title: "Cet accompagnement est fait pour vous si…",
+      audience_fit: [
+        { text: "Vous êtes en recherche active d'emploi" },
+        { text: "Vous avez un cap professionnel défini" },
+        { text: "Vous postulez sans obtenir les résultats attendus" },
+        { text: "Vous voulez changer de poste ou d'environnement" },
+        { text: "Vous reprenez une recherche après une période d'arrêt" },
+      ],
+      audience_fit_exclude: [
+        { text: "Vous n'avez pas encore clarifié votre projet (voir « Clarifier & Avancer »)" },
+        { text: "Vous cherchez uniquement un avis ponctuel sur un CV" },
+      ],
+      // S7 — Vous repartez avec
+      takeaways_title: "Une recherche d'emploi claire, structurée et cohérente.",
+      takeaways: [
+        { text: "Un CV repositionné et lisible" },
+        { text: "Un LinkedIn optimisé pour les recruteurs" },
+        { text: "Un pitch professionnel structuré" },
+        { text: "Une stratégie de recherche claire" },
+        { text: "Une meilleure compréhension du marché du travail" },
+        { text: "Une posture plus confiante en entretien" },
+      ],
+      // S12 — CTA final
+      cta_title:
+        "Et si votre recherche d'emploi devenait enfin lisible pour les bons interlocuteurs ?",
+      cta_body:
+        "Une recherche d'emploi n'est pas un problème de motivation. C'est souvent un problème de lecture et de positionnement.",
+      cta_label: "Réserver une séance découverte",
+      cta_subtext:
+        "30 minutes pour analyser votre situation et voir comment rendre votre recherche plus efficace.",
+      // S10 — Témoignage à compléter
       featured_testimonial: null,
     },
   ];

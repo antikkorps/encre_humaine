@@ -125,15 +125,17 @@ type Sanitize = (html?: string | null) => string;
 
 /**
  * Scope `faq_items` par slug d'offre (docs/02 §5, docs/05). Les choix `scope`
- * (`audit`/`competences`/`managers`/`b2c`/`general`) couvrent les 5 offres ;
- * `general` (transverse) est toujours ajouté. Slug inconnu → seulement `general`.
+ * (`audit`/`competences`/`managers`/`b2c`/`booster`/`general`) couvrent les 5 offres
+ * (clarifier partage le scope `b2c` du hub ; booster a le sien) ; `general`
+ * (transverse) est toujours ajouté. Slug inconnu → seulement `general`.
  */
 export const FAQ_SCOPE_BY_SLUG: Record<string, string> = {
   "audit-rh": "audit",
   "competences-parcours": "competences",
   "managers-equipes": "managers",
   "clarifier-avancer": "b2c",
-  "booster-recherche": "b2c",
+  // booster a sa propre FAQ (S11) : scope dédié pour ne pas fuiter sur le hub b2c / clarifier.
+  "booster-recherche": "booster",
 };
 
 /** Scopes de FAQ à charger pour une offre (spécifique + transverse). */

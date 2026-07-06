@@ -22,7 +22,10 @@ Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en r
 13. **CTA final** — `cta_title` / `cta_body` / `cta_label` → `/contact`.
 
 ## Renvois croisés (bonne pratique du brief)
-- `booster-recherche` → encart « Pas encore sûr de votre cap ? Commencez par *Clarifier & Avancer* ».
+- `booster-recherche` → section « Clarifier vs Booster » (via `context`) + liste ✗ « pas encore clarifié votre projet → *Clarifier & Avancer* ».
+
+## FAQ par scope (`faq_items`)
+Chaque offre tire ses FAQ par `scope` (+ `general`), cf. `FAQ_SCOPE_BY_SLUG` : `audit-rh`→audit, `competences-parcours`→competences, `managers-equipes`→managers, `clarifier-avancer`→b2c (partagé avec le hub Particuliers), `booster-recherche`→**booster** (FAQ dédiée, ne fuit pas sur le hub/clarifier).
 
 ## A11y / SEO
 - `h1` = `accroche_title`. SEO par offre (`meta_*`, `og_image`). Breadcrumb (hub → offre).

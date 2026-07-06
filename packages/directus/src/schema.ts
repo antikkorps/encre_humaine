@@ -25,6 +25,7 @@ const FAQ_SCOPE = [
   { text: "Compétences", value: "competences" },
   { text: "Managers", value: "managers" },
   { text: "Particuliers", value: "b2c" },
+  { text: "Booster recherche", value: "booster" },
   { text: "Général", value: "general" },
 ];
 const ARTICLE_GROUP = [

@@ -20,6 +20,8 @@ describe("faqScopesForSlug", () => {
   it("ajoute toujours « general » au scope spécifique de l'offre", () => {
     expect(faqScopesForSlug("audit-rh")).toEqual(["audit", "general"]);
     expect(faqScopesForSlug("clarifier-avancer")).toEqual(["b2c", "general"]);
+    // booster a sa FAQ dédiée (ne partage pas le scope b2c du hub / de clarifier)
+    expect(faqScopesForSlug("booster-recherche")).toEqual(["booster", "general"]);
   });
 
   it("slug inconnu → seulement « general »", () => {

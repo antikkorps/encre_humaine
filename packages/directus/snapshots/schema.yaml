@@ -5213,6 +5213,8 @@ fields:
             value: managers
           - text: Particuliers
             value: b2c
+          - text: Booster recherche
+            value: booster
           - text: Général
             value: general
       readonly: false
