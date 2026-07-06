@@ -33,8 +33,22 @@ useSchemaOrg([
 
 <template>
   <div>
-    <!-- 1. Accroche (h1 + chapeau) -->
-    <PageHero :title="heading" eyebrow="À propos" variant="neutral" />
+    <!-- 1. Accroche (h1 + chapeau) — hero 2 colonnes : titre à gauche, intro en carte à droite -->
+    <PageHero :title="heading" eyebrow="À propos" variant="neutral">
+      <template v-if="content?.accroche?.bodyHtml" #aside>
+        <div
+          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
+        >
+          <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-teal-100/70" aria-hidden="true"></div>
+          <span
+            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
+          >
+            <Icon name="material-symbols:format-quote" class="h-6 w-6" />
+          </span>
+          <RichText :html="content.accroche.bodyHtml" class="relative mt-5 leading-relaxed [&_p]:text-ink/75" />
+        </div>
+      </template>
+    </PageHero>
 
     <p
       v-if="error"
@@ -45,10 +59,6 @@ useSchemaOrg([
     </p>
 
     <template v-else-if="content">
-      <section v-if="content.accroche?.bodyHtml" v-reveal class="mx-auto max-w-3xl px-4 pt-16">
-        <RichText :html="content.accroche.bodyHtml" />
-      </section>
-
       <!-- 2. Mon parcours (photo gauche / texte droite desktop) -->
       <section v-if="content.story" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <div class="grid items-start gap-10 md:grid-cols-2">
@@ -70,7 +80,7 @@ useSchemaOrg([
               class="aspect-[4/5] w-full rounded-3xl object-cover shadow-lift"
             />
           </div>
-          <div :class="content.story.photo ? '' : 'md:col-span-2 mx-auto max-w-2xl'">
+          <div :class="content.story.photo ? '' : 'md:col-span-2 max-w-3xl'">
             <SectionHeading :title="content.story.title || 'Mon parcours'" eyebrow="Parcours" />
             <RichText :html="content.story.bodyHtml" class="mt-5" />
           </div>
@@ -79,9 +89,11 @@ useSchemaOrg([
 
       <!-- 3. Pourquoi L'Encre Humaine ? -->
       <section v-if="content.why" v-reveal class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-20">
-          <SectionHeading :title="content.why.title || 'Pourquoi L\'Encre Humaine ?'" />
-          <RichText :html="content.why.bodyHtml" class="mt-5" />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="max-w-3xl">
+            <SectionHeading :title="content.why.title || 'Pourquoi L\'Encre Humaine ?'" />
+            <RichText :html="content.why.bodyHtml" class="mt-5" />
+          </div>
         </div>
       </section>
 
@@ -102,7 +114,7 @@ useSchemaOrg([
       <!-- 4. Mes convictions -->
       <section v-if="content.convictions" v-reveal class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.convictions.title || 'Mes convictions'" align="center" />
+          <SectionHeading :title="content.convictions.title || 'Mes convictions'" />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2">
             <li
               v-for="(conviction, i) in content.convictions.items"
@@ -124,15 +136,16 @@ useSchemaOrg([
       </section>
 
       <!-- 5. Ma manière d'accompagner -->
-      <section v-if="content.work" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading :title="content.work.title || 'Comment je travaille'" />
-        <p
-          v-if="content.work.intro"
-          class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
-        >
-          {{ content.work.intro }}
-        </p>
-        <ul v-if="content.work.principles.length" class="mt-8 space-y-6">
+      <section v-if="content.work" v-reveal class="mx-auto max-w-6xl px-4 py-20">
+        <div class="max-w-3xl">
+          <SectionHeading :title="content.work.title || 'Comment je travaille'" />
+          <p
+            v-if="content.work.intro"
+            class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
+          >
+            {{ content.work.intro }}
+          </p>
+          <ul v-if="content.work.principles.length" class="mt-8 space-y-6">
           <li
             v-for="(principle, i) in content.work.principles"
             :key="i"
@@ -146,23 +159,24 @@ useSchemaOrg([
             </p>
           </li>
         </ul>
-        <p
-          v-if="content.work.location"
-          class="mt-8 rounded-2xl bg-teal-50 px-5 py-4 leading-relaxed text-ink/75"
-        >
-          {{ content.work.location }}
-        </p>
+          <p
+            v-if="content.work.location"
+            class="mt-8 rounded-2xl bg-teal-50 px-5 py-4 leading-relaxed text-ink/75"
+          >
+            {{ content.work.location }}
+          </p>
+        </div>
       </section>
 
       <!-- 6. Ce que je ne fais pas -->
       <section v-if="content.whatIDontDo" v-reveal class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-20">
+        <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.whatIDontDo.title || 'Ce que je ne fais pas'" />
-          <ul class="mt-8 space-y-3">
+          <ul class="mt-8 grid gap-3 sm:grid-cols-2">
             <li
               v-for="(item, i) in content.whatIDontDo.items"
               :key="i"
-              class="flex items-start gap-3 text-ink/80"
+              class="flex items-start gap-3 rounded-2xl border border-orange-100 bg-white/60 p-4 text-ink/80"
             >
               <span
                 class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-sm font-bold text-orange-600"

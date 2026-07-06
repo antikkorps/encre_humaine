@@ -331,7 +331,7 @@ useSchemaOrg([
     <!-- 8. FAQ (faq_items par scope) -->
     <section v-if="content.faq.length" v-reveal :class="theme.band">
       <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading title="Questions fréquentes" align="center" />
+        <SectionHeading title="Questions fréquentes" />
         <div class="mt-10">
           <FaqAccordion :items="content.faq" />
         </div>
@@ -345,7 +345,7 @@ useSchemaOrg([
       class="mx-auto max-w-5xl px-4 py-20"
       aria-label="Témoignages"
     >
-      <SectionHeading title="Ce qu'en disent les personnes accompagnées" align="center" />
+      <SectionHeading title="Ce qu'en disent les personnes accompagnées" />
       <div class="mt-10 grid gap-6 md:grid-cols-2">
         <TestimonialCard
           v-for="(testimonial, i) in content.testimonials"

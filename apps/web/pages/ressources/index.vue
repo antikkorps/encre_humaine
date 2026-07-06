@@ -58,12 +58,21 @@ useSeoMeta({
       :body="content?.accrocheBody ?? undefined"
       variant="neutral"
     >
-      <p
-        v-if="content?.heroSignature"
-        class="mx-auto mt-6 max-w-2xl whitespace-pre-line font-display text-lg font-medium text-teal-800"
-      >
-        {{ content.heroSignature }}
-      </p>
+      <template v-if="content?.heroSignature" #aside>
+        <figure
+          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
+        >
+          <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-teal-100/70" aria-hidden="true"></div>
+          <span
+            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
+          >
+            <Icon name="material-symbols:format-quote" class="h-6 w-6" />
+          </span>
+          <p class="relative mt-5 whitespace-pre-line font-display text-xl font-medium leading-relaxed text-ink/80">
+            {{ content.heroSignature }}
+          </p>
+        </figure>
+      </template>
     </PageHero>
 
     <p
@@ -210,7 +219,6 @@ useSeoMeta({
             :title="content.newsletter.name || 'Les Tentacules de L\'Encre Humaine'"
             :subtitle="content.newsletter.subtitle ?? undefined"
             eyebrow="🐙 Newsletter"
-            align="center"
           />
           <div class="mt-10 grid gap-10 md:grid-cols-2">
             <div class="space-y-8">
@@ -257,9 +265,11 @@ useSeoMeta({
       </section>
 
       <!-- 6. Positionnement — masqué si vide -->
-      <section v-if="content.positioning" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading :title="content.positioning.title || 'Une approche terrain'" />
-        <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
+      <section v-if="content.positioning" v-reveal class="mx-auto max-w-6xl px-4 py-20">
+        <div class="max-w-3xl">
+          <SectionHeading :title="content.positioning.title || 'Une approche terrain'" />
+          <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
+        </div>
       </section>
 
       <!-- 7. CTA final → section newsletter -->

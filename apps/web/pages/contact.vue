@@ -24,14 +24,29 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Accroche humaine (h1) + double CTA → section contact -->
+    <!-- 1. Accroche humaine (h1) + double CTA → section contact ; situations en carte aside -->
     <PageHero
       :title="heading"
       eyebrow="Contact"
-      :body="content?.accrocheBody ?? undefined"
       variant="teal"
     >
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <template v-if="content?.accrocheBody" #aside>
+        <figure
+          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
+        >
+          <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-teal-100/70" aria-hidden="true"></div>
+          <span
+            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
+          >
+            <Icon name="material-symbols:forum" class="h-6 w-6" />
+          </span>
+          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
+            {{ content.accrocheBody }}
+          </p>
+        </figure>
+      </template>
+
+      <div class="mt-8 flex flex-wrap gap-3">
         <NuxtLink
           to="#contact"
           class="inline-flex items-center gap-2 rounded-full bg-teal-700 px-7 py-3.5 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5"
@@ -117,7 +132,7 @@ useSeoMeta({
         class="bg-teal-50"
       >
         <div class="mx-auto max-w-5xl px-4 py-20">
-          <SectionHeading title="Comment se déroule le premier échange" align="center" />
+          <SectionHeading title="Comment se déroule le premier échange" />
           <ol
             v-if="content.nextSteps.length"
             class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -143,11 +158,11 @@ useSeoMeta({
           </ol>
           <p
             v-if="content.stepsConclusion"
-            class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center leading-relaxed text-ink/75"
+            class="mt-10 max-w-2xl whitespace-pre-line leading-relaxed text-ink/75"
           >
             {{ content.stepsConclusion }}
           </p>
-          <p v-if="content.responseTimeNote" class="mt-8 text-center text-sm text-ink/60">
+          <p v-if="content.responseTimeNote" class="mt-8 text-sm text-ink/60">
             {{ content.responseTimeNote }}
           </p>
         </div>
@@ -155,7 +170,7 @@ useSeoMeta({
 
       <!-- 4. Vous pouvez me contacter si… (organisations / particuliers) -->
       <section v-if="content.reasons" class="mx-auto max-w-5xl px-4 py-20">
-        <SectionHeading :title="content.reasons.title || 'Vous pouvez me contacter si…'" align="center" />
+        <SectionHeading :title="content.reasons.title || 'Vous pouvez me contacter si…'" />
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <div v-if="content.reasons.org.length" class="rounded-3xl border border-ink/5 bg-white p-8 shadow-soft">
             <p class="font-display text-lg font-bold text-teal-800">Pour les organisations</p>
@@ -187,10 +202,12 @@ useSeoMeta({
       </section>
 
       <!-- 5. FAQ courte (scope=contact) -->
-      <section v-if="content.faq.length" class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading title="Questions fréquentes" align="center" />
-        <div class="mt-10">
-          <FaqAccordion :items="content.faq" />
+      <section v-if="content.faq.length" class="mx-auto max-w-5xl px-4 py-20">
+        <div class="max-w-3xl">
+          <SectionHeading title="Questions fréquentes" />
+          <div class="mt-10">
+            <FaqAccordion :items="content.faq" />
+          </div>
         </div>
       </section>
 
