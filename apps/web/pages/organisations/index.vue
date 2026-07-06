@@ -57,31 +57,30 @@ useSeoMeta({
         />
       </section>
 
-      <!-- Texte d'accroche + phrase signature + CTA -->
-      <section
-        v-if="content.accrocheBody || content.accrocheSignature"
-        v-reveal
-        class="mx-auto max-w-3xl px-4 py-16 text-center"
-      >
-        <p
-          v-if="content.accrocheBody"
-          class="whitespace-pre-line text-lg leading-relaxed text-ink/75"
-        >
+      <!-- Texte d'accroche -->
+      <section v-if="content.accrocheBody" v-reveal class="mx-auto max-w-3xl px-4 pt-16 text-center">
+        <p class="whitespace-pre-line text-lg leading-relaxed text-ink/75">
           {{ content.accrocheBody }}
         </p>
-        <p
-          v-if="content.accrocheSignature"
-          class="mt-8 font-display text-2xl font-semibold text-teal-700"
+      </section>
+
+      <!-- Phrase signature → bandeau marine + CTA doré -->
+      <section v-if="content.accrocheSignature" v-reveal class="mx-auto max-w-6xl px-4 py-14">
+        <div
+          class="flex flex-col gap-6 rounded-3xl bg-teal-900 p-8 shadow-lift sm:flex-row sm:items-center sm:justify-between sm:p-10"
         >
-          {{ content.accrocheSignature }}
-        </p>
-        <NuxtLink
-          to="/contact"
-          class="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
-        >
-          Prendre rendez-vous
-          <span aria-hidden="true">→</span>
-        </NuxtLink>
+          <p class="max-w-2xl whitespace-pre-line font-display text-xl font-medium leading-relaxed text-paper">
+            <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
+            {{ content.accrocheSignature }}
+          </p>
+          <NuxtLink
+            to="/contact"
+            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
+          >
+            Prendre rendez-vous
+            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+          </NuxtLink>
+        </div>
       </section>
 
       <!-- 2. Ce que j'observe -->
@@ -99,7 +98,12 @@ useSeoMeta({
               :key="i"
               class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
             >
-              <h3 v-if="item.title" class="font-display text-lg font-semibold text-ink">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
+              >
+                <Icon :name="`material-symbols:${item.icon || 'insights'}`" class="h-6 w-6" />
+              </span>
+              <h3 v-if="item.title" class="mt-4 font-display text-lg font-semibold text-ink">
                 {{ item.title }}
               </h3>
               <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">{{ item.body }}</p>
@@ -130,22 +134,15 @@ useSeoMeta({
             :subtitle="content.method.intro ?? undefined"
             align="center"
           />
-          <ol class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <li
-              v-for="(step, i) in content.method.steps"
-              :key="i"
-              class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft"
-            >
-              <span
-                class="flex h-10 w-10 items-center justify-center rounded-full bg-teal-700 font-display text-lg font-bold text-white"
-                aria-hidden="true"
-              >
-                {{ step.number || i + 1 }}
+          <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="(step, i) in content.method.steps" :key="i">
+              <span class="font-display text-4xl font-bold text-orange-300" aria-hidden="true">
+                {{ String(Number(step.number) || i + 1).padStart(2, "0") }}
               </span>
               <h3 v-if="step.title" class="mt-4 font-display text-lg font-semibold text-ink">
                 {{ step.title }}
               </h3>
-              <p v-if="step.description" class="mt-1.5 text-sm leading-relaxed text-ink/65">
+              <p v-if="step.description" class="mt-2 text-sm leading-relaxed text-ink/65">
                 {{ step.description }}
               </p>
             </li>
@@ -169,11 +166,10 @@ useSeoMeta({
               :key="i"
               class="flex items-start gap-3 text-ink/80"
             >
-              <span
-                class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-700"
-                aria-hidden="true"
-                >✓</span
-              >
+              <Icon
+                name="material-symbols:check-circle-rounded"
+                class="mt-0.5 h-5 w-5 flex-none text-orange-500"
+              />
               <span>{{ item }}</span>
             </li>
           </ul>
@@ -205,17 +201,15 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 8. CTA final -->
+      <!-- 8. CTA final (bandeau marine mutualisé) -->
       <section v-reveal class="mx-auto max-w-6xl px-4 py-16">
-        <CtaBlock
+        <CtaBanner
           :title="content.cta.title"
-          :description="content.cta.body ?? undefined"
+          :body="content.cta.body ?? undefined"
           :cta-label="content.cta.label"
           to="/contact"
+          :subtext="content.cta.subtext ?? undefined"
         />
-        <p v-if="content.cta.subtext" class="mt-4 text-center text-sm text-ink/55">
-          {{ content.cta.subtext }}
-        </p>
       </section>
     </template>
   </div>

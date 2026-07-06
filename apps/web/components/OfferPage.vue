@@ -355,29 +355,15 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 10. CTA final → contact (bandeau marine) -->
+    <!-- 10. CTA final → contact (bandeau marine mutualisé) -->
     <section v-reveal class="mx-auto max-w-6xl px-4 py-16">
-      <div class="relative isolate overflow-hidden rounded-3xl bg-teal-900 px-6 py-14 shadow-lift sm:px-12">
-        <InkBlob class="absolute -right-10 -top-14 -z-10 h-56 w-56 text-orange-400/10" />
-        <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
-          <div>
-            <h2 class="font-display text-2xl font-bold text-paper sm:text-3xl">
-              {{ content.ctaTitle || 'Travaillons ensemble' }}
-            </h2>
-            <p v-if="content.ctaBody" class="mt-3 max-w-xl text-paper/75">{{ content.ctaBody }}</p>
-          </div>
-          <NuxtLink
-            to="/contact"
-            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
-          >
-            {{ content.ctaLabel }}
-            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
-          </NuxtLink>
-        </div>
-        <p v-if="content.ctaSubtext" class="mt-6 text-center text-sm text-paper/60 sm:text-left">
-          {{ content.ctaSubtext }}
-        </p>
-      </div>
+      <CtaBanner
+        :title="content.ctaTitle || 'Travaillons ensemble'"
+        :body="content.ctaBody ?? undefined"
+        :cta-label="content.ctaLabel"
+        to="/contact"
+        :subtext="content.ctaSubtext ?? undefined"
+      />
     </section>
   </div>
 </template>

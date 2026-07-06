@@ -57,32 +57,38 @@ useSeoMeta({
         />
       </section>
 
-      <!-- Texte d'accroche + signature + CTA -->
-      <section
-        v-if="content.accrocheBody || content.accrocheSignature || content.accrocheCtaLabel"
-        v-reveal
-        class="mx-auto max-w-3xl px-4 py-16 text-center"
-      >
-        <p
-          v-if="content.accrocheBody"
-          class="whitespace-pre-line text-lg leading-relaxed text-ink/75"
-        >
+      <!-- Texte d'accroche -->
+      <section v-if="content.accrocheBody" v-reveal class="mx-auto max-w-3xl px-4 pt-16 text-center">
+        <p class="whitespace-pre-line text-lg leading-relaxed text-ink/75">
           {{ content.accrocheBody }}
         </p>
-        <p
-          v-if="content.accrocheSignature"
-          class="mt-8 font-display text-2xl font-semibold text-orange-600"
+      </section>
+
+      <!-- Phrase signature → bandeau marine + CTA doré -->
+      <section
+        v-if="content.accrocheSignature || content.accrocheCtaLabel"
+        v-reveal
+        class="mx-auto max-w-6xl px-4 py-14"
+      >
+        <div
+          class="flex flex-col gap-6 rounded-3xl bg-teal-900 p-8 shadow-lift sm:flex-row sm:items-center sm:justify-between sm:p-10"
         >
-          {{ content.accrocheSignature }}
-        </p>
-        <NuxtLink
-          v-if="content.accrocheCtaLabel"
-          to="/contact"
-          class="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
-        >
-          {{ content.accrocheCtaLabel }}
-          <span aria-hidden="true">→</span>
-        </NuxtLink>
+          <p
+            v-if="content.accrocheSignature"
+            class="max-w-2xl whitespace-pre-line font-display text-xl font-medium leading-relaxed text-paper"
+          >
+            <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
+            {{ content.accrocheSignature }}
+          </p>
+          <NuxtLink
+            v-if="content.accrocheCtaLabel"
+            to="/contact"
+            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
+          >
+            {{ content.accrocheCtaLabel }}
+            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+          </NuxtLink>
+        </div>
       </section>
 
       <!-- 2. Ce que vous venez chercher (bénéfices) -->
@@ -99,7 +105,12 @@ useSeoMeta({
               :key="i"
               class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
             >
-              <h3 v-if="outcome.title" class="font-display text-lg font-semibold text-ink">
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
+              >
+                <Icon :name="`material-symbols:${outcome.icon || 'check-circle'}`" class="h-6 w-6" />
+              </span>
+              <h3 v-if="outcome.title" class="mt-4 font-display text-lg font-semibold text-ink">
                 {{ outcome.title }}
               </h3>
               <p v-if="outcome.body" class="mt-2 leading-relaxed text-ink/65">{{ outcome.body }}</p>
@@ -145,11 +156,10 @@ useSeoMeta({
                   :key="j"
                   class="flex items-start gap-2.5 text-ink/75"
                 >
-                  <span
-                    class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-orange-100 text-xs font-bold text-orange-700"
-                    aria-hidden="true"
-                    >✓</span
-                  >
+                  <Icon
+                    name="material-symbols:check-circle-rounded"
+                    class="mt-0.5 h-5 w-5 flex-none text-orange-500"
+                  />
                   <span>{{ item }}</span>
                 </li>
               </ul>
@@ -183,9 +193,10 @@ useSeoMeta({
           <RichText v-if="content.howIWorkHtml" :html="content.howIWorkHtml" class="mt-5" />
           <aside
             v-if="content.howIWorkSignature"
-            class="mt-8 rounded-3xl border-l-4 border-orange-300 bg-orange-50 p-6 shadow-soft"
+            class="mt-8 rounded-3xl border border-orange-200 bg-orange-50/60 p-6"
           >
-            <p class="whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
+            <Icon name="material-symbols:format-quote" class="h-7 w-7 text-orange-500" />
+            <p class="mt-2 whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
               {{ content.howIWorkSignature }}
             </p>
           </aside>
@@ -216,11 +227,10 @@ useSeoMeta({
               :key="i"
               class="flex items-start gap-3 text-ink/80"
             >
-              <span
-                class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-sm font-bold text-orange-700"
-                aria-hidden="true"
-                >✓</span
-              >
+              <Icon
+                name="material-symbols:check-circle-rounded"
+                class="mt-0.5 h-5 w-5 flex-none text-orange-500"
+              />
               <span>{{ item }}</span>
             </li>
           </ul>
@@ -260,18 +270,15 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 9. Appel à l'action -->
+      <!-- 9. Appel à l'action (bandeau marine mutualisé) -->
       <section v-reveal class="mx-auto max-w-6xl px-4 py-20">
-        <CtaBlock
+        <CtaBanner
           :title="content.ctaTitle || 'Et si vous vous accordiez un espace pour y voir plus clair ?'"
-          :description="content.ctaBody ?? undefined"
+          :body="content.ctaBody ?? undefined"
           :cta-label="content.ctaLabel"
           to="/contact"
-          variant="orange"
+          :subtext="content.ctaSubtext ?? undefined"
         />
-        <p v-if="content.ctaSubtext" class="mt-4 text-center text-sm text-ink/55">
-          {{ content.ctaSubtext }}
-        </p>
       </section>
     </template>
   </div>
