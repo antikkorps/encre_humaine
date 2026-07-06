@@ -11,6 +11,7 @@
 
 import { get, patch, post } from "./api.ts";
 import { homePageContent } from "./content-home.ts";
+import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
 
@@ -45,7 +46,7 @@ async function main(): Promise<void> {
     tagline: "Conseil RH & accompagnement des parcours professionnels",
     contact_email: "contact@encrehumaine.fr",
     linkedin_url: "https://www.linkedin.com/in/eleonore-moree",
-    booking_url: "https://cal.com/eleonore/decouverte",
+    booking_url: config.bookingUrl,
     location_label: "Bouches-du-Rhône · France entière",
     social_links: [{ platform: "LinkedIn", url: "https://www.linkedin.com/in/eleonore-moree" }],
     legal_name: "Eléonore Morée",
