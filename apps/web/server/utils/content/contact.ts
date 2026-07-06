@@ -6,6 +6,7 @@ import {
   mapFaqItems,
   mapNumberedSteps,
   mapSeo,
+  mapStringList,
   type NumberedStep,
   type RawSiteDefaults,
   str,
@@ -23,8 +24,16 @@ export interface RawContactPage {
   accroche_title?: string | null;
   accroche_body?: string | null;
   booking_intro?: string | null;
+  booking_reassurance?: string | null;
+  message_intro?: string | null;
   next_steps?: unknown; // répéteur number/title/description
+  steps_conclusion?: string | null;
   response_time_note?: string | null;
+  reasons_title?: string | null;
+  reasons_org?: unknown; // répéteur { text }
+  reasons_b2c?: unknown; // répéteur { text }
+  final_cta_title?: string | null;
+  final_cta_body?: string | null;
   meta_title?: string | null;
   meta_description?: string | null;
   og_image?: FileField;
@@ -44,10 +53,17 @@ export interface ContactContent {
   accrocheTitle: string | null;
   accrocheBody: string | null;
   /** Prise de RDV : `null` si aucune URL configurée (section masquée). */
-  booking: { url: string; intro: string | null } | null;
+  booking: { url: string; intro: string | null; reassurance: string | null } | null;
+  /** Texte au-dessus du formulaire message. */
+  messageIntro: string | null;
   nextSteps: NumberedStep[];
+  stepsConclusion: string | null;
   responseTimeNote: string | null;
+  /** « Vous pouvez me contacter si… » (org + particuliers) ; `null` si vide. */
+  reasons: { title: string | null; org: string[]; b2c: string[] } | null;
   faq: FaqItem[];
+  /** CTA final ; `null` si ni titre ni corps. */
+  finalCta: { title: string | null; body: string | null } | null;
   contact: { email: string | null; linkedin: string | null; location: string | null };
   seo: ContentSeo;
 }
@@ -64,13 +80,34 @@ export function mapContactContent(
   sanitize: Sanitize,
 ): ContactContent {
   const bookingUrl = str(settings.booking_url);
+  const reasonsTitle = str(page.reasons_title);
+  const reasonsOrg = mapStringList(page.reasons_org);
+  const reasonsB2c = mapStringList(page.reasons_b2c);
+  const finalCtaTitle = str(page.final_cta_title);
+  const finalCtaBody = str(page.final_cta_body);
   return {
     accrocheTitle: str(page.accroche_title) || null,
     accrocheBody: str(page.accroche_body) || null,
-    booking: bookingUrl ? { url: bookingUrl, intro: str(page.booking_intro) || null } : null,
+    booking: bookingUrl
+      ? {
+          url: bookingUrl,
+          intro: str(page.booking_intro) || null,
+          reassurance: str(page.booking_reassurance) || null,
+        }
+      : null,
+    messageIntro: str(page.message_intro) || null,
     nextSteps: mapNumberedSteps(page.next_steps),
+    stepsConclusion: str(page.steps_conclusion) || null,
     responseTimeNote: str(page.response_time_note) || null,
+    reasons:
+      reasonsTitle || reasonsOrg.length || reasonsB2c.length
+        ? { title: reasonsTitle || null, org: reasonsOrg, b2c: reasonsB2c }
+        : null,
     faq: mapFaqItems(faqRaw, sanitize),
+    finalCta:
+      finalCtaTitle || finalCtaBody
+        ? { title: finalCtaTitle || null, body: finalCtaBody || null }
+        : null,
     contact: {
       email: str(settings.contact_email) || null,
       linkedin: str(settings.linkedin_url) || null,
@@ -92,8 +129,16 @@ export async function loadContactContent(): Promise<ContactContent> {
           "accroche_title",
           "accroche_body",
           "booking_intro",
+          "booking_reassurance",
+          "message_intro",
           "next_steps",
+          "steps_conclusion",
           "response_time_note",
+          "reasons_title",
+          "reasons_org",
+          "reasons_b2c",
+          "final_cta_title",
+          "final_cta_body",
           "meta_title",
           "meta_description",
           "og_image",

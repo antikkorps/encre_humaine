@@ -24,13 +24,28 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Accroche humaine (h1) -->
+    <!-- 1. Accroche humaine (h1) + double CTA → section contact -->
     <PageHero
       :title="heading"
       eyebrow="Contact"
       :body="content?.accrocheBody ?? undefined"
       variant="teal"
-    />
+    >
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <NuxtLink
+          to="#contact"
+          class="inline-flex items-center gap-2 rounded-full bg-teal-700 px-7 py-3.5 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5"
+        >
+          Réserver un échange <span aria-hidden="true">→</span>
+        </NuxtLink>
+        <NuxtLink
+          to="#contact"
+          class="inline-flex items-center gap-2 rounded-full border border-ink/15 px-7 py-3.5 font-semibold text-ink/80 transition-colors hover:border-teal-300 hover:bg-teal-50"
+        >
+          M'envoyer un message
+        </NuxtLink>
+      </div>
+    </PageHero>
 
     <p
       v-if="error"
@@ -42,8 +57,12 @@ useSeoMeta({
 
     <template v-else-if="content">
       <!-- 2. Deux voies de contact, en onglets (un seul bloc visible à la fois) -->
-      <section class="mx-auto max-w-5xl px-4 py-20">
-        <SectionHeading title="Me contacter" eyebrow="Échangeons" />
+      <section id="contact" class="mx-auto max-w-5xl scroll-mt-20 px-4 py-20">
+        <SectionHeading
+          title="Deux façons de me contacter"
+          subtitle="Choisissez ce qui vous convient le mieux."
+          eyebrow="Échangeons"
+        />
         <TabsRoot :default-value="content.booking ? 'booking' : 'message'" class="mt-8">
           <TabsList
             class="mb-8 flex flex-wrap gap-1 border-b border-ink/10"
@@ -69,9 +88,18 @@ useSeoMeta({
               {{ content.booking.intro || "Réservez un premier échange en visio pour faire connaissance, sans engagement." }}
             </p>
             <BookingEmbed :url="content.booking.url" />
+            <p
+              v-if="content.booking.reassurance"
+              class="mt-6 max-w-2xl text-sm text-ink/60"
+            >
+              {{ content.booking.reassurance }}
+            </p>
           </TabsContent>
 
           <TabsContent value="message" class="mx-auto max-w-xl focus:outline-none">
+            <p v-if="content.messageIntro" class="mb-4 whitespace-pre-line text-ink/70">
+              {{ content.messageIntro }}
+            </p>
             <p class="mb-6 text-sm text-ink/55">
               Vos données servent uniquement à traiter votre demande
               (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
@@ -83,10 +111,13 @@ useSeoMeta({
         </TabsRoot>
       </section>
 
-      <!-- 3. Ce qui se passe ensuite -->
-      <section v-if="content.nextSteps.length || content.responseTimeNote" class="bg-teal-50">
+      <!-- 3. Comment se déroule le premier échange -->
+      <section
+        v-if="content.nextSteps.length || content.responseTimeNote || content.stepsConclusion"
+        class="bg-teal-50"
+      >
         <div class="mx-auto max-w-5xl px-4 py-20">
-          <SectionHeading title="Ce qui se passe ensuite" align="center" />
+          <SectionHeading title="Comment se déroule le premier échange" align="center" />
           <ol
             v-if="content.nextSteps.length"
             class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -110,13 +141,52 @@ useSeoMeta({
               </p>
             </li>
           </ol>
+          <p
+            v-if="content.stepsConclusion"
+            class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center leading-relaxed text-ink/75"
+          >
+            {{ content.stepsConclusion }}
+          </p>
           <p v-if="content.responseTimeNote" class="mt-8 text-center text-sm text-ink/60">
             {{ content.responseTimeNote }}
           </p>
         </div>
       </section>
 
-      <!-- 4. FAQ courte (scope=contact) -->
+      <!-- 4. Vous pouvez me contacter si… (organisations / particuliers) -->
+      <section v-if="content.reasons" class="mx-auto max-w-5xl px-4 py-20">
+        <SectionHeading :title="content.reasons.title || 'Vous pouvez me contacter si…'" align="center" />
+        <div class="mt-10 grid gap-6 md:grid-cols-2">
+          <div v-if="content.reasons.org.length" class="rounded-3xl border border-ink/5 bg-white p-8 shadow-soft">
+            <p class="font-display text-lg font-bold text-teal-800">Pour les organisations</p>
+            <ul class="mt-4 space-y-3">
+              <li
+                v-for="(item, i) in content.reasons.org"
+                :key="i"
+                class="flex items-start gap-3 text-ink/75"
+              >
+                <span class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal-100 text-sm font-bold text-teal-700" aria-hidden="true">✓</span>
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+          </div>
+          <div v-if="content.reasons.b2c.length" class="rounded-3xl border border-ink/5 bg-white p-8 shadow-soft">
+            <p class="font-display text-lg font-bold text-orange-700">Pour les particuliers</p>
+            <ul class="mt-4 space-y-3">
+              <li
+                v-for="(item, i) in content.reasons.b2c"
+                :key="i"
+                class="flex items-start gap-3 text-ink/75"
+              >
+                <span class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-sm font-bold text-orange-700" aria-hidden="true">✓</span>
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. FAQ courte (scope=contact) -->
       <section v-if="content.faq.length" class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading title="Questions fréquentes" align="center" />
         <div class="mt-10">
@@ -124,7 +194,18 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 5. Coordonnées directes -->
+      <!-- 6. CTA final → section contact -->
+      <section v-if="content.finalCta" class="mx-auto max-w-6xl px-4 py-16">
+        <CtaBlock
+          :title="content.finalCta.title || 'Parlons-en'"
+          :description="content.finalCta.body ?? undefined"
+          cta-label="Réserver un échange"
+          to="#contact"
+          variant="teal"
+        />
+      </section>
+
+      <!-- 7. Coordonnées directes -->
       <section
         v-if="content.contact.email || content.contact.linkedin || content.contact.location"
         class="bg-ink text-paper"

@@ -15,25 +15,59 @@ describe("mapContactContent", () => {
     expect(c.accrocheTitle).toBeNull();
     expect(c.accrocheBody).toBeNull();
     expect(c.booking).toBeNull();
+    expect(c.messageIntro).toBeNull();
     expect(c.nextSteps).toEqual([]);
+    expect(c.stepsConclusion).toBeNull();
     expect(c.responseTimeNote).toBeNull();
+    expect(c.reasons).toBeNull();
+    expect(c.finalCta).toBeNull();
     expect(c.faq).toEqual([]);
     expect(c.contact).toEqual({ email: null, linkedin: null, location: null });
   });
 
-  it("RDV présent seulement si booking_url configuré (intro depuis la page)", () => {
+  it("RDV présent seulement si booking_url configuré (intro + réassurance depuis la page)", () => {
     expect(
       mapContactContent({ booking_intro: "Réservons 30 min." }, [], {}, BASE, wrap).booking,
     ).toBeNull();
     expect(
       mapContactContent(
-        { booking_intro: "Réservons 30 min." },
+        { booking_intro: "Réservons 30 min.", booking_reassurance: "Aucun tentacule." },
         [],
         { booking_url: "https://cal.com/eleonore/decouverte" },
         BASE,
         wrap,
       ).booking,
-    ).toEqual({ url: "https://cal.com/eleonore/decouverte", intro: "Réservons 30 min." });
+    ).toEqual({
+      url: "https://cal.com/eleonore/decouverte",
+      intro: "Réservons 30 min.",
+      reassurance: "Aucun tentacule.",
+    });
+  });
+
+  it("mappe « me contacter si… » (org/particuliers) et le CTA final ; masqués si vides", () => {
+    const c = mapContactContent(
+      {
+        message_intro: "Écrivez-moi.",
+        steps_conclusion: "Pas de vente forcée.",
+        reasons_title: "Vous pouvez me contacter si…",
+        reasons_org: [{ text: "Structurer vos RH" }, { text: "" }],
+        reasons_b2c: [{ text: "Une transition" }],
+        final_cta_title: "Parlons-en",
+        final_cta_body: "30 minutes suffisent.",
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.messageIntro).toBe("Écrivez-moi.");
+    expect(c.stepsConclusion).toBe("Pas de vente forcée.");
+    expect(c.reasons).toEqual({
+      title: "Vous pouvez me contacter si…",
+      org: ["Structurer vos RH"], // entrée vide filtrée
+      b2c: ["Une transition"],
+    });
+    expect(c.finalCta).toEqual({ title: "Parlons-en", body: "30 minutes suffisent." });
   });
 
   it("mappe next_steps, FAQ assainie, coordonnées et SEO (fallback site_settings)", () => {

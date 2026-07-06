@@ -4815,7 +4815,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 6
       special:
         - cast-json
       translations: null
@@ -4856,7 +4856,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 8
       special: null
       translations: null
       validation: null
@@ -4897,7 +4897,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 16
       special:
         - alias
         - no-data
@@ -4922,7 +4922,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -4962,7 +4962,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -5002,7 +5002,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 19
       special:
         - file
       translations: null
@@ -5043,7 +5043,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 20
       special:
         - cast-boolean
       translations: null
@@ -5059,6 +5059,396 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: booking_reassurance
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: booking_reassurance
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Réassurance sous le RDV (ex. « 🐙 Aucun tentacule commercial caché… »)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: booking_reassurance
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: message_intro
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: message_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Texte au-dessus du formulaire message
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: message_intro
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: steps_conclusion
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: steps_conclusion
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Conclusion sous les étapes (optionnel)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: steps_conclusion
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: reasons_divider
+    type: alias
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: reasons_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Vous pouvez me contacter si…
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contact_page
+    field: reasons_title
+    type: string
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: reasons_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: reasons_title
+      table: contact_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: reasons_org
+    type: json
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: reasons_org
+      group: null
+      hidden: false
+      interface: list
+      note: Pour les organisations
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: reasons_org
+      table: contact_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: reasons_b2c
+    type: json
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: reasons_b2c
+      group: null
+      hidden: false
+      interface: list
+      note: Pour les particuliers
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: reasons_b2c
+      table: contact_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: contact_cta_divider
+    type: alias
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_cta_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: CTA final
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contact_page
+    field: final_cta_title
+    type: string
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: final_cta_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: final_cta_title
+      table: contact_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: final_cta_body
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: final_cta_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: final_cta_body
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false

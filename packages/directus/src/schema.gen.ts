@@ -131,6 +131,14 @@ export interface ContactPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  booking_reassurance: string | null;
+  message_intro: string | null;
+  steps_conclusion: string | null;
+  reasons_title: string | null;
+  reasons_org: unknown | null;
+  reasons_b2c: unknown | null;
+  final_cta_title: string | null;
+  final_cta_body: string | null;
 }
 
 export interface FaqItems {

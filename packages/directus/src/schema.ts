@@ -393,13 +393,33 @@ const singletons: CollectionDef[] = [
     fields: [
       f.input("accroche_title"),
       f.textarea("accroche_body"),
+      // Deux voies de contact (onglets RDV / message)
       f.textarea("booking_intro", { note: "Texte au-dessus de l'embed RDV" }),
+      f.textarea("booking_reassurance", {
+        note: "Réassurance sous le RDV (ex. « 🐙 Aucun tentacule commercial caché… »)",
+      }),
+      f.textarea("message_intro", { note: "Texte au-dessus du formulaire message" }),
+      // Comment se déroule le premier échange
       f.repeater("next_steps", [
         { field: "number" },
         { field: "title" },
         { field: "description", interface: "input-multiline" },
       ]),
+      f.textarea("steps_conclusion", { note: "Conclusion sous les étapes (optionnel)" }),
       f.textarea("response_time_note", { note: "Ex. « Je réponds sous 48h ouvrées… »" }),
+      // Vous pouvez me contacter si…
+      f.divider("reasons_divider", "Vous pouvez me contacter si…"),
+      f.input("reasons_title"),
+      f.repeater("reasons_org", [{ field: "text", interface: "input-multiline" }], {
+        note: "Pour les organisations",
+      }),
+      f.repeater("reasons_b2c", [{ field: "text", interface: "input-multiline" }], {
+        note: "Pour les particuliers",
+      }),
+      // CTA final
+      f.divider("contact_cta_divider", "CTA final"),
+      f.input("final_cta_title"),
+      f.textarea("final_cta_body"),
       ...f.seoBlock(),
     ],
   },
