@@ -1,17 +1,22 @@
 <script setup lang="ts">
 // En-tête de page réutilisable (pages intérieures) — docs/00-global.md §Layout.
-// Hero clair mais affirmé : eyebrow + grand titre Fraunces + taches d'encre.
-// `variant` aligne l'accent sur le public : teal (orga) / orange (particuliers) / neutre.
-// Le hero sombre de l'accueil reste la pièce maîtresse — ici on garde de la légèreté.
+// Hero **éditorial** aligné à gauche, calqué sur la maquette : eyebrow + grand titre
+// Fraunces (mot d'accent doré possible via `accent`) + chapô + CTA (slot défaut), et
+// une **colonne de contenu à droite** (slot `aside` : carte constat, citation…) qui
+// remplit le hero façon maquette. Sans `aside` → une seule colonne. Le hero sombre
+// de l'accueil reste la pièce maîtresse. `variant` aligne l'accent sur le public.
 withDefaults(
   defineProps<{
     title: string;
+    /** Fragment du titre mis en doré (ex. « vraiment. ») — rendu après `title`. */
+    accent?: string;
     eyebrow?: string;
     body?: string;
     variant?: "teal" | "orange" | "neutral";
   }>(),
   { variant: "neutral" },
 );
+const slots = useSlots();
 
 const tint: Record<string, string> = {
   teal: "bg-teal-50",
@@ -23,17 +28,16 @@ const blob: Record<string, string> = {
   orange: "text-orange-400/12",
   neutral: "text-teal-500/8",
 };
-const accent: Record<string, string> = {
-  teal: "text-teal-700",
+const accentColor: Record<string, string> = {
+  teal: "text-orange-600",
   orange: "text-orange-600",
   neutral: "text-brand-accent",
 };
 const dash: Record<string, string> = {
-  teal: "bg-teal-400",
+  teal: "bg-orange-300",
   orange: "bg-orange-300",
   neutral: "bg-orange-300",
 };
-// Filigrane tentacule (ADN encre), teinté selon le public — très discret.
 const tentacle: Record<string, string> = {
   teal: "text-teal-600/[0.07]",
   orange: "text-orange-500/[0.08]",
@@ -51,24 +55,34 @@ const tentacle: Record<string, string> = {
       :class="tentacle[variant]"
     />
 
-    <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:py-24">
-      <slot name="top" />
-      <p
-        v-if="eyebrow"
-        class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em]"
-        :class="accent[variant]"
-      >
-        <span aria-hidden="true" class="h-px w-6" :class="dash[variant]"></span>
-        {{ eyebrow }}
-      </p>
-      <h1 class="mt-3 font-display text-4xl font-bold text-ink sm:text-5xl">{{ title }}</h1>
-      <p
-        v-if="body"
-        class="mx-auto mt-5 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/70"
-      >
-        {{ body }}
-      </p>
-      <slot />
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+      <div class="grid items-center gap-10 lg:gap-14" :class="slots.aside ? 'lg:grid-cols-[1.05fr_0.95fr]' : ''">
+        <div>
+          <slot name="top" />
+          <p
+            v-if="eyebrow"
+            class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em]"
+            :class="accentColor[variant]"
+          >
+            <span aria-hidden="true" class="h-px w-6" :class="dash[variant]"></span>
+            {{ eyebrow }}
+          </p>
+          <h1 class="mt-4 max-w-2xl font-display text-4xl font-bold leading-[1.08] text-ink sm:text-5xl">
+            {{ title }}<template v-if="accent"> <span :class="accentColor[variant]">{{ accent }}</span></template>
+          </h1>
+          <p
+            v-if="body"
+            class="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-ink/70"
+          >
+            {{ body }}
+          </p>
+          <slot />
+        </div>
+
+        <div v-if="slots.aside">
+          <slot name="aside" />
+        </div>
+      </div>
     </div>
   </section>
 </template>

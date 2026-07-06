@@ -9426,7 +9426,48 @@ fields:
           - field: icon
             meta:
               field: icon
-              interface: input
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
               width: half
             name: icon
             type: string
@@ -10306,7 +10347,48 @@ fields:
           - field: icon
             meta:
               field: icon
-              interface: input
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
               width: half
             name: icon
             type: string
@@ -10449,7 +10531,48 @@ fields:
           - field: icon
             meta:
               field: icon
-              interface: input
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
               width: half
             name: icon
             type: string

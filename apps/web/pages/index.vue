@@ -144,11 +144,10 @@ const heroTitle = computed(() => {
             :title="content.recognition.title"
             :subtitle="content.recognition.subtitle ?? undefined"
             eyebrow="Le constat"
-            align="center"
           />
           <ul
             v-if="content.recognition.items.length"
-            class="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           >
             <li
               v-for="(item, i) in content.recognition.items"
@@ -164,7 +163,7 @@ const heroTitle = computed(() => {
           </ul>
           <p
             v-if="content.recognition.conclusion"
-            class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
+            class="mt-10 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
           >
             {{ content.recognition.conclusion }}
           </p>
@@ -174,7 +173,7 @@ const heroTitle = computed(() => {
       <!-- 4. Promesse / Offre : « Ce que je vous aide à construire » (#offres) -->
       <section v-if="content.build" id="offres" v-reveal class="scroll-mt-24">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.build.title" eyebrow="Mon offre" align="center" />
+          <SectionHeading :title="content.build.title" eyebrow="Mon offre" />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
             <article
               v-for="(block, i) in content.build.blocks"
@@ -188,7 +187,7 @@ const heroTitle = computed(() => {
               </p>
             </article>
           </div>
-          <div v-if="content.build.ctaLabel" class="mt-10 text-center">
+          <div v-if="content.build.ctaLabel" class="mt-10">
             <NuxtLink
               :to="content.build.ctaUrl"
               class="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
@@ -216,7 +215,6 @@ const heroTitle = computed(() => {
             :title="content.method.title"
             :subtitle="content.method.subtitle ?? undefined"
             eyebrow="Ma méthode"
-            align="center"
           />
           <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
@@ -234,7 +232,6 @@ const heroTitle = computed(() => {
           :title="content.why.title"
           :subtitle="content.why.subtitle ?? undefined"
           eyebrow="Ma signature"
-          align="center"
         />
         <div class="mt-12 grid gap-6 md:grid-cols-3">
           <article
@@ -248,7 +245,7 @@ const heroTitle = computed(() => {
         </div>
         <p
           v-if="content.why.conclusion"
-          class="mx-auto mt-10 max-w-3xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
+          class="mt-10 max-w-3xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
         >
           {{ content.why.conclusion }}
         </p>
@@ -281,7 +278,7 @@ const heroTitle = computed(() => {
               class="aspect-[4/3] w-full rounded-3xl object-cover shadow-lift"
             />
           </div>
-          <div :class="content.intro.photo ? '' : 'md:col-span-2 mx-auto max-w-2xl text-center'">
+          <div :class="content.intro.photo ? '' : 'md:col-span-2 max-w-3xl'">
             <p class="text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">
               À propos
             </p>
@@ -309,16 +306,16 @@ const heroTitle = computed(() => {
       <section v-if="content.b2c" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.b2c.title" eyebrow="Particuliers" align="center" />
+          <SectionHeading :title="content.b2c.title" eyebrow="Particuliers" />
           <p
             v-if="content.b2c.text"
-            class="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed text-ink/70"
+            class="mt-4 max-w-2xl text-lg leading-relaxed text-ink/70"
           >
             {{ content.b2c.text }}
           </p>
           <div
             v-if="content.b2c.cards.length"
-            class="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2"
+            class="mt-10 grid max-w-3xl gap-6 sm:grid-cols-2"
           >
             <article
               v-for="(card, i) in content.b2c.cards"
@@ -329,7 +326,7 @@ const heroTitle = computed(() => {
               <p v-if="card.body" class="mt-2 leading-relaxed text-ink/65">{{ card.body }}</p>
             </article>
           </div>
-          <div class="mt-10 text-center">
+          <div class="mt-10">
             <NuxtLink
               to="/particuliers"
               class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-7 py-3.5 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-orange-600"
@@ -347,7 +344,7 @@ const heroTitle = computed(() => {
         class="mx-auto max-w-3xl px-4 py-20"
         aria-label="Témoignage"
       >
-        <p class="mb-6 text-center text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">
+        <p class="mb-6 text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">
           Elles &amp; ils en parlent
         </p>
         <TestimonialCard :testimonial="content.featuredTestimonial" />

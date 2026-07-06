@@ -18,7 +18,7 @@ export HOST_DIRECTUS_PORT
 .PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
         cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply cms-types cms-seed \
         backup-build backup-run restore \
-        prod-deploy prod-up prod-ps prod-logs prod-umami-reset prod-backup prod-backup-logs
+        prod-deploy prod-up prod-cms-recreate prod-ps prod-logs prod-umami-reset prod-backup prod-backup-logs
 
 help: ## Liste les cibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -124,6 +124,10 @@ prod-deploy: ## PROD : git pull (user deploy) + rebuild + attente healthchecks
 
 prod-up: ## PROD : rebuild + relance (sans git pull)
 	$(PROD_COMPOSE) up -d --build --wait
+	$(PROD_COMPOSE) ps
+
+prod-cms-recreate: ## PROD : recrée le conteneur Directus (rafraîchit le cache de schéma)
+	$(PROD_COMPOSE) up -d --force-recreate --wait directus
 	$(PROD_COMPOSE) ps
 
 prod-ps: ## PROD : état des conteneurs

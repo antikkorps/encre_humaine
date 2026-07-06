@@ -13,7 +13,8 @@
     "apply": "tsx src/apply.ts",
     "types": "tsx src/types-gen.ts",
     "seed": "tsx src/seed.ts",
-    "seed:home": "tsx src/seed-home.ts"
+    "seed:home": "tsx src/seed-home.ts",
+    "reconcile": "tsx src/reconcile.ts"
   },
   "devDependencies": {
     "@types/node": "25.9.2",

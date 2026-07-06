@@ -24,13 +24,29 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Accroche empathique (h1 + sous-titre) -->
+    <!-- 1. Accroche empathique — hero 2 colonnes : discours à gauche, carte « constat » à droite -->
     <PageHero
       :title="heading"
       eyebrow="Particuliers"
       :body="content?.accrocheSubtitle ?? undefined"
       variant="orange"
-    />
+    >
+      <template v-if="content?.accrocheBody" #aside>
+        <figure
+          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
+        >
+          <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-orange-100/70" aria-hidden="true"></div>
+          <span
+            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
+          >
+            <Icon name="material-symbols:forum" class="h-6 w-6" />
+          </span>
+          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
+            {{ content.accrocheBody }}
+          </p>
+        </figure>
+      </template>
+    </PageHero>
 
     <p
       v-if="error"
@@ -55,13 +71,6 @@ useSeoMeta({
           decoding="async"
           class="aspect-[16/7] w-full rounded-3xl object-cover shadow-lift"
         />
-      </section>
-
-      <!-- Texte d'accroche -->
-      <section v-if="content.accrocheBody" v-reveal class="mx-auto max-w-3xl px-4 pt-16 text-center">
-        <p class="whitespace-pre-line text-lg leading-relaxed text-ink/75">
-          {{ content.accrocheBody }}
-        </p>
       </section>
 
       <!-- Phrase signature → bandeau marine + CTA doré -->
@@ -97,7 +106,6 @@ useSeoMeta({
           <SectionHeading
             :title="content.outcomesTitle || 'Ce que vous venez chercher'"
             :subtitle="content.outcomesIntro ?? undefined"
-            align="center"
           />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <li
@@ -164,20 +172,24 @@ useSeoMeta({
                 </li>
               </ul>
             </div>
-            <p
-              v-if="situation.result"
-              class="mt-5 rounded-2xl bg-orange-50 p-4 text-sm leading-relaxed text-ink/75"
-            >
-              <span class="font-semibold text-orange-700">Résultat — </span>{{ situation.result }}
-            </p>
-            <NuxtLink
-              v-if="situation.ctaLabel"
-              :to="situation.ctaLink"
-              class="mt-6 inline-flex w-fit items-center gap-1.5 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-orange-600"
-            >
-              {{ situation.ctaLabel }}
-              <span aria-hidden="true">→</span>
-            </NuxtLink>
+            <!-- Pied de carte (résultat + CTA) poussé en bas → aligné entre les cartes -->
+            <div v-if="situation.result || situation.ctaLabel" class="mt-auto pt-6">
+              <p
+                v-if="situation.result"
+                class="rounded-2xl bg-orange-50 p-4 text-sm leading-relaxed text-ink/75"
+              >
+                <span class="font-semibold text-orange-700">Résultat — </span>{{ situation.result }}
+              </p>
+              <NuxtLink
+                v-if="situation.ctaLabel"
+                :to="situation.ctaLink"
+                class="inline-flex w-fit items-center gap-1.5 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-orange-600"
+                :class="situation.result ? 'mt-5' : ''"
+              >
+                {{ situation.ctaLabel }}
+                <span aria-hidden="true">→</span>
+              </NuxtLink>
+            </div>
           </article>
         </div>
       </section>
@@ -188,18 +200,20 @@ useSeoMeta({
         v-reveal
         class="bg-teal-50"
       >
-        <div class="mx-auto max-w-3xl px-4 py-20">
-          <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" />
-          <RichText v-if="content.howIWorkHtml" :html="content.howIWorkHtml" class="mt-5" />
-          <aside
-            v-if="content.howIWorkSignature"
-            class="mt-8 rounded-3xl border border-orange-200 bg-orange-50/60 p-6"
-          >
-            <Icon name="material-symbols:format-quote" class="h-7 w-7 text-orange-500" />
-            <p class="mt-2 whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
-              {{ content.howIWorkSignature }}
-            </p>
-          </aside>
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="max-w-3xl">
+            <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" />
+            <RichText v-if="content.howIWorkHtml" :html="content.howIWorkHtml" class="mt-5" />
+            <aside
+              v-if="content.howIWorkSignature"
+              class="mt-8 rounded-3xl border border-orange-200 bg-orange-50/60 p-6"
+            >
+              <Icon name="material-symbols:format-quote" class="h-7 w-7 text-orange-500" />
+              <p class="mt-2 whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
+                {{ content.howIWorkSignature }}
+              </p>
+            </aside>
+          </div>
         </div>
       </section>
 
@@ -207,10 +221,12 @@ useSeoMeta({
       <section
         v-if="content.whyDifferentHtml"
         v-reveal
-        class="mx-auto max-w-3xl px-4 py-20"
+        class="mx-auto max-w-6xl px-4 py-20"
       >
-        <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" />
-        <RichText :html="content.whyDifferentHtml" class="mt-5" />
+        <div class="max-w-3xl">
+          <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" />
+          <RichText :html="content.whyDifferentHtml" class="mt-5" />
+        </div>
       </section>
 
       <!-- 6. Comment se déroule l'accompagnement (format + texte) -->
@@ -219,36 +235,40 @@ useSeoMeta({
         v-reveal
         class="bg-paper-2"
       >
-        <div class="mx-auto max-w-3xl px-4 py-20">
-          <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" />
-          <ul v-if="content.formatItems.length" class="mt-8 space-y-3">
-            <li
-              v-for="(item, i) in content.formatItems"
-              :key="i"
-              class="flex items-start gap-3 text-ink/80"
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="max-w-3xl">
+            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" />
+            <ul v-if="content.formatItems.length" class="mt-8 space-y-3">
+              <li
+                v-for="(item, i) in content.formatItems"
+                :key="i"
+                class="flex items-start gap-3 text-ink/80"
+              >
+                <Icon
+                  name="material-symbols:check-circle-rounded"
+                  class="mt-0.5 h-5 w-5 flex-none text-orange-500"
+                />
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+            <p
+              v-if="content.formatBody"
+              class="mt-8 whitespace-pre-line leading-relaxed text-ink/75"
             >
-              <Icon
-                name="material-symbols:check-circle-rounded"
-                class="mt-0.5 h-5 w-5 flex-none text-orange-500"
-              />
-              <span>{{ item }}</span>
-            </li>
-          </ul>
-          <p
-            v-if="content.formatBody"
-            class="mt-8 whitespace-pre-line leading-relaxed text-ink/75"
-          >
-            {{ content.formatBody }}
-          </p>
+              {{ content.formatBody }}
+            </p>
+          </div>
         </div>
       </section>
 
       <!-- 7. FAQ (faq_items scope=b2c) -->
       <section v-if="content.faq.length" v-reveal class="bg-orange-50">
-        <div class="mx-auto max-w-3xl px-4 py-20">
-          <SectionHeading title="Questions fréquentes" align="center" />
-          <div class="mt-10">
-            <FaqAccordion :items="content.faq" />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="max-w-3xl">
+            <SectionHeading title="Questions fréquentes" />
+            <div class="mt-10">
+              <FaqAccordion :items="content.faq" />
+            </div>
           </div>
         </div>
       </section>
@@ -260,7 +280,7 @@ useSeoMeta({
         class="mx-auto max-w-5xl px-4 py-20"
         aria-label="Témoignages"
       >
-        <SectionHeading title="Ce qu'en disent les personnes accompagnées" align="center" />
+        <SectionHeading title="Ce qu'en disent les personnes accompagnées" />
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <TestimonialCard
             v-for="(testimonial, i) in content.testimonials"

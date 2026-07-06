@@ -24,13 +24,29 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Accroche B2B (h1 + sous-titre) -->
+    <!-- 1. Accroche B2B — hero 2 colonnes : discours à gauche, carte « constat » à droite -->
     <PageHero
       :title="heading"
       eyebrow="Organisations"
       :body="content?.accrocheSubtitle ?? undefined"
       variant="teal"
-    />
+    >
+      <template v-if="content?.accrocheBody" #aside>
+        <figure
+          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
+        >
+          <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-orange-100/70" aria-hidden="true"></div>
+          <span
+            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
+          >
+            <Icon name="material-symbols:lightbulb" class="h-6 w-6" />
+          </span>
+          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
+            {{ content.accrocheBody }}
+          </p>
+        </figure>
+      </template>
+    </PageHero>
 
     <p
       v-if="error"
@@ -55,13 +71,6 @@ useSeoMeta({
           decoding="async"
           class="aspect-[16/7] w-full rounded-3xl object-cover shadow-lift"
         />
-      </section>
-
-      <!-- Texte d'accroche -->
-      <section v-if="content.accrocheBody" v-reveal class="mx-auto max-w-3xl px-4 pt-16 text-center">
-        <p class="whitespace-pre-line text-lg leading-relaxed text-ink/75">
-          {{ content.accrocheBody }}
-        </p>
       </section>
 
       <!-- Phrase signature → bandeau marine + CTA doré -->
@@ -90,7 +99,6 @@ useSeoMeta({
             :title="content.observe.title || 'Ce que j\'observe'"
             :subtitle="content.observe.intro ?? undefined"
             eyebrow="Le constat"
-            align="center"
           />
           <div v-if="content.observe.items.length" class="mt-10 grid gap-6 sm:grid-cols-2">
             <article
@@ -111,7 +119,7 @@ useSeoMeta({
           </div>
           <p
             v-if="content.observe.conclusion"
-            class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
+            class="mt-10 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
           >
             {{ content.observe.conclusion }}
           </p>
@@ -120,7 +128,7 @@ useSeoMeta({
 
       <!-- 3. Les offres B2B (dynamique depuis `offers`) -->
       <section v-if="content.offers.length" v-reveal class="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading :title="content.offersTitle" eyebrow="Accompagnement" align="center" />
+        <SectionHeading :title="content.offersTitle" eyebrow="Accompagnement" />
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <OfferCard v-for="offer in content.offers" :key="offer.slug" :offer="offer" />
         </div>
@@ -132,7 +140,6 @@ useSeoMeta({
           <SectionHeading
             :title="content.method.title || 'Ma façon de travailler'"
             :subtitle="content.method.intro ?? undefined"
-            align="center"
           />
           <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             <li v-for="(step, i) in content.method.steps" :key="i">
@@ -151,34 +158,38 @@ useSeoMeta({
       </section>
 
       <!-- 5. Ce qui différencie mon approche -->
-      <section v-if="content.differentiator" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading :title="content.differentiator.title || 'Mon approche'" />
-        <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
+      <section v-if="content.differentiator" v-reveal class="mx-auto max-w-6xl px-4 py-20">
+        <div class="max-w-3xl">
+          <SectionHeading :title="content.differentiator.title || 'Mon approche'" />
+          <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
+        </div>
       </section>
 
       <!-- 6. Cet accompagnement est fait pour vous si… -->
       <section v-if="content.audience" v-reveal class="bg-teal-50">
-        <div class="mx-auto max-w-3xl px-4 py-20">
-          <SectionHeading :title="content.audience.title || 'Pour qui ?'" />
-          <ul v-if="content.audience.items.length" class="mt-8 space-y-3">
-            <li
-              v-for="(item, i) in content.audience.items"
-              :key="i"
-              class="flex items-start gap-3 text-ink/80"
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="max-w-3xl">
+            <SectionHeading :title="content.audience.title || 'Pour qui ?'" />
+            <ul v-if="content.audience.items.length" class="mt-8 space-y-3">
+              <li
+                v-for="(item, i) in content.audience.items"
+                :key="i"
+                class="flex items-start gap-3 text-ink/80"
+              >
+                <Icon
+                  name="material-symbols:check-circle-rounded"
+                  class="mt-0.5 h-5 w-5 flex-none text-orange-500"
+                />
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+            <p
+              v-if="content.audience.conclusion"
+              class="mt-8 whitespace-pre-line leading-relaxed text-ink/80"
             >
-              <Icon
-                name="material-symbols:check-circle-rounded"
-                class="mt-0.5 h-5 w-5 flex-none text-orange-500"
-              />
-              <span>{{ item }}</span>
-            </li>
-          </ul>
-          <p
-            v-if="content.audience.conclusion"
-            class="mt-8 whitespace-pre-line leading-relaxed text-ink/80"
-          >
-            {{ content.audience.conclusion }}
-          </p>
+              {{ content.audience.conclusion }}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -190,7 +201,7 @@ useSeoMeta({
         aria-label="Témoignages"
       >
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.testimonialsTitle" align="center" />
+          <SectionHeading :title="content.testimonialsTitle" />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <TestimonialCard
               v-for="(testimonial, i) in content.testimonials"

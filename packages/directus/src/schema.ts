@@ -2,6 +2,7 @@
 // Source d'intention (diffable en review). Le moteur bootstrap.ts l'applique ;
 // le snapshot YAML en est l'artefact reproductible. DRY : un concept = une ligne.
 import * as f from "./fields.ts";
+import { ICON_CHOICES } from "./icons.ts";
 
 export type CollectionDef = {
   collection: string;
@@ -458,7 +459,12 @@ const collections: CollectionDef[] = [
       f.repeater(
         "outcomes",
         [
-          { field: "icon", width: "half" },
+          {
+            field: "icon",
+            width: "half",
+            interface: "select-dropdown",
+            options: { choices: [...ICON_CHOICES], allowNone: true },
+          },
           { field: "title" },
           { field: "body", interface: "input-multiline" },
         ],
@@ -469,7 +475,12 @@ const collections: CollectionDef[] = [
       f.repeater(
         "context_items",
         [
-          { field: "icon", width: "half" },
+          {
+            field: "icon",
+            width: "half",
+            interface: "select-dropdown",
+            options: { choices: [...ICON_CHOICES], allowNone: true },
+          },
           { field: "title" },
           { field: "body", interface: "input-multiline" },
         ],
@@ -486,7 +497,12 @@ const collections: CollectionDef[] = [
       f.repeater(
         "mission_includes",
         [
-          { field: "icon", width: "half" },
+          {
+            field: "icon",
+            width: "half",
+            interface: "select-dropdown",
+            options: { choices: [...ICON_CHOICES], allowNone: true },
+          },
           { field: "title" },
           { field: "body", interface: "input-multiline" },
         ],
