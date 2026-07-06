@@ -5,19 +5,38 @@
 
 > **Gabarit unique** pour les 5 pages (DRY). Schéma posé en phase 1 ; contenu détaillé rédigé en phase 2. Les routes et le gabarit existent dès la phase 1 pour ne pas refondre la nav.
 
-## Sections (ordre, champs `offers`)
-1. **Accroche** — `accroche_title` + `accroche_body`.
-2. **Ce que comprend la mission / Ce qu'on fait ensemble** — `mission_includes` (répéteur).
-3. **(B2B) Comment ça se passe** — étapes (réutilise `method_steps` du hub ou champ dédié) · **(B2C) Le format** — `format_body`.
-4. **Ce que vous en retirez / repartez avec** — `outcomes` (répéteur title/body).
-5. **Pour qui (et pas pour qui)** — `audience_fit` (répéteur).
-6. **Investissement** — `price_label` + `price_note` (ex. acompte 30 %, paiement 2×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
-7. **FAQ** — `faq` (M2M `faq_items` ou filtre par scope).
-8. **Témoignage** — `featured_testimonial` ; masqué si vide.
-9. **CTA** — `cta_label` → `/contact` (ou prise de RDV pour B2C : séance découverte).
+## Sections (ordre de rendu, champs `offers`)
+Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en remplit qu'une partie).
+1. **Accroche** — `accroche_title` + `accroche_subtitle` (hero) + `accroche_body` + `accroche_signature` + CTA (`cta_label`).
+2. **Ce que ça change (bénéfices)** — `outcomes_title` / `_intro` / `outcomes` (répéteur title/body).
+3. **Ce que je vois souvent (contexte)** — `context_title` / `context_items` / `context_conclusion`.
+4. **Une approche qui relie** — `approche_title` / `approche_body` (rich text) / `approche_signature` (encadré).
+5. **Ce que comprend la mission / Ce qu'on fait ensemble** — `mission_title` / `mission_intro` / `mission_includes`.
+6. **Un regard / une expérience** (optionnel) — `background_title` / `background_body` (rich text, listes possibles). *Récit terrain, surtout B2C.*
+7. **Comment ça se passe / Le format** — `format_title` / `format_body` (rich text).
+8. **Pour qui (✓) et pas pour vous (✗)** — `audience_fit` (✓) + `audience_fit_exclude` (✗, optionnel) + `audience_fit_conclusion`.
+9. **Ce que vous emportez** (optionnel) — `takeaways_title` / `_intro` / `takeaways` (répéteur, ✓).
+10. **Investissement** — `price_label` + `price_note` (ex. paiement 2-3×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
+11. **FAQ** — `faq_items` filtrés par scope (`FAQ_SCOPE_BY_SLUG` + `general`).
+12. **Témoignages** — **centralisés** : liste `testimonials` filtrée par `audience` de l'offre (B2B → organisation, B2C → particulier), vedettes d'abord (`-featured, sort`) ; masqué si vide. (Plus de pin M2O par offre — voir `04` §Centralisation.)
+13. **CTA final** — `cta_title` / `cta_body` / `cta_label` → `/contact`.
+
+## Mise en forme (éditoriale — navy + or)
+Traitement inspiré de la maquette Audit RH : hero éditorial aligné à gauche (eyebrow = `title`),
+signature d'accroche en **bandeau marine + CTA**, bénéfices **numérotés** (01-0N) avec icône, contexte
+en **cartes à icônes**, mission en **panneau marine sombre** + « pour qui » en panneau clair (2 colonnes),
+investissement en cartes Format/Tarif, CTA final marine. Orga = fonds froids (teal-50) / B2C = fonds
+chauds (orange-50) ; accents dorés + panneaux marine communs. Icônes **Material Symbols** via `@nuxt/icon`
+(server bundle **local**, `fallbackToApi: false` → CSP-safe, zéro appel externe). Les répéteurs
+`outcomes` / `context_items` / `mission_includes` portent un sous-champ `icon` (clé Iconify hyphénée,
+ex. `trending-up`), avec repli par section.
+> ⚠️ `@nuxt/icon` **épinglé en 1.15.0** : la 2.x tire `h3@2` (rc) incompatible avec Nuxt 4.4.8 (h3 v1).
 
 ## Renvois croisés (bonne pratique du brief)
-- `booster-recherche` → encart « Pas encore sûr de votre cap ? Commencez par *Clarifier & Avancer* ».
+- `booster-recherche` → section « Clarifier vs Booster » (via `context`) + liste ✗ « pas encore clarifié votre projet → *Clarifier & Avancer* ».
+
+## FAQ par scope (`faq_items`)
+Chaque offre tire ses FAQ par `scope` (+ `general`), cf. `FAQ_SCOPE_BY_SLUG` : `audit-rh`→audit, `competences-parcours`→competences, `managers-equipes`→managers, `clarifier-avancer`→b2c (partagé avec le hub Particuliers), `booster-recherche`→**booster** (FAQ dédiée, ne fuit pas sur le hub/clarifier).
 
 ## A11y / SEO
 - `h1` = `accroche_title`. SEO par offre (`meta_*`, `og_image`). Breadcrumb (hub → offre).

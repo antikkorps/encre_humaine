@@ -94,6 +94,30 @@ export interface B2cHubPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  accroche_subtitle: string | null;
+  accroche_signature: string | null;
+  accroche_cta_label: string | null;
+  outcomes_title: string | null;
+  outcomes_intro: string | null;
+  outcomes: unknown | null;
+  situations_title: string | null;
+  situations_intro: string | null;
+  situation_a_audience: string | null;
+  situation_a_items: unknown | null;
+  situation_a_result: string | null;
+  situation_b_audience: string | null;
+  situation_b_items: unknown | null;
+  situation_b_result: string | null;
+  how_i_work_title: string | null;
+  how_i_work_signature: string | null;
+  why_different_title: string | null;
+  why_different_body: string | null;
+  format_title: string | null;
+  format_items: unknown | null;
+  format_body: string | null;
+  cta_title: string | null;
+  cta_body: string | null;
+  cta_subtext: string | null;
 }
 
 export interface ContactPage {
@@ -107,6 +131,14 @@ export interface ContactPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  booking_reassurance: string | null;
+  message_intro: string | null;
+  steps_conclusion: string | null;
+  reasons_title: string | null;
+  reasons_org: unknown | null;
+  reasons_b2c: unknown | null;
+  final_cta_title: string | null;
+  final_cta_body: string | null;
 }
 
 export interface FaqItems {
@@ -193,6 +225,8 @@ export interface NewsletterPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  subtitle: string | null;
+  helps_with: unknown | null;
 }
 
 export interface Offers {
@@ -241,6 +275,12 @@ export interface Offers {
   approche_signature: string | null;
   mission_intro: string | null;
   format_title: string | null;
+  background_title: string | null;
+  background_body: string | null;
+  audience_fit_exclude: unknown | null;
+  takeaways_title: string | null;
+  takeaways_intro: string | null;
+  takeaways: unknown | null;
 }
 
 export interface OrgHubPage {
@@ -335,6 +375,11 @@ export interface ResourcesPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  hero_signature: string | null;
+  featured_article: string | Articles | null;
+  positioning_title: string | null;
+  positioning_body: string | null;
+  cta_title: string | null;
 }
 
 export interface ShopPage {

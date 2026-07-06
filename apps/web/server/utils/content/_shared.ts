@@ -140,6 +140,23 @@ export function mapTestimonialItem(raw: unknown): TestimonialItem | null {
   };
 }
 
+/**
+ * Champs `testimonials` consommés à l'affichage (DRY — hubs + offres). Les
+ * témoignages sont **centralisés** : chaque surface filtre par `audience`
+ * (+ tri `-featured, sort`) plutôt que de pinner un M2O.
+ */
+export const TESTIMONIAL_FIELDS = [
+  "quote",
+  "author_name",
+  "author_title",
+  "company",
+  "context",
+  "audience",
+] as const;
+
+/** Tri des témoignages : vedettes d'abord, puis ordre manuel. */
+export const TESTIMONIAL_SORT = ["-featured", "sort"] as const;
+
 /** Liste de témoignages publiés (filtrée en amont par audience) ; vides exclus. */
 export function mapTestimonials(raws: unknown): TestimonialItem[] {
   return (Array.isArray(raws) ? raws : [])
@@ -180,16 +197,18 @@ export function mapOffers(raws: unknown, fallback: Audience): OfferSummary[] {
     .filter((o): o is OfferSummary => o !== null);
 }
 
-/** Item « titre + corps » (convictions À propos, `outcomes` des offres…). */
+/** Item « titre + corps (+ icône) » (convictions À propos, `outcomes` des offres…). */
 export interface TitledItem {
   title: string;
   body: string;
+  /** Clé d'icône Material Symbols (optionnelle, ex. « visibility »). */
+  icon?: string;
 }
 
-/** Répéteur `[{ title, body }]` ; entrées sans titre ni corps exclues. */
+/** Répéteur `[{ title, body, icon? }]` ; entrées sans titre ni corps exclues. */
 export function mapTitledItems(raw: unknown): TitledItem[] {
   return records(raw)
-    .map((c) => ({ title: str(c.title), body: str(c.body) }))
+    .map((c) => ({ title: str(c.title), body: str(c.body), icon: str(c.icon) || undefined }))
     .filter((c) => c.title !== "" || c.body !== "");
 }
 

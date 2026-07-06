@@ -25,6 +25,7 @@ const FAQ_SCOPE = [
   { text: "Compétences", value: "competences" },
   { text: "Managers", value: "managers" },
   { text: "Particuliers", value: "b2c" },
+  { text: "Booster recherche", value: "booster" },
   { text: "Général", value: "general" },
 ];
 const ARTICLE_GROUP = [
@@ -260,24 +261,70 @@ const singletons: CollectionDef[] = [
     collection: "b2c_hub_page",
     singleton: true,
     icon: "diversity_3",
-    note: "FAQ branchée dynamiquement (faq_items scope=b2c)",
+    note: "FAQ branchée dynamiquement (faq_items scope=b2c). Gabarit riche calqué sur `offers`.",
     fields: [
+      // 1. Accroche
       f.input("accroche_title"),
-      f.textarea("accroche_body"),
+      f.textarea("accroche_subtitle", { note: "Sous-titre empathique sous le h1" }),
+      f.textarea("accroche_body", { note: "Texte d'accroche (multi-paragraphes)" }),
+      f.input("accroche_signature", { note: "Phrase signature" }),
+      f.input("accroche_cta_label", { note: "CTA d'accroche → /contact" }),
       f.imageFile("accroche_photo"),
+      // 2. Ce que vous venez chercher (bénéfices)
+      f.divider("outcomes_divider", "Ce que vous venez chercher"),
+      f.input("outcomes_title"),
+      f.textarea("outcomes_intro"),
+      f.repeater(
+        "outcomes",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Bénéfices (titre + corps)" },
+      ),
+      // 3. Deux situations, deux accompagnements (cartes détaillées)
+      f.divider("situations_divider", "Deux situations, deux accompagnements"),
+      f.input("situations_title"),
+      f.textarea("situations_intro"),
       f.divider("sit_a_divider", "Situation A"),
       f.input("situation_a_title"),
-      f.textarea("situation_a_body"),
+      f.textarea("situation_a_body", { note: "Chapô optionnel sous le titre de la carte" }),
+      f.textarea("situation_a_audience", { note: "« Pour qui ? »" }),
+      f.repeater("situation_a_items", [{ field: "text", interface: "input-multiline" }], {
+        note: "« Ce que nous travaillons » (liste)",
+      }),
+      f.textarea("situation_a_result", { note: "« Résultat »" }),
       f.input("situation_a_cta_label", { half: true }),
       f.input("situation_a_cta_link", { half: true }),
       f.divider("sit_b_divider", "Situation B"),
       f.input("situation_b_title"),
-      f.textarea("situation_b_body"),
+      f.textarea("situation_b_body", { note: "Chapô optionnel sous le titre de la carte" }),
+      f.textarea("situation_b_audience", { note: "« Pour qui ? »" }),
+      f.repeater("situation_b_items", [{ field: "text", interface: "input-multiline" }], {
+        note: "« Ce que nous travaillons » (liste)",
+      }),
+      f.textarea("situation_b_result", { note: "« Résultat »" }),
       f.input("situation_b_cta_label", { half: true }),
       f.input("situation_b_cta_link", { half: true }),
+      // 4. Ma façon d'accompagner
+      f.divider("how_i_work_divider", "Ma façon d'accompagner"),
+      f.input("how_i_work_title"),
       f.richtext("how_i_work_body"),
+      f.textarea("how_i_work_signature", { note: "Encadré signature (facultatif)" }),
+      // 5. Pourquoi cet accompagnement est différent
+      f.divider("why_different_divider", "Pourquoi c'est différent"),
+      f.input("why_different_title"),
+      f.richtext("why_different_body", { note: "Texte narratif (liste possible)" }),
+      // 6. Comment se déroule l'accompagnement
+      f.divider("format_divider", "Comment se déroule l'accompagnement"),
+      f.input("format_title"),
+      f.repeater("format_items", [{ field: "text" }], { note: "Format (visio, rythme…)" }),
+      f.textarea("format_body"),
+      // 8. Témoignage
       f.m2o("testimonial", "testimonials"),
+      // 9. Appel à l'action
+      f.divider("cta_divider", "Appel à l'action"),
+      f.input("cta_title"),
+      f.textarea("cta_body"),
       f.input("cta_label"),
+      f.input("cta_subtext", { note: "Sous-texte rassurant sous le bouton" }),
       ...f.seoBlock(),
     ],
   },
@@ -285,11 +332,21 @@ const singletons: CollectionDef[] = [
     collection: "resources_page",
     singleton: true,
     icon: "menu_book",
-    note: "Catégories branchées dynamiquement (article_categories)",
+    note: "Blog + newsletter fusionnés (« Les Tentacules »). Catégories dynamiques (article_categories).",
     fields: [
       f.input("accroche_title"),
       f.textarea("accroche_body"),
-      f.m2o("featured_resource", "resources"),
+      f.textarea("hero_signature", {
+        note: "Signature sous l'accroche (ex. « 🐙 Les Tentacules… »)",
+      }),
+      f.m2o("featured_article", "articles", { note: "Article « à lire en premier »" }),
+      f.m2o("featured_resource", "resources", {
+        note: "Ancien lead magnet vedette — déprécié (le lead magnet vit dans newsletter_page)",
+      }),
+      f.divider("positioning_divider", "Positionnement"),
+      f.input("positioning_title"),
+      f.richtext("positioning_body", { note: "Approche terrain (listes possibles)" }),
+      f.input("cta_title", { note: "Titre du CTA final (→ inscription newsletter)" }),
       ...f.seoBlock(),
     ],
   },
@@ -314,13 +371,16 @@ const singletons: CollectionDef[] = [
     collection: "newsletter_page",
     singleton: true,
     icon: "mail",
+    note: "Newsletter « Les Tentacules » — rendue dans la section newsletter de /ressources.",
     fields: [
-      f.input("name", { note: "Ex. « Le Fil »" }),
+      f.input("name", { note: "Ex. « Les Tentacules de L'Encre Humaine »" }),
+      f.textarea("subtitle", { note: "Sous-titre (ex. « Une fois tous les 15 jours… »)" }),
       f.richtext("promise_body"),
-      f.repeater("what_you_receive", [{ field: "text" }]),
-      f.m2o("welcome_gift_label", "resources", { note: "Cadeau de bienvenue (optionnel)" }),
+      f.repeater("helps_with", [{ field: "text" }], { note: "« Chaque édition aide à… »" }),
+      f.repeater("what_you_receive", [{ field: "text" }], { note: "« Contenu d'une édition »" }),
+      f.m2o("welcome_gift_label", "resources", { note: "Cadeau de bienvenue (lead magnet)" }),
       f.textarea("sample_excerpt"),
-      f.input("sample_issue_label", { note: "Ex. « Extrait du Fil #07 »" }),
+      f.input("sample_issue_label", { note: "Ex. « Extrait #07 »" }),
       f.textarea("rgpd_mention"),
       ...f.seoBlock(),
     ],
@@ -333,13 +393,33 @@ const singletons: CollectionDef[] = [
     fields: [
       f.input("accroche_title"),
       f.textarea("accroche_body"),
+      // Deux voies de contact (onglets RDV / message)
       f.textarea("booking_intro", { note: "Texte au-dessus de l'embed RDV" }),
+      f.textarea("booking_reassurance", {
+        note: "Réassurance sous le RDV (ex. « 🐙 Aucun tentacule commercial caché… »)",
+      }),
+      f.textarea("message_intro", { note: "Texte au-dessus du formulaire message" }),
+      // Comment se déroule le premier échange
       f.repeater("next_steps", [
         { field: "number" },
         { field: "title" },
         { field: "description", interface: "input-multiline" },
       ]),
+      f.textarea("steps_conclusion", { note: "Conclusion sous les étapes (optionnel)" }),
       f.textarea("response_time_note", { note: "Ex. « Je réponds sous 48h ouvrées… »" }),
+      // Vous pouvez me contacter si…
+      f.divider("reasons_divider", "Vous pouvez me contacter si…"),
+      f.input("reasons_title"),
+      f.repeater("reasons_org", [{ field: "text", interface: "input-multiline" }], {
+        note: "Pour les organisations",
+      }),
+      f.repeater("reasons_b2c", [{ field: "text", interface: "input-multiline" }], {
+        note: "Pour les particuliers",
+      }),
+      // CTA final
+      f.divider("contact_cta_divider", "CTA final"),
+      f.input("final_cta_title"),
+      f.textarea("final_cta_body"),
       ...f.seoBlock(),
     ],
   },
@@ -377,15 +457,23 @@ const collections: CollectionDef[] = [
       f.textarea("outcomes_intro"),
       f.repeater(
         "outcomes",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Bénéfices (titre + corps)" },
+        [
+          { field: "icon", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        { note: "Bénéfices (icône Material Symbols + titre + corps)" },
       ),
       // Ce que je vois souvent (contexte)
       f.input("context_title"),
       f.repeater(
         "context_items",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Situations récurrentes (titre + corps)" },
+        [
+          { field: "icon", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        { note: "Situations récurrentes (icône + titre + corps)" },
       ),
       f.textarea("context_conclusion"),
       // Une approche qui relie compétences et parcours (optionnel)
@@ -397,9 +485,18 @@ const collections: CollectionDef[] = [
       f.textarea("mission_intro", { note: "Intro sous le titre de la mission (optionnel)" }),
       f.repeater(
         "mission_includes",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "La mission inclut (titre + corps)" },
+        [
+          { field: "icon", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        { note: "La mission inclut (icône + titre + corps)" },
       ),
+      // Un regard / une expérience (optionnel — récit narratif avec listes)
+      f.input("background_title"),
+      f.richtext("background_body", {
+        note: "Récit d'expérience / regard terrain (puces possibles)",
+      }),
       f.input("format_title", {
         note: "Titre de la section format (défaut : « Comment ça se passe »)",
       }),
@@ -407,7 +504,16 @@ const collections: CollectionDef[] = [
       // Pour qui
       f.input("audience_fit_title"),
       f.repeater("audience_fit", [{ field: "text" }], { note: "Pour qui (✓)" }),
+      f.repeater("audience_fit_exclude", [{ field: "text", interface: "input-multiline" }], {
+        note: "Pas pour vous (✗) — optionnel",
+      }),
       f.textarea("audience_fit_conclusion"),
+      // Ce que vous emportez (livrables — optionnel)
+      f.input("takeaways_title"),
+      f.textarea("takeaways_intro"),
+      f.repeater("takeaways", [{ field: "text", interface: "input-multiline" }], {
+        note: "Ce que vous emportez (✓)",
+      }),
       // Témoignage + CTA
       f.m2o("featured_testimonial", "testimonials"),
       f.input("cta_title"),

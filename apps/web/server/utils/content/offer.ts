@@ -8,10 +8,12 @@ import {
   mapFaqItems,
   mapSeo,
   mapStringList,
-  mapTestimonialItem,
+  mapTestimonials,
   mapTitledItems,
   type RawSiteDefaults,
   str,
+  TESTIMONIAL_FIELDS,
+  TESTIMONIAL_SORT,
   type TitledItem,
 } from "./_shared";
 
@@ -52,12 +54,17 @@ export interface RawOfferFull {
   mission_title?: string | null;
   mission_intro?: string | null;
   mission_includes?: unknown; // répéteur { title, body }
+  background_title?: string | null;
+  background_body?: string | null; // rich text
   format_title?: string | null;
   format_body?: string | null; // rich text
   audience_fit_title?: string | null;
   audience_fit?: unknown; // répéteur { text }
+  audience_fit_exclude?: unknown; // répéteur { text } (✗)
   audience_fit_conclusion?: string | null;
-  featured_testimonial?: unknown; // m2o testimonials (résolu) ou string
+  takeaways_title?: string | null;
+  takeaways_intro?: string | null;
+  takeaways?: unknown; // répéteur { text }
   cta_title?: string | null;
   cta_body?: string | null;
   cta_label?: string | null;
@@ -71,6 +78,8 @@ export interface RawOfferFull {
 export interface OfferContent {
   /** Public de l'offre ; la page route vérifie la correspondance (sinon 404). */
   audience: Audience | null;
+  /** Nom de l'offre (eyebrow éditorial) ; `null` si absent. */
+  title: string | null;
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
   accrocheSubtitle: string | null;
@@ -88,19 +97,25 @@ export interface OfferContent {
   missionTitle: string | null;
   missionIntro: string | null;
   missionIncludes: TitledItem[];
+  /** « Un regard / une expérience » (optionnel) — titre + corps rich text assaini. */
+  background: { title: string | null; bodyHtml: string } | null;
   /** « Comment ça se passe » (optionnel) — titre surchargeable + corps assaini ("" si vide). */
   formatTitle: string | null;
   formatBodyHtml: string;
-  /** « Pour qui » (liste + conclusion). */
+  /** « Pour qui » (liste ✓ + liste ✗ « pas pour vous » + conclusion). */
   audienceFitTitle: string | null;
   audienceFit: string[];
+  audienceFitExclude: string[];
   audienceFitConclusion: string | null;
+  /** « Ce que vous emportez » (livrables) — titre + intro + liste ✓ ; masqué si liste vide. */
+  takeaways: { title: string | null; intro: string | null; items: string[] } | null;
   durationLabel: string | null;
   /** « Investissement » — libellé libre, jamais un montant calculé. */
   priceLabel: string | null;
   priceNote: string | null;
   faq: FaqItem[];
-  testimonial: TestimonialItem | null;
+  /** Témoignages centralisés (filtrés par audience de l'offre, vedettes d'abord). */
+  testimonials: TestimonialItem[];
   /** CTA final ; `ctaLabel` toujours présent (garde-fou d'affichage). */
   ctaTitle: string | null;
   ctaBody: string | null;
@@ -114,15 +129,17 @@ type Sanitize = (html?: string | null) => string;
 
 /**
  * Scope `faq_items` par slug d'offre (docs/02 §5, docs/05). Les choix `scope`
- * (`audit`/`competences`/`managers`/`b2c`/`general`) couvrent les 5 offres ;
- * `general` (transverse) est toujours ajouté. Slug inconnu → seulement `general`.
+ * (`audit`/`competences`/`managers`/`b2c`/`booster`/`general`) couvrent les 5 offres
+ * (clarifier partage le scope `b2c` du hub ; booster a le sien) ; `general`
+ * (transverse) est toujours ajouté. Slug inconnu → seulement `general`.
  */
 export const FAQ_SCOPE_BY_SLUG: Record<string, string> = {
   "audit-rh": "audit",
   "competences-parcours": "competences",
   "managers-equipes": "managers",
   "clarifier-avancer": "b2c",
-  "booster-recherche": "b2c",
+  // booster a sa propre FAQ (S11) : scope dédié pour ne pas fuiter sur le hub b2c / clarifier.
+  "booster-recherche": "booster",
 };
 
 /** Scopes de FAQ à charger pour une offre (spécifique + transverse). */
@@ -135,6 +152,7 @@ export function faqScopesForSlug(slug: string): string[] {
 export function mapOfferContent(
   raw: RawOfferFull,
   faqRaw: unknown,
+  testimonialsRaw: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
   sanitize: Sanitize,
@@ -145,8 +163,14 @@ export function mapOfferContent(
   const approcheTitle = str(raw.approche_title);
   const approcheBodyHtml = sanitize(raw.approche_body);
   const approcheSignature = str(raw.approche_signature);
+  const backgroundTitle = str(raw.background_title);
+  const backgroundBodyHtml = sanitize(raw.background_body);
+  const takeaways = mapStringList(raw.takeaways);
+  const takeawaysTitle = str(raw.takeaways_title);
+  const takeawaysIntro = str(raw.takeaways_intro);
   return {
     audience: asAudience(raw.audience) ?? null,
+    title: str(raw.title) || null,
     accrocheTitle: str(raw.accroche_title) || null,
     accrocheSubtitle: str(raw.accroche_subtitle) || null,
     accrocheBody: str(raw.accroche_body) || null,
@@ -169,16 +193,24 @@ export function mapOfferContent(
     missionTitle: str(raw.mission_title) || null,
     missionIntro: str(raw.mission_intro) || null,
     missionIncludes: mapTitledItems(raw.mission_includes),
+    background:
+      backgroundTitle || backgroundBodyHtml
+        ? { title: backgroundTitle || null, bodyHtml: backgroundBodyHtml }
+        : null,
     formatTitle: str(raw.format_title) || null,
     formatBodyHtml: sanitize(raw.format_body),
     audienceFitTitle: str(raw.audience_fit_title) || null,
     audienceFit: mapStringList(raw.audience_fit),
+    audienceFitExclude: mapStringList(raw.audience_fit_exclude),
     audienceFitConclusion: str(raw.audience_fit_conclusion) || null,
+    takeaways: takeaways.length
+      ? { title: takeawaysTitle || null, intro: takeawaysIntro || null, items: takeaways }
+      : null,
     durationLabel: str(raw.duration_label) || null,
     priceLabel: str(raw.price_label) || null,
     priceNote: str(raw.price_note) || null,
     faq: mapFaqItems(faqRaw, sanitize),
-    testimonial: mapTestimonialItem(raw.featured_testimonial),
+    testimonials: mapTestimonials(testimonialsRaw),
     ctaTitle: str(raw.cta_title) || null,
     ctaBody: str(raw.cta_body) || null,
     ctaLabel: str(raw.cta_label) || "Prendre rendez-vous",
@@ -222,22 +254,17 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "mission_title",
         "mission_intro",
         "mission_includes",
+        "background_title",
+        "background_body",
         "format_title",
         "format_body",
         "audience_fit_title",
         "audience_fit",
+        "audience_fit_exclude",
         "audience_fit_conclusion",
-        // m2o testimonials : relation vers une vraie collection → sélection imbriquée OK.
-        {
-          featured_testimonial: [
-            "quote",
-            "author_name",
-            "author_title",
-            "company",
-            "context",
-            "audience",
-          ],
-        },
+        "takeaways_title",
+        "takeaways_intro",
+        "takeaways",
         "cta_title",
         "cta_body",
         "cta_label",
@@ -253,13 +280,25 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
 
   if (!offer) return null;
 
-  const [faq, settings] = await Promise.all([
+  // Témoignages centralisés : filtrés sur l'audience de l'offre (B2B → organisation,
+  // B2C → particulier), vedettes d'abord (plus de pin M2O par offre).
+  const offerAudience = str((offer as { audience?: string | null }).audience);
+
+  const [faq, testimonials, settings] = await Promise.all([
     client.request(
       readItems("faq_items", {
         filter: { status: { _eq: "published" }, scope: { _in: faqScopesForSlug(slug) } },
         sort: ["sort"],
         limit: -1,
         fields: ["question", "answer"],
+      }),
+    ),
+    client.request(
+      readItems("testimonials", {
+        filter: { status: { _eq: "published" }, audience: { _eq: offerAudience } },
+        sort: [...TESTIMONIAL_SORT],
+        limit: -1,
+        fields: [...TESTIMONIAL_FIELDS],
       }),
     ),
     client.request(
@@ -272,6 +311,7 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
   return mapOfferContent(
     offer as unknown as RawOfferFull,
     faq,
+    testimonials,
     settings as unknown as RawSiteDefaults,
     assetBase,
     sanitizeRichText,

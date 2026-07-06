@@ -14,11 +14,27 @@ describe("mapNewsletterContent", () => {
   it("page vide : sections masquées", () => {
     const c = mapNewsletterContent({}, {}, BASE, wrap);
     expect(c.name).toBeNull();
+    expect(c.subtitle).toBeNull();
     expect(c.promiseHtml).toBe("");
+    expect(c.helpsWith).toEqual([]);
     expect(c.whatYouReceive).toEqual([]);
     expect(c.welcomeGiftLabel).toBeNull();
     expect(c.sample).toBeNull();
     expect(c.rgpdMention).toBeNull();
+  });
+
+  it("mappe le sous-titre et la liste « aide à » (entrées vides filtrées)", () => {
+    const c = mapNewsletterContent(
+      {
+        subtitle: "Tous les 15 jours.",
+        helps_with: [{ text: "comprendre une situation" }, { text: "" }],
+      },
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.subtitle).toBe("Tous les 15 jours.");
+    expect(c.helpsWith).toEqual(["comprendre une situation"]);
   });
 
   it("cadeau : titre si m2o résolu, null si non résolu (string)", () => {

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-// Index Ressources (blog) — docs/07-ressources.md. Contenu depuis `resources_page`
-// + articles publiés + ressource vedette, via l'endpoint caché `/api/content/resources`.
-// Fonctionne avec 0 article (état vide propre). Filtres par groupe de catégorie
-// (côté client). Ressource vedette : téléchargement direct OU gating newsletter.
+// Page fusionnée « Les Tentacules » (blog + newsletter) — /ressources. Contenu depuis
+// `resources_page` + articles publiés + `newsletter_page`, via l'endpoint caché
+// `/api/content/resources`. Fonctionne avec 0 article (état vide propre). Filtres par
+// groupe de catégorie (côté client). L'inscription passe par `NewsletterForm` (double
+// opt-in) ; la landing `/newsletter` a été fusionnée ici (redirect 301).
 const { data: content, error } = await useFetch("/api/content/resources", {
   query: usePreviewQuery(),
 });
@@ -16,6 +17,10 @@ const visibleArticles = computed(() => {
   const all = content.value?.articles ?? [];
   return activeGroup.value ? all.filter((a) => a.categoryGroup === activeGroup.value) : all;
 });
+// Mots-clés du filtre actif (chrome de taxonomie) — masqué sur « Tout ».
+const activeKeywords = computed(
+  () => content.value?.filters.find((f) => f.group === activeGroup.value)?.keywords ?? null,
+);
 
 // Pagination côté client (l'endpoint renvoie tous les articles publiés). Réinitialisée
 // au changement de filtre. La grille n'affiche qu'une page ; navigation par numéros.
@@ -34,9 +39,9 @@ function goToPage(n: number) {
 }
 
 useSeoMeta({
-  title: () => content.value?.seo.title ?? `Ressources — ${siteName}`,
+  title: () => content.value?.seo.title ?? `Les Tentacules — ${siteName}`,
   description: () => content.value?.seo.description ?? undefined,
-  ogTitle: () => content.value?.seo.title ?? `Ressources — ${siteName}`,
+  ogTitle: () => content.value?.seo.title ?? `Les Tentacules — ${siteName}`,
   ogDescription: () => content.value?.seo.description ?? undefined,
   ogImage: () => content.value?.seo.ogImage ?? undefined,
   ogType: "website",
@@ -46,13 +51,20 @@ useSeoMeta({
 
 <template>
   <div>
-    <!-- 1. Accroche (h1) -->
+    <!-- 1. Hero (h1 + sous-titre + signature 🐙) -->
     <PageHero
       :title="heading"
-      eyebrow="Ressources"
+      eyebrow="Les Tentacules"
       :body="content?.accrocheBody ?? undefined"
       variant="neutral"
-    />
+    >
+      <p
+        v-if="content?.heroSignature"
+        class="mx-auto mt-6 max-w-2xl whitespace-pre-line font-display text-lg font-medium text-teal-800"
+      >
+        {{ content.heroSignature }}
+      </p>
+    </PageHero>
 
     <p
       v-if="error"
@@ -63,13 +75,17 @@ useSeoMeta({
     </p>
 
     <template v-else-if="content">
-      <!-- 2. Ressource gratuite en vedette -->
-      <section v-if="content.featured" class="mx-auto max-w-5xl px-4 py-16">
-        <article class="grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft md:grid-cols-2 md:p-8">
+      <!-- 3. À lire en premier (article vedette) — masqué si non défini -->
+      <section v-if="content.featuredArticle" v-reveal class="mx-auto max-w-5xl px-4 py-16">
+        <SectionHeading title="À lire en premier" eyebrow="Sélection" />
+        <NuxtLink
+          :to="`/ressources/${content.featuredArticle.slug}`"
+          class="mt-8 grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-2 md:p-8"
+        >
           <NuxtImg
-            v-if="content.featured.coverUrl"
-            :src="content.featured.coverUrl"
-            :alt="content.featured.title"
+            v-if="content.featuredArticle.coverImage"
+            :src="content.featuredArticle.coverImage"
+            :alt="content.featuredArticle.coverAlt || content.featuredArticle.title"
             width="640"
             height="480"
             fit="cover"
@@ -80,67 +96,58 @@ useSeoMeta({
             class="aspect-[4/3] w-full rounded-2xl object-cover"
           />
           <div>
-            <p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent">
-              <span aria-hidden="true" class="h-px w-5 bg-orange-300"></span>
-              Ressource gratuite
-            </p>
-            <h2 class="mt-2 font-display text-2xl font-bold text-ink">
-              {{ content.featured.title }}
-            </h2>
-            <p v-if="content.featured.description" class="mt-3 leading-relaxed text-ink/65">
-              {{ content.featured.description }}
-            </p>
-
-            <!-- Gating email → inscription newsletter ; sinon téléchargement direct -->
-            <div v-if="content.featured.requiresEmail" class="mt-6">
-              <p class="mb-3 text-sm text-ink/60">
-                Recevez cette ressource en vous inscrivant à la newsletter :
-              </p>
-              <NewsletterForm />
-            </div>
-            <a
-              v-else-if="content.featured.downloadUrl"
-              :href="content.featured.downloadUrl"
-              target="_blank"
-              rel="noopener"
-              class="mt-6 inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
+            <p
+              v-if="content.featuredArticle.categoryName"
+              class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent"
             >
-              Télécharger
-              <span aria-hidden="true">↓</span>
-            </a>
+              <span aria-hidden="true" class="h-px w-5 bg-orange-300"></span>
+              {{ content.featuredArticle.categoryName }}
+            </p>
+            <h3 class="mt-2 font-display text-2xl font-bold text-ink">
+              {{ content.featuredArticle.title }}
+            </h3>
+            <p v-if="content.featuredArticle.excerpt" class="mt-3 leading-relaxed text-ink/65">
+              {{ content.featuredArticle.excerpt }}
+            </p>
+            <span class="mt-6 inline-flex items-center gap-1.5 font-semibold text-teal-700">
+              Lire l'article <span aria-hidden="true">→</span>
+            </span>
           </div>
-        </article>
+        </NuxtLink>
       </section>
 
-      <!-- 3 + 4. Filtres + grille d'articles -->
-      <section class="mx-auto max-w-6xl px-4 pb-24" :class="content.featured ? '' : 'pt-4'">
-        <SectionHeading title="Articles" />
+      <!-- 2 + 4. Explorer les Tentacules (filtres) + dernières publiées (grille) -->
+      <section class="mx-auto max-w-6xl px-4 pb-24" :class="content.featuredArticle ? '' : 'pt-4'">
+        <SectionHeading title="Dernières tentacules publiées" eyebrow="Explorer les Tentacules" />
 
-        <div v-if="content.filters.length" class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filtrer par thème">
-          <button
-            type="button"
-            class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
-            :class="activeGroup === null
-              ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
-              : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-            :aria-pressed="activeGroup === null"
-            @click="activeGroup = null"
-          >
-            Tout
-          </button>
-          <button
-            v-for="filter in content.filters"
-            :key="filter.group"
-            type="button"
-            class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
-            :class="activeGroup === filter.group
-              ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
-              : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-            :aria-pressed="activeGroup === filter.group"
-            @click="activeGroup = filter.group"
-          >
-            {{ filter.label }}
-          </button>
+        <div v-if="content.filters.length" class="mt-6" role="group" aria-label="Filtrer par thème">
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
+              :class="activeGroup === null
+                ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
+                : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
+              :aria-pressed="activeGroup === null"
+              @click="activeGroup = null"
+            >
+              Tout
+            </button>
+            <button
+              v-for="filter in content.filters"
+              :key="filter.group"
+              type="button"
+              class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
+              :class="activeGroup === filter.group
+                ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
+                : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
+              :aria-pressed="activeGroup === filter.group"
+              @click="activeGroup = filter.group"
+            >
+              <span aria-hidden="true">{{ filter.emoji }}</span> {{ filter.label }}
+            </button>
+          </div>
+          <p v-if="activeKeywords" class="mt-3 text-sm text-ink/55">{{ activeKeywords }}</p>
         </div>
 
         <!-- État vide (0 article) : pas de section cassée -->
@@ -149,8 +156,8 @@ useSeoMeta({
           class="mt-12 text-center text-ink/65"
           role="status"
         >
-          Les premiers articles arrivent bientôt. En attendant, abonnez-vous à
-          <NuxtLink to="/newsletter" class="text-teal-700 underline">la newsletter</NuxtLink>.
+          Les premières tentacules arrivent bientôt. En attendant, inscrivez-vous à
+          <NuxtLink to="#newsletter" class="text-teal-700 underline">la newsletter</NuxtLink>.
         </p>
 
         <div v-else class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -194,6 +201,75 @@ useSeoMeta({
             <span aria-hidden="true">→</span><span class="sr-only">Page suivante</span>
           </button>
         </nav>
+      </section>
+
+      <!-- 5. Newsletter intégrée « Les Tentacules » -->
+      <section id="newsletter" v-reveal class="scroll-mt-24 bg-teal-50">
+        <div class="mx-auto max-w-5xl px-4 py-20">
+          <SectionHeading
+            :title="content.newsletter.name || 'Les Tentacules de L\'Encre Humaine'"
+            :subtitle="content.newsletter.subtitle ?? undefined"
+            eyebrow="🐙 Newsletter"
+            align="center"
+          />
+          <div class="mt-10 grid gap-10 md:grid-cols-2">
+            <div class="space-y-8">
+              <div v-if="content.newsletter.helpsWith.length">
+                <p class="font-display font-semibold text-ink">Chaque édition aide à :</p>
+                <ul class="mt-3 space-y-2">
+                  <li
+                    v-for="(item, i) in content.newsletter.helpsWith"
+                    :key="i"
+                    class="flex items-start gap-2.5 text-ink/75"
+                  >
+                    <span class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-teal-100 text-xs font-bold text-teal-700" aria-hidden="true">✓</span>
+                    <span>{{ item }}</span>
+                  </li>
+                </ul>
+              </div>
+              <div v-if="content.newsletter.whatYouReceive.length">
+                <p class="font-display font-semibold text-ink">Dans chaque édition :</p>
+                <ul class="mt-3 space-y-2">
+                  <li
+                    v-for="(item, i) in content.newsletter.whatYouReceive"
+                    :key="i"
+                    class="flex items-start gap-2.5 text-ink/75"
+                  >
+                    <span class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-teal-100 text-xs font-bold text-teal-700" aria-hidden="true">•</span>
+                    <span>{{ item }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
+              <NewsletterForm submit-label="Recevoir les Tentacules" />
+              <p
+                v-if="content.newsletter.welcomeGiftLabel"
+                class="mt-5 rounded-2xl bg-orange-50 px-4 py-3 text-sm text-ink/75"
+              >
+                <span aria-hidden="true">📘</span>
+                <span class="font-semibold text-orange-700"> Offert à l'inscription : </span>
+                {{ content.newsletter.welcomeGiftLabel }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Positionnement — masqué si vide -->
+      <section v-if="content.positioning" v-reveal class="mx-auto max-w-3xl px-4 py-20">
+        <SectionHeading :title="content.positioning.title || 'Une approche terrain'" />
+        <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
+      </section>
+
+      <!-- 7. CTA final → section newsletter -->
+      <section v-reveal class="mx-auto max-w-6xl px-4 pb-24">
+        <CtaBlock
+          :title="content.ctaTitle || 'Commencer à y voir plus clair'"
+          cta-label="S'inscrire aux prochaines Tentacules"
+          to="#newsletter"
+          variant="teal"
+        />
       </section>
     </template>
   </div>

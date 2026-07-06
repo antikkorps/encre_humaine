@@ -24,7 +24,54 @@ export default defineNuxtConfig({
   // docs/00-global.md §Composants (NavMobile, FaqAccordion). a11y native.
   // nuxt-security : CSP stricte à nonce + en-têtes sécurité (docs/06 §6) — owne
   // les en-têtes du site public (Caddy ne les pose plus que pour cms./stats.).
-  modules: ["@nuxt/image", "@nuxt/fonts", "@nuxtjs/seo", "reka-ui/nuxt", "nuxt-security"],
+  modules: [
+    "@nuxt/image",
+    "@nuxt/icon",
+    "@nuxt/fonts",
+    "@nuxtjs/seo",
+    "reka-ui/nuxt",
+    "nuxt-security",
+  ],
+
+  // @nuxt/icon : on **n'embarque QUE les icônes réellement utilisées** (clientBundle
+  // explicite) au lieu de toute la collection material-symbols (~10k icônes) — sinon
+  // le build Nitro sature la mémoire (OOM sur le runner CI ~2 Go). Ces icônes sont
+  // inline (SSR + client), zéro appel à api.iconify.design (`serverBundle:false` +
+  // `fallbackToApi:false`) → CSP-safe. ⚠️ Ajouter ici toute NOUVELLE clé d'icône
+  // rendue (sinon elle n'apparaît pas). Source : `@iconify-json/material-symbols`.
+  icon: {
+    mode: "svg",
+    serverBundle: false,
+    fallbackToApi: false,
+    clientBundle: {
+      sizeLimitKb: 512,
+      icons: [
+        "material-symbols:arrow-forward",
+        "material-symbols:cancel",
+        "material-symbols:check-circle",
+        "material-symbols:check-circle-rounded",
+        "material-symbols:event",
+        "material-symbols:format-quote",
+        "material-symbols:payments",
+        "material-symbols:lightbulb",
+        "material-symbols:insights",
+        "material-symbols:analytics",
+        "material-symbols:description",
+        "material-symbols:difference",
+        "material-symbols:flag",
+        "material-symbols:format-list-numbered",
+        "material-symbols:forum",
+        "material-symbols:group",
+        "material-symbols:layers",
+        "material-symbols:record-voice-over",
+        "material-symbols:route",
+        "material-symbols:schedule",
+        "material-symbols:settings",
+        "material-symbols:trending-up",
+        "material-symbols:visibility",
+      ],
+    },
+  },
 
   // Sécurité — docs/06-security.md §6/§7. CSP **à nonce** (script-src sans
   // 'unsafe-inline') : Nuxt émet un <script> inline de config qui DOIT porter le
@@ -154,6 +201,13 @@ export default defineNuxtConfig({
       analyticsWebsiteId: process.env.ANALYTICS_WEBSITE_ID ?? "",
       vatEnabled: process.env.VAT_ENABLED === "true",
     },
+  },
+
+  // Redirections. La landing d'inscription `/newsletter` a fusionné dans la section
+  // newsletter de `/ressources` (« Les Tentacules ») → 301. `/newsletter/confirmation`
+  // (page inerte du double opt-in) reste une route à part (non redirigée).
+  routeRules: {
+    "/newsletter": { redirect: { to: "/ressources", statusCode: 301 } },
   },
 
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.

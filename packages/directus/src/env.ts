@@ -61,6 +61,13 @@ export const config = {
   editorPassword: process.env.DIRECTUS_EDITOR_PASSWORD ?? fileEnv.DIRECTUS_EDITOR_PASSWORD ?? "",
   /** URL publique du site → Project URL Directus (logo cliquable vers le site). Vide = ignoré. */
   siteUrl: process.env.BASE_URL ?? fileEnv.BASE_URL ?? "",
+  /**
+   * URL de prise de RDV (provider-agnostique, cf. BOOKING_URL) → seed dans
+   * `site_settings.booking_url`. Lue depuis l'env pour ne PAS diverger du socle
+   * `infra/env/.env` (instance UE cal.eu). Fallback = valeur de prod connue.
+   */
+  bookingUrl:
+    process.env.BOOKING_URL ?? fileEnv.BOOKING_URL ?? "https://cal.eu/encrehumaine/rdv-decouverte",
   /** Tableau de bord Umami (dérivé de ANALYTICS_SCRIPT_URL) → lien barre de modules. Vide = ignoré. */
   umamiUrl: (process.env.ANALYTICS_SCRIPT_URL ?? fileEnv.ANALYTICS_SCRIPT_URL ?? "").replace(
     /\/script\.js$/,

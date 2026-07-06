@@ -7,6 +7,9 @@ import type { ErrorCode } from "@encre/shared/errors";
 import { NewsletterSubscribeSchema } from "@encre/shared/validation";
 import * as v from "valibot";
 
+// Libellé du bouton d'inscription (surchargeable — ex. « Recevoir les Tentacules »).
+withDefaults(defineProps<{ submitLabel?: string }>(), { submitLabel: "Je m'abonne" });
+
 const form = reactive({
   firstName: "",
   email: "",
@@ -128,7 +131,7 @@ async function onSubmit() {
       :disabled="status === 'submitting' || (!!siteKey && !ready)"
       class="inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800 disabled:opacity-60"
     >
-      {{ status === "submitting" ? "Inscription…" : "Je m'abonne" }}
+      {{ status === "submitting" ? "Inscription…" : submitLabel }}
     </button>
 
     <p class="text-xs text-ink/55">

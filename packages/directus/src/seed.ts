@@ -11,6 +11,7 @@
 
 import { get, patch, post } from "./api.ts";
 import { homePageContent } from "./content-home.ts";
+import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
 
@@ -45,7 +46,7 @@ async function main(): Promise<void> {
     tagline: "Conseil RH & accompagnement des parcours professionnels",
     contact_email: "contact@encrehumaine.fr",
     linkedin_url: "https://www.linkedin.com/in/eleonore-moree",
-    booking_url: "https://cal.com/eleonore/decouverte",
+    booking_url: config.bookingUrl,
     location_label: "Bouches-du-Rhône · France entière",
     social_links: [{ platform: "LinkedIn", url: "https://www.linkedin.com/in/eleonore-moree" }],
     legal_name: "Eléonore Morée",
@@ -69,7 +70,9 @@ async function main(): Promise<void> {
     featured: true,
     ...PUB,
   });
-  const tSophie = await upsert("testimonials", "author_name", "Sophie Lambert", {
+  // Témoignage démo B2C — seedé pour l'admin ; non rattaché à une offre tant
+  // qu'Éléonore n'a pas fourni de vrai retour client (offres B2C : testimonial null).
+  await upsert("testimonials", "author_name", "Sophie Lambert", {
     quote:
       "J'étais perdue dans ma reconversion. En quelques séances, j'ai retrouvé un cap clair et la confiance pour avancer.",
     author_title: "En reconversion",
@@ -104,7 +107,7 @@ async function main(): Promise<void> {
   });
 
   // ── articles ────────────────────────────────────────────────────────────────
-  await upsert("articles", "slug", "structurer-rh-pme", {
+  const aStructurer = await upsert("articles", "slug", "structurer-rh-pme", {
     title: "Structurer ses pratiques RH en PME : par où commencer ?",
     excerpt: "Trois leviers concrets pour poser des bases RH solides sans usine à gaz.",
     body: P(
@@ -141,23 +144,54 @@ async function main(): Promise<void> {
   // ── faq_items (par scope) ───────────────────────────────────────────────────
   const faqs: Array<{ q: string; a: string; scope: string }> = [
     {
+      q: "Le premier échange est-il gratuit ?",
+      a: P("Oui.", "Il s'agit d'un échange découverte de 30 minutes, sans engagement."),
+      scope: "contact",
+    },
+    {
+      q: "Dois-je préparer quelque chose ?",
+      a: P("Non.", "Venez simplement avec votre situation et vos questions."),
+      scope: "contact",
+    },
+    {
       q: "Sous quel délai répondez-vous ?",
-      a: P("Sous 48h ouvrées, par email."),
+      a: P("Je réponds généralement sous 48 heures ouvrées."),
       scope: "contact",
     },
     {
-      q: "Proposez-vous un premier échange gratuit ?",
-      a: P("Oui, une séance découverte de 30 minutes."),
+      q: "Et si vous n'êtes pas la bonne personne ?",
+      a: P(
+        "Je vous le dirai.",
+        "Je préfère orienter vers la bonne ressource plutôt que proposer un accompagnement qui ne serait pas adapté.",
+      ),
       scope: "contact",
     },
     {
-      q: "Comment se passe un accompagnement individuel ?",
-      a: P("En visio ou présentiel, en 4 à 6 séances selon le besoin."),
+      q: "Puis-je utiliser mon CPF ?",
+      a: P(
+        "Non.",
+        "Ces accompagnements ne sont pas éligibles au CPF.",
+        "Ils relèvent d'une démarche personnelle et volontaire.",
+      ),
       scope: "b2c",
     },
     {
-      q: "Est-ce adapté si je ne sais pas encore quoi faire ?",
-      a: P("C'est même le point de départ idéal : on clarifie ensemble."),
+      q: "Cet accompagnement est-il fait pour moi ?",
+      a: P(
+        "Il s'adresse aux personnes qui souhaitent avancer dans leur réflexion ou leur projet professionnel.",
+        "En revanche, il ne remplace pas un accompagnement thérapeutique lorsqu'une souffrance psychologique importante est présente.",
+      ),
+      scope: "b2c",
+    },
+    {
+      q: "Que se passe-t-il lors du premier échange ?",
+      a: P(
+        "Nous faisons connaissance.",
+        "Vous m'expliquez votre situation, vos interrogations et vos besoins.",
+        "Je vous explique ma façon de travailler.",
+        "Et nous regardons ensemble si l'accompagnement est pertinent pour vous.",
+        "Sans engagement. Sans pression.",
+      ),
       scope: "b2c",
     },
     {
@@ -243,6 +277,76 @@ async function main(): Promise<void> {
       ),
       scope: "managers",
     },
+    // Booster sa recherche — FAQ dédiée (scope propre pour ne pas fuiter sur le hub / clarifier)
+    {
+      q: "Est-ce que cet accompagnement garantit de trouver un emploi ?",
+      a: P(
+        "Non.",
+        "Et aucun accompagnement sérieux ne peut le garantir.",
+        "En revanche, il augmente votre lisibilité auprès des recruteurs, la cohérence de votre candidature et l'efficacité de votre stratégie de recherche.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce qu'on revoit uniquement mon CV ?",
+      a: P(
+        "Non.",
+        "Le CV est un support parmi d'autres. Nous travaillons aussi votre positionnement, votre profil LinkedIn, votre stratégie de recherche et votre posture en entretien.",
+        "L'objectif n'est pas d'avoir un « beau CV », mais une recherche d'emploi efficace et cohérente.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Quelle est la différence avec « Clarifier & Avancer » ?",
+      a: P(
+        "Clarifier & Avancer sert à comprendre votre direction professionnelle, explorer vos options et construire un projet.",
+        "Booster sa recherche sert à structurer une recherche déjà définie, rendre votre profil visible et lisible, et optimiser vos candidatures.",
+        "En résumé : Clarifier = comprendre où aller ; Booster = savoir comment y arriver.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce que ça marche si je n'ai pas postulé depuis longtemps ?",
+      a: P(
+        "Oui.",
+        "C'est même un cas fréquent. On reprend ensemble les codes actuels du marché du travail et on reconstruit une stratégie adaptée à votre situation actuelle.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce que vous m'aidez à trouver des offres ?",
+      a: P(
+        "Je ne suis pas un cabinet de recrutement.",
+        "En revanche, je vous aide à mieux cibler les bons postes, activer votre réseau, comprendre où et comment chercher, et rendre vos candidatures plus efficaces.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce que cet accompagnement est adapté à une reconversion ?",
+      a: P(
+        "Oui, si votre projet est déjà clarifié.",
+        "Sinon, il est préférable de commencer par « Clarifier & Avancer », pour éviter de « booster » une direction qui n'est pas encore stable.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Est-ce finançable par le CPF ?",
+      a: P(
+        "Non.",
+        "Cet accompagnement n'est pas éligible au CPF.",
+        "Il s'agit d'un accompagnement individuel en stratégie de recherche d'emploi et repositionnement professionnel.",
+      ),
+      scope: "booster",
+    },
+    {
+      q: "Que se passe-t-il lors de la séance découverte ?",
+      a: P(
+        "On fait un point sur votre situation actuelle, vos candidatures, vos difficultés et vos objectifs.",
+        "Puis je vous indique si cet accompagnement est adapté ou si une autre approche serait plus pertinente.",
+        "Sans engagement.",
+      ),
+      scope: "booster",
+    },
     {
       q: "Intervenez-vous partout en France ?",
       a: P("Oui, à distance, et en présentiel dans la région PACA."),
@@ -254,7 +358,8 @@ async function main(): Promise<void> {
   }
 
   // ── offers (5 documentées) ──────────────────────────────────────────────────
-  type TB = { title: string; body?: string };
+  // `icon` = clé Material Symbols au format Iconify (hyphénée, ex. « trending-up »).
+  type TB = { title: string; body?: string; icon?: string };
   type OfferSeed = {
     slug: string;
     audience: string;
@@ -281,11 +386,17 @@ async function main(): Promise<void> {
     mission_title?: string;
     mission_intro?: string;
     mission_includes?: TB[];
+    background_title?: string;
+    background_body?: string;
     format_title?: string;
     format_body?: string;
     audience_fit_title?: string;
     audience_fit?: { text: string }[];
+    audience_fit_exclude?: { text: string }[];
     audience_fit_conclusion?: string;
+    takeaways_title?: string;
+    takeaways_intro?: string;
+    takeaways?: { text: string }[];
     cta_title?: string;
     cta_body?: string;
     cta_label?: string;
@@ -313,18 +424,22 @@ async function main(): Promise<void> {
         "L'objectif n'est pas de produire un document théorique. Il est de vous permettre de comprendre rapidement où vous en êtes, ce qui fonctionne déjà, ce qui freine votre organisation, et par quoi commencer.",
       outcomes: [
         {
+          icon: "visibility",
           title: "Voir clairement votre situation RH",
           body: "Vous obtenez une lecture structurée de vos pratiques actuelles, sans jargon ni jugement.",
         },
         {
+          icon: "flag",
           title: "Identifier les vrais leviers d'action",
           body: "Pas une liste de recommandations, mais ce qui aura réellement un impact dans votre contexte.",
         },
         {
+          icon: "format-list-numbered",
           title: "Prioriser ce qui compte vraiment",
           body: "Ce qui est urgent, ce qui est important, et ce qui peut attendre.",
         },
         {
+          icon: "layers",
           title: "Poser une base solide pour la suite",
           body: "Que vous poursuiviez ensuite seul ou accompagné, vous repartez avec une vision claire et exploitable.",
         },
@@ -332,22 +447,27 @@ async function main(): Promise<void> {
       context_title: "Derrière chaque audit RH, on retrouve des situations très similaires.",
       context_items: [
         {
+          icon: "description",
           title: "Compétences peu lisibles",
           body: "Les savoir-faire existent, mais ils ne sont pas formalisés ni partagés.",
         },
         {
+          icon: "group",
           title: "Managers en sur-sollicitation",
           body: "Ils portent beaucoup de responsabilités sans cadre commun ni outils stabilisés.",
         },
         {
+          icon: "settings",
           title: "Outils RH sous-exploités",
           body: "Entretiens, formation, procédures… présents, mais peu structurants dans le quotidien.",
         },
         {
+          icon: "trending-up",
           title: "Organisation en croissance rapide",
           body: "L'entreprise évolue plus vite que ses pratiques internes.",
         },
         {
+          icon: "schedule",
           title: "Pilotage à court terme",
           body: "Le quotidien prend le dessus sur la structuration.",
         },
@@ -356,22 +476,27 @@ async function main(): Promise<void> {
       mission_title: "Un audit RH complet, structuré et directement exploitable.",
       mission_includes: [
         {
+          icon: "analytics",
           title: "Analyse de votre organisation RH",
           body: "Recrutement, intégration, formation, entretiens, compétences, management.",
         },
         {
+          icon: "forum",
           title: "Entretiens avec les parties prenantes clés",
           body: "Direction, managers, fonctions support selon votre organisation.",
         },
         {
+          icon: "difference",
           title: "Lecture des écarts et enjeux",
           body: "Entre vos pratiques actuelles et vos besoins réels de développement.",
         },
         {
+          icon: "route",
           title: "Feuille de route priorisée",
           body: "Une vision claire : court terme (actions immédiates), moyen terme, structuration long terme.",
         },
         {
+          icon: "record-voice-over",
           title: "Restitution orale",
           body: "Un temps d'échange pour repartir avec une vision claire et actionnable.",
         },
@@ -697,9 +822,159 @@ async function main(): Promise<void> {
       title: "Clarifier & avancer",
       icon: "explore",
       short_description: "Retrouver un cap professionnel clair et un plan d'action réaliste.",
-      duration_label: "4 à 6 séances",
-      price_label: "À partir de 90 € / séance",
-      featured_testimonial: tSophie,
+      // S7 — Format
+      duration_label: "6 séances d'une heure",
+      // S9 — Investissement (« Sur demande » d'Éléonore ; pas de montant publié)
+      price_label: "Sur demande",
+      price_note:
+        "Paiement en 2 ou 3 fois possible.\n\nSéance découverte offerte.\n\nSans engagement après le premier échange.",
+      // S1 — Accroche
+      accroche_title:
+        "Vous n'avez pas besoin d'avoir déjà trouvé la réponse. Vous avez besoin de retrouver de la clarté.",
+      accroche_subtitle:
+        "Questionnement professionnel, reconversion, perte de sens, évolution de carrière, licenciement, envie de changement…\n\n" +
+        "Certaines périodes de la vie professionnelle nous obligent à nous arrêter pour comprendre ce qui se joue réellement.\n\n" +
+        "Et lorsqu'on est directement concerné, il est souvent difficile de prendre du recul seul.",
+      accroche_body:
+        "Vous avez peut-être l'impression de tourner en rond.\n\n" +
+        "De vous poser les mêmes questions sans parvenir à avancer.\n\n" +
+        "Vous hésitez entre rester et partir.\n\n" +
+        "Changer ou continuer.\n\n" +
+        "Explorer une nouvelle voie ou sécuriser celle que vous connaissez déjà.\n\n" +
+        "Dans ces moments-là, la difficulté n'est pas toujours de trouver une solution.\n\n" +
+        "C'est souvent de retrouver suffisamment de clarté pour comprendre ce que vous vivez, ce qui compte réellement pour vous et ce que vous souhaitez construire ensuite.",
+      accroche_signature:
+        "Parce qu'il est plus facile d'avancer quand on comprend enfin où l'on se trouve.",
+      // S2 — Ce que cet accompagnement peut changer (bénéfices)
+      outcomes_title: "Passer du brouillard à une direction plus claire.",
+      outcomes_intro:
+        "Vous n'avez pas besoin de repartir avec un plan de carrière sur dix ans. Vous avez besoin de comprendre ce qui se passe aujourd'hui pour pouvoir décider de la suite.",
+      outcomes: [
+        {
+          title: "Mettre des mots sur ce que vous vivez",
+          body: "Comprendre ce qui génère le doute, la frustration ou l'envie de changement.",
+        },
+        {
+          title: "Relire votre parcours autrement",
+          body: "Identifier les expériences, compétences et motivations qui ont réellement façonné votre trajectoire professionnelle.",
+        },
+        {
+          title: "Retrouver confiance dans vos ressources",
+          body: "Prendre conscience de ce que vous savez faire, de ce que vous apportez et de ce que vous pouvez construire.",
+        },
+        {
+          title: "Explorer des pistes réalistes",
+          body: "Ouvrir le champ des possibles sans perdre de vue votre réalité personnelle, professionnelle ou financière.",
+        },
+        {
+          title: "Reprendre une dynamique d'action",
+          body: "Passer progressivement de la réflexion à des choix concrets et assumés.",
+        },
+      ],
+      // S3 — Derrière le flou, il y a souvent déjà des réponses (récit + signature)
+      approche_title:
+        "Vous n'êtes peut-être pas perdu·e. Vous êtes peut-être à un moment charnière.",
+      approche_body: P(
+        "Lorsqu'une transition professionnelle s'installe, beaucoup de personnes pensent qu'elles doivent repartir de zéro.",
+        "C'est rarement le cas.",
+        "La plupart du temps, les réponses existent déjà en partie.",
+        "Elles sont simplement dispersées dans votre expérience, vos réussites, vos difficultés, vos envies ou vos contraintes.",
+        "L'accompagnement consiste à les rendre plus visibles.",
+        "À relier les éléments entre eux.",
+        "À donner du sens à ce qui paraît encore confus.",
+      ),
+      approche_signature:
+        "Structurer sans déshumaniser.\n\nMême lorsqu'il s'agit d'un parcours individuel, il est possible d'apporter du cadre sans enfermer les choix.",
+      // S4 — Ce que nous travaillons ensemble
+      mission_title:
+        "Un accompagnement de transition professionnelle construit autour de votre réalité.",
+      mission_includes: [
+        {
+          title: "Faire le point sur votre parcours",
+          body: "Comprendre ce que vous avez vécu, appris et construit au fil de vos expériences.",
+        },
+        {
+          title: "Identifier vos ressources",
+          body: "Repérer vos compétences, vos forces, vos moteurs et vos besoins professionnels.",
+        },
+        {
+          title: "Clarifier vos priorités",
+          body: "Faire la différence entre ce que vous souhaitez réellement et ce qui relève des attentes extérieures.",
+        },
+        {
+          title: "Explorer plusieurs scénarios",
+          body: "Construire des pistes d'évolution professionnelle cohérentes avec votre situation.",
+        },
+        {
+          title: "Définir une direction",
+          body: "Transformer les réflexions en choix concrets et progressifs.",
+        },
+        {
+          title: "Construire un plan d'action",
+          body: "Identifier les premières étapes pour avancer de manière réaliste et durable.",
+        },
+      ],
+      // S5 — Une approche à la croisée des parcours et des RH (récit d'expérience)
+      background_title:
+        "Je ne vous accompagne pas seulement avec des outils. Je vous accompagne avec une expérience du terrain.",
+      background_body:
+        P(
+          "Depuis plus de 10 ans, j'évolue dans les domaines de l'insertion professionnelle, de la formation et des ressources humaines.",
+          "J'ai accompagné :",
+        ) +
+        "<ul><li>des personnes en recherche d'emploi ;</li><li>des salariés en reconversion professionnelle ;</li><li>des personnes confrontées à une rupture de parcours ;</li><li>des collaborateurs en évolution de carrière ;</li><li>des organisations qui cherchent à développer les compétences de leurs équipes.</li></ul>" +
+        P("Cette expérience me permet de porter un double regard :") +
+        "<ul><li>celui des parcours professionnels individuels ;</li><li>celui des réalités du marché du travail et des entreprises.</li></ul>" +
+        P(
+          "Mon rôle n'est pas de vous dire quoi faire.",
+          "Mon rôle est de vous aider à comprendre votre situation pour que vos décisions vous appartiennent réellement.",
+        ),
+      // S7 — Le format
+      format_title: "Un accompagnement à votre rythme.",
+      format_body:
+        "<ul><li>6 séances individuelles d'une heure</li><li>En visioconférence</li><li>Rythme personnalisé</li><li>Exercices et réflexions entre les séances</li></ul>" +
+        P(
+          "Certaines personnes retrouvent rapidement de la clarté.",
+          "D'autres ont besoin de davantage de temps pour explorer leur situation.",
+          "Le rythme s'adapte à votre besoin et à l'avancement de votre réflexion.",
+        ),
+      // S6 — Pour qui ? (✓ et ✗)
+      audience_fit_title: "Cet accompagnement est particulièrement adapté si…",
+      audience_fit: [
+        { text: "Vous traversez une période de questionnement professionnel" },
+        { text: "Vous envisagez une reconversion professionnelle" },
+        { text: "Vous avez perdu votre emploi et souhaitez réfléchir à la suite" },
+        { text: "Vous ressentez une perte de sens dans votre activité actuelle" },
+        { text: "Vous avez plusieurs pistes et ne savez pas laquelle explorer" },
+        { text: "Vous souhaitez construire un projet professionnel plus cohérent" },
+        {
+          text: "Vous avez besoin de prendre une décision importante concernant votre avenir professionnel",
+        },
+      ],
+      audience_fit_exclude: [
+        { text: "Vous cherchez simplement à valider une décision déjà prise" },
+        { text: "Vous recherchez une réponse toute faite" },
+        {
+          text: "Vous traversez une souffrance psychologique nécessitant un accompagnement thérapeutique spécialisé",
+        },
+      ],
+      // S8 — Ce que vous emportez avec vous
+      takeaways_title: "Des réponses, mais surtout une direction.",
+      takeaways_intro: "À l'issue de l'accompagnement, vous repartez avec :",
+      takeaways: [
+        { text: "Une meilleure compréhension de votre situation" },
+        { text: "Une vision plus claire de vos besoins professionnels" },
+        { text: "Un projet ou plusieurs scénarios d'évolution réalistes" },
+        { text: "Un plan d'action concret" },
+        { text: "Des outils de réflexion réutilisables par la suite" },
+        { text: "Davantage de confiance dans vos décisions" },
+      ],
+      // CTA final (Éléonore n'en fournit pas ; wording léger au ton du site, à valider)
+      cta_title: "Et si vous vous accordiez un temps pour y voir plus clair ?",
+      cta_label: "Réserver une séance découverte",
+      cta_subtext: "Séance découverte offerte, sans engagement après le premier échange.",
+      // S10 — Témoignage à compléter avec les premiers retours clients
+      featured_testimonial: null,
     },
     {
       slug: "booster-recherche",
@@ -707,8 +982,148 @@ async function main(): Promise<void> {
       title: "Booster sa recherche",
       icon: "rocket_launch",
       short_description: "CV, posture et stratégie pour une recherche d'emploi efficace.",
-      duration_label: "3 à 5 séances",
-      price_label: "À partir de 90 € / séance",
+      // S6 — Format
+      duration_label: "4 séances d'1h",
+      // S9 — Investissement
+      price_label: "À partir de 600 € TTC",
+      price_note:
+        "Paiement en 2 fois possible.\n\nSéance découverte offerte.\n\nSans engagement après le premier échange.",
+      // S1 — Accroche
+      accroche_title:
+        "Vous avez un cap professionnel. Mais votre recherche d'emploi ne le reflète pas encore.",
+      accroche_subtitle:
+        "Recherche d'emploi, transition professionnelle, évolution de carrière…\n\n" +
+        "Vous postulez, mais les retours sont rares.\n\n" +
+        "Ou vous décrochez des entretiens, sans transformation derrière.\n\n" +
+        "Vous avez le sentiment de faire « les bonnes choses », sans comprendre ce qui bloque réellement du côté des recruteurs.",
+      accroche_body:
+        "Dans une recherche d'emploi, le problème n'est pas toujours le niveau.\n\n" +
+        "Ni les compétences.\n\n" +
+        "Ni même l'expérience.\n\n" +
+        "Le plus souvent, c'est un décalage de lecture.\n\n" +
+        "Entre ce que vous pensez dire de vous.\n\n" +
+        "Et ce que les recruteurs comprennent réellement.\n\n" +
+        "Cet accompagnement sert à réduire ce décalage.\n\n" +
+        "Pas en « refaisant un CV ».\n\n" +
+        "Mais en reconstruisant une stratégie de recherche lisible, cohérente et efficace.",
+      accroche_signature:
+        "Parce qu'un bon profil ne suffit pas s'il n'est pas lisible par ceux qui le lisent.",
+      // S2 — Ce qui se joue vraiment (ce qui bloque)
+      outcomes_title:
+        "Ce n'est pas seulement votre CV qui est évalué. C'est votre lisibilité professionnelle.",
+      outcomes_intro:
+        "Avec 10 ans d'expérience en insertion professionnelle et en ressources humaines, j'ai vu une constante : les candidats ne sont pas « hors sujet », ils sont souvent mal alignés avec les codes de lecture du marché du travail. Une recherche d'emploi efficace n'est pas une question d'énergie : c'est une question de lisibilité.",
+      outcomes: [
+        {
+          title: "Votre valeur n'est pas immédiatement lisible",
+          body: "Vos compétences existent, mais elles ne ressortent pas clairement dans vos supports.",
+        },
+        {
+          title: "Votre candidature ne raconte pas la bonne histoire",
+          body: "Le CV, LinkedIn et le discours ne sont pas alignés entre eux.",
+        },
+        {
+          title: "Vous ciblez des postes sans stratégie claire",
+          body: "Vous postulez beaucoup, mais sans logique de positionnement.",
+        },
+        {
+          title: "Vous ne parlez pas le langage des recruteurs",
+          body: "Les entreprises ne lisent pas un parcours comme vous le vivez. Elles le lisent en termes de compétences transférables, de signaux de stabilité, de cohérence de trajectoire et d'adéquation poste / profil.",
+        },
+        {
+          title: "Votre posture en entretien ne reflète pas votre valeur",
+          body: "Vous savez faire, mais vous ne le démontrez pas toujours au bon moment.",
+        },
+      ],
+      // S3 — Clarifier vs Booster (renvoi croisé)
+      context_title: "Avant d'optimiser une recherche d'emploi, il faut savoir où on en est.",
+      context_items: [
+        {
+          title: "Clarifier & Avancer",
+          body: "Si vous êtes encore en questionnement. Vous avez besoin de comprendre votre direction, vos envies, vos options.",
+        },
+        {
+          title: "Booster sa recherche",
+          body: "Si votre cap est déjà posé. Vous savez ce que vous cherchez, mais vous avez besoin de le rendre visible, lisible et convaincant pour les recruteurs.",
+        },
+      ],
+      context_conclusion: "Clarifier construit la direction. Booster construit la visibilité.",
+      // S4 — Ce qu'on fait ensemble
+      mission_title: "Transformer votre recherche d'emploi en stratégie lisible.",
+      mission_includes: [
+        {
+          title: "Repositionner votre CV",
+          body: "On ne « refait pas un CV » : on clarifie votre valeur perçue — compétences clés, logique de parcours, éléments différenciants, accroche lisible par un recruteur.",
+        },
+        {
+          title: "Optimiser votre profil LinkedIn",
+          body: "On travaille votre présence comme un outil de visibilité professionnelle : cohérence du parcours, lisibilité immédiate, mots-clés recruteurs (SEO emploi), crédibilité du positionnement.",
+        },
+        {
+          title: "Construire votre pitch professionnel",
+          body: "Une présentation claire, naturelle et structurée de votre profil, compréhensible en 30 secondes par un recruteur.",
+        },
+        {
+          title: "Structurer votre stratégie de recherche d'emploi",
+          body: "On sort du « je postule partout » pour aller vers un ciblage cohérent, une lecture du marché, une priorisation des opportunités et l'activation du réseau.",
+        },
+        {
+          title: "Préparer vos entretiens",
+          body: "On travaille les attentes implicites des recruteurs, les questions pièges, votre posture et la cohérence discours / parcours.",
+        },
+      ],
+      // S5 — La lecture RH des recruteurs (récit d'expérience)
+      background_title: "Ce que les recruteurs lisent vraiment dans une candidature.",
+      background_body:
+        P(
+          "Avec mon expérience en RH, formation et insertion professionnelle, je vous apporte un deuxième regard : celui de ceux qui recrutent.",
+          "Un recruteur ne lit pas un CV comme un récit personnel. Il le lit comme un système de signaux :",
+        ) +
+        "<ul><li>est-ce que ce profil est lisible rapidement ?</li><li>est-ce que le parcours est cohérent ?</li><li>est-ce que le poste est un bon « fit » ?</li><li>est-ce que la personne saura tenir le rôle ?</li></ul>" +
+        P(
+          "Cet accompagnement consiste à traduire votre parcours dans ce langage-là, sans vous dénaturer.",
+          "Structurer sans déshumaniser, même dans une recherche d'emploi.",
+        ),
+      // S6 — Format
+      format_title: "Un travail concret, structuré et opérationnel.",
+      format_body:
+        "<ul><li>4 séances d'1h</li><li>Visioconférence</li><li>Exercices entre les séances</li><li>Relecture et ajustements des supports</li></ul>" +
+        P(
+          "Chaque séance fait avancer un élément concret de votre recherche.",
+          "L'objectif n'est pas de réfléchir plus : c'est de rendre votre recherche plus efficace et plus lisible.",
+        ),
+      // S8 — Pour qui ? (✓ et ✗)
+      audience_fit_title: "Cet accompagnement est fait pour vous si…",
+      audience_fit: [
+        { text: "Vous êtes en recherche active d'emploi" },
+        { text: "Vous avez un cap professionnel défini" },
+        { text: "Vous postulez sans obtenir les résultats attendus" },
+        { text: "Vous voulez changer de poste ou d'environnement" },
+        { text: "Vous reprenez une recherche après une période d'arrêt" },
+      ],
+      audience_fit_exclude: [
+        { text: "Vous n'avez pas encore clarifié votre projet (voir « Clarifier & Avancer »)" },
+        { text: "Vous cherchez uniquement un avis ponctuel sur un CV" },
+      ],
+      // S7 — Vous repartez avec
+      takeaways_title: "Une recherche d'emploi claire, structurée et cohérente.",
+      takeaways: [
+        { text: "Un CV repositionné et lisible" },
+        { text: "Un LinkedIn optimisé pour les recruteurs" },
+        { text: "Un pitch professionnel structuré" },
+        { text: "Une stratégie de recherche claire" },
+        { text: "Une meilleure compréhension du marché du travail" },
+        { text: "Une posture plus confiante en entretien" },
+      ],
+      // S12 — CTA final
+      cta_title:
+        "Et si votre recherche d'emploi devenait enfin lisible pour les bons interlocuteurs ?",
+      cta_body:
+        "Une recherche d'emploi n'est pas un problème de motivation. C'est souvent un problème de lecture et de positionnement.",
+      cta_label: "Réserver une séance découverte",
+      cta_subtext:
+        "30 minutes pour analyser votre situation et voir comment rendre votre recherche plus efficace.",
+      // S10 — Témoignage à compléter
       featured_testimonial: null,
     },
   ];
@@ -745,6 +1160,8 @@ async function main(): Promise<void> {
         { title: "Des livrables actionnables" },
         { title: "Un point de suivi à la fin" },
       ],
+      background_title: o.background_title ?? "",
+      background_body: o.background_body ?? "",
       format_title: o.format_title ?? "",
       format_body:
         o.format_body ??
@@ -757,7 +1174,11 @@ async function main(): Promise<void> {
         { text: "Pour vous si vous voulez du concret" },
         { text: "Pas pour vous si vous cherchez une recette magique" },
       ],
+      audience_fit_exclude: o.audience_fit_exclude ?? [],
       audience_fit_conclusion: o.audience_fit_conclusion ?? "",
+      takeaways_title: o.takeaways_title ?? "",
+      takeaways_intro: o.takeaways_intro ?? "",
+      takeaways: o.takeaways ?? [],
       featured_testimonial: o.featured_testimonial,
       cta_title: o.cta_title ?? "",
       cta_body: o.cta_body ?? "",
@@ -769,7 +1190,7 @@ async function main(): Promise<void> {
   }
 
   // ── resources (lead magnets) ────────────────────────────────────────────────
-  const rGuide = await upsert("resources", "slug", "guide-7-leviers-rh", {
+  await upsert("resources", "slug", "guide-7-leviers-rh", {
     title: "Le guide des 7 leviers RH en PME",
     description: "Un guide pratique pour structurer vos pratiques RH sans usine à gaz.",
     requires_email: true,
@@ -782,6 +1203,16 @@ async function main(): Promise<void> {
     description: "Une trame simple pour des entretiens qui servent vraiment à quelque chose.",
     requires_email: false,
     audience: "organisation",
+    featured: false,
+    ...PUB,
+  });
+  // Lead magnet de bienvenue « Les Tentacules » (offert à l'inscription newsletter).
+  const rTentacules = await upsert("resources", "slug", "5-questions-clarifier", {
+    title: "5 questions pour clarifier une situation RH ou une transition professionnelle",
+    description:
+      "Un mini-guide pour poser les bonnes questions avant d'agir, côté organisation comme côté parcours.",
+    requires_email: true,
+    audience: "particulier",
     featured: false,
     ...PUB,
   });
@@ -1010,62 +1441,241 @@ async function main(): Promise<void> {
   });
 
   await setSingleton("b2c_hub_page", {
-    accroche_title: "Pour les particuliers",
-    accroche_body: "Un accompagnement bienveillant pour clarifier votre cap et avancer.",
-    situation_a_title: "Je veux y voir plus clair",
-    situation_a_body: "Vous sentez qu'il faut bouger mais ne savez pas vers quoi.",
-    situation_a_cta_label: "Clarifier & avancer",
+    // 1. Accroche
+    accroche_title:
+      "Quand le parcours professionnel devient flou, retrouver de la clarté change tout.",
+    accroche_subtitle:
+      "Reconversion professionnelle, perte de sens, évolution de carrière, recherche d'emploi, questionnement sur la suite…\n\n" +
+      "Certaines périodes de la vie professionnelle nous obligent à ralentir pour comprendre ce qui se joue vraiment.\n\n" +
+      "Et lorsqu'on est directement concerné, il est souvent difficile d'y voir clair seul.",
+    accroche_body:
+      "Vous avez peut-être l'impression de tourner en rond.\n\n" +
+      "De ne plus être à votre place.\n\n" +
+      "De savoir que quelque chose doit évoluer sans parvenir à identifier quoi.\n\n" +
+      "Ou au contraire, vous avez déjà un projet en tête mais vous ne savez pas comment le concrétiser.\n\n" +
+      "Dans les deux cas, la difficulté n'est pas toujours de trouver une solution.\n\n" +
+      "C'est souvent de retrouver suffisamment de clarté pour avancer dans une direction qui a du sens pour vous.",
+    accroche_signature:
+      "Parce qu'un parcours professionnel n'a pas besoin d'être parfait. Il a besoin d'être compris.",
+    accroche_cta_label: "Réserver un premier échange",
+    // 2. Ce que vous venez chercher (bénéfices)
+    outcomes_title: "Avant de prendre une décision, il faut souvent comprendre ce qui se passe.",
+    outcomes_intro:
+      "Les personnes que j'accompagne arrivent rarement avec une demande technique. Elles arrivent avec des questions. Parfois très simples. Parfois très profondes.",
+    outcomes: [
+      {
+        title: "Retrouver de la clarté",
+        body: "Mettre des mots sur ce qui bloque, ce qui manque ou ce qui appelle un changement.",
+      },
+      {
+        title: "Comprendre son parcours",
+        body: "Prendre du recul sur son histoire professionnelle et identifier les fils conducteurs souvent invisibles au quotidien.",
+      },
+      {
+        title: "Faire des choix plus sereinement",
+        body: "Explorer les possibilités et prendre des décisions plus alignées avec ses aspirations et sa réalité.",
+      },
+      {
+        title: "Reprendre confiance",
+        body: "Valoriser ses compétences, ses expériences et ses ressources pour retrouver une dynamique d'action.",
+      },
+      {
+        title: "Passer à l'action",
+        body: "Transformer les réflexions en démarches concrètes et réalistes.",
+      },
+    ],
+    // 3. Deux situations, deux accompagnements
+    situations_title: "Chaque transition professionnelle est différente.",
+    situations_intro:
+      "Certaines personnes cherchent d'abord à comprendre. D'autres savent déjà où elles veulent aller. L'accompagnement s'adapte à votre situation.",
+    situation_a_title: "Clarifier & Avancer",
+    situation_a_body: "",
+    situation_a_audience:
+      "Vous traversez une période de questionnement professionnel, de reconversion, d'évolution de carrière ou de perte de sens.",
+    situation_a_items: [
+      { text: "Comprendre ce qui se joue dans votre situation actuelle" },
+      { text: "Identifier vos besoins et vos motivations" },
+      { text: "Explorer les pistes possibles" },
+      { text: "Construire un projet professionnel réaliste" },
+      { text: "Retrouver une direction claire" },
+    ],
+    situation_a_result:
+      "Vous repartez avec une vision plus lisible de votre parcours et des prochaines étapes à engager.",
+    situation_a_cta_label: "Découvrir l'accompagnement",
     situation_a_cta_link: "/particuliers/clarifier-avancer",
-    situation_b_title: "Je cherche un emploi",
-    situation_b_body: "Vous voulez une recherche plus efficace et plus sereine.",
-    situation_b_cta_label: "Booster sa recherche",
+    situation_b_title: "Booster sa recherche",
+    situation_b_body: "",
+    situation_b_audience:
+      "Vous avez déjà un objectif professionnel mais vous avez besoin d'aide pour le concrétiser.",
+    situation_b_items: [
+      { text: "CV et candidature" },
+      { text: "Profil LinkedIn" },
+      { text: "Valorisation des compétences" },
+      { text: "Préparation aux entretiens" },
+      { text: "Stratégie de recherche d'emploi" },
+      { text: "Réseau professionnel" },
+    ],
+    situation_b_result:
+      "Vous gagnez en cohérence, en visibilité et en efficacité dans vos démarches.",
+    situation_b_cta_label: "Découvrir l'accompagnement",
     situation_b_cta_link: "/particuliers/booster-recherche",
+    // 4. Ma façon d'accompagner
+    how_i_work_title: "Ni recettes toutes faites. Ni injonctions à changer de vie.",
     how_i_work_body: P(
-      "On avance à votre rythme, avec des outils simples et des objectifs clairs.",
+      "Chaque parcours est différent.",
+      "C'est pourquoi je ne pars jamais d'une méthode standardisée ou d'un projet préconçu.",
+      "Je commence par comprendre votre situation, votre histoire professionnelle et ce qui vous amène aujourd'hui.",
+      "Mon rôle n'est pas de décider à votre place.",
+      "Mon rôle est de vous aider à voir plus clair pour que vous puissiez prendre vos propres décisions.",
     ),
-    testimonial: tSophie,
-    cta_label: "Prendre rendez-vous",
+    how_i_work_signature:
+      "Structurer sans déshumaniser.\n\n" +
+      "Même lorsqu'il s'agit d'un parcours individuel, la clarté reste souvent le meilleur point de départ.",
+    // 5. Pourquoi c'est différent
+    why_different_title: "Un regard à la croisée des parcours, de l'emploi et des RH.",
+    why_different_body:
+      P(
+        "Depuis plus de 10 ans, j'accompagne des personnes confrontées à des transitions professionnelles.",
+        "J'ai travaillé dans :",
+      ) +
+      "<ul><li>l'insertion professionnelle ;</li><li>l'accompagnement vers l'emploi ;</li><li>la formation ;</li><li>les ressources humaines ;</li><li>le développement des compétences.</li></ul>" +
+      P(
+        "J'ai accompagné des jeunes, des salariés, des demandeurs d'emploi, des personnes en reconversion ou confrontées à une rupture professionnelle.",
+        "Cette diversité de situations m'a appris une chose :",
+        "Les parcours professionnels sont rarement linéaires.",
+        "Et derrière chaque période de doute se cachent souvent des ressources qui demandent simplement à être révélées.",
+      ),
+    // 6. Comment se déroule l'accompagnement
+    format_title: "Un accompagnement à votre rythme.",
+    format_items: [
+      { text: "Séances individuelles d'une heure" },
+      { text: "À distance en visioconférence" },
+      { text: "Exercices et réflexions entre les séances" },
+      { text: "Accompagnement personnalisé" },
+    ],
+    format_body:
+      "Les exercices proposés ne sont pas des devoirs.\n\n" +
+      "Ils servent à prolonger la réflexion dans votre quotidien et à transformer progressivement les prises de conscience en actions concrètes.",
+    // 8. Témoignage — à compléter après les premiers accompagnements
+    testimonial: null,
+    // 9. Appel à l'action
+    cta_title: "Et si vous vous accordiez enfin un espace pour y voir plus clair ?",
+    cta_body:
+      "Une transition professionnelle n'exige pas toujours des réponses immédiates. Elle demande souvent un temps pour comprendre, prendre du recul et retrouver une direction.",
+    cta_label: "Réserver une séance découverte",
+    cta_subtext:
+      "Un premier échange gratuit pour faire le point sur votre situation et voir comment je peux vous accompagner.",
     meta_title: "Pour les particuliers — L'Encre Humaine",
+    meta_description:
+      "Reconversion, perte de sens, évolution de carrière ou recherche d'emploi : un accompagnement pour retrouver de la clarté et avancer dans une direction qui a du sens.",
   });
 
   await setSingleton("resources_page", {
-    accroche_title: "Ressources",
+    // S1 — Hero
+    accroche_title: "Comprendre les organisations et les parcours professionnels",
     accroche_body:
-      "Des guides et des articles pour avancer, côté organisations comme côté particuliers.",
-    featured_resource: rGuide,
-    meta_title: "Ressources — L'Encre Humaine",
+      "Gestion des compétences, management, GEPP, transition professionnelle, reconversion, recherche d'emploi.\n\nDes analyses de terrain pour rendre les situations professionnelles plus lisibles.",
+    hero_signature:
+      "🐙 Les Tentacules de L'Encre Humaine\n\nUne newsletter + un espace de ressources pour relier organisations et parcours professionnels.",
+    // S3 — À lire en premier
+    featured_article: aStructurer,
+    // S6 — Positionnement
+    positioning_title: "Une approche terrain des organisations et des parcours",
+    positioning_body:
+      P("Je croise deux réalités :") +
+      "<ul><li>les systèmes RH (organisation, compétences, management) ;</li><li>les trajectoires professionnelles (transition, reconversion, recherche d'emploi).</li></ul>" +
+      P("Pour comprendre avant d'agir."),
+    // S7 — CTA final
+    cta_title: "Commencer à y voir plus clair",
+    meta_title: "Les Tentacules — L'Encre Humaine",
+    meta_description:
+      "Des analyses de terrain RH et parcours professionnels, plus la newsletter « Les Tentacules ». Comprendre les organisations et les trajectoires pour agir plus juste.",
   });
 
   await setSingleton("newsletter_page", {
-    name: "Le Fil",
-    promise_body: P(
-      "Deux fois par mois, des outils concrets et des retours de terrain. 5 minutes, sans bullshit.",
-    ),
-    what_you_receive: [
-      { text: "Un outil ou une méthode actionnable" },
-      { text: "Un retour d'expérience" },
-      { text: "Une ressource à télécharger" },
+    name: "Les Tentacules de L'Encre Humaine",
+    subtitle:
+      "Une fois tous les 15 jours, une lecture du terrain RH et des parcours professionnels.",
+    promise_body: "",
+    helps_with: [
+      { text: "comprendre une situation RH complexe" },
+      { text: "lire ce qui se joue dans une organisation" },
+      { text: "éclairer un parcours professionnel ou une transition" },
+      { text: "remettre de la clarté là où il y a du flou" },
     ],
-    welcome_gift_label: rGuide,
-    sample_excerpt:
-      "Cette semaine : comment transformer l'entretien annuel en vrai moment utile (et pas une corvée).",
-    sample_issue_label: "Extrait du Fil #07",
+    what_you_receive: [
+      { text: "une analyse terrain (organisation ou parcours)" },
+      { text: "un éclairage RH (GEPP, management, compétences…)" },
+      { text: "une ressource utile (outil, lecture, article)" },
+      { text: "parfois une question de réflexion" },
+    ],
+    welcome_gift_label: rTentacules,
     rgpd_mention: "Double opt-in, désinscription en un clic. Vos données ne sont jamais cédées.",
-    meta_title: "La newsletter « Le Fil » — L'Encre Humaine",
+    meta_title: "Les Tentacules — la newsletter de L'Encre Humaine",
   });
 
   await setSingleton("contact_page", {
-    accroche_title: "Travaillons ensemble",
+    // S1 — Hero
+    accroche_title: "Vous avez une situation à clarifier ?",
     accroche_body:
-      "Une question, un projet, une envie d'en parler ? Écrivez-moi ou réservez un échange.",
-    booking_intro: "Réservez une séance découverte de 30 minutes, sans engagement.",
+      "Que vous soyez une organisation en réflexion sur ses pratiques RH ou une personne en questionnement professionnel, un premier échange permet souvent d'y voir plus clair.\n\n" +
+      "Certaines situations ont simplement besoin d'un regard extérieur.\n\n" +
+      "Un projet RH qui n'avance pas.\n\n" +
+      "Une équipe qui cherche ses repères.\n\n" +
+      "Une transition professionnelle.\n\n" +
+      "Une idée qui tourne en boucle depuis plusieurs mois.\n\n" +
+      "Ce premier échange est là pour faire le point et voir ce qui pourrait être utile.",
+    // S2 — Deux façons de me contacter
+    booking_intro:
+      "Vous préférez en parler directement ? Réservez un créneau de 30 minutes. Nous faisons le point sur votre situation et je vous indique si je peux vous aider, et comment.",
+    booking_reassurance:
+      "🐙 Aucun tentacule commercial caché. Juste une conversation pour comprendre votre situation.",
+    message_intro:
+      "Vous préférez prendre contact par écrit ? Décrivez votre situation en quelques lignes. Je vous répondrai sous 48 heures ouvrées.",
+    // S3 — Comment se déroule le premier échange
     next_steps: [
-      { number: 1, title: "Vous écrivez", description: "Un message ou une réservation." },
-      { number: 2, title: "On échange", description: "30 min pour cerner le besoin." },
-      { number: 3, title: "Je propose", description: "Une proposition claire et adaptée." },
+      {
+        number: 1,
+        title: "Vous m'expliquez votre situation",
+        description: "Sans préparation particulière. Avec vos mots.",
+      },
+      {
+        number: 2,
+        title: "Je vous pose quelques questions",
+        description: "Pour comprendre votre contexte, vos enjeux et ce qui vous amène.",
+      },
+      {
+        number: 3,
+        title: "Nous identifions ensemble les prochaines étapes",
+        description:
+          "Parfois cela débouche sur un accompagnement. Parfois sur quelques pistes de réflexion. Parfois sur une orientation vers une autre ressource ou un autre professionnel.",
+      },
     ],
-    response_time_note: "Je réponds sous 48h ouvrées.",
+    steps_conclusion:
+      "L'objectif n'est pas de vous vendre quelque chose. L'objectif est de comprendre si je suis la bonne personne pour vous aider.",
+    response_time_note: "Je réponds généralement sous 48 heures ouvrées.",
+    // S4 — Vous pouvez me contacter si…
+    reasons_title: "Vous pouvez me contacter si…",
+    reasons_org: [
+      { text: "Vous souhaitez structurer vos pratiques RH." },
+      { text: "Vous travaillez sur vos compétences, votre GEPP ou vos parcours." },
+      { text: "Vos managers manquent de repères." },
+      { text: "Vous préparez une phase de croissance ou de transformation." },
+    ],
+    reasons_b2c: [
+      { text: "Vous traversez une transition professionnelle." },
+      { text: "Vous envisagez une reconversion." },
+      { text: "Vous cherchez à clarifier votre projet." },
+      { text: "Vous avez besoin d'un regard extérieur sur votre recherche d'emploi." },
+    ],
+    // CTA final
+    final_cta_title:
+      "Parfois, 30 minutes suffisent pour remettre un peu de clarté dans une situation.",
+    final_cta_body:
+      "Que votre question concerne les RH, le management, les compétences, une transition professionnelle ou une recherche d'emploi, le plus simple est souvent d'en parler.",
     meta_title: "Contact — L'Encre Humaine",
+    meta_description:
+      "Un premier échange de 30 minutes, sans engagement, pour faire le point sur votre situation RH ou votre parcours professionnel et voir comment je peux vous aider.",
   });
 
   await setSingleton("shop_page", {

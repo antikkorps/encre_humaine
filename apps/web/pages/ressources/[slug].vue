@@ -129,9 +129,9 @@ if (article.value) {
         <div class="mt-14">
           <CtaBlock
             title="Envie d'aller plus loin ?"
-            description="Recevez « Le Fil » : des outils concrets, sans bullshit, deux fois par mois."
-            cta-label="S'abonner à la newsletter"
-            to="/newsletter"
+            description="Recevez « Les Tentacules » : une lecture du terrain RH et des parcours, une fois tous les 15 jours."
+            cta-label="Recevoir les Tentacules"
+            to="/ressources#newsletter"
           />
         </div>
       </div>
