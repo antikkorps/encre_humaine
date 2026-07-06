@@ -33,14 +33,44 @@ export default defineNuxtConfig({
     "nuxt-security",
   ],
 
-  // @nuxt/icon : jeu Material Symbols servi EN LOCAL (server bundle) — jamais
-  // d'appel à api.iconify.design (CSP stricte : `default-src 'self'`). Le client
-  // récupère les icônes manquantes en same-origin (/api/_nuxt_icon, autorisé par
-  // `connect-src 'self'`) ; en SSR elles sont inline. `fallbackToApi: false` coupe
-  // tout repli externe.
+  // @nuxt/icon : on **n'embarque QUE les icônes réellement utilisées** (clientBundle
+  // explicite) au lieu de toute la collection material-symbols (~10k icônes) — sinon
+  // le build Nitro sature la mémoire (OOM sur le runner CI ~2 Go). Ces icônes sont
+  // inline (SSR + client), zéro appel à api.iconify.design (`serverBundle:false` +
+  // `fallbackToApi:false`) → CSP-safe. ⚠️ Ajouter ici toute NOUVELLE clé d'icône
+  // rendue (sinon elle n'apparaît pas). Source : `@iconify-json/material-symbols`.
   icon: {
-    serverBundle: "local",
+    mode: "svg",
+    serverBundle: false,
     fallbackToApi: false,
+    clientBundle: {
+      sizeLimitKb: 512,
+      icons: [
+        "material-symbols:arrow-forward",
+        "material-symbols:cancel",
+        "material-symbols:check-circle",
+        "material-symbols:check-circle-rounded",
+        "material-symbols:event",
+        "material-symbols:format-quote",
+        "material-symbols:payments",
+        "material-symbols:lightbulb",
+        "material-symbols:insights",
+        "material-symbols:analytics",
+        "material-symbols:description",
+        "material-symbols:difference",
+        "material-symbols:flag",
+        "material-symbols:format-list-numbered",
+        "material-symbols:forum",
+        "material-symbols:group",
+        "material-symbols:layers",
+        "material-symbols:record-voice-over",
+        "material-symbols:route",
+        "material-symbols:schedule",
+        "material-symbols:settings",
+        "material-symbols:trending-up",
+        "material-symbols:visibility",
+      ],
+    },
   },
 
   // Sécurité — docs/06-security.md §6/§7. CSP **à nonce** (script-src sans
