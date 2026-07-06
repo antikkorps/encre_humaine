@@ -209,7 +209,7 @@ collections:
       icon: mail
       item_duplication_fields: null
       note: null
-      preview_url: https://encrehumaine.fr/newsletter?preview=true
+      preview_url: https://encrehumaine.fr/ressources?preview=true
       singleton: true
       sort: null
       sort_field: null
@@ -8060,7 +8060,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 2
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -8108,7 +8108,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 5
       special:
         - cast-json
       translations: null
@@ -8149,7 +8149,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 6
       special:
         - m2o
       translations: null
@@ -8190,7 +8190,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 7
       special: null
       translations: null
       validation: null
@@ -8230,7 +8230,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 8
       special: null
       translations: null
       validation: null
@@ -8270,7 +8270,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -8311,7 +8311,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 10
       special:
         - alias
         - no-data
@@ -8336,7 +8336,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -8376,7 +8376,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -8416,7 +8416,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 13
       special:
         - file
       translations: null
@@ -8457,7 +8457,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 14
       special:
         - cast-boolean
       translations: null
@@ -8473,6 +8473,95 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: newsletter_page
+    field: subtitle
+    type: text
+    meta:
+      collection: newsletter_page
+      conditions: null
+      display: null
+      display_options: null
+      field: subtitle
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Sous-titre (ex. « Une fois tous les 15 jours… »)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: subtitle
+      table: newsletter_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: newsletter_page
+    field: helps_with
+    type: json
+    meta:
+      collection: newsletter_page
+      conditions: null
+      display: null
+      display_options: null
+      field: helps_with
+      group: null
+      hidden: false
+      interface: list
+      note: « Chaque édition aide à… »
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: helps_with
+      table: newsletter_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -13825,7 +13914,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 5
       special:
         - m2o
       translations: null
@@ -13867,7 +13956,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 10
       special:
         - alias
         - no-data
@@ -13892,7 +13981,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -13932,7 +14021,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -13972,7 +14061,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 13
       special:
         - file
       translations: null
@@ -14013,7 +14102,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 14
       special:
         - cast-boolean
       translations: null
@@ -14029,6 +14118,233 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: resources_page
+    field: hero_signature
+    type: text
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: hero_signature
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Signature sous l'accroche (ex. « 🐙 Les Tentacules… »)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hero_signature
+      table: resources_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: resources_page
+    field: featured_article
+    type: uuid
+    meta:
+      collection: resources_page
+      conditions: null
+      display: related-values
+      display_options: null
+      field: featured_article
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: Article « à lire en premier »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: featured_article
+      table: resources_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: articles
+      foreign_key_column: id
+  - collection: resources_page
+    field: positioning_divider
+    type: alias
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: positioning_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Positionnement
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: resources_page
+    field: positioning_title
+    type: string
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: positioning_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: positioning_title
+      table: resources_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: resources_page
+    field: positioning_body
+    type: text
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: positioning_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: Approche terrain (listes possibles)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: positioning_body
+      table: resources_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: resources_page
+    field: cta_title
+    type: string
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_title
+      group: null
+      hidden: false
+      interface: input
+      note: Titre du CTA final (→ inscription newsletter)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_title
+      table: resources_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -16302,6 +16618,27 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: resources_page_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: resources_page
+    field: featured_article
+    related_collection: articles
+    meta:
+      junction_field: null
+      many_collection: resources_page
+      many_field: featured_article
+      one_allowed_collections: null
+      one_collection: articles
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: resources_page
+      column: featured_article
+      foreign_key_table: articles
+      foreign_key_column: id
+      constraint_name: resources_page_featured_article_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: shop_page

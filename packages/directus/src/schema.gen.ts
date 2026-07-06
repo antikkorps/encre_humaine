@@ -217,6 +217,8 @@ export interface NewsletterPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  subtitle: string | null;
+  helps_with: unknown | null;
 }
 
 export interface Offers {
@@ -365,6 +367,11 @@ export interface ResourcesPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  hero_signature: string | null;
+  featured_article: string | Articles | null;
+  positioning_title: string | null;
+  positioning_body: string | null;
+  cta_title: string | null;
 }
 
 export interface ShopPage {

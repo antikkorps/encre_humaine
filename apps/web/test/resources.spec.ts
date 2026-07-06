@@ -1,54 +1,56 @@
 // @vitest-environment node
 //
-// Composition de l'index Ressources — docs/07-ressources.md.
-// Vérifie : ressource vedette (gating vs direct), filtres dérivés des groupes
-// présents (ordre documenté), 0 article → état vide propre, SEO.
+// Composition de la page fusionnée « Les Tentacules » (blog + newsletter) — /ressources.
+// Vérifie : article vedette, filtres dérivés des groupes présents (ordre documenté +
+// chrome emoji/mots-clés), positionnement rich text assaini, section newsletter,
+// 0 article → état vide propre, SEO.
 import { describe, expect, it } from "vitest";
 import {
   buildFilters,
-  mapFeaturedResource,
+  mapFeaturedArticle,
   mapResourcesContent,
 } from "../server/utils/content/resources";
 
 const BASE = "https://cms.example.fr";
+const wrap = (h?: string | null) => (h ? `clean(${h})` : "");
 
-describe("mapFeaturedResource", () => {
-  it("null si pas de titre ou relation non résolue (string)", () => {
-    expect(mapFeaturedResource(null, BASE)).toBeNull();
-    expect(mapFeaturedResource("uuid", BASE)).toBeNull();
-    expect(mapFeaturedResource({ title: "" }, BASE)).toBeNull();
+describe("mapFeaturedArticle", () => {
+  it("null si relation non résolue (string) ou sans titre/slug", () => {
+    expect(mapFeaturedArticle(null, BASE)).toBeNull();
+    expect(mapFeaturedArticle("uuid", BASE)).toBeNull();
+    expect(mapFeaturedArticle({ title: "", slug: "" }, BASE)).toBeNull();
   });
 
-  it("lien direct si non gaté, masqué si gating email", () => {
-    expect(
-      mapFeaturedResource(
-        { title: "Guide", description: "Un guide.", file: "f1", cover_image: "c1" },
-        BASE,
-      ),
-    ).toEqual({
-      title: "Guide",
-      description: "Un guide.",
-      coverUrl: `${BASE}/assets/c1`,
-      requiresEmail: false,
-      downloadUrl: `${BASE}/assets/f1`,
-    });
-    const gated = mapFeaturedResource({ title: "Guide", requires_email: true, file: "f1" }, BASE);
-    expect(gated?.requiresEmail).toBe(true);
-    expect(gated?.downloadUrl).toBeNull(); // gaté : pas de lien direct
+  it("mappe l'article vedette (réutilise mapArticle)", () => {
+    const a = mapFeaturedArticle(
+      {
+        title: "À lire",
+        slug: "a-lire",
+        excerpt: "Chapô.",
+        category: { name: "Terrain", slug: "terrain", group: "terrain" },
+      },
+      BASE,
+    );
+    expect(a).toMatchObject({ title: "À lire", slug: "a-lire", categoryGroup: "terrain" });
   });
 });
 
 describe("buildFilters", () => {
-  it("ne garde que les groupes présents, dans l'ordre documenté", () => {
+  it("ne garde que les groupes présents (ordre documenté) + chrome emoji/label", () => {
     const filters = buildFilters([
-      { title: "A", slug: "a", shortDescription: "", categoryGroup: "terrain" } as never,
-      { title: "B", slug: "b", shortDescription: "", categoryGroup: "organisations" } as never,
-      { title: "C", slug: "c", shortDescription: "", categoryGroup: "terrain" } as never,
+      { title: "A", slug: "a", categoryGroup: "terrain" } as never,
+      { title: "B", slug: "b", categoryGroup: "organisations" } as never,
+      { title: "C", slug: "c", categoryGroup: "terrain" } as never,
     ]);
-    expect(filters).toEqual([
-      { group: "organisations", label: "Organisations" },
-      { group: "terrain", label: "Terrain" },
-    ]);
+    expect(filters).toHaveLength(2);
+    expect(filters[0]).toMatchObject({
+      group: "organisations",
+      label: "Organisations",
+      emoji: "🏢",
+    });
+    expect(filters[1]).toMatchObject({ group: "terrain", label: "Terrain", emoji: "🔎" });
+    // le groupe « particuliers » est relabellé « Parcours professionnels »
+    expect(filters.every((f) => typeof f.keywords === "string" && f.keywords.length)).toBe(true);
   });
 
   it("aucun filtre si aucun groupe", () => {
@@ -57,30 +59,58 @@ describe("buildFilters", () => {
 });
 
 describe("mapResourcesContent", () => {
-  it("0 article : grille vide, aucun filtre (pas de section cassée)", () => {
-    const c = mapResourcesContent({ accroche_title: "Ressources" }, [], {}, BASE);
-    expect(c.accrocheTitle).toBe("Ressources");
+  it("0 article : grille vide, aucun filtre, sections optionnelles masquées", () => {
+    const c = mapResourcesContent({ accroche_title: "Tentacules" }, [], {}, {}, BASE, wrap);
+    expect(c.accrocheTitle).toBe("Tentacules");
     expect(c.articles).toEqual([]);
     expect(c.filters).toEqual([]);
-    expect(c.featured).toBeNull();
+    expect(c.featuredArticle).toBeNull();
+    expect(c.positioning).toBeNull();
+    expect(c.ctaTitle).toBeNull();
+    // la section newsletter est toujours composée (masquage géré au rendu)
+    expect(c.newsletter.name).toBeNull();
   });
 
-  it("dérive les filtres des articles et mappe le SEO", () => {
+  it("compose filtres, positionnement assaini et section newsletter", () => {
     const c = mapResourcesContent(
-      { meta_title: "" },
+      {
+        meta_title: "",
+        hero_signature: "🐙 Les Tentacules",
+        positioning_title: "Approche terrain",
+        positioning_body: "<p>Deux réalités</p><ul><li>RH</li></ul>",
+        cta_title: "Y voir plus clair",
+      },
       [
         {
           title: "Premier",
           slug: "premier",
-          category: { name: "Sur le terrain", slug: "terrain", group: "terrain" },
+          category: { name: "Parcours", slug: "particuliers", group: "particuliers" },
         },
       ],
+      {
+        name: "Les Tentacules",
+        subtitle: "Tous les 15 jours.",
+        helps_with: [{ text: "comprendre" }, { text: "" }],
+        what_you_receive: [{ text: "une analyse" }],
+        welcome_gift_label: { title: "5 questions" },
+      },
       { brand_name: "L'Encre Humaine" },
       BASE,
+      wrap,
     );
-    expect(c.articles).toHaveLength(1);
-    expect(c.articles[0]?.categoryGroup).toBe("terrain");
-    expect(c.filters).toEqual([{ group: "terrain", label: "Terrain" }]);
+    expect(c.heroSignature).toBe("🐙 Les Tentacules");
+    expect(c.filters).toHaveLength(1);
+    expect(c.filters[0]).toMatchObject({ group: "particuliers", label: "Parcours professionnels" });
+    expect(c.positioning).toEqual({
+      title: "Approche terrain",
+      bodyHtml: "clean(<p>Deux réalités</p><ul><li>RH</li></ul>)",
+    });
+    expect(c.ctaTitle).toBe("Y voir plus clair");
+    expect(c.newsletter.name).toBe("Les Tentacules");
+    expect(c.newsletter.subtitle).toBe("Tous les 15 jours.");
+    expect(c.newsletter.helpsWith).toEqual(["comprendre"]); // entrée vide filtrée
+    expect(c.newsletter.whatYouReceive).toEqual(["une analyse"]);
+    expect(c.newsletter.welcomeGiftLabel).toBe("5 questions");
     expect(c.seo.title).toBe("L'Encre Humaine");
   });
 });

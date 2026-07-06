@@ -29,7 +29,8 @@ const SINGLETON_PREVIEW_PATHS: Record<string, string> = {
   org_hub_page: "/organisations",
   b2c_hub_page: "/particuliers",
   resources_page: "/ressources",
-  newsletter_page: "/newsletter",
+  // La newsletter est rendue dans la section newsletter de /ressources (fusion).
+  newsletter_page: "/ressources",
   contact_page: "/contact",
 };
 

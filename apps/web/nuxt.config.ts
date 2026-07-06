@@ -156,6 +156,13 @@ export default defineNuxtConfig({
     },
   },
 
+  // Redirections. La landing d'inscription `/newsletter` a fusionné dans la section
+  // newsletter de `/ressources` (« Les Tentacules ») → 301. `/newsletter/confirmation`
+  // (page inerte du double opt-in) reste une route à part (non redirigée).
+  routeRules: {
+    "/newsletter": { redirect: { to: "/ressources", statusCode: 301 } },
+  },
+
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.
   nitro: {
     experimental: { tasks: true },

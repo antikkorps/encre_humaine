@@ -107,7 +107,7 @@ async function main(): Promise<void> {
   });
 
   // ── articles ────────────────────────────────────────────────────────────────
-  await upsert("articles", "slug", "structurer-rh-pme", {
+  const aStructurer = await upsert("articles", "slug", "structurer-rh-pme", {
     title: "Structurer ses pratiques RH en PME : par où commencer ?",
     excerpt: "Trois leviers concrets pour poser des bases RH solides sans usine à gaz.",
     body: P(
@@ -1162,7 +1162,7 @@ async function main(): Promise<void> {
   }
 
   // ── resources (lead magnets) ────────────────────────────────────────────────
-  const rGuide = await upsert("resources", "slug", "guide-7-leviers-rh", {
+  await upsert("resources", "slug", "guide-7-leviers-rh", {
     title: "Le guide des 7 leviers RH en PME",
     description: "Un guide pratique pour structurer vos pratiques RH sans usine à gaz.",
     requires_email: true,
@@ -1175,6 +1175,16 @@ async function main(): Promise<void> {
     description: "Une trame simple pour des entretiens qui servent vraiment à quelque chose.",
     requires_email: false,
     audience: "organisation",
+    featured: false,
+    ...PUB,
+  });
+  // Lead magnet de bienvenue « Les Tentacules » (offert à l'inscription newsletter).
+  const rTentacules = await upsert("resources", "slug", "5-questions-clarifier", {
+    title: "5 questions pour clarifier une situation RH ou une transition professionnelle",
+    description:
+      "Un mini-guide pour poser les bonnes questions avant d'agir, côté organisation comme côté parcours.",
+    requires_email: true,
+    audience: "particulier",
     featured: false,
     ...PUB,
   });
@@ -1533,29 +1543,47 @@ async function main(): Promise<void> {
   });
 
   await setSingleton("resources_page", {
-    accroche_title: "Ressources",
+    // S1 — Hero
+    accroche_title: "Comprendre les organisations et les parcours professionnels",
     accroche_body:
-      "Des guides et des articles pour avancer, côté organisations comme côté particuliers.",
-    featured_resource: rGuide,
-    meta_title: "Ressources — L'Encre Humaine",
+      "Gestion des compétences, management, GEPP, transition professionnelle, reconversion, recherche d'emploi.\n\nDes analyses de terrain pour rendre les situations professionnelles plus lisibles.",
+    hero_signature:
+      "🐙 Les Tentacules de L'Encre Humaine\n\nUne newsletter + un espace de ressources pour relier organisations et parcours professionnels.",
+    // S3 — À lire en premier
+    featured_article: aStructurer,
+    // S6 — Positionnement
+    positioning_title: "Une approche terrain des organisations et des parcours",
+    positioning_body:
+      P("Je croise deux réalités :") +
+      "<ul><li>les systèmes RH (organisation, compétences, management) ;</li><li>les trajectoires professionnelles (transition, reconversion, recherche d'emploi).</li></ul>" +
+      P("Pour comprendre avant d'agir."),
+    // S7 — CTA final
+    cta_title: "Commencer à y voir plus clair",
+    meta_title: "Les Tentacules — L'Encre Humaine",
+    meta_description:
+      "Des analyses de terrain RH et parcours professionnels, plus la newsletter « Les Tentacules ». Comprendre les organisations et les trajectoires pour agir plus juste.",
   });
 
   await setSingleton("newsletter_page", {
-    name: "Le Fil",
-    promise_body: P(
-      "Deux fois par mois, des outils concrets et des retours de terrain. 5 minutes, sans bullshit.",
-    ),
-    what_you_receive: [
-      { text: "Un outil ou une méthode actionnable" },
-      { text: "Un retour d'expérience" },
-      { text: "Une ressource à télécharger" },
+    name: "Les Tentacules de L'Encre Humaine",
+    subtitle:
+      "Une fois tous les 15 jours, une lecture du terrain RH et des parcours professionnels.",
+    promise_body: "",
+    helps_with: [
+      { text: "comprendre une situation RH complexe" },
+      { text: "lire ce qui se joue dans une organisation" },
+      { text: "éclairer un parcours professionnel ou une transition" },
+      { text: "remettre de la clarté là où il y a du flou" },
     ],
-    welcome_gift_label: rGuide,
-    sample_excerpt:
-      "Cette semaine : comment transformer l'entretien annuel en vrai moment utile (et pas une corvée).",
-    sample_issue_label: "Extrait du Fil #07",
+    what_you_receive: [
+      { text: "une analyse terrain (organisation ou parcours)" },
+      { text: "un éclairage RH (GEPP, management, compétences…)" },
+      { text: "une ressource utile (outil, lecture, article)" },
+      { text: "parfois une question de réflexion" },
+    ],
+    welcome_gift_label: rTentacules,
     rgpd_mention: "Double opt-in, désinscription en un clic. Vos données ne sont jamais cédées.",
-    meta_title: "La newsletter « Le Fil » — L'Encre Humaine",
+    meta_title: "Les Tentacules — la newsletter de L'Encre Humaine",
   });
 
   await setSingleton("contact_page", {

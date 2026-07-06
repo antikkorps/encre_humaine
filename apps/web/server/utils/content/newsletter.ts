@@ -1,4 +1,3 @@
-import { readSingleton } from "@directus/sdk";
 import {
   type ContentSeo,
   type FileField,
@@ -9,14 +8,15 @@ import {
 } from "./_shared";
 
 /**
- * Contenu de la page Newsletter « Le Fil » — docs/08-newsletter.md. Source :
- * `newsletter_page` (singleton) + `site_settings` (défauts SEO). `promise_body`
- * est du rich text → **assaini serveur** (sanitizer injecté). L'inscription elle-
- * même passe par `NewsletterForm` → `POST /api/newsletter/subscribe` (double
- * opt-in). Sections vides masquées (docs/00 §États).
+ * Contenu éditorial de la newsletter « Les Tentacules » — docs/08-newsletter.md.
+ * Source : singleton `newsletter_page`. Depuis la fusion blog+newsletter, ce
+ * contenu est **rendu dans la section newsletter de `/ressources`** (chargé par
+ * `resources.ts`, plus de page/endpoint dédié). `promise_body` est du rich text →
+ * **assaini serveur** (sanitizer injecté). L'inscription passe par `NewsletterForm`
+ * → `POST /api/newsletter/subscribe` (double opt-in). Sections vides masquées.
  *
  * NB : à ne pas confondre avec `server/utils/newsletter.ts` (crypto token + purge
- * RGPD) ; ici c'est uniquement le **contenu éditorial** de la page.
+ * RGPD) ; ici c'est uniquement le **contenu éditorial**.
  */
 
 /** M2O `welcome_gift_label` → resources (résolu) ou id brut (string). */
@@ -27,7 +27,9 @@ interface RawGift {
 
 export interface RawNewsletterPage {
   name?: string | null;
+  subtitle?: string | null;
   promise_body?: string | null; // rich text
+  helps_with?: unknown; // répéteur { text }
   what_you_receive?: unknown; // répéteur { text }
   welcome_gift_label?: RawGift | string | null; // m2o resources
   sample_excerpt?: string | null;
@@ -40,9 +42,13 @@ export interface RawNewsletterPage {
 }
 
 export interface NewsletterContent {
-  /** Source du `h1` (null = fallback d'affichage). */
+  /** Nom de la newsletter (null = fallback d'affichage). */
   name: string | null;
+  subtitle: string | null;
   promiseHtml: string;
+  /** « Chaque édition aide à… ». */
+  helpsWith: string[];
+  /** « Contenu d'une édition ». */
   whatYouReceive: string[];
   /** Libellé du cadeau de bienvenue (titre de la ressource liée), si défini. */
   welcomeGiftLabel: string | null;
@@ -71,7 +77,9 @@ export function mapNewsletterContent(
   const excerpt = str(raw.sample_excerpt);
   return {
     name: str(raw.name) || null,
+    subtitle: str(raw.subtitle) || null,
     promiseHtml: sanitize(raw.promise_body),
+    helpsWith: mapStringList(raw.helps_with),
     whatYouReceive: mapStringList(raw.what_you_receive),
     welcomeGiftLabel: giftLabel(raw.welcome_gift_label),
     sample: excerpt ? { excerpt, issueLabel: str(raw.sample_issue_label) || null } : null,
@@ -80,41 +88,16 @@ export function mapNewsletterContent(
   };
 }
 
-/** Charge et compose la page Newsletter (Directus published, lecture seule). */
-export async function loadNewsletterContent(): Promise<NewsletterContent> {
-  const client = directusServer();
-  const assetBase = useRuntimeConfig().public.directusPublicUrl;
-
-  const [page, settings] = await Promise.all([
-    client.request(
-      readSingleton("newsletter_page", {
-        fields: [
-          "name",
-          "promise_body",
-          "what_you_receive",
-          // m2o vers une vraie collection → sélection imbriquée OK.
-          { welcome_gift_label: ["title", "slug"] },
-          "sample_excerpt",
-          "sample_issue_label",
-          "rgpd_mention",
-          "meta_title",
-          "meta_description",
-          "og_image",
-          "no_index",
-        ],
-      }),
-    ),
-    client.request(
-      readSingleton("site_settings", {
-        fields: ["brand_name", "default_meta_description", "default_og_image"],
-      }),
-    ),
-  ]);
-
-  return mapNewsletterContent(
-    page as unknown as RawNewsletterPage,
-    settings as unknown as RawSiteDefaults,
-    assetBase,
-    sanitizeRichText,
-  );
-}
+/** Champs `newsletter_page` consommés par le loader /ressources (section newsletter). */
+export const NEWSLETTER_PAGE_FIELDS = [
+  "name",
+  "subtitle",
+  "promise_body",
+  "helps_with",
+  "what_you_receive",
+  // m2o vers une vraie collection → sélection imbriquée OK.
+  { welcome_gift_label: ["title", "slug"] },
+  "sample_excerpt",
+  "sample_issue_label",
+  "rgpd_mention",
+] as const;
