@@ -25,7 +25,9 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.3",
+    "@iconify-json/material-symbols": "1.2.82",
     "@nuxt/fonts": "0.14.0",
+    "@nuxt/icon": "1.15.0",
     "@nuxt/image": "2.0.0",
     "@nuxt/test-utils": "4.0.3",
     "@nuxtjs/seo": "5.3.1",

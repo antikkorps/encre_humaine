@@ -457,15 +457,23 @@ const collections: CollectionDef[] = [
       f.textarea("outcomes_intro"),
       f.repeater(
         "outcomes",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Bénéfices (titre + corps)" },
+        [
+          { field: "icon", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        { note: "Bénéfices (icône Material Symbols + titre + corps)" },
       ),
       // Ce que je vois souvent (contexte)
       f.input("context_title"),
       f.repeater(
         "context_items",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Situations récurrentes (titre + corps)" },
+        [
+          { field: "icon", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        { note: "Situations récurrentes (icône + titre + corps)" },
       ),
       f.textarea("context_conclusion"),
       // Une approche qui relie compétences et parcours (optionnel)
@@ -477,8 +485,12 @@ const collections: CollectionDef[] = [
       f.textarea("mission_intro", { note: "Intro sous le titre de la mission (optionnel)" }),
       f.repeater(
         "mission_includes",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "La mission inclut (titre + corps)" },
+        [
+          { field: "icon", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        { note: "La mission inclut (icône + titre + corps)" },
       ),
       // Un regard / une expérience (optionnel — récit narratif avec listes)
       f.input("background_title"),

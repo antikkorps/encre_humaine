@@ -21,6 +21,17 @@ Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en r
 12. **Témoignage** — `featured_testimonial` ; masqué si vide.
 13. **CTA final** — `cta_title` / `cta_body` / `cta_label` → `/contact`.
 
+## Mise en forme (éditoriale — navy + or)
+Traitement inspiré de la maquette Audit RH : hero éditorial aligné à gauche (eyebrow = `title`),
+signature d'accroche en **bandeau marine + CTA**, bénéfices **numérotés** (01-0N) avec icône, contexte
+en **cartes à icônes**, mission en **panneau marine sombre** + « pour qui » en panneau clair (2 colonnes),
+investissement en cartes Format/Tarif, CTA final marine. Orga = fonds froids (teal-50) / B2C = fonds
+chauds (orange-50) ; accents dorés + panneaux marine communs. Icônes **Material Symbols** via `@nuxt/icon`
+(server bundle **local**, `fallbackToApi: false` → CSP-safe, zéro appel externe). Les répéteurs
+`outcomes` / `context_items` / `mission_includes` portent un sous-champ `icon` (clé Iconify hyphénée,
+ex. `trending-up`), avec repli par section.
+> ⚠️ `@nuxt/icon` **épinglé en 1.15.0** : la 2.x tire `h3@2` (rc) incompatible avec Nuxt 4.4.8 (h3 v1).
+
 ## Renvois croisés (bonne pratique du brief)
 - `booster-recherche` → section « Clarifier vs Booster » (via `context`) + liste ✗ « pas encore clarifié votre projet → *Clarifier & Avancer* ».
 

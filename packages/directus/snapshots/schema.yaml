@@ -9423,6 +9423,13 @@ fields:
       note: Résultats
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: input
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title
@@ -10296,6 +10303,13 @@ fields:
       note: Situations récurrentes (titre + corps)
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: input
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title
@@ -10432,6 +10446,13 @@ fields:
       note: La mission inclut (titre + corps)
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: input
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title

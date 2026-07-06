@@ -37,6 +37,7 @@ describe("mapOfferContent", () => {
   it("offre minimale : sections vides masquées, audience nulle, CTA replié", () => {
     const c = mapOfferContent({}, [], {}, BASE, wrap);
     expect(c.audience).toBeNull();
+    expect(c.title).toBeNull();
     expect(c.accrocheTitle).toBeNull();
     expect(c.accrocheSubtitle).toBeNull();
     expect(c.accrocheBody).toBeNull();
@@ -99,7 +100,7 @@ describe("mapOfferContent", () => {
     const c = mapOfferContent(
       {
         mission_includes: [
-          { title: "Diagnostic", body: "Analyse." },
+          { title: "Diagnostic", body: "Analyse.", icon: "analytics" },
           { title: "", body: "" },
         ],
         outcomes: [
@@ -116,7 +117,9 @@ describe("mapOfferContent", () => {
       BASE,
       wrap,
     );
-    expect(c.missionIncludes).toEqual([{ title: "Diagnostic", body: "Analyse." }]);
+    expect(c.missionIncludes).toEqual([
+      { title: "Diagnostic", body: "Analyse.", icon: "analytics" },
+    ]);
     expect(c.outcomes).toEqual([{ title: "Clarté", body: "Une feuille de route." }]);
     expect(c.audienceFit).toEqual(["DRH de PME"]);
     expect(c.context).toEqual({

@@ -180,16 +180,18 @@ export function mapOffers(raws: unknown, fallback: Audience): OfferSummary[] {
     .filter((o): o is OfferSummary => o !== null);
 }
 
-/** Item « titre + corps » (convictions À propos, `outcomes` des offres…). */
+/** Item « titre + corps (+ icône) » (convictions À propos, `outcomes` des offres…). */
 export interface TitledItem {
   title: string;
   body: string;
+  /** Clé d'icône Material Symbols (optionnelle, ex. « visibility »). */
+  icon?: string;
 }
 
-/** Répéteur `[{ title, body }]` ; entrées sans titre ni corps exclues. */
+/** Répéteur `[{ title, body, icon? }]` ; entrées sans titre ni corps exclues. */
 export function mapTitledItems(raw: unknown): TitledItem[] {
   return records(raw)
-    .map((c) => ({ title: str(c.title), body: str(c.body) }))
+    .map((c) => ({ title: str(c.title), body: str(c.body), icon: str(c.icon) || undefined }))
     .filter((c) => c.title !== "" || c.body !== "");
 }
 

@@ -358,7 +358,8 @@ async function main(): Promise<void> {
   }
 
   // ── offers (5 documentées) ──────────────────────────────────────────────────
-  type TB = { title: string; body?: string };
+  // `icon` = clé Material Symbols au format Iconify (hyphénée, ex. « trending-up »).
+  type TB = { title: string; body?: string; icon?: string };
   type OfferSeed = {
     slug: string;
     audience: string;
@@ -423,18 +424,22 @@ async function main(): Promise<void> {
         "L'objectif n'est pas de produire un document théorique. Il est de vous permettre de comprendre rapidement où vous en êtes, ce qui fonctionne déjà, ce qui freine votre organisation, et par quoi commencer.",
       outcomes: [
         {
+          icon: "visibility",
           title: "Voir clairement votre situation RH",
           body: "Vous obtenez une lecture structurée de vos pratiques actuelles, sans jargon ni jugement.",
         },
         {
+          icon: "flag",
           title: "Identifier les vrais leviers d'action",
           body: "Pas une liste de recommandations, mais ce qui aura réellement un impact dans votre contexte.",
         },
         {
+          icon: "format-list-numbered",
           title: "Prioriser ce qui compte vraiment",
           body: "Ce qui est urgent, ce qui est important, et ce qui peut attendre.",
         },
         {
+          icon: "layers",
           title: "Poser une base solide pour la suite",
           body: "Que vous poursuiviez ensuite seul ou accompagné, vous repartez avec une vision claire et exploitable.",
         },
@@ -442,22 +447,27 @@ async function main(): Promise<void> {
       context_title: "Derrière chaque audit RH, on retrouve des situations très similaires.",
       context_items: [
         {
+          icon: "description",
           title: "Compétences peu lisibles",
           body: "Les savoir-faire existent, mais ils ne sont pas formalisés ni partagés.",
         },
         {
+          icon: "group",
           title: "Managers en sur-sollicitation",
           body: "Ils portent beaucoup de responsabilités sans cadre commun ni outils stabilisés.",
         },
         {
+          icon: "settings",
           title: "Outils RH sous-exploités",
           body: "Entretiens, formation, procédures… présents, mais peu structurants dans le quotidien.",
         },
         {
+          icon: "trending-up",
           title: "Organisation en croissance rapide",
           body: "L'entreprise évolue plus vite que ses pratiques internes.",
         },
         {
+          icon: "schedule",
           title: "Pilotage à court terme",
           body: "Le quotidien prend le dessus sur la structuration.",
         },
@@ -466,22 +476,27 @@ async function main(): Promise<void> {
       mission_title: "Un audit RH complet, structuré et directement exploitable.",
       mission_includes: [
         {
+          icon: "analytics",
           title: "Analyse de votre organisation RH",
           body: "Recrutement, intégration, formation, entretiens, compétences, management.",
         },
         {
+          icon: "forum",
           title: "Entretiens avec les parties prenantes clés",
           body: "Direction, managers, fonctions support selon votre organisation.",
         },
         {
+          icon: "difference",
           title: "Lecture des écarts et enjeux",
           body: "Entre vos pratiques actuelles et vos besoins réels de développement.",
         },
         {
+          icon: "route",
           title: "Feuille de route priorisée",
           body: "Une vision claire : court terme (actions immédiates), moyen terme, structuration long terme.",
         },
         {
+          icon: "record-voice-over",
           title: "Restitution orale",
           body: "Un temps d'échange pour repartir avec une vision claire et actionnable.",
         },

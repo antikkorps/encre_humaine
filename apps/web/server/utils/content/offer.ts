@@ -77,6 +77,8 @@ export interface RawOfferFull {
 export interface OfferContent {
   /** Public de l'offre ; la page route vérifie la correspondance (sinon 404). */
   audience: Audience | null;
+  /** Nom de l'offre (eyebrow éditorial) ; `null` si absent. */
+  title: string | null;
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
   accrocheSubtitle: string | null;
@@ -165,6 +167,7 @@ export function mapOfferContent(
   const takeawaysIntro = str(raw.takeaways_intro);
   return {
     audience: asAudience(raw.audience) ?? null,
+    title: str(raw.title) || null,
     accrocheTitle: str(raw.accroche_title) || null,
     accrocheSubtitle: str(raw.accroche_subtitle) || null,
     accrocheBody: str(raw.accroche_body) || null,

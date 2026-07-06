@@ -24,7 +24,24 @@ export default defineNuxtConfig({
   // docs/00-global.md §Composants (NavMobile, FaqAccordion). a11y native.
   // nuxt-security : CSP stricte à nonce + en-têtes sécurité (docs/06 §6) — owne
   // les en-têtes du site public (Caddy ne les pose plus que pour cms./stats.).
-  modules: ["@nuxt/image", "@nuxt/fonts", "@nuxtjs/seo", "reka-ui/nuxt", "nuxt-security"],
+  modules: [
+    "@nuxt/image",
+    "@nuxt/icon",
+    "@nuxt/fonts",
+    "@nuxtjs/seo",
+    "reka-ui/nuxt",
+    "nuxt-security",
+  ],
+
+  // @nuxt/icon : jeu Material Symbols servi EN LOCAL (server bundle) — jamais
+  // d'appel à api.iconify.design (CSP stricte : `default-src 'self'`). Le client
+  // récupère les icônes manquantes en same-origin (/api/_nuxt_icon, autorisé par
+  // `connect-src 'self'`) ; en SSR elles sont inline. `fallbackToApi: false` coupe
+  // tout repli externe.
+  icon: {
+    serverBundle: "local",
+    fallbackToApi: false,
+  },
 
   // Sécurité — docs/06-security.md §6/§7. CSP **à nonce** (script-src sans
   // 'unsafe-inline') : Nuxt émet un <script> inline de config qui DOIT porter le
