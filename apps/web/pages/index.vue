@@ -108,17 +108,17 @@ const heroTitle = computed(() => {
               {{ hero.tagline.join(" • ") }}
             </p>
 
-            <div class="mt-9 flex flex-wrap gap-3">
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <NuxtLink
                 to="/contact"
-                class="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
               >
                 {{ hero.ctaPrimaryLabel }}
                 <span aria-hidden="true">↗</span>
               </NuxtLink>
               <a
                 href="#approche"
-                class="inline-flex items-center gap-2 rounded-full border border-sand-400/70 px-6 py-3.5 font-semibold text-ink transition-colors hover:bg-orange-100/60"
+                class="inline-flex items-center justify-center gap-2 rounded-full border border-sand-400/70 px-6 py-3.5 font-semibold text-ink transition-colors hover:bg-orange-100/60"
               >
                 {{ hero.ctaSecondaryLabel }}
               </a>
