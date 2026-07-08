@@ -78,6 +78,9 @@ const singletons: CollectionDef[] = [
       // — Hero (nommage CTA agnostique : principal = RDV, secondaire = ancre offres) —
       f.input("hero_title"),
       f.textarea("hero_subtitle"),
+      f.textarea("hero_signature", {
+        note: "Phrase signature (italique, sous le sous-titre du hero). Ex. « Une organisation avance mieux lorsque… »",
+      }),
       f.tags("hero_tagline", { note: "Domaines (ex. Audit RH • GEPP • Management)" }),
       f.input("hero_cta_primary_label", { half: true, note: "CTA principal → /contact (RDV)" }),
       f.input("hero_cta_secondary_label", {

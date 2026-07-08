@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // Ligne de crédibilité (chiffres clés) — docs/02-content-model.md §4 (home_page.stats).
+// Bandeau à gros chiffres navy, séparés par des filets dorés (registre « pop »).
 // Se masque proprement si vide (docs/00-global.md §États).
 import type { Stat } from "~/types/content";
 
@@ -9,18 +10,18 @@ defineProps<{ stats: Stat[] }>();
 <template>
   <dl
     v-if="stats.length"
-    class="flex flex-col items-center gap-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-16 sm:gap-y-8"
+    class="grid gap-10 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-orange-300/50"
   >
-    <div v-for="(stat, i) in stats" :key="i" class="text-center sm:min-w-[8rem]">
+    <div v-for="(stat, i) in stats" :key="i" class="px-4 text-center sm:px-8">
       <dt class="sr-only">{{ stat.label }}</dt>
       <dd>
-        <span
-          class="block font-display text-4xl font-bold text-teal-700 sm:text-5xl"
-        >
+        <span class="block font-display text-5xl font-bold text-ink sm:text-6xl">
           {{ stat.value }}
         </span>
-        <span aria-hidden="true" class="mx-auto mt-2 block h-1 w-8 rounded-full bg-sand-400"></span>
-        <span class="mt-2 block text-sm font-medium text-ink/70">{{ stat.label }}</span>
+        <span aria-hidden="true" class="mx-auto mt-3 block h-1 w-8 rounded-full bg-sand-400"></span>
+        <span class="mt-3 block whitespace-pre-line text-sm font-medium leading-relaxed text-ink/70">
+          {{ stat.label }}
+        </span>
       </dd>
     </div>
   </dl>

@@ -54,6 +54,7 @@ export interface RawArticle {
 export interface RawHome {
   hero_title?: string | null;
   hero_subtitle?: string | null;
+  hero_signature?: string | null;
   hero_tagline?: unknown;
   hero_proofs?: unknown;
   hero_cta_primary_label?: string | null;
@@ -101,6 +102,8 @@ export interface HomeContent {
   hero: {
     title: string;
     subtitle: string | null;
+    /** Phrase signature (italique, sous le sous-titre) — masquée si vide. */
+    signature: string | null;
     /** Ligne d'expertise (Audit RH • GEPP • …). */
     tagline: string[];
     /** Micro-preuves ✓. */
@@ -264,6 +267,7 @@ export function mapHomeContent(
     hero: {
       title: str(home.hero_title) || "L'Encre Humaine",
       subtitle: str(home.hero_subtitle) || null,
+      signature: str(home.hero_signature) || null,
       tagline: mapStringList(home.hero_tagline),
       proofs: mapStringList(home.hero_proofs),
       ctaPrimaryLabel: str(home.hero_cta_primary_label) || "Prendre rendez-vous",
@@ -305,6 +309,7 @@ export async function loadHomeContent(): Promise<HomeContent> {
         fields: [
           "hero_title",
           "hero_subtitle",
+          "hero_signature",
           "hero_tagline",
           "hero_proofs",
           "hero_cta_primary_label",
