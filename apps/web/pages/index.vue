@@ -57,7 +57,7 @@ const heroTitle = computed(() => {
     <section class="bg-ink-gradient relative isolate overflow-hidden text-paper">
       <!-- Filigrane poulpe doré, ample, à droite (accent identitaire). -->
       <OctopusWatermark
-        class="pointer-events-none absolute -right-28 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-sand-300/[0.12] lg:block"
+        class="pointer-events-none absolute -right-40 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-sand-300/[0.10] lg:block"
       />
       <InkBlob class="absolute -left-20 top-10 -z-10 h-72 w-72 -rotate-45 text-teal-500/15" />
       <InkBlob class="absolute -bottom-12 right-1/4 -z-10 h-56 w-56 text-orange-400/10" />
@@ -125,30 +125,41 @@ const heroTitle = computed(() => {
             </div>
           </div>
 
-          <!-- Colonne droite : micro-preuves (sur le filigrane poulpe) -->
+          <!-- Colonne droite : micro-preuves sur une carte givrée (ne pas les poser
+               à même le filigrane poulpe → illisible). Le poulpe reste ambiant derrière. -->
           <div v-if="hero.proofs.length" class="lg:pl-6">
-            <ul class="space-y-4">
-              <li
-                v-for="proof in hero.proofs"
-                :key="proof"
-                class="flex items-start gap-3"
+            <div
+              class="rounded-3xl border border-paper/15 bg-paper/[0.06] p-6 shadow-soft backdrop-blur sm:p-8"
+            >
+              <p
+                class="mb-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-sand-300"
               >
-                <span
-                  class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sand-400/15 text-sand-300 ring-1 ring-inset ring-sand-400/40"
+                <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-sand-400"></span>
+                En pratique
+              </p>
+              <ul class="space-y-4">
+                <li
+                  v-for="proof in hero.proofs"
+                  :key="proof"
+                  class="flex items-start gap-3"
                 >
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M5 12.5 10 17.5 19 7"
-                      stroke="currentColor"
-                      stroke-width="2.2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span class="leading-relaxed text-paper/85">{{ proof }}</span>
-              </li>
-            </ul>
+                  <span
+                    class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sand-400/15 text-sand-300 ring-1 ring-inset ring-sand-400/40"
+                  >
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M5 12.5 10 17.5 19 7"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="leading-relaxed text-paper/85">{{ proof }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -164,11 +175,11 @@ const heroTitle = computed(() => {
     </p>
 
     <template v-else-if="content">
-      <!-- 2. Bandeau de crédibilité (stats) — carte flottante, séparateurs dorés -->
-      <section v-if="content.stats.length" class="relative z-10 bg-paper">
+      <!-- 2. Bandeau de crédibilité (stats) — carte aérée, séparateurs dorés -->
+      <section v-if="content.stats.length" class="bg-paper py-16 lg:py-20">
         <div class="mx-auto max-w-5xl px-4">
           <div
-            class="-mt-6 rounded-3xl border border-ink/5 bg-white px-6 py-10 shadow-lift sm:-mt-10 sm:px-10 lg:py-12"
+            class="rounded-3xl border border-ink/5 bg-white px-6 py-10 shadow-lift sm:px-10 lg:py-12"
           >
             <StatRow :stats="content.stats" />
           </div>
