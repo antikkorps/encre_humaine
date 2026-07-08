@@ -52,35 +52,35 @@ const heroTitle = computed(() => {
 <template>
   <div>
     <!-- ============================================================= -->
-    <!-- 1. HÉRO — clair, éditorial gauche (h1 = hero_title)            -->
+    <!-- 1. HÉRO — sombre (marine), éditorial gauche (h1 = hero_title)  -->
     <!-- ============================================================= -->
-    <section class="relative isolate overflow-hidden bg-paper">
+    <section class="bg-ink-gradient relative isolate overflow-hidden text-paper">
       <!-- Filigrane poulpe doré, ample, à droite (accent identitaire). -->
       <OctopusWatermark
-        class="pointer-events-none absolute -right-28 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-teal-800/[0.06] lg:block"
+        class="pointer-events-none absolute -right-28 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-sand-300/[0.12] lg:block"
       />
-      <InkBlob class="absolute -left-24 -top-10 -z-10 h-72 w-72 text-teal-500/[0.07]" />
-      <InkBlob class="absolute -bottom-16 right-1/4 -z-10 h-56 w-56 text-orange-400/[0.08]" />
+      <InkBlob class="absolute -left-20 top-10 -z-10 h-72 w-72 -rotate-45 text-teal-500/15" />
+      <InkBlob class="absolute -bottom-12 right-1/4 -z-10 h-56 w-56 text-orange-400/10" />
 
       <div class="mx-auto max-w-6xl px-4 py-20 lg:py-28">
         <div class="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
           <!-- Colonne texte (gauche) -->
           <div class="max-w-2xl">
             <p
-              class="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-4 py-1.5 text-sm font-medium text-ink/70 shadow-soft"
+              class="inline-flex items-center gap-2 rounded-full border border-paper/20 bg-paper/5 px-4 py-1.5 text-sm font-medium text-paper/80"
             >
-              <OctopusMark class="h-4 w-4 text-teal-700" />
+              <OctopusMark class="h-4 w-4 text-teal-300" />
               Conseil RH &amp; accompagnement
             </p>
             <h1
-              class="mt-6 font-display text-4xl font-bold leading-[1.08] text-ink sm:text-5xl lg:text-[3.35rem]"
+              class="mt-6 font-display text-4xl font-bold leading-[1.08] text-paper sm:text-5xl lg:text-[3.35rem]"
             >
               <span v-if="heroTitle.head">{{ heroTitle.head }}</span
-              ><span class="ink-underline text-ink">{{ heroTitle.tail }}</span>
+              ><span class="ink-underline text-paper">{{ heroTitle.tail }}</span>
             </h1>
             <p
               v-if="hero.subtitle"
-              class="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-ink/70"
+              class="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-paper/80"
             >
               {{ hero.subtitle }}
             </p>
@@ -92,10 +92,10 @@ const heroTitle = computed(() => {
             >
               <span
                 aria-hidden="true"
-                class="-mt-1 font-display text-4xl leading-none text-sand-400"
+                class="-mt-1 font-display text-4xl leading-none text-sand-300"
                 >“</span
               >
-              <p class="font-display text-lg italic leading-relaxed text-ink/80">
+              <p class="font-display text-lg italic leading-relaxed text-paper/85">
                 {{ hero.signature }}
               </p>
             </blockquote>
@@ -103,7 +103,7 @@ const heroTitle = computed(() => {
             <!-- Ligne d'expertise (domaines couverts) -->
             <p
               v-if="hero.tagline.length"
-              class="mt-7 text-sm font-semibold uppercase tracking-[0.08em] text-teal-700/80"
+              class="mt-7 text-sm font-semibold uppercase tracking-[0.08em] text-teal-200/90"
             >
               {{ hero.tagline.join(" • ") }}
             </p>
@@ -111,14 +111,14 @@ const heroTitle = computed(() => {
             <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <NuxtLink
                 to="/contact"
-                class="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-paper px-6 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-white"
               >
                 {{ hero.ctaPrimaryLabel }}
                 <span aria-hidden="true">↗</span>
               </NuxtLink>
               <a
                 href="#approche"
-                class="inline-flex items-center justify-center gap-2 rounded-full border border-sand-400/70 px-6 py-3.5 font-semibold text-ink transition-colors hover:bg-orange-100/60"
+                class="inline-flex items-center justify-center gap-2 rounded-full border border-paper/25 bg-paper/5 px-6 py-3.5 font-semibold text-paper transition-colors hover:bg-paper/10"
               >
                 {{ hero.ctaSecondaryLabel }}
               </a>
@@ -134,7 +134,7 @@ const heroTitle = computed(() => {
                 class="flex items-start gap-3"
               >
                 <span
-                  class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sand-400/20 text-teal-700 ring-1 ring-inset ring-sand-400/50"
+                  class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sand-400/15 text-sand-300 ring-1 ring-inset ring-sand-400/40"
                 >
                   <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
@@ -146,7 +146,7 @@ const heroTitle = computed(() => {
                     />
                   </svg>
                 </span>
-                <span class="leading-relaxed text-ink/75">{{ proof }}</span>
+                <span class="leading-relaxed text-paper/85">{{ proof }}</span>
               </li>
             </ul>
           </div>
@@ -260,36 +260,34 @@ const heroTitle = computed(() => {
           class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
-          <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16">
-            <div class="max-w-md">
-              <SectionHeading
-                :title="content.method.title"
-                :subtitle="content.method.subtitle ?? undefined"
-                eyebrow="Ma méthode"
-                tone="dark"
-              />
-            </div>
-            <ol class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-              <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
-                <!-- Filet doré reliant les étapes (desktop). -->
-                <span
-                  v-if="i < content.method.steps.length - 1"
-                  aria-hidden="true"
-                  class="absolute left-12 top-6 hidden h-px w-[calc(100%-2.5rem)] bg-sand-400/30 lg:block"
-                ></span>
-                <span
-                  aria-hidden="true"
-                  class="relative grid h-12 w-12 place-items-center rounded-full bg-sand-400 font-display text-lg font-bold text-ink-900"
-                >
-                  {{ i + 1 }}
-                </span>
-                <h3 class="mt-4 font-display text-lg font-bold text-paper">{{ step.title }}</h3>
-                <p v-if="step.body" class="mt-2 text-sm leading-relaxed text-paper/70">
-                  {{ step.body }}
-                </p>
-              </li>
-            </ol>
+          <div class="max-w-2xl">
+            <SectionHeading
+              :title="content.method.title"
+              :subtitle="content.method.subtitle ?? undefined"
+              eyebrow="Ma méthode"
+              tone="dark"
+            />
           </div>
+          <ol class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
+              <!-- Filet doré reliant les étapes (desktop, pleine largeur). -->
+              <span
+                v-if="i < content.method.steps.length - 1"
+                aria-hidden="true"
+                class="absolute left-16 top-6 hidden h-px w-[calc(100%-2rem)] bg-sand-400/30 lg:block"
+              ></span>
+              <span
+                aria-hidden="true"
+                class="relative grid h-12 w-12 place-items-center rounded-full bg-sand-400 font-display text-lg font-bold text-ink-900"
+              >
+                {{ i + 1 }}
+              </span>
+              <h3 class="mt-5 font-display text-lg font-bold text-paper">{{ step.title }}</h3>
+              <p v-if="step.body" class="mt-2 leading-relaxed text-paper/70">
+                {{ step.body }}
+              </p>
+            </li>
+          </ol>
         </div>
       </section>
 
