@@ -9,6 +9,8 @@ export const homePageContent = {
   hero_title: "Quand votre organisation grandit, vos pratiques RH doivent suivre.",
   hero_subtitle:
     "J'aide les PME à structurer leurs compétences, leurs parcours et leurs pratiques RH pour accompagner durablement leur développement.",
+  hero_signature:
+    "Une organisation avance mieux lorsque ses pratiques RH et ses réalités humaines vont dans le même sens.",
   hero_tagline: ["Audit RH", "GEPP", "Plan de développement des compétences", "Management"],
   hero_proofs: [
     "10+ ans d'expérience",

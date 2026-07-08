@@ -197,6 +197,7 @@ export interface HomePage {
   resources_subtitle: string | null;
   resources_cta_label: string | null;
   final_cta_description: string | null;
+  hero_signature: string | null;
 }
 
 export interface LegalDocuments {

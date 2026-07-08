@@ -215,6 +215,7 @@ describe("mapHomeContent", () => {
     expect(content.hero).toEqual({
       title: "L'Encre Humaine",
       subtitle: null,
+      signature: null,
       tagline: [],
       proofs: [],
       ctaPrimaryLabel: "Prendre rendez-vous",

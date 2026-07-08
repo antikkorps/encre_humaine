@@ -3,6 +3,12 @@
 // + témoignage vedette, via l'endpoint serveur caché `/api/content/home` (le token
 // Directus reste serveur). Rendu SSG/ISR. Les sections dynamiques se masquent
 // proprement si vides ; en cas d'échec de fetch, message sobre (docs/00 §États).
+//
+// Design (refonte 2026-07, maquette Éléonore) : héro éditorial CLAIR aligné à
+// gauche (titre navy + phrase signature dorée + micro-preuves + filigrane poulpe),
+// « titres jaunes » (kickers dorés) sur chaque section, méthode sur fond sombre,
+// portrait ovale à cadre doré. Le sombre se redistribue (héro clair, méthode + CTA
+// final sombres). Voir mémoire [[encre-humaine-design-editorial]].
 const { data: content, error } = await useFetch("/api/content/home", {
   query: usePreviewQuery(),
 });
@@ -24,6 +30,7 @@ const hero = computed(
     content.value?.hero ?? {
       title: siteName,
       subtitle: null,
+      signature: null,
       tagline: [] as string[],
       proofs: [] as string[],
       ctaPrimaryLabel: "Prendre rendez-vous",
@@ -31,7 +38,7 @@ const hero = computed(
     },
 );
 
-// Met le dernier mot du titre en avant (souligné « encre ») — effet générique
+// Met le dernier mot du titre en avant (souligné doré « encre ») — effet générique
 // quel que soit le contenu Directus. Un seul mot → tout est mis en avant.
 const heroTitle = computed(() => {
   const words = hero.value.title.trim().split(/\s+/);
@@ -44,80 +51,107 @@ const heroTitle = computed(() => {
 
 <template>
   <div>
-    <!-- 1. Hero (au-dessus de la ligne de flottaison, h1 = hero_title) -->
-    <section class="bg-ink-gradient relative isolate overflow-hidden text-paper">
-      <!-- Décor : filigrane poulpe (accent identitaire fort) + taches d'encre. -->
+    <!-- ============================================================= -->
+    <!-- 1. HÉRO — clair, éditorial gauche (h1 = hero_title)            -->
+    <!-- ============================================================= -->
+    <section class="relative isolate overflow-hidden bg-paper">
+      <!-- Filigrane poulpe doré, ample, à droite (accent identitaire). -->
       <OctopusWatermark
-        class="absolute -right-24 top-1/2 -z-10 hidden h-[40rem] -translate-y-1/2 rotate-6 text-sand-300/[0.2] md:block"
+        class="pointer-events-none absolute -right-28 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-teal-800/[0.06] lg:block"
       />
-      <InkBlob class="absolute -left-20 top-10 -z-10 h-72 w-72 -rotate-45 text-teal-500/15" />
-      <InkBlob class="absolute -bottom-10 left-1/4 -z-10 h-56 w-56 text-orange-400/10" />
+      <InkBlob class="absolute -left-24 -top-10 -z-10 h-72 w-72 text-teal-500/[0.07]" />
+      <InkBlob class="absolute -bottom-16 right-1/4 -z-10 h-56 w-56 text-orange-400/[0.08]" />
 
-      <div class="mx-auto max-w-4xl px-4 py-24 text-center sm:py-32">
-        <p
-          class="inline-flex items-center gap-2 rounded-full border border-paper/20 bg-paper/5 px-4 py-1.5 text-sm font-medium text-paper/80"
-        >
-          <OctopusMark class="h-4 w-4 text-teal-300" />
-          Conseil RH &amp; accompagnement
-        </p>
-        <h1 class="mt-6 font-display text-5xl font-bold leading-[1.05] sm:text-6xl">
-          <span v-if="heroTitle.head">{{ heroTitle.head }}</span
-          ><span class="ink-underline text-paper">{{ heroTitle.tail }}</span>
-        </h1>
-        <p v-if="hero.subtitle" class="mx-auto mt-6 max-w-2xl text-lg text-paper/80 sm:text-xl">
-          {{ hero.subtitle }}
-        </p>
-        <!-- Ligne d'expertise (domaines couverts) -->
-        <p
-          v-if="hero.tagline.length"
-          class="mx-auto mt-5 max-w-2xl text-sm font-medium uppercase tracking-[0.1em] text-teal-200/90"
-        >
-          {{ hero.tagline.join(" • ") }}
-        </p>
-        <div class="mt-10 flex flex-wrap justify-center gap-3">
-          <NuxtLink
-            to="/contact"
-            class="rounded-full bg-paper px-6 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-white"
-          >
-            {{ hero.ctaPrimaryLabel }}
-          </NuxtLink>
-          <a
-            href="#approche"
-            class="rounded-full border border-paper/25 bg-paper/5 px-6 py-3.5 font-semibold text-paper transition-colors hover:bg-paper/10"
-          >
-            {{ hero.ctaSecondaryLabel }}
-          </a>
-        </div>
-        <!-- Micro-preuves rapides -->
-        <ul
-          v-if="hero.proofs.length"
-          class="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-paper/75"
-        >
-          <li v-for="proof in hero.proofs" :key="proof" class="inline-flex items-center gap-1.5">
-            <svg
-              class="h-4 w-4 shrink-0 text-teal-300"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
+      <div class="mx-auto max-w-6xl px-4 py-20 lg:py-28">
+        <div class="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
+          <!-- Colonne texte (gauche) -->
+          <div class="max-w-2xl">
+            <p
+              class="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-4 py-1.5 text-sm font-medium text-ink/70 shadow-soft"
             >
-              <path
-                fill-rule="evenodd"
-                d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.3 3.3 6.8-6.8a1 1 0 0 1 1.4 0Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            {{ proof }}
-          </li>
-        </ul>
-      </div>
+              <OctopusMark class="h-4 w-4 text-teal-700" />
+              Conseil RH &amp; accompagnement
+            </p>
+            <h1
+              class="mt-6 font-display text-4xl font-bold leading-[1.08] text-ink sm:text-5xl lg:text-[3.35rem]"
+            >
+              <span v-if="heroTitle.head">{{ heroTitle.head }}</span
+              ><span class="ink-underline text-ink">{{ heroTitle.tail }}</span>
+            </h1>
+            <p
+              v-if="hero.subtitle"
+              class="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-ink/70"
+            >
+              {{ hero.subtitle }}
+            </p>
 
-      <!-- La vague « coule » vers la 1re section claire, quelle qu'elle soit :
-           fond crème des stats si présentes, sinon la section Problème (paper-2).
-           Robuste si les stats reviennent — pas de liseré au raccord. -->
-      <InkWave
-        :class="content?.stats.length ? 'text-paper' : 'text-paper-2'"
-        height="h-12 sm:h-20"
-      />
+            <!-- Phrase signature (doré, italique, guillemet) -->
+            <blockquote
+              v-if="hero.signature"
+              class="mt-7 flex gap-3 border-l-2 border-sand-400 pl-4"
+            >
+              <span
+                aria-hidden="true"
+                class="-mt-1 font-display text-4xl leading-none text-sand-400"
+                >“</span
+              >
+              <p class="font-display text-lg italic leading-relaxed text-ink/80">
+                {{ hero.signature }}
+              </p>
+            </blockquote>
+
+            <!-- Ligne d'expertise (domaines couverts) -->
+            <p
+              v-if="hero.tagline.length"
+              class="mt-7 text-sm font-semibold uppercase tracking-[0.08em] text-teal-700/80"
+            >
+              {{ hero.tagline.join(" • ") }}
+            </p>
+
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <NuxtLink
+                to="/contact"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+              >
+                {{ hero.ctaPrimaryLabel }}
+                <span aria-hidden="true">↗</span>
+              </NuxtLink>
+              <a
+                href="#approche"
+                class="inline-flex items-center justify-center gap-2 rounded-full border border-sand-400/70 px-6 py-3.5 font-semibold text-ink transition-colors hover:bg-orange-100/60"
+              >
+                {{ hero.ctaSecondaryLabel }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Colonne droite : micro-preuves (sur le filigrane poulpe) -->
+          <div v-if="hero.proofs.length" class="lg:pl-6">
+            <ul class="space-y-4">
+              <li
+                v-for="proof in hero.proofs"
+                :key="proof"
+                class="flex items-start gap-3"
+              >
+                <span
+                  class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-sand-400/20 text-teal-700 ring-1 ring-inset ring-sand-400/50"
+                >
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M5 12.5 10 17.5 19 7"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span class="leading-relaxed text-ink/75">{{ proof }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- État d'erreur sobre : le hero reste affiché, le reste est remplacé par un mot. -->
@@ -130,64 +164,79 @@ const heroTitle = computed(() => {
     </p>
 
     <template v-else-if="content">
-      <!-- 2. Ligne de crédibilité (stats) — masquée si vide (StatRow) -->
-      <section v-if="content.stats.length" class="mx-auto max-w-5xl px-4 pb-4 pt-10">
-        <StatRow :stats="content.stats" />
+      <!-- 2. Bandeau de crédibilité (stats) — carte flottante, séparateurs dorés -->
+      <section v-if="content.stats.length" class="relative z-10 bg-paper">
+        <div class="mx-auto max-w-5xl px-4">
+          <div
+            class="-mt-6 rounded-3xl border border-ink/5 bg-white px-6 py-10 shadow-lift sm:-mt-10 sm:px-10 lg:py-12"
+          >
+            <StatRow :stats="content.stats" />
+          </div>
+        </div>
       </section>
 
-      <!-- 3. Problème : « Vous vous reconnaissez ? » -->
-      <!-- Pas de v-reveal ici : la translation rouvrirait un liseré sous la vague
-           du hero (le raccord doit rester collé). -->
+      <!-- 3. Les défis (« Vous vous reconnaissez ? ») -->
       <section v-if="content.recognition" class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.recognition.title"
             :subtitle="content.recognition.subtitle ?? undefined"
-            eyebrow="Le constat"
+            eyebrow="Les défis des PME"
           />
           <ul
             v-if="content.recognition.items.length"
-            class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            class="mt-12 grid gap-4 sm:grid-cols-2"
           >
             <li
               v-for="(item, i) in content.recognition.items"
               :key="i"
-              class="flex gap-3 rounded-2xl border border-ink/5 bg-white p-5 shadow-soft"
+              class="flex items-start gap-4 rounded-2xl border border-ink/5 bg-white p-5 shadow-soft"
             >
               <span
                 aria-hidden="true"
-                class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-400"
-              ></span>
+                class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-sand-400/60 bg-orange-50"
+              >
+                <span class="h-2 w-2 rounded-full bg-sand-400"></span>
+              </span>
               <span class="leading-relaxed text-ink/75">{{ item }}</span>
             </li>
           </ul>
           <p
             v-if="content.recognition.conclusion"
-            class="mt-10 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
+            class="mx-auto mt-12 max-w-3xl whitespace-pre-line text-center font-display text-xl italic leading-relaxed text-teal-800"
           >
             {{ content.recognition.conclusion }}
           </p>
         </div>
       </section>
 
-      <!-- 4. Promesse / Offre : « Ce que je vous aide à construire » (#offres) -->
-      <section v-if="content.build" id="offres" v-reveal class="scroll-mt-24">
+      <!-- 4. Ce que je vous aide à construire (#offres) -->
+      <section v-if="content.build" id="offres" v-reveal class="scroll-mt-24 bg-paper">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.build.title" eyebrow="Mon offre" />
+          <SectionHeading
+            :title="content.build.title"
+            eyebrow="Ce que je construis"
+            align="center"
+          />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
             <article
               v-for="(block, i) in content.build.blocks"
               :key="i"
               class="flex flex-col rounded-3xl border border-ink/5 bg-white p-8 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
-              <span aria-hidden="true" class="h-1.5 w-10 rounded-full bg-teal-500"></span>
-              <h3 class="mt-4 font-display text-xl font-bold text-ink">{{ block.title }}</h3>
+              <span
+                aria-hidden="true"
+                class="grid h-12 w-12 place-items-center rounded-full bg-teal-800 font-display text-lg font-bold text-sand-300"
+              >
+                {{ String(i + 1).padStart(2, "0") }}
+              </span>
+              <h3 class="mt-5 font-display text-xl font-bold text-ink">{{ block.title }}</h3>
               <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
                 {{ block.body }}
               </p>
             </article>
           </div>
-          <div v-if="content.build.ctaLabel" class="mt-10">
+          <div v-if="content.build.ctaLabel" class="mt-12 text-center">
             <NuxtLink
               :to="content.build.ctaUrl"
               class="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
@@ -199,117 +248,149 @@ const heroTitle = computed(() => {
         </div>
       </section>
 
-      <!-- 5. Ma méthode (#approche) — étapes numérotées -->
+      <!-- 5. Ma méthode (#approche) — fond sombre + timeline dorée numérotée -->
       <section
         v-if="content.method"
         id="approche"
         v-reveal
-        class="relative isolate scroll-mt-24 overflow-hidden bg-teal-50"
+        class="bg-ink-gradient relative isolate scroll-mt-24 overflow-hidden text-paper"
       >
         <TentacleAccent
           name="tentacule-5-plein"
-          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
+        <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
+          <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16">
+            <div class="max-w-md">
+              <SectionHeading
+                :title="content.method.title"
+                :subtitle="content.method.subtitle ?? undefined"
+                eyebrow="Ma méthode"
+                tone="dark"
+              />
+            </div>
+            <ol class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+              <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
+                <!-- Filet doré reliant les étapes (desktop). -->
+                <span
+                  v-if="i < content.method.steps.length - 1"
+                  aria-hidden="true"
+                  class="absolute left-12 top-6 hidden h-px w-[calc(100%-2.5rem)] bg-sand-400/30 lg:block"
+                ></span>
+                <span
+                  aria-hidden="true"
+                  class="relative grid h-12 w-12 place-items-center rounded-full bg-sand-400 font-display text-lg font-bold text-ink-900"
+                >
+                  {{ i + 1 }}
+                </span>
+                <h3 class="mt-4 font-display text-lg font-bold text-paper">{{ step.title }}</h3>
+                <p v-if="step.body" class="mt-2 text-sm leading-relaxed text-paper/70">
+                  {{ step.body }}
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. L'Encre Humaine (signature / positionnement) -->
+      <section v-if="content.why" v-reveal class="relative isolate overflow-hidden bg-paper-2">
+        <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/[0.08]" />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
-            :title="content.method.title"
-            :subtitle="content.method.subtitle ?? undefined"
-            eyebrow="Ma méthode"
+            :title="content.why.title"
+            :subtitle="content.why.subtitle ?? undefined"
+            eyebrow="L'Encre Humaine"
           />
-          <ol class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
-              <span class="font-display text-5xl font-bold text-teal-600/30">{{ i + 1 }}</span>
-              <h3 class="mt-2 font-display text-xl font-bold text-ink">{{ step.title }}</h3>
-              <p v-if="step.body" class="mt-2 leading-relaxed text-ink/70">{{ step.body }}</p>
-            </li>
-          </ol>
+          <div class="mt-12 grid gap-10 lg:grid-cols-[1.55fr_0.85fr] lg:items-center">
+            <div class="grid gap-6 sm:grid-cols-3">
+              <article v-for="(item, i) in content.why.items" :key="i">
+                <span
+                  aria-hidden="true"
+                  class="block h-1.5 w-10 rounded-full bg-sand-400"
+                ></span>
+                <h3 class="mt-4 font-display text-lg font-bold text-ink">{{ item.title }}</h3>
+                <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">{{ item.body }}</p>
+              </article>
+            </div>
+            <blockquote
+              v-if="content.why.conclusion"
+              class="relative rounded-3xl border border-sand-400/30 bg-white/70 p-8 shadow-soft backdrop-blur"
+            >
+              <span
+                aria-hidden="true"
+                class="absolute -top-4 left-6 font-display text-6xl leading-none text-sand-400/70"
+                >“</span
+              >
+              <p
+                class="relative whitespace-pre-line font-display text-lg italic leading-relaxed text-teal-800"
+              >
+                {{ content.why.conclusion }}
+              </p>
+            </blockquote>
+          </div>
         </div>
       </section>
 
-      <!-- 6. Signature / Positionnement : double expertise -->
-      <section v-if="content.why" v-reveal class="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading
-          :title="content.why.title"
-          :subtitle="content.why.subtitle ?? undefined"
-          eyebrow="Ma signature"
-        />
-        <div class="mt-12 grid gap-6 md:grid-cols-3">
-          <article
-            v-for="(item, i) in content.why.items"
-            :key="i"
-            class="rounded-3xl border border-ink/5 bg-white p-8 shadow-soft"
-          >
-            <h3 class="font-display text-xl font-bold text-ink">{{ item.title }}</h3>
-            <p v-if="item.body" class="mt-3 leading-relaxed text-ink/65">{{ item.body }}</p>
-          </article>
-        </div>
-        <p
-          v-if="content.why.conclusion"
-          class="mt-10 max-w-3xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
-        >
-          {{ content.why.conclusion }}
-        </p>
-      </section>
-
-      <!-- 7. À propos -->
-      <section v-if="content.intro" v-reveal class="relative isolate overflow-hidden bg-paper-2">
-        <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/10" />
+      <!-- 7. Derrière l'Encre Humaine — portrait ovale cadre doré -->
+      <section v-if="content.intro" v-reveal class="relative isolate overflow-hidden bg-paper">
         <TentacleAccent
           name="tentacule-2-trait"
-          class="absolute -left-16 bottom-0 -z-10 hidden w-[34rem] rotate-6 text-teal-700/[0.08] lg:block"
+          class="absolute -left-16 bottom-0 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
-        <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 md:grid-cols-2">
-          <!-- alt vide admis : portrait illustratif jouxtant le titre/texte qui portent le sens (a11y). -->
-          <div v-if="content.intro.photo" class="relative">
-            <span
-              aria-hidden="true"
-              class="absolute -left-3 -top-3 -z-10 h-full w-full rounded-3xl bg-teal-100"
-            ></span>
-            <NuxtImg
-              :src="content.intro.photo.url"
-              :alt="content.intro.photo.alt"
-              :width="content.intro.photo.width ?? 640"
-              :height="content.intro.photo.height ?? 480"
-              fit="cover"
-              format="webp"
-              sizes="100vw md:50vw lg:560px"
-              loading="lazy"
-              decoding="async"
-              class="aspect-[4/3] w-full rounded-3xl object-cover shadow-lift"
-            />
+        <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 md:grid-cols-[0.85fr_1.15fr]">
+          <!-- Portrait ovale, cadre doré, désaturé (style maquette). -->
+          <div v-if="content.intro.photo" class="flex flex-col items-center">
+            <div class="relative w-full max-w-xs">
+              <NuxtImg
+                :src="content.intro.photo.url"
+                :alt="content.intro.photo.alt"
+                :width="content.intro.photo.width ?? 640"
+                :height="content.intro.photo.height ?? 800"
+                fit="cover"
+                format="webp"
+                sizes="100vw md:340px"
+                loading="lazy"
+                decoding="async"
+                class="aspect-[4/5] w-full rounded-[48%] object-cover shadow-lift ring-4 ring-sand-400/60 ring-offset-4 ring-offset-paper [filter:grayscale(0.85)]"
+              />
+            </div>
+            <NuxtLink
+              to="/a-propos"
+              class="mt-8 inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-orange-600"
+            >
+              {{ content.intro.ctaLabel }}
+              <span aria-hidden="true">↗</span>
+            </NuxtLink>
           </div>
           <div :class="content.intro.photo ? '' : 'md:col-span-2 max-w-3xl'">
-            <p class="text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">
-              À propos
+            <p
+              class="inline-flex items-center gap-2 rounded-full bg-orange-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-orange-600 ring-1 ring-inset ring-orange-300/50"
+            >
+              <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-sand-400"></span>
+              Derrière l'Encre Humaine
             </p>
-            <h2 class="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">
+            <h2 class="mt-4 font-display text-3xl font-bold text-ink sm:text-4xl">
               {{ content.intro.title }}
             </h2>
             <p
               v-if="content.intro.text"
-              class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
+              class="mt-5 whitespace-pre-line text-lg leading-relaxed text-ink/70"
             >
               {{ content.intro.text }}
             </p>
-            <NuxtLink
-              to="/a-propos"
-              class="mt-6 inline-flex items-center gap-1.5 font-semibold text-teal-700 transition-colors hover:text-teal-800"
-            >
-              {{ content.intro.ctaLabel }}
-              <span aria-hidden="true">→</span>
-            </NuxtLink>
           </div>
         </div>
       </section>
 
-      <!-- 8. Particuliers : 2 axes d'accompagnement -->
+      <!-- 8. Pour les particuliers — 2 axes d'accompagnement (registre chaud) -->
       <section v-if="content.b2c" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.b2c.title" eyebrow="Particuliers" />
+          <SectionHeading :title="content.b2c.title" eyebrow="Pour les particuliers" />
           <p
             v-if="content.b2c.text"
-            class="mt-4 max-w-2xl text-lg leading-relaxed text-ink/70"
+            class="mt-5 max-w-2xl text-lg leading-relaxed text-ink/70"
           >
             {{ content.b2c.text }}
           </p>
@@ -320,9 +401,15 @@ const heroTitle = computed(() => {
             <article
               v-for="(card, i) in content.b2c.cards"
               :key="i"
-              class="rounded-3xl border border-orange-200/60 bg-white p-8 shadow-soft"
+              class="rounded-3xl border border-orange-200/70 bg-white p-8 shadow-soft"
             >
-              <h3 class="font-display text-xl font-bold text-ink">{{ card.title }}</h3>
+              <span
+                aria-hidden="true"
+                class="grid h-10 w-10 place-items-center rounded-full bg-orange-100 font-display text-base font-bold text-orange-600 ring-1 ring-inset ring-orange-300/50"
+              >
+                {{ i + 1 }}
+              </span>
+              <h3 class="mt-4 font-display text-xl font-bold text-ink">{{ card.title }}</h3>
               <p v-if="card.body" class="mt-2 leading-relaxed text-ink/65">{{ card.body }}</p>
             </article>
           </div>
@@ -338,26 +425,37 @@ const heroTitle = computed(() => {
         </div>
       </section>
 
-      <!-- 9. Témoignage vedette — section masquée si absent -->
+      <!-- 9. Témoignage vedette — gardé mais masqué tant qu'aucun avis (Éléonore). -->
       <section
         v-if="content.featuredTestimonial"
         class="mx-auto max-w-3xl px-4 py-20"
         aria-label="Témoignage"
       >
-        <p class="mb-6 text-sm font-semibold uppercase tracking-[0.12em] text-brand-accent">
+        <p
+          class="mb-6 inline-flex items-center gap-2 rounded-full bg-orange-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-orange-600 ring-1 ring-inset ring-orange-300/50"
+        >
+          <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-sand-400"></span>
           Elles &amp; ils en parlent
         </p>
         <TestimonialCard :testimonial="content.featuredTestimonial" />
       </section>
 
-      <!-- 10. Ressources — 3 derniers articles, masquée si aucun -->
-      <section v-if="content.articles.length" v-reveal class="relative isolate overflow-hidden bg-teal-50">
+      <!-- 10. Les Tentacules — 3 derniers articles, masquée si aucun -->
+      <section
+        v-if="content.articles.length"
+        v-reveal
+        class="relative isolate overflow-hidden bg-teal-50"
+      >
         <TentacleAccent
           name="tentacule-3-trait"
           class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.resources.title" eyebrow="Ressources" :subtitle="content.resources.subtitle ?? undefined" />
+          <SectionHeading
+            :title="content.resources.title"
+            eyebrow="Les Tentacules"
+            :subtitle="content.resources.subtitle ?? undefined"
+          />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <ArticleCard
               v-for="article in content.articles"
@@ -365,13 +463,19 @@ const heroTitle = computed(() => {
               :article="article"
             />
           </div>
-          <div class="mt-10">
+          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
             <NuxtLink
               to="/ressources"
               class="inline-flex items-center gap-1.5 font-semibold text-teal-700 transition-colors hover:text-teal-800"
             >
               {{ content.resources.ctaLabel }}
               <span aria-hidden="true">→</span>
+            </NuxtLink>
+            <NuxtLink
+              to="/ressources#newsletter"
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 transition-colors hover:text-orange-700"
+            >
+              🐙 Recevoir les prochaines Tentacules
             </NuxtLink>
           </div>
         </div>

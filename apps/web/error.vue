@@ -108,9 +108,9 @@ useSeoMeta({
             {{ title }}
           </h1>
 
-          <!-- Carte « rapport d'incident » : texte lisible + pied tamponné. -->
+          <!-- Carte texte de l'incident (le pied tamponné en sort et flotte). -->
           <div
-            class="mt-7 overflow-hidden rounded-2xl border border-paper/10 bg-ink-950/40 text-left shadow-soft backdrop-blur-sm"
+            class="mt-7 rounded-2xl border border-paper/10 bg-ink-950/40 text-left shadow-soft backdrop-blur-sm"
           >
             <div
               class="space-y-3 px-6 py-6 leading-relaxed text-paper/75 sm:px-8 sm:py-7"
@@ -118,26 +118,27 @@ useSeoMeta({
               <p class="text-lg font-medium text-paper">{{ lead }}</p>
               <p v-for="(paragraph, index) in body" :key="index">{{ paragraph }}</p>
             </div>
-
-            <dl
-              class="flex flex-col gap-2.5 border-t border-paper/10 px-6 py-4 font-mono text-[0.68rem] uppercase tracking-wider text-paper/45 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:px-8"
-            >
-              <div
-                v-for="item in report"
-                :key="item.label"
-                class="flex items-center gap-2"
-              >
-                <span
-                  class="h-1.5 w-1.5 shrink-0 rounded-full bg-sand-400"
-                  :class="item.live && 'animate-pulse'"
-                />
-                <span
-                  >{{ item.label }} :
-                  <span class="text-paper/70">{{ item.value }}</span></span
-                >
-              </div>
-            </dl>
           </div>
+
+          <!-- Rapport d'incident tamponné : chips qui « flottent » librement sous
+               la carte (dérive lente désynchronisée, coupée sous reduced-motion). -->
+          <dl
+            class="mt-6 flex flex-wrap gap-2.5 font-mono text-[0.68rem] uppercase tracking-wider text-paper/45"
+          >
+            <div
+              v-for="(item, index) in report"
+              :key="item.label"
+              class="motion-drift-slow inline-flex items-center gap-2 rounded-full border border-paper/10 bg-ink-950/50 px-3.5 py-2 backdrop-blur-sm"
+              :style="{ animationDelay: `${index * -4}s` }"
+            >
+              <span
+                class="h-1.5 w-1.5 shrink-0 rounded-full bg-sand-400"
+                :class="item.live && 'animate-pulse'"
+              />
+              <dt class="inline">{{ item.label }} :</dt>
+              <dd class="inline text-paper/70">{{ item.value }}</dd>
+            </div>
+          </dl>
 
           <!-- Actions : retour accueil (icône maison de la navbar) + contact.
                La colonne texte élargie laisse les deux boutons côte à côte avec

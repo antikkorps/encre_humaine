@@ -10,6 +10,12 @@ import type { ProviderGetImage } from "@nuxt/image";
  *
  * `src` = URL d'asset Directus COMPLÈTE (`${base}/assets/{id}`), telle que
  * produite par les loaders de contenu (`server/utils/content/_shared.ts`).
+ *
+ * ⚠️ @nuxt/image v2 : l'export par défaut d'un provider doit être une fonction
+ * `setup()` qui renvoie l'objet provider (`resolveImage` fait `setup().getImage`).
+ * En v1 on exportait directement `{ getImage }` → « setup is not a function ».
+ * `defineProvider` de la lib fait exactement ce wrapping ; on l'inline pour ne
+ * dépendre d'aucun chemin d'import interne.
  */
 export const getImage: ProviderGetImage = (src, { modifiers } = { modifiers: {} }) => {
   const { width, height, quality, format, fit } = modifiers ?? {};
@@ -23,5 +29,6 @@ export const getImage: ProviderGetImage = (src, { modifiers } = { modifiers: {} 
   return { url: qs ? `${src}${src.includes("?") ? "&" : "?"}${qs}` : src };
 };
 
-// @nuxt/image importe le provider via son export par défaut.
-export default { getImage };
+// v2 : provider = fonction setup() → { getImage }. (mémoïsé comme defineProvider)
+const provider = { getImage };
+export default () => provider;
