@@ -4,7 +4,7 @@
 // query params d'asset. On vérifie la construction d'URL (le rendu des images
 // dépend de Directus, non testable ici, mais la logique d'URL l'est).
 import { describe, expect, it } from "vitest";
-import { getImage } from "../providers/directus";
+import setupProvider, { getImage } from "../providers/directus";
 
 // 3e arg = contexte @nuxt/image (ImageCTX), requis par le type ProviderGetImage
 // mais ignoré par notre implémentation (transformations déléguées à Directus).
@@ -35,5 +35,12 @@ describe("provider image Directus", () => {
       "https://cms.x/assets/abc",
     );
     expect(call("https://cms.x/assets/abc", {}).url).toBe("https://cms.x/assets/abc");
+  });
+
+  // Contrat @nuxt/image v2 : l'export par défaut est une fonction setup() qui
+  // renvoie l'objet provider (sinon « setup is not a function » au SSR).
+  it("expose un default setup() renvoyant { getImage } (contrat v2)", () => {
+    expect(typeof setupProvider).toBe("function");
+    expect(typeof setupProvider().getImage).toBe("function");
   });
 });
