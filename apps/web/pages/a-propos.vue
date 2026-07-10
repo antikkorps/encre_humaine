@@ -91,7 +91,7 @@ useSchemaOrg([
       <section v-if="content.why" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.why.title || 'Pourquoi L\'Encre Humaine ?'" />
+            <SectionHeading :title="content.why.title || 'Pourquoi L\'Encre Humaine ?'" eyebrow="Raison d'être" />
             <RichText :html="content.why.bodyHtml" class="mt-5" />
           </div>
         </div>
@@ -114,7 +114,7 @@ useSchemaOrg([
       <!-- 4. Mes convictions -->
       <section v-if="content.convictions" v-reveal class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.convictions.title || 'Mes convictions'" />
+          <SectionHeading :title="content.convictions.title || 'Mes convictions'" eyebrow="Convictions" />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2">
             <li
               v-for="(conviction, i) in content.convictions.items"
@@ -138,7 +138,7 @@ useSchemaOrg([
       <!-- 5. Ma manière d'accompagner -->
       <section v-if="content.work" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <div class="max-w-3xl">
-          <SectionHeading :title="content.work.title || 'Comment je travaille'" />
+          <SectionHeading :title="content.work.title || 'Comment je travaille'" eyebrow="Méthode" />
           <p
             v-if="content.work.intro"
             class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
@@ -171,7 +171,7 @@ useSchemaOrg([
       <!-- 6. Ce que je ne fais pas -->
       <section v-if="content.whatIDontDo" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.whatIDontDo.title || 'Ce que je ne fais pas'" />
+          <SectionHeading :title="content.whatIDontDo.title || 'Ce que je ne fais pas'" eyebrow="En toute clarté" />
           <ul class="mt-8 grid gap-3 sm:grid-cols-2">
             <li
               v-for="(item, i) in content.whatIDontDo.items"

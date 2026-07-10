@@ -106,6 +106,7 @@ useSeoMeta({
           <SectionHeading
             :title="content.outcomesTitle || 'Ce que vous venez chercher'"
             :subtitle="content.outcomesIntro ?? undefined"
+            eyebrow="Bénéfices"
           />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <li
@@ -202,7 +203,7 @@ useSeoMeta({
       >
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" />
+            <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" eyebrow="Méthode" />
             <RichText v-if="content.howIWorkHtml" :html="content.howIWorkHtml" class="mt-5" />
             <aside
               v-if="content.howIWorkSignature"
@@ -224,7 +225,7 @@ useSeoMeta({
         class="mx-auto max-w-6xl px-4 py-20"
       >
         <div class="max-w-3xl">
-          <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" />
+          <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" eyebrow="Ma différence" />
           <RichText :html="content.whyDifferentHtml" class="mt-5" />
         </div>
       </section>
@@ -237,7 +238,7 @@ useSeoMeta({
       >
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" />
+            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" eyebrow="Déroulé" />
             <ul v-if="content.formatItems.length" class="mt-8 space-y-3">
               <li
                 v-for="(item, i) in content.formatItems"
@@ -265,7 +266,7 @@ useSeoMeta({
       <section v-if="content.faq.length" v-reveal class="bg-orange-50">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading title="Questions fréquentes" />
+            <SectionHeading title="Questions fréquentes" eyebrow="FAQ" />
             <div class="mt-10">
               <FaqAccordion :items="content.faq" />
             </div>
@@ -280,7 +281,7 @@ useSeoMeta({
         class="mx-auto max-w-5xl px-4 py-20"
         aria-label="Témoignages"
       >
-        <SectionHeading title="Ce qu'en disent les personnes accompagnées" />
+        <SectionHeading title="Ce qu'en disent les personnes accompagnées" eyebrow="Témoignages" />
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <TestimonialCard
             v-for="(testimonial, i) in content.testimonials"

@@ -126,8 +126,83 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 3. Les offres B2B (dynamique depuis `offers`) -->
-      <section v-if="content.offers.length" v-reveal class="mx-auto max-w-6xl px-4 py-20">
+      <!-- 3. Les offres B2B. Si les « trois enjeux » sont renseignés (cartes
+           détaillées, même trame que les particuliers), ils priment ; sinon on
+           retombe sur les cartes compactes dynamiques (`offers`). -->
+      <section
+        v-if="content.situations.length"
+        v-reveal
+        class="mx-auto max-w-6xl px-4 py-20"
+      >
+        <SectionHeading
+          :title="content.situationsTitle || 'Trois enjeux, trois accompagnements'"
+          :subtitle="content.situationsIntro ?? undefined"
+          eyebrow="Accompagnement"
+        />
+        <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <article
+            v-for="(situation, i) in content.situations"
+            :key="i"
+            class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+          >
+            <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-teal-500"></span>
+            <h3 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h3>
+            <p
+              v-if="situation.body"
+              class="mt-3 whitespace-pre-line leading-relaxed text-ink/65"
+            >
+              {{ situation.body }}
+            </p>
+            <div v-if="situation.audience" class="mt-5">
+              <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">Pour qui ?</p>
+              <p class="mt-1 whitespace-pre-line leading-relaxed text-ink/70">
+                {{ situation.audience }}
+              </p>
+            </div>
+            <div v-if="situation.items.length" class="mt-5">
+              <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">
+                Ce que nous travaillons
+              </p>
+              <ul class="mt-2 space-y-2">
+                <li
+                  v-for="(item, j) in situation.items"
+                  :key="j"
+                  class="flex items-start gap-2.5 text-ink/75"
+                >
+                  <Icon
+                    name="material-symbols:check-circle-rounded"
+                    class="mt-0.5 h-5 w-5 flex-none text-teal-500"
+                  />
+                  <span>{{ item }}</span>
+                </li>
+              </ul>
+            </div>
+            <!-- Pied de carte (résultat + CTA) poussé en bas → aligné entre les cartes -->
+            <div v-if="situation.result || situation.ctaLabel" class="mt-auto pt-6">
+              <p
+                v-if="situation.result"
+                class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
+              >
+                <span class="font-semibold text-teal-700">Résultat — </span>{{ situation.result }}
+              </p>
+              <NuxtLink
+                v-if="situation.ctaLabel"
+                :to="situation.ctaLink"
+                class="inline-flex w-fit items-center gap-1.5 rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-700"
+                :class="situation.result ? 'mt-5' : ''"
+              >
+                {{ situation.ctaLabel }}
+                <span aria-hidden="true">→</span>
+              </NuxtLink>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section
+        v-else-if="content.offers.length"
+        v-reveal
+        class="mx-auto max-w-6xl px-4 py-20"
+      >
         <SectionHeading :title="content.offersTitle" eyebrow="Accompagnement" />
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <OfferCard v-for="offer in content.offers" :key="offer.slug" :offer="offer" />
@@ -140,6 +215,7 @@ useSeoMeta({
           <SectionHeading
             :title="content.method.title || 'Ma façon de travailler'"
             :subtitle="content.method.intro ?? undefined"
+            eyebrow="Méthode"
           />
           <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             <li v-for="(step, i) in content.method.steps" :key="i">
@@ -160,7 +236,7 @@ useSeoMeta({
       <!-- 5. Ce qui différencie mon approche -->
       <section v-if="content.differentiator" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <div class="max-w-3xl">
-          <SectionHeading :title="content.differentiator.title || 'Mon approche'" />
+          <SectionHeading :title="content.differentiator.title || 'Mon approche'" eyebrow="Ma différence" />
           <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
         </div>
       </section>
@@ -169,7 +245,7 @@ useSeoMeta({
       <section v-if="content.audience" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.audience.title || 'Pour qui ?'" />
+            <SectionHeading :title="content.audience.title || 'Pour qui ?'" eyebrow="Fait pour vous" />
             <ul v-if="content.audience.items.length" class="mt-8 space-y-3">
               <li
                 v-for="(item, i) in content.audience.items"
@@ -201,7 +277,7 @@ useSeoMeta({
         aria-label="Témoignages"
       >
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.testimonialsTitle" />
+          <SectionHeading :title="content.testimonialsTitle" eyebrow="Témoignages" />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <TestimonialCard
               v-for="(testimonial, i) in content.testimonials"
