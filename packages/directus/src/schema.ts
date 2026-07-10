@@ -232,6 +232,41 @@ const singletons: CollectionDef[] = [
       f.textarea("observe_conclusion"),
       // §3 Offres (cartes dynamiques depuis `offers`) — titre de section
       f.input("offers_title"),
+      // §3bis Trois enjeux, trois accompagnements (cartes détaillées, calquées
+      // sur les situations B2C). Renseignées → remplacent les cartes compactes.
+      f.divider("enjeux_divider", "Trois enjeux, trois accompagnements"),
+      f.input("situations_title"),
+      f.textarea("situations_intro"),
+      f.divider("enjeu_a_divider", "Enjeu A"),
+      f.input("situation_a_title"),
+      f.textarea("situation_a_body", { note: "Chapô optionnel sous le titre de la carte" }),
+      f.textarea("situation_a_audience", { note: "« Pour qui ? »" }),
+      f.repeater("situation_a_items", [{ field: "text", interface: "input-multiline" }], {
+        note: "« Ce que nous travaillons » (liste)",
+      }),
+      f.textarea("situation_a_result", { note: "« Résultat »" }),
+      f.input("situation_a_cta_label", { half: true }),
+      f.input("situation_a_cta_link", { half: true }),
+      f.divider("enjeu_b_divider", "Enjeu B"),
+      f.input("situation_b_title"),
+      f.textarea("situation_b_body", { note: "Chapô optionnel sous le titre de la carte" }),
+      f.textarea("situation_b_audience", { note: "« Pour qui ? »" }),
+      f.repeater("situation_b_items", [{ field: "text", interface: "input-multiline" }], {
+        note: "« Ce que nous travaillons » (liste)",
+      }),
+      f.textarea("situation_b_result", { note: "« Résultat »" }),
+      f.input("situation_b_cta_label", { half: true }),
+      f.input("situation_b_cta_link", { half: true }),
+      f.divider("enjeu_c_divider", "Enjeu C"),
+      f.input("situation_c_title"),
+      f.textarea("situation_c_body", { note: "Chapô optionnel sous le titre de la carte" }),
+      f.textarea("situation_c_audience", { note: "« Pour qui ? »" }),
+      f.repeater("situation_c_items", [{ field: "text", interface: "input-multiline" }], {
+        note: "« Ce que nous travaillons » (liste)",
+      }),
+      f.textarea("situation_c_result", { note: "« Résultat »" }),
+      f.input("situation_c_cta_label", { half: true }),
+      f.input("situation_c_cta_link", { half: true }),
       // §4 Ma façon de travailler
       f.input("method_title"),
       f.textarea("method_intro"),

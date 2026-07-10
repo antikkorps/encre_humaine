@@ -126,6 +126,7 @@ useSchemaOrg([
         <SectionHeading
           :title="content.outcomesTitle || 'Ce que vous en retirez'"
           :subtitle="content.outcomesIntro ?? undefined"
+          eyebrow="Bénéfices"
         />
         <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           <li v-for="(outcome, i) in content.outcomes" :key="i">
@@ -149,7 +150,7 @@ useSchemaOrg([
     <!-- 3. Ce que je vois souvent (contexte, cartes à icônes) -->
     <section v-if="content.context" v-reveal :class="theme.band">
       <div class="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading :title="content.context.title || 'Ce que je vois souvent'" />
+        <SectionHeading :title="content.context.title || 'Ce que je vois souvent'" eyebrow="Le constat" />
         <div v-if="content.context.items.length" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <article
             v-for="(item, i) in content.context.items"
@@ -178,7 +179,7 @@ useSchemaOrg([
 
     <!-- 3bis. Une approche qui relie (optionnel) — narratif + encadré citation -->
     <section v-if="content.approche" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="content.approche.title || 'Mon approche'" />
+      <SectionHeading :title="content.approche.title || 'Mon approche'" eyebrow="Approche" />
       <RichText v-if="content.approche.bodyHtml" :html="content.approche.bodyHtml" class="mt-5" />
       <aside
         v-if="content.approche.signature"
@@ -193,7 +194,7 @@ useSchemaOrg([
 
     <!-- 4bis. Un regard / une expérience (optionnel) -->
     <section v-if="content.background" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="content.background.title || 'Mon expérience'" />
+      <SectionHeading :title="content.background.title || 'Mon expérience'" eyebrow="Expérience" />
       <RichText v-if="content.background.bodyHtml" :html="content.background.bodyHtml" class="mt-5" />
     </section>
 
@@ -276,7 +277,7 @@ useSchemaOrg([
 
     <!-- 5. Comment ça se passe / Le format (optionnel) -->
     <section v-if="content.formatBodyHtml" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="content.formatTitle || formatHeading" />
+      <SectionHeading :title="content.formatTitle || formatHeading" eyebrow="Déroulé" />
       <RichText :html="content.formatBodyHtml" class="mt-5" />
     </section>
 
@@ -286,6 +287,7 @@ useSchemaOrg([
         <SectionHeading
           :title="content.takeaways.title || 'Ce que vous emportez'"
           :subtitle="content.takeaways.intro ?? undefined"
+          eyebrow="Livrables"
         />
         <ul class="mt-8 space-y-3">
           <li v-for="(item, i) in content.takeaways.items" :key="i" class="flex items-start gap-3 text-ink/80">
@@ -302,7 +304,7 @@ useSchemaOrg([
       v-reveal
       class="mx-auto max-w-4xl px-4 py-20"
     >
-      <SectionHeading title="Investissement" />
+      <SectionHeading title="Investissement" eyebrow="Tarif" />
       <div class="mt-8 grid gap-6 sm:grid-cols-2">
         <div v-if="content.durationLabel" class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft">
           <span class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200">
@@ -331,7 +333,7 @@ useSchemaOrg([
     <!-- 8. FAQ (faq_items par scope) -->
     <section v-if="content.faq.length" v-reveal :class="theme.band">
       <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading title="Questions fréquentes" />
+        <SectionHeading title="Questions fréquentes" eyebrow="FAQ" />
         <div class="mt-10">
           <FaqAccordion :items="content.faq" />
         </div>
@@ -345,7 +347,7 @@ useSchemaOrg([
       class="mx-auto max-w-5xl px-4 py-20"
       aria-label="Témoignages"
     >
-      <SectionHeading title="Ce qu'en disent les personnes accompagnées" />
+      <SectionHeading title="Ce qu'en disent les personnes accompagnées" eyebrow="Témoignages" />
       <div class="mt-10 grid gap-6 md:grid-cols-2">
         <TestimonialCard
           v-for="(testimonial, i) in content.testimonials"

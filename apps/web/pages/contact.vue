@@ -132,7 +132,7 @@ useSeoMeta({
         class="bg-teal-50"
       >
         <div class="mx-auto max-w-5xl px-4 py-20">
-          <SectionHeading title="Comment se déroule le premier échange" />
+          <SectionHeading title="Comment se déroule le premier échange" eyebrow="Le premier pas" />
           <ol
             v-if="content.nextSteps.length"
             class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -170,7 +170,7 @@ useSeoMeta({
 
       <!-- 4. Vous pouvez me contacter si… (organisations / particuliers) -->
       <section v-if="content.reasons" class="mx-auto max-w-5xl px-4 py-20">
-        <SectionHeading :title="content.reasons.title || 'Vous pouvez me contacter si…'" />
+        <SectionHeading :title="content.reasons.title || 'Vous pouvez me contacter si…'" eyebrow="Quand me contacter" />
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <div v-if="content.reasons.org.length" class="rounded-3xl border border-ink/5 bg-white p-8 shadow-soft">
             <p class="font-display text-lg font-bold text-teal-800">Pour les organisations</p>
@@ -204,7 +204,7 @@ useSeoMeta({
       <!-- 5. FAQ courte (scope=contact) -->
       <section v-if="content.faq.length" class="mx-auto max-w-5xl px-4 py-20">
         <div class="max-w-3xl">
-          <SectionHeading title="Questions fréquentes" />
+          <SectionHeading title="Questions fréquentes" eyebrow="FAQ" />
           <div class="mt-10">
             <FaqAccordion :items="content.faq" />
           </div>

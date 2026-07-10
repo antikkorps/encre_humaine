@@ -17,6 +17,8 @@ describe("mapOrgHubContent", () => {
     expect(c.observe).toBeNull();
     expect(c.offers).toEqual([]);
     expect(c.offersTitle).toBe("Mes offres pour les organisations");
+    expect(c.situationsTitle).toBeNull();
+    expect(c.situations).toEqual([]);
     expect(c.method).toBeNull();
     expect(c.differentiator).toBeNull();
     expect(c.audience).toBeNull();
@@ -94,5 +96,43 @@ describe("mapOrgHubContent", () => {
       subtext: "30 min sans engagement.",
     });
     expect(c.seo.title).toBe("L'Encre Humaine");
+  });
+
+  it("compose les trois enjeux (cartes détaillées) ; slots vides filtrés, CTA link par défaut", () => {
+    const c = mapOrgHubContent(
+      {
+        situations_title: "Chaque organisation avance à son rythme.",
+        situations_intro: "L'accompagnement s'adapte à votre réalité de terrain.",
+        situation_a_title: "Audit RH & feuille de route",
+        situation_a_audience: "Vos pratiques RH se sont construites au fil de l'eau.",
+        situation_a_items: [{ text: "Analyse des pratiques" }, "Priorisation des enjeux"],
+        situation_a_result: "Une feuille de route réaliste.",
+        situation_a_cta_label: "Découvrir l'offre",
+        // situation B entièrement vide → filtrée
+        situation_c_title: "Managers & équipes",
+      },
+      [],
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.situationsTitle).toBe("Chaque organisation avance à son rythme.");
+    expect(c.situationsIntro).toBe("L'accompagnement s'adapte à votre réalité de terrain.");
+    expect(c.situations).toHaveLength(2); // A + C ; B vide filtrée
+    expect(c.situations[0]).toEqual({
+      title: "Audit RH & feuille de route",
+      body: null,
+      audience: "Vos pratiques RH se sont construites au fil de l'eau.",
+      items: ["Analyse des pratiques", "Priorisation des enjeux"],
+      result: "Une feuille de route réaliste.",
+      ctaLabel: "Découvrir l'offre",
+      ctaLink: "/organisations/audit-rh",
+    });
+    // Slot C minimal : CTA link retombe sur l'offre managers.
+    expect(c.situations[1]).toMatchObject({
+      title: "Managers & équipes",
+      ctaLink: "/organisations/managers-equipes",
+    });
   });
 });

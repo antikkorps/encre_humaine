@@ -18,6 +18,7 @@ import {
   TESTIMONIAL_SORT,
   type TitledItem,
 } from "./_shared";
+import { type B2cSituation, mapSituation } from "./b2c-hub";
 
 /**
  * Contenu du hub Organisations (B2B) — docs/03-organisations-hub.md.
@@ -41,6 +42,29 @@ export interface RawOrgHub {
   observe_items?: unknown; // répéteur { title, body }
   observe_conclusion?: string | null;
   offers_title?: string | null;
+  situations_title?: string | null;
+  situations_intro?: string | null;
+  situation_a_title?: string | null;
+  situation_a_body?: string | null;
+  situation_a_audience?: string | null;
+  situation_a_items?: unknown; // répéteur { text }
+  situation_a_result?: string | null;
+  situation_a_cta_label?: string | null;
+  situation_a_cta_link?: string | null;
+  situation_b_title?: string | null;
+  situation_b_body?: string | null;
+  situation_b_audience?: string | null;
+  situation_b_items?: unknown;
+  situation_b_result?: string | null;
+  situation_b_cta_label?: string | null;
+  situation_b_cta_link?: string | null;
+  situation_c_title?: string | null;
+  situation_c_body?: string | null;
+  situation_c_audience?: string | null;
+  situation_c_items?: unknown;
+  situation_c_result?: string | null;
+  situation_c_cta_label?: string | null;
+  situation_c_cta_link?: string | null;
   method_title?: string | null;
   method_intro?: string | null;
   method_steps?: unknown; // répéteur number + title + description
@@ -77,6 +101,11 @@ export interface OrgHubContent {
   /** Titre de la section offres (cartes dynamiques). */
   offersTitle: string;
   offers: OfferSummary[];
+  /** « Trois enjeux, trois accompagnements » — titre/intro + cartes détaillées.
+   * Renseignées en back-office → remplacent les cartes offres compactes. */
+  situationsTitle: string | null;
+  situationsIntro: string | null;
+  situations: B2cSituation[];
   method: { title: string; intro: string | null; steps: NumberedStep[] } | null;
   differentiator: { title: string; bodyHtml: string } | null;
   audience: { title: string; items: string[]; conclusion: string | null } | null;
@@ -111,6 +140,44 @@ export function mapOrgHubContent(
   const audienceItems = mapStringList(hub.audience_items);
   const audienceTitle = str(hub.audience_title);
   const audienceConclusion = str(hub.audience_conclusion);
+  const situations = [
+    mapSituation(
+      {
+        title: hub.situation_a_title,
+        body: hub.situation_a_body,
+        audience: hub.situation_a_audience,
+        items: hub.situation_a_items,
+        result: hub.situation_a_result,
+        ctaLabel: hub.situation_a_cta_label,
+        ctaLink: hub.situation_a_cta_link,
+      },
+      "/organisations/audit-rh",
+    ),
+    mapSituation(
+      {
+        title: hub.situation_b_title,
+        body: hub.situation_b_body,
+        audience: hub.situation_b_audience,
+        items: hub.situation_b_items,
+        result: hub.situation_b_result,
+        ctaLabel: hub.situation_b_cta_label,
+        ctaLink: hub.situation_b_cta_link,
+      },
+      "/organisations/competences-parcours",
+    ),
+    mapSituation(
+      {
+        title: hub.situation_c_title,
+        body: hub.situation_c_body,
+        audience: hub.situation_c_audience,
+        items: hub.situation_c_items,
+        result: hub.situation_c_result,
+        ctaLabel: hub.situation_c_cta_label,
+        ctaLink: hub.situation_c_cta_link,
+      },
+      "/organisations/managers-equipes",
+    ),
+  ].filter((s): s is B2cSituation => s !== null);
 
   return {
     accrocheTitle: str(hub.accroche_title) || null,
@@ -129,6 +196,9 @@ export function mapOrgHubContent(
         : null,
     offersTitle: str(hub.offers_title) || "Mes offres pour les organisations",
     offers: mapOffers(offers, "organisation"),
+    situationsTitle: str(hub.situations_title) || null,
+    situationsIntro: str(hub.situations_intro) || null,
+    situations,
     method:
       methodTitle || methodIntro || steps.length
         ? { title: methodTitle, intro: methodIntro || null, steps }
@@ -169,6 +239,29 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
           "observe_items",
           "observe_conclusion",
           "offers_title",
+          "situations_title",
+          "situations_intro",
+          "situation_a_title",
+          "situation_a_body",
+          "situation_a_audience",
+          "situation_a_items",
+          "situation_a_result",
+          "situation_a_cta_label",
+          "situation_a_cta_link",
+          "situation_b_title",
+          "situation_b_body",
+          "situation_b_audience",
+          "situation_b_items",
+          "situation_b_result",
+          "situation_b_cta_label",
+          "situation_b_cta_link",
+          "situation_c_title",
+          "situation_c_body",
+          "situation_c_audience",
+          "situation_c_items",
+          "situation_c_result",
+          "situation_c_cta_label",
+          "situation_c_cta_link",
           "method_title",
           "method_intro",
           "method_steps",

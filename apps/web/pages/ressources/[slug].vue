@@ -157,7 +157,7 @@ if (article.value) {
 
     <!-- 4. Articles liés -->
     <section v-if="article.related.length" class="mt-16">
-      <SectionHeading title="À lire aussi" />
+      <SectionHeading title="À lire aussi" eyebrow="À suivre" />
       <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <ArticleCard v-for="rel in article.related" :key="rel.slug" :article="rel" />
       </div>
