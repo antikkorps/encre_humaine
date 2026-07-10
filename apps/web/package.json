@@ -14,7 +14,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@directus/sdk": "21.3.0",
+    "@directus/sdk": "22.0.0",
     "@encre/db": "workspace:*",
     "@encre/directus": "workspace:*",
     "@encre/shared": "workspace:*",
