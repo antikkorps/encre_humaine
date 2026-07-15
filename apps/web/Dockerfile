@@ -8,7 +8,7 @@
 # Node 26 → pnpm installé via npm, version alignée sur `packageManager`.
 # ─────────────────────────────────────────────────────────────────────────────
 
-ARG NODE_IMAGE=node:26.2.0-bookworm-slim
+ARG NODE_IMAGE=node:26.3.0-bookworm-slim
 ARG PNPM_VERSION=10.16.1
 
 # ── base : Node + pnpm ───────────────────────────────────────────────────────
