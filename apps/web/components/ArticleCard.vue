@@ -34,6 +34,15 @@ const publishedLabel = computed(() => {
         class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
     </div>
+    <!-- Sans visuel : bandeau marine signé plutôt qu'une carte tronquée — les cartes
+         d'une même rangée gardent la même silhouette. Décoratif → hors arbre a11y. -->
+    <div
+      v-else
+      class="flex aspect-video w-full items-center justify-center bg-teal-900"
+      aria-hidden="true"
+    >
+      <OctopusMark class="h-14 w-14 text-orange-300/70 transition-transform duration-500 group-hover:scale-105" />
+    </div>
     <div class="flex flex-1 flex-col p-6">
       <p
         v-if="article.categoryName"

@@ -1,6 +1,14 @@
 import { readItems, readSingleton } from "@directus/sdk";
 import type { ArticleSummary } from "~/types/content";
-import { type ContentSeo, type FileField, mapSeo, type RawSiteDefaults, str } from "./_shared";
+import {
+  type ContentPhoto,
+  type ContentSeo,
+  type FileField,
+  mapPhoto,
+  mapSeo,
+  type RawSiteDefaults,
+  str,
+} from "./_shared";
 import { mapArticle, mapArticles, type RawArticle } from "./home";
 import {
   mapNewsletterContent,
@@ -45,6 +53,7 @@ export interface RawResourcesPage {
   featured_article?: RawArticle | string | null;
   positioning_title?: string | null;
   positioning_body?: string | null; // rich text
+  positioning_photo?: FileField;
   cta_title?: string | null;
   meta_title?: string | null;
   meta_description?: string | null;
@@ -69,8 +78,8 @@ export interface ResourcesContent {
   /** Filtres présents (groupes ayant ≥ 1 article), dans l'ordre documenté. */
   filters: CategoryFilter[];
   articles: ArticleSummary[];
-  /** Positionnement (rich text assaini) ; `null` si vide. */
-  positioning: { title: string | null; bodyHtml: string } | null;
+  /** Positionnement (rich text assaini) ; `null` si vide. `photo` optionnelle. */
+  positioning: { title: string | null; bodyHtml: string; photo: ContentPhoto | null } | null;
   ctaTitle: string | null;
   /** Section newsletter intégrée (« Les Tentacules »). */
   newsletter: NewsletterContent;
@@ -110,6 +119,7 @@ export function mapResourcesContent(
   const articles = mapArticles(articlesRaw, assetBase);
   const positioningTitle = str(page.positioning_title);
   const positioningBodyHtml = sanitize(page.positioning_body);
+  const positioningPhoto = mapPhoto(page.positioning_photo, assetBase);
   return {
     accrocheTitle: str(page.accroche_title) || null,
     accrocheBody: str(page.accroche_body) || null,
@@ -119,7 +129,11 @@ export function mapResourcesContent(
     articles,
     positioning:
       positioningTitle || positioningBodyHtml
-        ? { title: positioningTitle || null, bodyHtml: positioningBodyHtml }
+        ? {
+            title: positioningTitle || null,
+            bodyHtml: positioningBodyHtml,
+            photo: positioningPhoto,
+          }
         : null,
     ctaTitle: str(page.cta_title) || null,
     newsletter: mapNewsletterContent(newsletterRaw, settings, assetBase, sanitize),
@@ -152,6 +166,7 @@ export async function loadResourcesContent(): Promise<ResourcesContent> {
           },
           "positioning_title",
           "positioning_body",
+          "positioning_photo",
           "cta_title",
           "meta_title",
           "meta_description",

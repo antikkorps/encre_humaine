@@ -106,7 +106,7 @@ useSeoMeta({
           <SectionHeading
             :title="content.outcomesTitle || 'Ce que vous venez chercher'"
             :subtitle="content.outcomesIntro ?? undefined"
-            eyebrow="Bénéfices"
+            eyebrow="Ce que vous venez chercher (et ce que vous trouvez)"
           />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <li
@@ -133,7 +133,7 @@ useSeoMeta({
         <SectionHeading
           :title="content.situationsTitle || 'Où en êtes-vous ?'"
           :subtitle="content.situationsIntro ?? undefined"
-          eyebrow="Accompagnement"
+          eyebrow="Deux situations, deux accompagnements"
         />
         <div class="mt-10 grid gap-6 md:grid-cols-2">
           <article
@@ -203,7 +203,7 @@ useSeoMeta({
       >
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" eyebrow="Méthode" />
+            <SectionHeading :title="content.howIWorkTitle || 'Ma façon d\'accompagner'" eyebrow="Ma façon d'accompagner" />
             <RichText v-if="content.howIWorkHtml" :html="content.howIWorkHtml" class="mt-5" />
             <aside
               v-if="content.howIWorkSignature"
@@ -225,7 +225,7 @@ useSeoMeta({
         class="mx-auto max-w-6xl px-4 py-20"
       >
         <div class="max-w-3xl">
-          <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" eyebrow="Ma différence" />
+          <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" eyebrow="Pourquoi cet accompagnement est différent ?" />
           <RichText :html="content.whyDifferentHtml" class="mt-5" />
         </div>
       </section>
@@ -238,7 +238,7 @@ useSeoMeta({
       >
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" eyebrow="Déroulé" />
+            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" eyebrow="Comment se déroule l'accompagnement ?" />
             <ul v-if="content.formatItems.length" class="mt-8 space-y-3">
               <li
                 v-for="(item, i) in content.formatItems"
