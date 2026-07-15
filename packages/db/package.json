@@ -19,7 +19,7 @@
     "uuidv7": "1.2.1"
   },
   "devDependencies": {
-    "@types/node": "25.9.2",
+    "@types/node": "25.9.3",
     "drizzle-kit": "0.31.10",
     "typescript": "6.0.3",
     "vitest": "4.1.9"
