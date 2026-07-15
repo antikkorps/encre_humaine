@@ -385,6 +385,9 @@ const singletons: CollectionDef[] = [
       f.divider("positioning_divider", "Positionnement"),
       f.input("positioning_title"),
       f.richtext("positioning_body", { note: "Approche terrain (listes possibles)" }),
+      f.imageFile("positioning_photo", {
+        note: "Visuel à côté du texte (optionnel, masqué si vide)",
+      }),
       f.input("cta_title", { note: "Titre du CTA final (→ inscription newsletter)" }),
       ...f.seoBlock(),
     ],

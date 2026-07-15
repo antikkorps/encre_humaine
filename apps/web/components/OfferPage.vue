@@ -40,8 +40,57 @@ const hub = computed(() =>
     ? { to: "/particuliers", label: "Pour les particuliers" }
     : { to: "/organisations", label: "Pour les organisations" },
 );
-const missionHeading = computed(() =>
-  isB2c.value ? "Ce qu'on fait ensemble" : "Ce que comprend la mission",
+// Kickers dorés par offre. Éléonore veut un titre de section *parlant* plutôt que
+// l'étiquette générique (« Bénéfices », « Le constat »…) : le libellé change donc
+// d'une offre à l'autre. Les valeurs manquantes retombent sur le défaut générique
+// passé au rendu, ce qui garde une offre non listée ici parfaitement fonctionnelle.
+type OfferEyebrows = Partial<
+  Record<
+    "outcomes" | "context" | "approche" | "background" | "mission" | "format" | "takeaways",
+    string
+  >
+>;
+const EYEBROWS: Record<string, OfferEyebrows> = {
+  "audit-rh": {
+    outcomes: "Ce que cet audit change concrètement",
+    context: "Ce que je vois très souvent en entreprise",
+  },
+  "competences-parcours": {
+    outcomes: "Ce que cet accompagnement change concrètement",
+    context: "Ce que j'observe le plus souvent",
+    approche: "Une approche qui relie compétences et parcours",
+  },
+  "managers-equipes": {
+    outcomes: "Ce que cet accompagnement change concrètement",
+    context: "Ce que j'observe le plus souvent",
+    approche: "Une approche qui relie management, RH et réalité du terrain",
+    // Une thématique au choix, pas un package : d'où « thématiques » et non « mission ».
+    mission: "Les thématiques d'accompagnement",
+    format: "Le format",
+  },
+  "clarifier-avancer": {
+    outcomes: "Ce que cet accompagnement peut changer",
+    approche: "Derrière le flou, il y a souvent déjà des réponses",
+    mission: "Ce que nous travaillons ensemble",
+    background: "Une approche à la croisée des parcours et des RH",
+    format: "Le format",
+    takeaways: "Ce que vous emportez avec vous",
+  },
+  "booster-recherche": {
+    outcomes: "Ce qui se joue vraiment dans une recherche d'emploi",
+    context: "Clarifier vs booster : deux moments différents",
+    mission: "Ce que nous travaillons ensemble",
+    background: "La lecture RH des recruteurs",
+    format: "Format de l'accompagnement",
+    takeaways: "Vous repartez avec",
+  },
+};
+const eyebrows = computed<OfferEyebrows>(() => EYEBROWS[String(route.params.slug)] ?? {});
+
+const missionHeading = computed(
+  () =>
+    eyebrows.value.mission ??
+    (isB2c.value ? "Ce qu'on fait ensemble" : "Ce que comprend la mission"),
 );
 const formatHeading = computed(() => (isB2c.value ? "Le format" : "Comment ça se passe"));
 
@@ -76,30 +125,40 @@ useSchemaOrg([
 
 <template>
   <div v-if="content">
-    <!-- 1. Hero éditorial (gauche) : eyebrow + h1 + sous-titre -->
-    <section class="relative isolate overflow-hidden bg-paper">
-      <InkBlob class="absolute -right-24 -top-28 -z-10 h-96 w-96 rotate-12 text-teal-500/[0.06]" />
-      <div class="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+    <!-- 1. Accroche — même gabarit que les hubs : PageHero 2 colonnes, discours à
+         gauche, texte d'accroche en carte givrée à droite (au lieu du paragraphe
+         nu qui flottait sous le hero). -->
+    <PageHero
+      :title="heading"
+      :eyebrow="eyebrow"
+      :body="content.accrocheSubtitle ?? undefined"
+      :variant="isB2c ? 'orange' : 'teal'"
+    >
+      <template #top>
         <nav class="mb-6 text-sm font-medium text-orange-600" aria-label="Fil d'Ariane">
           <NuxtLink :to="hub.to" class="underline-offset-2 hover:underline">← {{ hub.label }}</NuxtLink>
         </nav>
-        <p class="text-sm font-semibold uppercase tracking-[0.14em] text-orange-600">{{ eyebrow }}</p>
-        <h1 class="mt-4 max-w-3xl font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
-          {{ heading }}
-        </h1>
-        <p
-          v-if="content.accrocheSubtitle"
-          class="mt-6 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/70"
+      </template>
+      <template v-if="content.accrocheBody" #aside>
+        <figure
+          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
         >
-          {{ content.accrocheSubtitle }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Texte d'accroche -->
-    <section v-if="content.accrocheBody" v-reveal class="mx-auto max-w-3xl px-4 pt-16">
-      <p class="whitespace-pre-line text-lg leading-relaxed text-ink/75">{{ content.accrocheBody }}</p>
-    </section>
+          <div
+            class="absolute -right-10 -top-10 h-28 w-28 rounded-full"
+            :class="isB2c ? 'bg-teal-100/70' : 'bg-orange-100/70'"
+            aria-hidden="true"
+          ></div>
+          <span
+            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
+          >
+            <Icon name="material-symbols:lightbulb" class="h-6 w-6" />
+          </span>
+          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
+            {{ content.accrocheBody }}
+          </p>
+        </figure>
+      </template>
+    </PageHero>
 
     <!-- Signature d'accroche → bandeau marine + CTA -->
     <section v-if="content.accrocheSignature" v-reveal class="mx-auto max-w-6xl px-4 py-14">
@@ -126,7 +185,7 @@ useSchemaOrg([
         <SectionHeading
           :title="content.outcomesTitle || 'Ce que vous en retirez'"
           :subtitle="content.outcomesIntro ?? undefined"
-          eyebrow="Bénéfices"
+          :eyebrow="eyebrows.outcomes ?? 'Bénéfices'"
         />
         <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           <li v-for="(outcome, i) in content.outcomes" :key="i">
@@ -150,7 +209,10 @@ useSchemaOrg([
     <!-- 3. Ce que je vois souvent (contexte, cartes à icônes) -->
     <section v-if="content.context" v-reveal :class="theme.band">
       <div class="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading :title="content.context.title || 'Ce que je vois souvent'" eyebrow="Le constat" />
+        <SectionHeading
+          :title="content.context.title || 'Ce que je vois souvent'"
+          :eyebrow="eyebrows.context ?? 'Le constat'"
+        />
         <div v-if="content.context.items.length" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <article
             v-for="(item, i) in content.context.items"
@@ -179,7 +241,10 @@ useSchemaOrg([
 
     <!-- 3bis. Une approche qui relie (optionnel) — narratif + encadré citation -->
     <section v-if="content.approche" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="content.approche.title || 'Mon approche'" eyebrow="Approche" />
+      <SectionHeading
+        :title="content.approche.title || 'Mon approche'"
+        :eyebrow="eyebrows.approche ?? 'Approche'"
+      />
       <RichText v-if="content.approche.bodyHtml" :html="content.approche.bodyHtml" class="mt-5" />
       <aside
         v-if="content.approche.signature"
@@ -194,7 +259,10 @@ useSchemaOrg([
 
     <!-- 4bis. Un regard / une expérience (optionnel) -->
     <section v-if="content.background" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="content.background.title || 'Mon expérience'" eyebrow="Expérience" />
+      <SectionHeading
+        :title="content.background.title || 'Mon expérience'"
+        :eyebrow="eyebrows.background ?? 'Expérience'"
+      />
       <RichText v-if="content.background.bodyHtml" :html="content.background.bodyHtml" class="mt-5" />
     </section>
 
@@ -277,7 +345,10 @@ useSchemaOrg([
 
     <!-- 5. Comment ça se passe / Le format (optionnel) -->
     <section v-if="content.formatBodyHtml" v-reveal class="mx-auto max-w-3xl px-4 py-20">
-      <SectionHeading :title="content.formatTitle || formatHeading" eyebrow="Déroulé" />
+      <SectionHeading
+        :title="content.formatTitle || formatHeading"
+        :eyebrow="eyebrows.format ?? 'Déroulé'"
+      />
       <RichText :html="content.formatBodyHtml" class="mt-5" />
     </section>
 
@@ -287,7 +358,7 @@ useSchemaOrg([
         <SectionHeading
           :title="content.takeaways.title || 'Ce que vous emportez'"
           :subtitle="content.takeaways.intro ?? undefined"
-          eyebrow="Livrables"
+          :eyebrow="eyebrows.takeaways ?? 'Livrables'"
         />
         <ul class="mt-8 space-y-3">
           <li v-for="(item, i) in content.takeaways.items" :key="i" class="flex items-start gap-3 text-ink/80">
@@ -298,35 +369,37 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 7. Investissement — cartes Format / Tarif + mention 293 B -->
+    <!-- 7. Investissement — panneau marine : le montant *est* le titre, format et
+         conditions en soutien (les deux cartes blanches côte à côte diluaient le
+         prix dans une étiquette « Tarif » grise). -->
     <section
       v-if="content.priceLabel || content.priceNote || content.durationLabel"
       v-reveal
       class="mx-auto max-w-4xl px-4 py-20"
     >
-      <SectionHeading title="Investissement" eyebrow="Tarif" />
-      <div class="mt-8 grid gap-6 sm:grid-cols-2">
-        <div v-if="content.durationLabel" class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft">
-          <span class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200">
-            <Icon name="material-symbols:event" class="h-6 w-6" />
-          </span>
-          <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-ink/45">Format</p>
-          <p class="mt-1 font-display text-xl font-semibold text-ink">{{ content.durationLabel }}</p>
-        </div>
-        <div class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft">
-          <span class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200">
-            <Icon name="material-symbols:payments" class="h-6 w-6" />
-          </span>
-          <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-ink/45">Tarif</p>
-          <p v-if="content.priceLabel" class="mt-1 font-display text-2xl font-bold text-orange-600">
-            {{ content.priceLabel }}
-          </p>
-          <p v-if="content.priceNote" class="mt-2 whitespace-pre-line text-sm leading-relaxed text-ink/70">
-            {{ content.priceNote }}
-          </p>
-          <!-- Franchise en base de TVA (docs/05 §6, ADR #4). -->
-          <p class="mt-3 text-xs text-ink/45">TVA non applicable, art. 293 B du CGI.</p>
-        </div>
+      <div class="relative isolate overflow-hidden rounded-[1.75rem] bg-teal-900 p-8 shadow-lift sm:p-10">
+        <InkBlob class="absolute -right-16 -top-20 -z-10 h-72 w-72 rotate-12 text-orange-300/[0.07]" />
+        <SectionHeading tone="dark" eyebrow="Investissement" :title="content.priceLabel || 'Sur devis'" />
+        <dl class="mt-8 grid gap-6 sm:grid-cols-2">
+          <div v-if="content.durationLabel" class="rounded-2xl bg-white/5 p-6 ring-1 ring-inset ring-white/10">
+            <dt class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-orange-300">
+              <Icon name="material-symbols:event" class="h-5 w-5" />
+              Format
+            </dt>
+            <dd class="mt-2 font-display text-lg font-semibold text-paper">{{ content.durationLabel }}</dd>
+          </div>
+          <div v-if="content.priceNote" class="rounded-2xl bg-white/5 p-6 ring-1 ring-inset ring-white/10">
+            <dt class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-orange-300">
+              <Icon name="material-symbols:payments" class="h-5 w-5" />
+              Conditions
+            </dt>
+            <dd class="mt-2 whitespace-pre-line text-sm leading-relaxed text-paper/70">
+              {{ content.priceNote }}
+            </dd>
+          </div>
+        </dl>
+        <!-- Franchise en base de TVA (docs/05 §6, ADR #4). -->
+        <p class="mt-6 text-xs text-paper/45">TVA non applicable, art. 293 B du CGI.</p>
       </div>
     </section>
 

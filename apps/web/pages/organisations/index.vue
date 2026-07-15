@@ -27,7 +27,6 @@ useSeoMeta({
     <!-- 1. Accroche B2B — hero 2 colonnes : discours à gauche, carte « constat » à droite -->
     <PageHero
       :title="heading"
-      eyebrow="Organisations"
       :body="content?.accrocheSubtitle ?? undefined"
       variant="teal"
     >
@@ -98,7 +97,7 @@ useSeoMeta({
           <SectionHeading
             :title="content.observe.title || 'Ce que j\'observe'"
             :subtitle="content.observe.intro ?? undefined"
-            eyebrow="Le constat"
+            eyebrow="Ce que j'observe le plus souvent"
           />
           <div v-if="content.observe.items.length" class="mt-10 grid gap-6 sm:grid-cols-2">
             <article
@@ -137,7 +136,7 @@ useSeoMeta({
         <SectionHeading
           :title="content.situationsTitle || 'Trois enjeux, trois accompagnements'"
           :subtitle="content.situationsIntro ?? undefined"
-          eyebrow="Accompagnement"
+          eyebrow="Comment je peux vous aider"
         />
         <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <article
@@ -203,7 +202,7 @@ useSeoMeta({
         v-reveal
         class="mx-auto max-w-6xl px-4 py-20"
       >
-        <SectionHeading :title="content.offersTitle" eyebrow="Accompagnement" />
+        <SectionHeading :title="content.offersTitle" eyebrow="Comment je peux vous aider" />
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <OfferCard v-for="offer in content.offers" :key="offer.slug" :offer="offer" />
         </div>
@@ -215,7 +214,7 @@ useSeoMeta({
           <SectionHeading
             :title="content.method.title || 'Ma façon de travailler'"
             :subtitle="content.method.intro ?? undefined"
-            eyebrow="Méthode"
+            eyebrow="Ma façon de travailler"
           />
           <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             <li v-for="(step, i) in content.method.steps" :key="i">
@@ -236,7 +235,7 @@ useSeoMeta({
       <!-- 5. Ce qui différencie mon approche -->
       <section v-if="content.differentiator" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <div class="max-w-3xl">
-          <SectionHeading :title="content.differentiator.title || 'Mon approche'" eyebrow="Ma différence" />
+          <SectionHeading :title="content.differentiator.title || 'Mon approche'" eyebrow="Ce qui différencie mon approche" />
           <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
         </div>
       </section>
@@ -245,7 +244,7 @@ useSeoMeta({
       <section v-if="content.audience" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.audience.title || 'Pour qui ?'" eyebrow="Fait pour vous" />
+            <SectionHeading :title="content.audience.title || 'Pour qui ?'" eyebrow="Cet accompagnement est fait pour vous si…" />
             <ul v-if="content.audience.items.length" class="mt-8 space-y-3">
               <li
                 v-for="(item, i) in content.audience.items"

@@ -104,13 +104,36 @@ describe("mapResourcesContent", () => {
     expect(c.positioning).toEqual({
       title: "Approche terrain",
       bodyHtml: "clean(<p>Deux réalités</p><ul><li>RH</li></ul>)",
+      photo: null,
     });
     expect(c.ctaTitle).toBe("Y voir plus clair");
     expect(c.newsletter.name).toBe("Les Tentacules");
+
     expect(c.newsletter.subtitle).toBe("Tous les 15 jours.");
     expect(c.newsletter.helpsWith).toEqual(["comprendre"]); // entrée vide filtrée
     expect(c.newsletter.whatYouReceive).toEqual(["une analyse"]);
     expect(c.newsletter.welcomeGiftLabel).toBe("5 questions");
     expect(c.seo.title).toBe("L'Encre Humaine");
+  });
+
+  it("visuel de positionnement : mappé quand fourni, absent sinon", () => {
+    const withPhoto = mapResourcesContent(
+      { positioning_title: "Approche terrain", positioning_photo: "f1" },
+      [],
+      {},
+      {},
+      BASE,
+      wrap,
+    );
+    expect(withPhoto.positioning?.photo).toEqual({
+      url: `${BASE}/assets/f1`,
+      alt: "",
+      width: null,
+      height: null,
+    });
+
+    // Un visuel seul ne suffit pas à faire exister la section (titre/corps vides).
+    const photoOnly = mapResourcesContent({ positioning_photo: "f1" }, [], {}, {}, BASE, wrap);
+    expect(photoOnly.positioning).toBeNull();
   });
 });

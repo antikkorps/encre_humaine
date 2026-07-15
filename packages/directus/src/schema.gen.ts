@@ -304,6 +304,15 @@ export interface OrgHubPage {
   observe_items: unknown | null;
   observe_conclusion: string | null;
   offers_title: string | null;
+  method_title: string | null;
+  method_intro: string | null;
+  differentiator_title: string | null;
+  differentiator_body: string | null;
+  audience_title: string | null;
+  audience_conclusion: string | null;
+  testimonials_title: string | null;
+  cta_body: string | null;
+  cta_subtext: string | null;
   situations_title: string | null;
   situations_intro: string | null;
   situation_a_title: string | null;
@@ -327,15 +336,6 @@ export interface OrgHubPage {
   situation_c_result: string | null;
   situation_c_cta_label: string | null;
   situation_c_cta_link: string | null;
-  method_title: string | null;
-  method_intro: string | null;
-  differentiator_title: string | null;
-  differentiator_body: string | null;
-  audience_title: string | null;
-  audience_conclusion: string | null;
-  testimonials_title: string | null;
-  cta_body: string | null;
-  cta_subtext: string | null;
 }
 
 export interface Products {
@@ -404,6 +404,7 @@ export interface ResourcesPage {
   positioning_title: string | null;
   positioning_body: string | null;
   cta_title: string | null;
+  positioning_photo: string | DirectusFile | null;
 }
 
 export interface ShopPage {

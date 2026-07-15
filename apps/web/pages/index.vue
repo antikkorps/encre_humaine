@@ -192,7 +192,7 @@ const heroTitle = computed(() => {
           <SectionHeading
             :title="content.recognition.title"
             :subtitle="content.recognition.subtitle ?? undefined"
-            eyebrow="Les défis des PME"
+            eyebrow="Les défis que rencontrent de nombreuses PME"
           />
           <ul
             v-if="content.recognition.items.length"
@@ -226,7 +226,7 @@ const heroTitle = computed(() => {
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.build.title"
-            eyebrow="Ce que je construis"
+            eyebrow="Ce que je vous aide à construire"
             align="center"
           />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
@@ -462,7 +462,7 @@ const heroTitle = computed(() => {
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.resources.title"
-            eyebrow="Les Tentacules"
+            eyebrow="🐙 Les Tentacules de L'Encre Humaine"
             :subtitle="content.resources.subtitle ?? undefined"
           />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
