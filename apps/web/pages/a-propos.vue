@@ -34,7 +34,7 @@ useSchemaOrg([
 <template>
   <div>
     <!-- 1. Accroche (h1 + chapeau) — hero 2 colonnes : titre à gauche, intro en carte à droite -->
-    <PageHero :title="heading" eyebrow="À propos" variant="neutral">
+    <PageHero :title="heading" variant="neutral">
       <template v-if="content?.accroche?.bodyHtml" #aside>
         <div
           class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
@@ -81,7 +81,7 @@ useSchemaOrg([
             />
           </div>
           <div :class="content.story.photo ? '' : 'md:col-span-2 max-w-3xl'">
-            <SectionHeading :title="content.story.title || 'Mon parcours'" eyebrow="Parcours" />
+            <SectionHeading :title="content.story.title || 'Mon parcours'" eyebrow="Mon parcours" />
             <RichText :html="content.story.bodyHtml" class="mt-5" />
           </div>
         </div>
@@ -102,10 +102,7 @@ useSchemaOrg([
         <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-20 md:grid-cols-[auto_1fr]">
           <OctopusLogo class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
           <div>
-            <SectionHeading
-              :title="content.octopus.subtitle || 'Et pourquoi un poulpe ?'"
-              eyebrow="Pourquoi ce nom"
-            />
+            <SectionHeading :title="content.octopus.subtitle || 'Et pourquoi un poulpe ?'" />
             <RichText :html="content.octopus.bodyHtml" class="mt-5" />
           </div>
         </div>
@@ -114,7 +111,7 @@ useSchemaOrg([
       <!-- 4. Mes convictions -->
       <section v-if="content.convictions" v-reveal class="bg-paper-2">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.convictions.title || 'Mes convictions'" eyebrow="Convictions" />
+          <SectionHeading :title="content.convictions.title || 'Mes convictions'" eyebrow="Ce qui guide mon travail" />
           <ul class="mt-10 grid gap-6 sm:grid-cols-2">
             <li
               v-for="(conviction, i) in content.convictions.items"
@@ -138,7 +135,7 @@ useSchemaOrg([
       <!-- 5. Ma manière d'accompagner -->
       <section v-if="content.work" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <div class="max-w-3xl">
-          <SectionHeading :title="content.work.title || 'Comment je travaille'" eyebrow="Méthode" />
+          <SectionHeading :title="content.work.title || 'Comment je travaille'" eyebrow="Ma manière d'accompagner" />
           <p
             v-if="content.work.intro"
             class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
@@ -171,7 +168,7 @@ useSchemaOrg([
       <!-- 6. Ce que je ne fais pas -->
       <section v-if="content.whatIDontDo" v-reveal class="bg-teal-50">
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.whatIDontDo.title || 'Ce que je ne fais pas'" eyebrow="En toute clarté" />
+          <SectionHeading :title="content.whatIDontDo.title || 'Ce que je ne fais pas'" eyebrow="Ce que vous ne trouverez pas ici" />
           <ul class="mt-8 grid gap-3 sm:grid-cols-2">
             <li
               v-for="(item, i) in content.whatIDontDo.items"
