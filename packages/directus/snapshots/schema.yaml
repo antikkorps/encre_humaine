@@ -11518,7 +11518,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 40
       special:
         - cast-json
       translations: null
@@ -11567,7 +11567,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 44
       special:
         - cast-json
       translations: null
@@ -11608,7 +11608,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 47
       special: null
       translations: null
       validation: null
@@ -11648,7 +11648,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -11689,7 +11689,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 51
       special:
         - alias
         - no-data
@@ -11714,7 +11714,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 52
       special: null
       translations: null
       validation: null
@@ -11754,7 +11754,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 53
       special: null
       translations: null
       validation: null
@@ -11794,7 +11794,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 54
       special:
         - file
       translations: null
@@ -11835,7 +11835,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 55
       special:
         - cast-boolean
       translations: null
@@ -12172,7 +12172,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 38
       special: null
       translations: null
       validation: null
@@ -12212,7 +12212,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 39
       special: null
       translations: null
       validation: null
@@ -12252,7 +12252,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 41
       special: null
       translations: null
       validation: null
@@ -12292,7 +12292,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 42
       special: null
       translations: null
       validation: null
@@ -12332,7 +12332,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -12372,7 +12372,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 45
       special: null
       translations: null
       validation: null
@@ -12412,7 +12412,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 46
       special: null
       translations: null
       validation: null
@@ -12452,7 +12452,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -12492,7 +12492,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 50
       special: null
       translations: null
       validation: null
@@ -12500,6 +12500,1057 @@ fields:
       width: full
     schema:
       name: cta_subtext
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: enjeux_divider
+    type: alias
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: enjeux_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Trois enjeux, trois accompagnements
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: org_hub_page
+    field: situations_title
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situations_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situations_title
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situations_intro
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situations_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situations_intro
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: enjeu_a_divider
+    type: alias
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: enjeu_a_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Enjeu A
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: org_hub_page
+    field: situation_a_title
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_title
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapô optionnel sous le titre de la carte
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_audience
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_audience
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Pour qui ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_audience
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_items
+    type: json
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_items
+      group: null
+      hidden: false
+      interface: list
+      note: « Ce que nous travaillons » (liste)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_items
+      table: org_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_result
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Résultat »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_result
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_cta_label
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_a_cta_label
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_cta_link
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_cta_link
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_a_cta_link
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: enjeu_b_divider
+    type: alias
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: enjeu_b_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Enjeu B
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: org_hub_page
+    field: situation_b_title
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_title
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapô optionnel sous le titre de la carte
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_audience
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_audience
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Pour qui ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_audience
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_items
+    type: json
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_items
+      group: null
+      hidden: false
+      interface: list
+      note: « Ce que nous travaillons » (liste)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_items
+      table: org_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_result
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Résultat »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_result
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_cta_label
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 28
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_b_cta_label
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_cta_link
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_cta_link
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 29
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_b_cta_link
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: enjeu_c_divider
+    type: alias
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: enjeu_c_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Enjeu C
+      readonly: false
+      required: false
+      searchable: true
+      sort: 30
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: org_hub_page
+    field: situation_c_title
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_c_title
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapô optionnel sous le titre de la carte
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 32
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_c_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_audience
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_audience
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Pour qui ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_c_audience
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_items
+    type: json
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_items
+      group: null
+      hidden: false
+      interface: list
+      note: « Ce que nous travaillons » (liste)
+      options:
+        fields:
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: text
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_c_items
+      table: org_hub_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_result
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: « Résultat »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 35
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_c_result
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_cta_label
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 36
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_c_cta_label
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_cta_link
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_cta_link
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 37
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_c_cta_link
       table: org_hub_page
       data_type: character varying
       default_value: null
@@ -14532,7 +15583,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special:
         - alias
         - no-data
@@ -14557,7 +15608,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -14597,7 +15648,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -14637,7 +15688,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special:
         - file
       translations: null
@@ -14678,7 +15729,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special:
         - cast-boolean
       translations: null
@@ -14906,7 +15957,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -14929,6 +15980,47 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: resources_page
+    field: positioning_photo
+    type: uuid
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: positioning_photo
+      group: null
+      hidden: false
+      interface: file-image
+      note: Visuel à côté du texte (optionnel, masqué si vide)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: positioning_photo
+      table: resources_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
   - collection: shop_page
     field: id
     type: uuid
@@ -17215,6 +18307,27 @@ relations:
       foreign_key_table: articles
       foreign_key_column: id
       constraint_name: resources_page_featured_article_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: resources_page
+    field: positioning_photo
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: resources_page
+      many_field: positioning_photo
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: resources_page
+      column: positioning_photo
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: resources_page_positioning_photo_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: shop_page

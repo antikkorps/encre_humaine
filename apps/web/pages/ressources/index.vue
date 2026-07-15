@@ -22,21 +22,39 @@ const activeKeywords = computed(
   () => content.value?.filters.find((f) => f.group === activeGroup.value)?.keywords ?? null,
 );
 
-// Pagination côté client (l'endpoint renvoie tous les articles publiés). Réinitialisée
-// au changement de filtre. La grille n'affiche qu'une page ; navigation par numéros.
-const PAGE_SIZE = 9;
-const page = ref(1);
-watch(activeGroup, () => {
-  page.value = 1;
-});
-const pageCount = computed(() => Math.max(1, Math.ceil(visibleArticles.value.length / PAGE_SIZE)));
-const pagedArticles = computed(() =>
-  visibleArticles.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE),
-);
-function goToPage(n: number) {
-  page.value = Math.min(Math.max(1, n), pageCount.value);
-  if (import.meta.client) window.scrollTo({ top: 0, behavior: "smooth" });
+// Carrousel « Derniers contenus » (remplace la pagination numérotée) : défilement
+// horizontal en scroll-snap **natif** — on hérite gratuitement du clavier, du tactile
+// et de `prefers-reduced-motion`, sans dépendance. Le nombre de cartes visibles est
+// piloté par la largeur des items (1 en mobile, 2 en tablette, 3 en desktop) : pour en
+// afficher un autre nombre, il suffit de changer les classes `basis-*` de la liste.
+const track = ref<HTMLElement | null>(null);
+const atStart = ref(true);
+const atEnd = ref(true);
+
+function updateArrows() {
+  const el = track.value;
+  if (!el) return;
+  // Tolérance d'1px : les navigateurs arrondissent scrollLeft en zoom non entier.
+  atStart.value = el.scrollLeft <= 1;
+  atEnd.value = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
 }
+function scrollByPage(direction: -1 | 1) {
+  const el = track.value;
+  if (!el) return;
+  el.scrollBy({ left: direction * el.clientWidth, behavior: "smooth" });
+}
+
+// Au changement de filtre : retour au début (sinon on reste scrollé dans le vide).
+watch(activeGroup, async () => {
+  await nextTick();
+  track.value?.scrollTo({ left: 0 });
+  updateArrows();
+});
+onMounted(() => {
+  updateArrows();
+  window.addEventListener("resize", updateArrows, { passive: true });
+});
+onBeforeUnmount(() => window.removeEventListener("resize", updateArrows));
 
 // Portes d'entrée « Explorer les Tentacules » : applique le filtre + descend
 // jusqu'à la grille des publications.
@@ -117,7 +135,7 @@ useSeoMeta({
         v-reveal
         class="mx-auto max-w-6xl scroll-mt-24 px-4 pt-16"
       >
-        <SectionHeading title="Explorer les Tentacules" eyebrow="Par thème" align="center" />
+        <SectionHeading title="Explorer les Tentacules" eyebrow="Accès aux contenus" align="center" />
         <div class="mt-10 grid gap-6 md:grid-cols-3">
           <button
             v-for="filter in content.filters"
@@ -153,7 +171,7 @@ useSeoMeta({
 
       <!-- 3. À lire en premier (article vedette) — masqué si non défini -->
       <section v-if="content.featuredArticle" v-reveal class="mx-auto max-w-5xl px-4 py-16">
-        <SectionHeading title="À lire en premier" eyebrow="Sélection" />
+        <SectionHeading title="À lire en premier" eyebrow="Article mis en avant" />
         <NuxtLink
           :to="`/ressources/${content.featuredArticle.slug}`"
           class="mt-8 grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-2 md:p-8"
@@ -198,7 +216,7 @@ useSeoMeta({
         class="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24"
         :class="content.featuredArticle ? '' : 'pt-4'"
       >
-        <SectionHeading title="Dernières tentacules publiées" eyebrow="Publications" />
+        <SectionHeading title="Dernières tentacules publiées" eyebrow="Derniers contenus" />
 
         <div v-if="content.filters.length" class="mt-6" role="group" aria-label="Filtrer par thème">
           <div class="flex flex-wrap gap-2">
@@ -240,47 +258,52 @@ useSeoMeta({
           <NuxtLink to="#newsletter" class="text-teal-700 underline">la newsletter</NuxtLink>.
         </p>
 
-        <div v-else class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <ArticleCard v-for="article in pagedArticles" :key="article.slug" :article="article" />
-        </div>
+        <!-- Carrousel : la liste défile, les flèches font défiler d'une « page » de
+             cartes. `tabindex="0"` + `role="region"` → la zone est atteignable et
+             défilable au clavier (exigence a11y d'un conteneur scrollable). -->
+        <div v-else class="relative mt-10">
+          <ul
+            ref="track"
+            tabindex="0"
+            role="region"
+            aria-label="Derniers contenus"
+            class="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600 [&::-webkit-scrollbar]:hidden"
+            @scroll.passive="updateArrows"
+          >
+            <li
+              v-for="article in visibleArticles"
+              :key="article.slug"
+              class="w-[82%] shrink-0 snap-start sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
+            >
+              <ArticleCard :article="article" />
+            </li>
+          </ul>
 
-        <!-- Pagination (masquée s'il n'y a qu'une page) -->
-        <nav
-          v-if="pageCount > 1"
-          class="mt-12 flex items-center justify-center gap-2"
-          aria-label="Pagination des articles"
-        >
-          <button
-            type="button"
-            class="inline-flex h-10 items-center rounded-full border border-ink/15 px-4 text-sm font-medium text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
-            :disabled="page === 1"
-            @click="goToPage(page - 1)"
+          <nav
+            v-if="!(atStart && atEnd)"
+            class="mt-6 flex items-center justify-center gap-3"
+            aria-label="Navigation du carrousel"
           >
-            <span aria-hidden="true">←</span><span class="sr-only">Page précédente</span>
-          </button>
-          <button
-            v-for="n in pageCount"
-            :key="n"
-            type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium transition-colors"
-            :class="n === page
-              ? 'bg-teal-700 text-white shadow-soft'
-              : 'border border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-            :aria-current="n === page ? 'page' : undefined"
-            :aria-label="`Page ${n}`"
-            @click="goToPage(n)"
-          >
-            {{ n }}
-          </button>
-          <button
-            type="button"
-            class="inline-flex h-10 items-center rounded-full border border-ink/15 px-4 text-sm font-medium text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
-            :disabled="page === pageCount"
-            @click="goToPage(page + 1)"
-          >
-            <span aria-hidden="true">→</span><span class="sr-only">Page suivante</span>
-          </button>
-        </nav>
+            <button
+              type="button"
+              class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
+              :disabled="atStart"
+              @click="scrollByPage(-1)"
+            >
+              <Icon name="material-symbols:arrow-back" class="h-5 w-5" aria-hidden="true" />
+              <span class="sr-only">Contenus précédents</span>
+            </button>
+            <button
+              type="button"
+              class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
+              :disabled="atEnd"
+              @click="scrollByPage(1)"
+            >
+              <Icon name="material-symbols:arrow-forward" class="h-5 w-5" aria-hidden="true" />
+              <span class="sr-only">Contenus suivants</span>
+            </button>
+          </nav>
+        </div>
       </section>
 
       <!-- 5. Newsletter intégrée « Les Tentacules » — bandeau marine (maquette) -->
@@ -339,11 +362,34 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 6. Positionnement — masqué si vide -->
+      <!-- 6. Positionnement — masqué si vide. Visuel optionnel à côté du texte (même
+           trame que le portrait d'« À propos ») : sans photo, le texte reste en
+           colonne simple plutôt que de s'étaler sur toute la largeur. -->
       <section v-if="content.positioning" v-reveal class="mx-auto max-w-6xl px-4 py-20">
-        <div class="max-w-3xl">
-          <SectionHeading :title="content.positioning.title || 'Une approche terrain'" eyebrow="Positionnement" />
-          <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
+        <div
+          class="grid items-center gap-10"
+          :class="content.positioning.photo ? 'md:grid-cols-[1fr_0.8fr]' : ''"
+        >
+          <div :class="content.positioning.photo ? '' : 'max-w-3xl'">
+            <SectionHeading
+              :title="content.positioning.title || 'Une approche terrain'"
+              eyebrow="Positionnement"
+            />
+            <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
+          </div>
+          <NuxtImg
+            v-if="content.positioning.photo"
+            :src="content.positioning.photo.url"
+            :alt="content.positioning.photo.alt"
+            :width="content.positioning.photo.width ?? 720"
+            :height="content.positioning.photo.height ?? 900"
+            fit="cover"
+            format="webp"
+            sizes="100vw md:420px"
+            loading="lazy"
+            decoding="async"
+            class="aspect-[4/5] w-full rounded-3xl object-cover shadow-lift"
+          />
         </div>
       </section>
 
