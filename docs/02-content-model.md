@@ -197,10 +197,14 @@ Archives publiques de « Le Fil ». Schéma minimal le moment venu : `issue_numb
 | **Administrateur** | Franck | structure (collections, champs), rôles, paramètres système |
 | **Éditrice** | Eléonore | CRUD complet sur **toutes les collections de contenu** + bibliothèque de fichiers ; **aucun** accès à la structure, aux rôles, ni aux réglages système |
 | **API (lecture)** | l'app Nuxt | **lecture seule**, filtrée sur `status = published` uniquement |
+| **Public** (anonyme) | les visiteurs, les crawlers | lecture de `directus_files` **filtrée aux images** (`type` commence par `image/`) — rien d'autre |
 
 Règles :
 - L'**éditrice** contrôle la mise en ligne via le `status` (draft → published). Rien ne part en prod sans son action.
 - Le **token API** de Nuxt est en lecture seule et ne voit jamais les brouillons. Stocké en variable d'env (`07-deploy`).
+- **Pourquoi le rôle Public existe** : les médias sont servis par le CMS directement au navigateur (`<img src="{DIRECTUS_PUBLIC_URL}/assets/…">`, il n'y a pas de proxy Nuxt). Sans permission publique, **toute image uploadée renvoie 403** pour un visiteur — mais reste visible pour qui est connecté au CMS (cookie `.encrehumaine.fr`), ce qui masque la panne. Les `og:image` cassent aussi (les crawlers sont anonymes).
+- **Le filtre mime est la frontière de sécurité** : il borne aussi `/files`, donc un anonyme ne peut pas énumérer la bibliothèque. Ce qui n'est pas une image (PDF du lead magnet `resources.file`) reste invisible. ⚠️ **Ne jamais élargir cette permission à `directus_files` sans filtre** : ça exposerait les documents à l'énumération. Un futur fichier privé qui serait une image demanderait un filtre par dossier.
+- **Ne jamais valider un rendu d'image en étant connecté au CMS** (voir ci-dessus) : tester en navigation privée, ou `curl` sans en-tête d'auth.
 - **Isolation base** : le rôle Postgres de Directus est restreint au schéma `directus` (il ne voit pas `app`). Directus n'expose donc jamais `orders`/`leads`/`subscribers`. (Config dans `07-deploy`.)
 
 ---

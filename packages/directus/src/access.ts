@@ -2,6 +2,12 @@
 //  - Éditrice : CRUD sur tout le contenu + fichiers ; aucune structure/réglage.
 //    → compte d'Eléonore créé ici si DIRECTUS_EDITOR_PASSWORD est fourni.
 //  - API (lecture) : lecture seule, status=published uniquement → token statique (Nuxt).
+//  - Public (anonyme) : **les images seulement**. Le navigateur va chercher les
+//    médias en direct sur le CMS (`<img src="{DIRECTUS_PUBLIC_URL}/assets/…">`, pas
+//    de proxy Nuxt) : sans cette policy, toute image uploadée renvoie 403 et ne
+//    s'affiche que pour une personne connectée au CMS (cookie `.encrehumaine.fr`),
+//    ce qui masque la panne. Le filtre mime borne aussi `/files` : un anonyme ne peut
+//    pas énumérer les documents (PDF du lead magnet).
 //  - Administrateur : rôle système par défaut (Franck = DIRECTUS_ADMIN_EMAIL,
 //    créé au 1er boot Directus depuis le .env), non recréé ici.
 
@@ -12,6 +18,9 @@ import { allCollections } from "./schema.ts";
 type Action = "create" | "read" | "update" | "delete" | "share";
 
 const API_USER_EMAIL = "api-readonly@encrehumaine.fr";
+
+/** Nom interne (non traduit) de la policy publique livrée par Directus. */
+const PUBLIC_POLICY_NAME = "$t:public_label";
 
 /** Collections de contenu + indicateur « possède un champ status ». */
 function contentTargets(): { collection: string; hasStatus: boolean; junction?: string }[] {
@@ -128,6 +137,28 @@ export async function bootstrapAccess(): Promise<void> {
     description: "Token serveur Nuxt — lecture seule published (docs/02 §6).",
   });
   await ensureAccess(apiRole, apiPolicy);
+
+  // ── Policy Public (anonyme) : images uniquement ───────────────────────────
+  // La policy publique est livrée par Directus (nom interne `$t:public_label`) et
+  // n'est rattachée à aucun rôle : elle s'applique aux requêtes sans session. On ne
+  // la crée donc pas, on la garnit.
+  const publicPolicy = await findPolicy(PUBLIC_POLICY_NAME);
+  if (publicPolicy) {
+    await resetPermissions(publicPolicy, [
+      // `_starts_with: "image/"` = la ligne de partage : ce que le site affiche
+      // (portraits, couvertures, og:image) est public ; les documents (PDF du lead
+      // magnet) restent invisibles, y compris à l'énumération via `/files`.
+      {
+        collection: "directus_files",
+        action: "read",
+        filter: { type: { _starts_with: "image/" } },
+      },
+    ]);
+  } else {
+    console.warn(
+      `  ⚠ policy publique introuvable (${PUBLIC_POLICY_NAME}) — les images resteront en 403 pour les visiteurs`,
+    );
+  }
 
   // ── Utilisateur API à token statique ──────────────────────────────────────
   const existingUser = await findUserByEmail(API_USER_EMAIL);
