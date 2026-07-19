@@ -4,7 +4,7 @@
   "private": true,
   "description": "Site L'Encre Humaine — conseil RH & accompagnement + boutique serious games",
   "type": "module",
-  "packageManager": "pnpm@10.34.3",
+  "packageManager": "pnpm@10.34.4",
   "engines": {
     "node": ">=22",
     "pnpm": ">=10"
@@ -37,7 +37,7 @@
       "vue-demi"
     ],
     "overrides": {
-      "@types/node": "25.9.3"
+      "@types/node": "25.9.4"
     }
   }
 }
