@@ -16,7 +16,7 @@ const appError = useError();
          Masqué sur les pages d'erreur (le bandeau 404 a déjà son poulpe). -->
     <OctopusLogoFull
       v-if="!appError"
-      class="motion-drift-slow pointer-events-none absolute bottom-3 right-4 hidden h-28 select-none lg:block xl:h-36"
+      class="pointer-events-none absolute -bottom-8 right-4 hidden h-52 rotate-[6deg] select-none lg:block xl:-bottom-10 xl:h-64"
     />
     <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 md:grid-cols-4">
       <div class="sm:col-span-2 md:col-span-1">
