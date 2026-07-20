@@ -52,6 +52,10 @@
   --color-sand-400: #c9a84c;
   --color-sand-500: #b08f33;
 
+  /* Bleu du logo historique (fichier d'Éléonore) — HORS palette rebrand : il ne
+     sert QU'au logo complet (OctopusLogoFull), jamais à l'UI. */
+  --color-logo: #015294;
+
   --color-brand: var(--color-teal-700);
   --color-brand-accent: var(--color-orange-500);
 
