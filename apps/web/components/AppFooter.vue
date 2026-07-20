@@ -10,11 +10,13 @@ const appError = useError();
 
 <template>
   <footer class="relative isolate mt-auto overflow-hidden bg-ink text-paper/80">
-    <!-- Filigrane poulpe qui déborde du coin — accent discret, décoratif.
+    <!-- Le logo dans ses couleurs, posé en bas à droite (demande Éléonore) — il
+         remplace l'ancien filigrane teal. Décoratif (la marque est déjà écrite en
+         toutes lettres à gauche), donc sans `title`.
          Masqué sur les pages d'erreur (le bandeau 404 a déjà son poulpe). -->
-    <OctopusWatermark
+    <OctopusLogoFull
       v-if="!appError"
-      class="absolute -bottom-20 -right-10 -z-10 hidden h-[26rem] rotate-[8deg] text-teal-300/25 sm:block"
+      class="pointer-events-none absolute -bottom-8 right-4 hidden h-52 rotate-[6deg] select-none lg:block xl:-bottom-10 xl:h-64"
     />
     <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 md:grid-cols-4">
       <div class="sm:col-span-2 md:col-span-1">

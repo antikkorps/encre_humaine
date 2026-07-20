@@ -182,7 +182,7 @@ useSeoMeta({
                 v-if="situation.result"
                 class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
               >
-                <span class="font-semibold text-teal-700">Résultat — </span>{{ situation.result }}
+                <span class="font-semibold text-teal-700">Résultat : </span>{{ situation.result }}
               </p>
               <NuxtLink
                 v-if="situation.ctaLabel"

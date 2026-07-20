@@ -129,7 +129,7 @@ async function onSubmit() {
     <button
       type="submit"
       :disabled="status === 'submitting' || (!!siteKey && !ready)"
-      class="inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800 disabled:opacity-60"
+      class="inline-flex items-center gap-1.5 rounded-full bg-orange-400 px-7 py-3 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500 disabled:opacity-60"
     >
       {{ status === "submitting" ? "Inscription…" : submitLabel }}
     </button>
