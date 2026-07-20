@@ -21,7 +21,7 @@ jobs:
       - name: Dépendances système
         run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Installer pnpm (aligné sur packageManager)
         run: npm install -g pnpm@10.16.1
