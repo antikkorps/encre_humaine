@@ -2,7 +2,7 @@
 // Source d'intention (diffable en review). Le moteur bootstrap.ts l'applique ;
 // le snapshot YAML en est l'artefact reproductible. DRY : un concept = une ligne.
 import * as f from "./fields.ts";
-import { ICON_CHOICES } from "./icons.ts";
+import { ICON_SUBFIELD } from "./icons.ts";
 
 export type CollectionDef = {
   collection: string;
@@ -226,8 +226,8 @@ const singletons: CollectionDef[] = [
       f.textarea("observe_intro"),
       f.repeater(
         "observe_items",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Constats (titre + corps)" },
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Constats (icône Material Symbols + titre + corps)" },
       ),
       f.textarea("observe_conclusion"),
       // §3 Offres (cartes dynamiques depuis `offers`) — titre de section
@@ -315,8 +315,8 @@ const singletons: CollectionDef[] = [
       f.textarea("outcomes_intro"),
       f.repeater(
         "outcomes",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Bénéfices (titre + corps)" },
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Bénéfices (icône Material Symbols + titre + corps)" },
       ),
       // 3. Deux situations, deux accompagnements (cartes détaillées)
       f.divider("situations_divider", "Deux situations, deux accompagnements"),
@@ -499,32 +499,14 @@ const collections: CollectionDef[] = [
       f.textarea("outcomes_intro"),
       f.repeater(
         "outcomes",
-        [
-          {
-            field: "icon",
-            width: "half",
-            interface: "select-dropdown",
-            options: { choices: [...ICON_CHOICES], allowNone: true },
-          },
-          { field: "title" },
-          { field: "body", interface: "input-multiline" },
-        ],
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
         { note: "Bénéfices (icône Material Symbols + titre + corps)" },
       ),
       // Ce que je vois souvent (contexte)
       f.input("context_title"),
       f.repeater(
         "context_items",
-        [
-          {
-            field: "icon",
-            width: "half",
-            interface: "select-dropdown",
-            options: { choices: [...ICON_CHOICES], allowNone: true },
-          },
-          { field: "title" },
-          { field: "body", interface: "input-multiline" },
-        ],
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
         { note: "Situations récurrentes (icône + titre + corps)" },
       ),
       f.textarea("context_conclusion"),
@@ -537,16 +519,7 @@ const collections: CollectionDef[] = [
       f.textarea("mission_intro", { note: "Intro sous le titre de la mission (optionnel)" }),
       f.repeater(
         "mission_includes",
-        [
-          {
-            field: "icon",
-            width: "half",
-            interface: "select-dropdown",
-            options: { choices: [...ICON_CHOICES], allowNone: true },
-          },
-          { field: "title" },
-          { field: "body", interface: "input-multiline" },
-        ],
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
         { note: "La mission inclut (icône + titre + corps)" },
       ),
       // Un regard / une expérience (optionnel — récit narratif avec listes)

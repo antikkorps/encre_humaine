@@ -1,8 +1,9 @@
-// Icônes disponibles pour les items d'offres (sous-champ `icon` des répéteurs
-// outcomes/context_items/mission_includes). Liste FERMÉE : ces clés doivent aussi
-// figurer dans `clientBundle.icons` de apps/web/nuxt.config.ts (sinon elles ne
-// s'affichent pas sur le site). Choix = jeu thématique (les icônes purement
-// structurelles — flèche, citation, coches — restent réservées au code).
+// Icônes disponibles pour les items éditoriaux (sous-champ `icon` des répéteurs :
+// offers.outcomes/context_items/mission_includes, org_hub_page.observe_items,
+// b2c_hub_page.outcomes). Liste FERMÉE : ces clés doivent aussi figurer dans
+// `clientBundle.icons` de apps/web/nuxt.config.ts (sinon elles ne s'affichent pas
+// sur le site). Choix = jeu thématique (les icônes purement structurelles —
+// flèche, citation, coches — restent réservées au code).
 // `value` = clé Material Symbols au format Iconify (hyphénée). Partagé par
 // schema.ts (interface select) et reconcile.ts (patch du meta).
 export const ICON_CHOICES = [
@@ -25,4 +26,33 @@ export const ICON_CHOICES = [
   { text: "Constat / idée (lightbulb)", value: "lightbulb" },
   { text: "Observation / insight (insights)", value: "insights" },
   { text: "Validation / coche (check-circle)", value: "check-circle" },
+  // Jeu élargi (2026-07-21) — plus de nuances pour les hubs organisations & particuliers.
+  { text: "Confiance / partenariat (handshake)", value: "handshake" },
+  { text: "Collectif / équipes (groups)", value: "groups" },
+  { text: "Posture / psychologie (psychology)", value: "psychology" },
+  { text: "Diversité / collaboration (diversity-3)", value: "diversity-3" },
+  { text: "Équilibre / cadre (balance)", value: "balance" },
+  { text: "Élan / lancement (rocket-launch)", value: "rocket-launch" },
+  { text: "Exigence / qualité (workspace-premium)", value: "workspace-premium" },
+  { text: "Cohérence / liens (hub)", value: "hub" },
+  { text: "Exploration / boussole (explore)", value: "explore" },
+  { text: "Apprentissage / lecture (menu-book)", value: "menu-book" },
+  { text: "Formation (school)", value: "school" },
+  { text: "Développement personnel (self-improvement)", value: "self-improvement" },
+  { text: "Recherche d'emploi (person-search)", value: "person-search" },
+  { text: "Plan d'action / checklist (checklist)", value: "checklist" },
+  { text: "Chronologie / étapes (timeline)", value: "timeline" },
+  { text: "Objectif / cible (target)", value: "target" },
+  { text: "Levier / clé (key)", value: "key" },
+  { text: "Inspiration / idée (emoji-objects)", value: "emoji-objects" },
 ] as const;
+
+// Sous-champ `icon` d'un répéteur (1re position, demi-largeur, liste déroulante
+// fermée). Source unique consommée par schema.ts (création) et reconcile.ts
+// (patch du meta d'un répéteur déjà existant).
+export const ICON_SUBFIELD = {
+  field: "icon",
+  width: "half" as const,
+  interface: "select-dropdown",
+  options: { choices: [...ICON_CHOICES], allowNone: true },
+};
