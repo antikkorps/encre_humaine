@@ -5,7 +5,7 @@
 // Idempotent : ne patche que ce qui diffère, relançable sans risque. N'écrit AUCUN
 // contenu (uniquement des `meta` de champs → visibilité/édition dans l'admin).
 import { get, patch } from "./api.ts";
-import { ICON_CHOICES } from "./icons.ts";
+import { ICON_SUBFIELD } from "./icons.ts";
 
 // 1) Choix du select `faq_items.scope` (le bootstrap ne met pas à jour les choix
 //    d'un select existant). Liste complète = miroir de FAQ_SCOPE (schema.ts).
@@ -19,22 +19,34 @@ const FAQ_SCOPE_CHOICES = [
   { text: "Général", value: "general" },
 ];
 
-// 2) Sous-champ `icon` (1re position, demi-largeur) des répéteurs de `offers`,
-//    en select-dropdown fermé (choix = ICON_CHOICES, miroir du clientBundle).
-const ICON_SUBFIELD = {
+// 2) Sous-champ `icon` (1re position, demi-largeur) des répéteurs éditoriaux, en
+//    select-dropdown fermé (choix = ICON_CHOICES, miroir du clientBundle). Le
+//    patch remet aussi la liste de choix à jour quand ICON_CHOICES s'enrichit.
+const ICON_SUB_DIRECTUS = {
   field: "icon",
   name: "icon",
   type: "string",
   meta: {
     field: "icon",
-    interface: "select-dropdown",
-    width: "half",
-    options: { choices: [...ICON_CHOICES], allowNone: true },
+    interface: ICON_SUBFIELD.interface,
+    width: ICON_SUBFIELD.width,
+    options: ICON_SUBFIELD.options,
   },
 };
-const ICON_REPEATERS = ["outcomes", "context_items", "mission_includes"];
+const ICON_CHOICE_COUNT = ICON_SUBFIELD.options.choices.length;
+// [collection, champ répéteur] — les hubs affichent l'icône depuis le run 7.
+const ICON_REPEATERS: [string, string][] = [
+  ["offers", "outcomes"],
+  ["offers", "context_items"],
+  ["offers", "mission_includes"],
+  ["org_hub_page", "observe_items"],
+  ["b2c_hub_page", "outcomes"],
+];
 
-type SubField = { field: string; meta?: { interface?: string } };
+type SubField = {
+  field: string;
+  meta?: { interface?: string; options?: { choices?: unknown[] } };
+};
 type FieldMeta = {
   meta: { options?: { choices?: { value: string }[]; fields?: SubField[] } | null };
 };
@@ -53,22 +65,25 @@ async function reconcileFaqScope(): Promise<void> {
 }
 
 async function reconcileIconSubfields(): Promise<void> {
-  for (const field of ICON_REPEATERS) {
-    const cur = await get<FieldMeta>(`/fields/offers/${field}`);
+  for (const [collection, field] of ICON_REPEATERS) {
+    const cur = await get<FieldMeta>(`/fields/${collection}/${field}`);
     const fields = cur.meta.options?.fields ?? [];
     const existing = fields.find((f) => f.field === "icon");
-    if (existing?.meta?.interface === "select-dropdown") {
-      console.log(`= offers.${field} : sous-champ « icon » déjà en liste déroulante`);
+    const upToDate =
+      existing?.meta?.interface === "select-dropdown" &&
+      (existing.meta.options?.choices?.length ?? 0) === ICON_CHOICE_COUNT;
+    if (upToDate) {
+      console.log(`= ${collection}.${field} : sous-champ « icon » déjà à jour`);
       continue;
     }
     const others = fields.filter((f) => f.field !== "icon");
-    await patch(`/fields/offers/${field}`, {
-      meta: { options: { ...(cur.meta.options ?? {}), fields: [ICON_SUBFIELD, ...others] } },
+    await patch(`/fields/${collection}/${field}`, {
+      meta: { options: { ...(cur.meta.options ?? {}), fields: [ICON_SUB_DIRECTUS, ...others] } },
     });
     console.log(
       existing
-        ? `~ offers.${field} : sous-champ « icon » → liste déroulante`
-        : `+ offers.${field} : sous-champ « icon » ajouté (liste déroulante)`,
+        ? `~ ${collection}.${field} : sous-champ « icon » mis à jour (liste déroulante)`
+        : `+ ${collection}.${field} : sous-champ « icon » ajouté (liste déroulante)`,
     );
   }
 }
