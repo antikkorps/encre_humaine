@@ -19,8 +19,10 @@ withDefaults(
     align?: "left" | "center";
     tone?: "light" | "dark";
     level?: 2 | 3;
+    /** Élargit le sous-titre (max-w-4xl) pour qu'il « prenne la page » (méthode). */
+    wide?: boolean;
   }>(),
-  { align: "left", tone: "light", level: 2 },
+  { align: "left", tone: "light", level: 2, wide: false },
 );
 </script>
 
@@ -58,8 +60,12 @@ withDefaults(
     </component>
     <p
       v-if="subtitle"
-      class="mt-3 max-w-2xl text-lg"
-      :class="[align === 'center' ? 'mx-auto' : '', tone === 'dark' ? 'text-paper/75' : 'text-ink/70']"
+      class="mt-3 text-lg"
+      :class="[
+        wide ? 'max-w-4xl' : 'max-w-2xl',
+        align === 'center' ? 'mx-auto text-center' : '',
+        tone === 'dark' ? 'text-paper/75' : 'text-ink/70',
+      ]"
     >
       {{ subtitle }}
     </p>

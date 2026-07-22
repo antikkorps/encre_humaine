@@ -76,6 +76,20 @@
   letter-spacing: -0.015em;
 }
 
+/*
+ * Justification du corps de texte (demande Éléonore : fins de lignes « propres »).
+ * Portée : les paragraphes du contenu principal (`<main>`) — le header et le pied
+ * de page gardent leur alignement propre. `:where()` garde la spécificité à zéro,
+ * donc TOUTE classe Tailwind d'alignement (text-center, text-left…) reprend la main
+ * là où le design l'impose (citations centrées, listes…). `hyphens: auto` (html
+ * lang=fr) referme les grands trous de justification en français.
+ */
+main :where(p) {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
 /* Cible tactile ≥ 24px, focus visibles (WCAG 2.2 AA). */
 :where(a, button, [role="button"]) {
   min-height: 1.5rem;
