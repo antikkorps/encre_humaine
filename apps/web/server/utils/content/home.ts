@@ -117,7 +117,8 @@ export interface HomeContent {
   recognition: {
     title: string;
     subtitle: string | null;
-    items: string[];
+    /** Problématiques : texte + icône éditable (clé Material Symbols, optionnelle). */
+    items: { text: string; icon?: string }[];
     conclusion: string | null;
   } | null;
   build: {
@@ -162,7 +163,11 @@ export function mapStats(raw: unknown): Stat[] {
 export function mapRecognition(home: RawHome): HomeContent["recognition"] {
   const title = str(home.recognition_title);
   const subtitle = str(home.recognition_subtitle);
-  const items = mapStringList(home.recognition_items);
+  // Répéteur `[{ text, icon? }]` (l'icône devient éditable au run 8) ; tolère
+  // aussi l'ancienne forme liste-de-chaînes. Entrées sans texte exclues.
+  const items = records(home.recognition_items)
+    .map((it) => ({ text: str(it.text) || str(it.value), icon: str(it.icon) || undefined }))
+    .filter((it) => it.text !== "");
   const conclusion = str(home.recognition_conclusion);
   if (!title && !subtitle && !items.length && !conclusion) return null;
   return { title, subtitle: subtitle || null, items, conclusion: conclusion || null };

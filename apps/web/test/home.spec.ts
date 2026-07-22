@@ -43,17 +43,25 @@ describe("mapRecognition", () => {
     expect(mapRecognition({})).toBeNull();
   });
 
-  it("compose titre, sous-titre, items (répéteur text) et conclusion", () => {
+  it("compose titre, sous-titre, items (répéteur text + icône éditable) et conclusion", () => {
     expect(
       mapRecognition({
         recognition_title: "Par où commencer ?",
-        recognition_items: [{ text: "Managers sans repères" }, { text: "" }, {}],
+        recognition_items: [
+          { text: "Managers sans repères", icon: "psychology" },
+          { text: "Sans icône" },
+          { text: "" },
+          {},
+        ],
         recognition_conclusion: "  Vous avez besoin de méthode.  ",
       }),
     ).toEqual({
       title: "Par où commencer ?",
       subtitle: null,
-      items: ["Managers sans repères"],
+      items: [
+        { text: "Managers sans repères", icon: "psychology" },
+        { text: "Sans icône", icon: undefined },
+      ],
       conclusion: "Vous avez besoin de méthode.",
     });
   });

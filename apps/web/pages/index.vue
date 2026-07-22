@@ -48,10 +48,11 @@ const heroTitle = computed(() => {
   return { head: words.length ? `${words.join(" ")} ` : "", tail };
 });
 
-// Icônes cyclées sur les listes dynamiques (contenu Directus, nombre variable) :
-// on remplace les puces/numéros par des pictos qui « parlent ». Cyclage modulo →
-// robuste quel que soit le nombre d'items. ⚠️ Toute clé ajoutée ici doit figurer
-// dans le clientBundle @nuxt/icon (nuxt.config.ts) sinon elle ne s'affiche pas.
+// Icônes par DÉFAUT des listes éditoriales (défis PME, « ce que je vous aide à
+// construire ») : chaque item porte une icône éditable dans Directus (dropdown
+// ICON_CHOICES, run 8) ; à défaut, on cycle ces pictos modulo pour un rendu
+// « qui parle » dès la première publication. ⚠️ Toute clé ici doit figurer dans
+// le clientBundle @nuxt/icon (nuxt.config.ts) sinon elle ne s'affiche pas.
 const challengeIcons = [
   "material-symbols:psychology",
   "material-symbols:groups",
@@ -229,9 +230,16 @@ const buildIcons = [
                 aria-hidden="true"
                 class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-sand-400/50 bg-orange-50 text-orange-600"
               >
-                <Icon :name="challengeIcons[i % challengeIcons.length]!" class="h-5 w-5" />
+                <Icon
+                  :name="
+                    item.icon
+                      ? `material-symbols:${item.icon}`
+                      : challengeIcons[i % challengeIcons.length]!
+                  "
+                  class="h-5 w-5"
+                />
               </span>
-              <span class="leading-relaxed text-ink/75">{{ item }}</span>
+              <span class="leading-relaxed text-ink/75">{{ item.text }}</span>
             </li>
           </ul>
           <p
@@ -266,7 +274,14 @@ const buildIcons = [
                 aria-hidden="true"
                 class="grid h-12 w-12 place-items-center rounded-full bg-teal-800 text-sand-300"
               >
-                <Icon :name="buildIcons[i % buildIcons.length]!" class="h-6 w-6" />
+                <Icon
+                  :name="
+                    block.icon
+                      ? `material-symbols:${block.icon}`
+                      : buildIcons[i % buildIcons.length]!
+                  "
+                  class="h-6 w-6"
+                />
               </span>
               <h3 class="mt-5 font-display text-xl font-bold text-ink">{{ block.title }}</h3>
               <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
