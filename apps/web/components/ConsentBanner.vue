@@ -48,24 +48,32 @@ function reopen() {
       v-if="visible"
       role="region"
       aria-label="Contrôle des cookies"
-      class="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-2xl overflow-hidden rounded-3xl border border-ink/10 bg-paper/95 shadow-lift backdrop-blur sm:inset-x-4 sm:bottom-4"
+      class="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-3xl overflow-hidden rounded-3xl border border-ink/10 bg-paper/95 shadow-lift backdrop-blur sm:inset-x-4 sm:bottom-4"
     >
-      <!-- Vue 1 — présentation -->
-      <div v-if="view === 'intro'" class="p-5 sm:p-6">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-          <img
-            :src="cookieOctopus"
-            alt=""
-            aria-hidden="true"
-            width="120"
-            height="120"
-            class="mx-auto h-24 w-24 flex-none select-none object-contain sm:mx-0 sm:h-28 sm:w-28"
-          />
+      <!-- Vue 1 — présentation. Mascotte à droite (grande, halo doré), texte à
+           gauche, puis barre d'actions : refus à l'extrême gauche, réglage +
+           acceptation groupés à droite (l'acceptation, primaire, en dernier). -->
+      <div v-if="view === 'intro'" class="p-5 sm:p-7">
+        <div class="flex flex-col gap-5 sm:flex-row-reverse sm:items-center sm:gap-7">
+          <div class="relative mx-auto flex-none sm:mx-0">
+            <span
+              aria-hidden="true"
+              class="absolute inset-0 -z-10 m-auto h-32 w-32 rounded-full bg-sand-300/30 blur-2xl sm:h-44 sm:w-44"
+            ></span>
+            <img
+              :src="cookieOctopus"
+              alt=""
+              aria-hidden="true"
+              width="220"
+              height="220"
+              class="h-40 w-40 select-none object-contain sm:h-52 sm:w-52"
+            />
+          </div>
           <div class="min-w-0">
-            <h2 class="font-display text-lg font-bold text-ink">
+            <h2 class="font-display text-xl font-bold text-ink">
               Contrôle des cookies • autorisation d'embarquement 🍪
             </h2>
-            <div class="mt-2 space-y-2 text-sm leading-relaxed text-ink/75">
+            <div class="mt-2.5 space-y-2 text-sm leading-relaxed text-ink/75">
               <p>Notre poulpe technique a détecté quelques cookies à bord.</p>
               <p>
                 Pas d'inquiétude : ils ne sont pas là pour observer vos tentacules (ni votre
@@ -74,40 +82,43 @@ function reopen() {
               </p>
               <p>À vous de choisir lesquels peuvent embarquer.</p>
             </div>
+            <NuxtLink
+              to="/confidentialite"
+              class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 underline decoration-teal-700/40 underline-offset-2 transition-colors hover:text-teal-800"
+            >
+              <Icon name="material-symbols:visibility" class="h-4 w-4" />
+              Lire la politique de confidentialité
+            </NuxtLink>
           </div>
         </div>
 
-        <div class="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
+        <div
+          class="mt-6 flex flex-col gap-3 border-t border-ink/10 pt-5 sm:flex-row sm:items-center sm:justify-between"
+        >
           <button
             type="button"
-            class="rounded-full bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
-            @click="acceptThirdParty"
-          >
-            J'autorise l'embarquement
-          </button>
-          <button
-            type="button"
-            class="rounded-full bg-orange-400 px-5 py-2.5 text-sm font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
-            @click="openSettings"
-          >
-            Je règle les tentacules 🐙
-          </button>
-          <button
-            type="button"
-            class="rounded-full px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:bg-ink/5 hover:text-ink"
+            class="order-last rounded-full px-4 py-2.5 text-sm font-medium text-ink/60 whitespace-nowrap transition-colors hover:bg-ink/5 hover:text-ink sm:order-none"
             @click="refuseThirdParty"
           >
             Je poursuis sans cookies optionnels
           </button>
+          <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+            <button
+              type="button"
+              class="whitespace-nowrap rounded-full bg-orange-400 px-5 py-2.5 text-sm font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
+              @click="openSettings"
+            >
+              Je règle les tentacules 🐙
+            </button>
+            <button
+              type="button"
+              class="whitespace-nowrap rounded-full bg-teal-700 px-6 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
+              @click="acceptThirdParty"
+            >
+              J'autorise l'embarquement
+            </button>
+          </div>
         </div>
-
-        <NuxtLink
-          to="/confidentialite"
-          class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 underline decoration-teal-700/40 underline-offset-2 transition-colors hover:text-teal-800"
-        >
-          <Icon name="material-symbols:visibility" class="h-4 w-4" />
-          Lire la politique de confidentialité
-        </NuxtLink>
       </div>
 
       <!-- Vue 2 — réglages fins par catégorie -->
