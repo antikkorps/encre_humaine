@@ -87,7 +87,16 @@
 main :where(p) {
   text-align: justify;
   text-justify: inter-word;
+  -webkit-hyphens: auto;
   hyphens: auto;
+  /*
+   * Resserre la césure pour éviter les « trous » de justification : on ne
+   * coupe que les mots d'au moins 6 lettres, en laissant ≥ 3 lettres avant
+   * et ≥ 2 après le tiret (fragments plus lisibles, moins de lignes trouées).
+   */
+  -webkit-hyphenate-limit-before: 3;
+  -webkit-hyphenate-limit-after: 2;
+  hyphenate-limit-chars: 6 3 2;
 }
 
 /* Cible tactile ≥ 24px, focus visibles (WCAG 2.2 AA). */

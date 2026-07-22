@@ -216,6 +216,7 @@ const buildIcons = [
             :title="content.recognition.title"
             :subtitle="content.recognition.subtitle ?? undefined"
             eyebrow="Les défis que rencontrent de nombreuses PME"
+            wide
           />
           <ul
             v-if="content.recognition.items.length"
@@ -357,6 +358,7 @@ const buildIcons = [
             :title="content.why.title"
             :subtitle="content.why.subtitle ?? undefined"
             eyebrow="L'Encre Humaine"
+            wide
           />
           <div class="mt-12 grid gap-10 lg:grid-cols-[1.55fr_0.85fr] lg:items-center">
             <div class="grid gap-6 sm:grid-cols-3">
@@ -515,6 +517,7 @@ const buildIcons = [
             :title="content.resources.title"
             eyebrow="🐙 Les Tentacules de L'Encre Humaine"
             :subtitle="content.resources.subtitle ?? undefined"
+            wide
           />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <ArticleCard
