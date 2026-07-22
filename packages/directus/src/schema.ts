@@ -95,17 +95,19 @@ const singletons: CollectionDef[] = [
       f.divider("recognition_divider", "Vous vous reconnaissez ?"),
       f.input("recognition_title"),
       f.textarea("recognition_subtitle"),
-      f.repeater("recognition_items", [{ field: "text", interface: "input-multiline" }], {
-        note: "Problématiques (5–6, une par entrée)",
-      }),
+      f.repeater(
+        "recognition_items",
+        [ICON_SUBFIELD, { field: "text", interface: "input-multiline" }],
+        { note: "Problématiques (5–6, une par entrée) — icône éditable par item" },
+      ),
       f.textarea("recognition_conclusion"),
       // — Promesse / Offre : ce que je vous aide à construire (ancre #offres) —
       f.divider("build_divider", "Promesse / Offre (#offres)"),
       f.input("build_title"),
       f.repeater(
         "build_blocks",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Blocs services (titre + texte)" },
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Blocs services (icône éditable + titre + texte)" },
       ),
       f.input("build_cta_label", { half: true, note: "CTA section (ex. « Explorer »)" }),
       f.input("build_cta_url", { half: true, note: "Cible du CTA (défaut /organisations)" }),

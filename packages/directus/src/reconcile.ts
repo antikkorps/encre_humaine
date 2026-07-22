@@ -34,13 +34,16 @@ const ICON_SUB_DIRECTUS = {
   },
 };
 const ICON_CHOICE_COUNT = ICON_SUBFIELD.options.choices.length;
-// [collection, champ répéteur] — les hubs affichent l'icône depuis le run 7.
+// [collection, champ répéteur] — les hubs affichent l'icône depuis le run 7 ;
+// l'accueil (défis + « ce que je vous aide à construire ») s'y ajoute au run 8.
 const ICON_REPEATERS: [string, string][] = [
   ["offers", "outcomes"],
   ["offers", "context_items"],
   ["offers", "mission_includes"],
   ["org_hub_page", "observe_items"],
   ["b2c_hub_page", "outcomes"],
+  ["home_page", "recognition_items"],
+  ["home_page", "build_blocks"],
 ];
 
 type SubField = {

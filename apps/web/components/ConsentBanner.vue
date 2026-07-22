@@ -2,43 +2,189 @@
 // Bandeau de consentement maison — docs/06-security.md §7.
 // Non bloquant (region, pas de modale) : le site reste utilisable. Gate uniquement
 // les contenus tiers (embed RDV, embeds Stripe). Umami cookieless = exempté.
-const { decided, acceptThirdParty, refuseThirdParty } = useConsent();
+//
+// Habillage « poulpe » (demande Éléonore) : ton chaleureux, mascotte à la loupe,
+// 3 choix explicites (tout accepter / régler / refuser l'optionnel) + lien vers la
+// politique de confidentialité. Un panneau de réglages fin détaille les catégories.
+// Une fois un choix fait, un petit bouton flottant en bas à gauche permet de
+// rouvrir le bandeau à tout moment (rappel du consentement, exigence RGPD).
+import cookieOctopus from "~/assets/cookies/cookies.webp";
+
+const {
+  visible,
+  thirdParty,
+  acceptThirdParty,
+  refuseThirdParty,
+  savePreferences,
+  openPreferences,
+} = useConsent();
+
+// Vue courante du bandeau : présentation ou réglages fins.
+const view = ref<"intro" | "settings">("intro");
+// État local du toggle « optionnel » dans le panneau (init depuis le cookie).
+const allowOptional = ref(thirdParty.value);
+
+function openSettings() {
+  allowOptional.value = thirdParty.value;
+  view.value = "settings";
+}
+
+function save() {
+  savePreferences(allowOptional.value);
+  view.value = "intro";
+}
+
+// Rouvrir depuis le widget flottant : on repart toujours de la présentation.
+function reopen() {
+  view.value = "intro";
+  openPreferences();
+}
 </script>
 
 <template>
   <ClientOnly>
+    <!-- ============================ Bandeau ============================ -->
     <section
-      v-if="!decided"
+      v-if="visible"
       role="region"
-      aria-label="Consentement aux contenus tiers"
-      class="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-4xl rounded-2xl border border-ink/10 bg-paper/95 px-5 py-4 shadow-lift backdrop-blur sm:inset-x-4 sm:bottom-4"
+      aria-label="Contrôle des cookies"
+      class="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-2xl overflow-hidden rounded-3xl border border-ink/10 bg-paper/95 shadow-lift backdrop-blur sm:inset-x-4 sm:bottom-4"
     >
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p class="flex items-start gap-3 text-sm text-ink/80">
-          <OctopusMark class="mt-0.5 hidden h-6 w-6 flex-none text-teal-600 sm:block" />
-          <span>
-            Ce site n'utilise aucun cookie de suivi. Certains contenus tiers
-            (prise de rendez-vous, paiement) nécessitent votre accord pour se charger.
-            <NuxtLink to="/confidentialite" class="text-teal-700 underline">En savoir plus</NuxtLink>.
-          </span>
-        </p>
-        <div class="flex shrink-0 gap-2">
+      <!-- Vue 1 — présentation -->
+      <div v-if="view === 'intro'" class="p-5 sm:p-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+          <img
+            :src="cookieOctopus"
+            alt=""
+            aria-hidden="true"
+            width="120"
+            height="120"
+            class="mx-auto h-24 w-24 flex-none select-none object-contain sm:mx-0 sm:h-28 sm:w-28"
+          />
+          <div class="min-w-0">
+            <h2 class="font-display text-lg font-bold text-ink">
+              Contrôle des cookies • autorisation d'embarquement 🍪
+            </h2>
+            <div class="mt-2 space-y-2 text-sm leading-relaxed text-ink/75">
+              <p>Notre poulpe technique a détecté quelques cookies à bord.</p>
+              <p>
+                Pas d'inquiétude : ils ne sont pas là pour observer vos tentacules (ni votre
+                réserve de biscuits). Certains sont nécessaires au bon fonctionnement du site,
+                d'autres nous aident à améliorer votre expérience.
+              </p>
+              <p>À vous de choisir lesquels peuvent embarquer.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
-            class="rounded-full px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:bg-teal-50 hover:text-teal-700"
-            @click="refuseThirdParty"
+            class="rounded-full bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
+            @click="acceptThirdParty"
           >
-            Continuer sans
+            J'autorise l'embarquement
           </button>
           <button
             type="button"
-            class="rounded-full bg-teal-700 px-4 py-2 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
-            @click="acceptThirdParty"
+            class="rounded-full bg-orange-400 px-5 py-2.5 text-sm font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
+            @click="openSettings"
           >
-            Autoriser les contenus tiers
+            Je règle les tentacules 🐙
+          </button>
+          <button
+            type="button"
+            class="rounded-full px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:bg-ink/5 hover:text-ink"
+            @click="refuseThirdParty"
+          >
+            Je poursuis sans cookies optionnels
+          </button>
+        </div>
+
+        <NuxtLink
+          to="/confidentialite"
+          class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 underline decoration-teal-700/40 underline-offset-2 transition-colors hover:text-teal-800"
+        >
+          <Icon name="material-symbols:visibility" class="h-4 w-4" />
+          Lire la politique de confidentialité
+        </NuxtLink>
+      </div>
+
+      <!-- Vue 2 — réglages fins par catégorie -->
+      <div v-else class="p-5 sm:p-6">
+        <h2 class="font-display text-lg font-bold text-ink">Je règle les tentacules 🐙</h2>
+        <p class="mt-1 text-sm text-ink/70">Choisissez ce qui peut embarquer.</p>
+
+        <ul class="mt-4 space-y-3">
+          <li class="flex items-start gap-3 rounded-2xl border border-ink/10 bg-white/60 p-4">
+            <span
+              aria-hidden="true"
+              class="mt-0.5 grid h-6 w-11 flex-none place-items-center rounded-full bg-teal-700/90 text-xs font-semibold text-white"
+              >Actif</span
+            >
+            <div>
+              <p class="text-sm font-semibold text-ink">Cookies nécessaires</p>
+              <p class="mt-0.5 text-sm text-ink/65">
+                Indispensables au bon fonctionnement du site (sécurité, mémorisation de votre
+                choix). Toujours actifs, sans suivi.
+              </p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3 rounded-2xl border border-ink/10 bg-white/60 p-4">
+            <label class="mt-0.5 inline-flex flex-none cursor-pointer items-center">
+              <input v-model="allowOptional" type="checkbox" class="peer sr-only" />
+              <span
+                aria-hidden="true"
+                class="relative h-6 w-11 rounded-full bg-ink/20 transition-colors after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:bg-teal-700 peer-checked:after:translate-x-5"
+              ></span>
+              <span class="sr-only">Activer les cookies optionnels</span>
+            </label>
+            <div>
+              <p class="text-sm font-semibold text-ink">Contenus optionnels &amp; confort</p>
+              <p class="mt-0.5 text-sm text-ink/65">
+                Chargement des contenus tiers (prise de rendez-vous, paiement) et petits réglages
+                qui améliorent votre expérience.
+              </p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-5 flex flex-col gap-2.5 sm:flex-row sm:items-center">
+          <button
+            type="button"
+            class="rounded-full bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
+            @click="save"
+          >
+            Enregistrer mes choix
+          </button>
+          <button
+            type="button"
+            class="rounded-full px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:bg-ink/5 hover:text-ink"
+            @click="view = 'intro'"
+          >
+            Retour
           </button>
         </div>
       </div>
     </section>
+
+    <!-- ====================== Widget flottant (rappel) ====================== -->
+    <!-- Toujours accessible en bas à gauche une fois un choix fait — libellé au survol. -->
+    <div v-else class="group fixed bottom-3 left-3 z-40 sm:bottom-4 sm:left-4">
+      <button
+        type="button"
+        aria-label="Gérez vos préférences en matière de cookies et données personnelles"
+        class="grid h-12 w-12 place-items-center rounded-full border border-ink/10 bg-paper/95 text-teal-700 shadow-lift backdrop-blur transition-transform hover:-translate-y-0.5"
+        @click="reopen"
+      >
+        <OctopusMark class="h-6 w-6" />
+      </button>
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute bottom-1/2 left-14 w-max max-w-[70vw] translate-y-1/2 rounded-xl bg-ink px-3 py-2 text-xs font-medium text-paper opacity-0 shadow-lift transition-opacity duration-150 group-hover:opacity-100"
+      >
+        Gérez vos préférences en matière de cookies et données personnelles
+      </span>
+    </div>
   </ClientOnly>
 </template>

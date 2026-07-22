@@ -47,6 +47,25 @@ const heroTitle = computed(() => {
   // de blancs des templates Vue.
   return { head: words.length ? `${words.join(" ")} ` : "", tail };
 });
+
+// Icônes par DÉFAUT des listes éditoriales (défis PME, « ce que je vous aide à
+// construire ») : chaque item porte une icône éditable dans Directus (dropdown
+// ICON_CHOICES, run 8) ; à défaut, on cycle ces pictos modulo pour un rendu
+// « qui parle » dès la première publication. ⚠️ Toute clé ici doit figurer dans
+// le clientBundle @nuxt/icon (nuxt.config.ts) sinon elle ne s'affiche pas.
+const challengeIcons = [
+  "material-symbols:psychology",
+  "material-symbols:groups",
+  "material-symbols:route",
+  "material-symbols:insights",
+  "material-symbols:schedule",
+  "material-symbols:balance",
+];
+const buildIcons = [
+  "material-symbols:visibility",
+  "material-symbols:self-improvement",
+  "material-symbols:timeline",
+];
 </script>
 
 <template>
@@ -57,7 +76,7 @@ const heroTitle = computed(() => {
     <section class="bg-ink-gradient relative isolate overflow-hidden text-paper">
       <!-- Filigrane poulpe doré, ample, à droite (accent identitaire). -->
       <OctopusWatermark
-        class="pointer-events-none absolute -right-40 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-sand-300/[0.10] lg:block"
+        class="pointer-events-none absolute -right-12 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-sand-300/[0.10] lg:block"
       />
       <InkBlob class="absolute -left-20 top-10 -z-10 h-72 w-72 -rotate-45 text-teal-500/15" />
       <InkBlob class="absolute -bottom-12 right-1/4 -z-10 h-56 w-56 text-orange-400/10" />
@@ -118,7 +137,7 @@ const heroTitle = computed(() => {
               </NuxtLink>
               <a
                 href="#approche"
-                class="inline-flex items-center justify-center gap-2 rounded-full border border-paper/25 bg-paper/5 px-6 py-3.5 font-semibold text-paper transition-colors hover:bg-paper/10"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-orange-400 px-6 py-3.5 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
               >
                 {{ hero.ctaSecondaryLabel }}
               </a>
@@ -127,7 +146,7 @@ const heroTitle = computed(() => {
 
           <!-- Colonne droite : micro-preuves sur une carte givrée (ne pas les poser
                à même le filigrane poulpe → illisible). Le poulpe reste ambiant derrière. -->
-          <div v-if="hero.proofs.length" class="lg:pl-6">
+          <div v-if="hero.proofs.length" class="lg:pl-6 lg:pt-16">
             <div
               class="rounded-3xl border border-paper/15 bg-paper/[0.06] p-6 shadow-soft backdrop-blur sm:p-8"
             >
@@ -187,7 +206,11 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 3. Les défis (« Vous vous reconnaissez ? ») -->
-      <section v-if="content.recognition" class="bg-paper-2">
+      <section v-if="content.recognition" class="relative isolate overflow-hidden bg-paper-2">
+        <TentacleAccent
+          name="tentacule-1-trait"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.recognition.title"
@@ -205,11 +228,18 @@ const heroTitle = computed(() => {
             >
               <span
                 aria-hidden="true"
-                class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-sand-400/60 bg-orange-50"
+                class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-sand-400/50 bg-orange-50 text-orange-600"
               >
-                <span class="h-2 w-2 rounded-full bg-sand-400"></span>
+                <Icon
+                  :name="
+                    item.icon
+                      ? `material-symbols:${item.icon}`
+                      : challengeIcons[i % challengeIcons.length]!
+                  "
+                  class="h-5 w-5"
+                />
               </span>
-              <span class="leading-relaxed text-ink/75">{{ item }}</span>
+              <span class="leading-relaxed text-ink/75">{{ item.text }}</span>
             </li>
           </ul>
           <p
@@ -222,13 +252,18 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 4. Ce que je vous aide à construire (#offres) -->
-      <section v-if="content.build" id="offres" v-reveal class="scroll-mt-24 bg-paper">
+      <section
+        v-if="content.build"
+        id="offres"
+        v-reveal
+        class="relative isolate scroll-mt-24 overflow-hidden bg-paper"
+      >
+        <TentacleAccent
+          name="tentacule-4-plein"
+          class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading
-            :title="content.build.title"
-            eyebrow="Ce que je vous aide à construire"
-            align="center"
-          />
+          <SectionHeading :title="content.build.title" eyebrow="Ce que je vous aide à construire" />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
             <article
               v-for="(block, i) in content.build.blocks"
@@ -237,9 +272,16 @@ const heroTitle = computed(() => {
             >
               <span
                 aria-hidden="true"
-                class="grid h-12 w-12 place-items-center rounded-full bg-teal-800 font-display text-lg font-bold text-sand-300"
+                class="grid h-12 w-12 place-items-center rounded-full bg-teal-800 text-sand-300"
               >
-                {{ String(i + 1).padStart(2, "0") }}
+                <Icon
+                  :name="
+                    block.icon
+                      ? `material-symbols:${block.icon}`
+                      : buildIcons[i % buildIcons.length]!
+                  "
+                  class="h-6 w-6"
+                />
               </span>
               <h3 class="mt-5 font-display text-xl font-bold text-ink">{{ block.title }}</h3>
               <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
@@ -247,7 +289,7 @@ const heroTitle = computed(() => {
               </p>
             </article>
           </div>
-          <div v-if="content.build.ctaLabel" class="mt-12 text-center">
+          <div v-if="content.build.ctaLabel" class="mt-12">
             <NuxtLink
               :to="content.build.ctaUrl"
               class="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
@@ -271,30 +313,31 @@ const heroTitle = computed(() => {
           class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
-          <div class="max-w-2xl">
-            <SectionHeading
-              :title="content.method.title"
-              :subtitle="content.method.subtitle ?? undefined"
-              eyebrow="Ma méthode"
-              tone="dark"
-            />
-          </div>
-          <ol class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            <li v-for="(step, i) in content.method.steps" :key="i" class="relative">
-              <!-- Filet doré reliant les étapes (desktop, pleine largeur). -->
+          <!-- Titre + intro en pleine largeur (demande Éléonore : « prendre la page »). -->
+          <SectionHeading
+            :title="content.method.title"
+            :subtitle="content.method.subtitle ?? undefined"
+            eyebrow="Ma méthode"
+            tone="dark"
+            wide
+          />
+          <!-- Frise centrée dans la page : étapes numérotées, contenu sous chaque pastille. -->
+          <ol class="mx-auto mt-14 grid max-w-5xl gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="(step, i) in content.method.steps" :key="i" class="relative text-center">
+              <!-- Filet doré reliant les pastilles centrées (desktop). -->
               <span
                 v-if="i < content.method.steps.length - 1"
                 aria-hidden="true"
-                class="absolute left-16 top-6 hidden h-px w-[calc(100%-2rem)] bg-sand-400/30 lg:block"
+                class="absolute left-1/2 top-6 hidden h-px w-[calc(100%+2rem)] bg-sand-400/30 lg:block"
               ></span>
               <span
                 aria-hidden="true"
-                class="relative grid h-12 w-12 place-items-center rounded-full bg-sand-400 font-display text-lg font-bold text-ink-900"
+                class="relative mx-auto grid h-12 w-12 place-items-center rounded-full bg-sand-400 font-display text-lg font-bold text-ink-900"
               >
                 {{ i + 1 }}
               </span>
               <h3 class="mt-5 font-display text-lg font-bold text-paper">{{ step.title }}</h3>
-              <p v-if="step.body" class="mt-2 leading-relaxed text-paper/70">
+              <p v-if="step.body" class="mt-2 text-center leading-relaxed text-paper/70">
                 {{ step.body }}
               </p>
             </li>
@@ -305,6 +348,10 @@ const heroTitle = computed(() => {
       <!-- 6. L'Encre Humaine (signature / positionnement) -->
       <section v-if="content.why" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/[0.08]" />
+        <TentacleAccent
+          name="tentacule-1-plein"
+          class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.why.title"
@@ -366,7 +413,7 @@ const heroTitle = computed(() => {
             </div>
             <NuxtLink
               to="/a-propos"
-              class="mt-8 inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-orange-600"
+              class="mt-8 inline-flex items-center gap-2 rounded-full bg-orange-400 px-6 py-3 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
             >
               {{ content.intro.ctaLabel }}
               <span aria-hidden="true">↗</span>
@@ -395,6 +442,10 @@ const heroTitle = computed(() => {
       <!-- 8. Pour les particuliers — 2 axes d'accompagnement (registre chaud) -->
       <section v-if="content.b2c" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
+        <TentacleAccent
+          name="tentacule-4-trait"
+          class="absolute -right-20 top-6 -z-10 hidden w-[26rem] rotate-6 text-orange-400/[0.10] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.b2c.title" eyebrow="Pour les particuliers" />
           <p
@@ -425,7 +476,7 @@ const heroTitle = computed(() => {
           <div class="mt-10">
             <NuxtLink
               to="/particuliers"
-              class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-7 py-3.5 font-semibold text-white shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-orange-600"
+              class="inline-flex items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
             >
               {{ content.b2c.ctaLabel }}
               <span aria-hidden="true">→</span>
@@ -491,7 +542,15 @@ const heroTitle = computed(() => {
       </section>
 
       <!-- 11. CTA final -->
-      <section v-if="content.finalCta" v-reveal class="mx-auto max-w-6xl px-4 py-20">
+      <section
+        v-if="content.finalCta"
+        v-reveal
+        class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20"
+      >
+        <TentacleAccent
+          name="tentacule-5-trait"
+          class="absolute -left-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 -rotate-6 text-teal-600/[0.05] lg:block"
+        />
         <CtaBlock
           :title="content.finalCta.title"
           :description="content.finalCta.description ?? undefined"
