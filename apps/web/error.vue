@@ -12,7 +12,7 @@
 import type { NuxtError } from "#app";
 // Asset local → import Vite (le provider @nuxt/image est bindé à Directus, réservé
 // aux médias distants). Renvoie l'URL buildée (hash + copie dans /_nuxt).
-import poulpeStagiaire from "~/assets/poulpe_stagiaire/Poulpe_stagiaire.webp";
+import poulpeStagiaire from "~/assets/poulpe_stagiaire/Poulpe_stagiaire2.webp";
 
 const props = defineProps<{ error: NuxtError }>();
 
