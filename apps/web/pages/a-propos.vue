@@ -91,7 +91,12 @@ useSchemaOrg([
               />
               <RichText :html="content.story.bodyHtml" class="mt-5" />
             </div>
-            <figure v-if="content.story.photo" class="relative md:sticky md:top-28">
+            <!-- Mobile : la photo passe AVANT le texte (sinon elle atterrit après
+                 un long paragraphe) ; desktop : elle reprend sa place à droite. -->
+            <figure
+              v-if="content.story.photo"
+              class="relative order-first md:order-none md:sticky md:top-28"
+            >
               <span
                 aria-hidden="true"
                 class="absolute -right-3 -top-3 -z-10 h-full w-full rounded-3xl bg-teal-100"
