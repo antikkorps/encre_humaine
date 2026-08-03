@@ -151,9 +151,10 @@ useSchemaOrg([
         <figure
           class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
         >
+          <!-- Bulle dorée sur les deux publics : Éléonore l'a demandée en jaune
+               sur « À propos », et les hubs suivent déjà cette règle. -->
           <div
-            class="absolute -right-10 -top-10 h-28 w-28 rounded-full"
-            :class="isB2c ? 'bg-teal-100/70' : 'bg-orange-100/70'"
+            class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-orange-100/70"
             aria-hidden="true"
           ></div>
           <span
