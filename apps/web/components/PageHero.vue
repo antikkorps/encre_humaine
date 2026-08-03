@@ -88,6 +88,12 @@ const tentacle: Record<string, string> = {
           <slot name="aside" />
         </div>
       </div>
+
+      <!-- Bandeau pleine largeur SOUS les deux colonnes (phrase signature + CTA
+           des hubs) : Éléonore veut ce bloc intégré au hero, pas en section à part. -->
+      <div v-if="slots.below" class="mt-12">
+        <slot name="below" />
+      </div>
     </div>
   </section>
 </template>

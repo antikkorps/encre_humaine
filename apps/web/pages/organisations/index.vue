@@ -32,25 +32,6 @@ useSeoMeta({
       variant="neutral"
       tentacle-side="left"
     >
-      <!-- Phrase signature + CTA intégrés au hero (demande Éléonore : plus de
-           section dédiée « Structurer sans déshumaniser » sous l'accroche). -->
-      <div v-if="content?.accrocheSignature" class="mt-8 max-w-xl">
-        <!-- `text-left` : phrase courte → la justification globale creuserait
-             d'énormes blancs entre les mots. -->
-        <p
-          class="whitespace-pre-line border-l-2 border-orange-300 pl-4 text-left font-display text-xl font-medium leading-relaxed text-ink"
-        >
-          {{ content.accrocheSignature }}
-        </p>
-      </div>
-      <NuxtLink
-        to="/contact"
-        class="mt-8 inline-flex items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
-      >
-        Prendre rendez-vous
-        <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
-      </NuxtLink>
-
       <template v-if="content?.accrocheBody" #aside>
         <figure
           class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
@@ -65,6 +46,31 @@ useSeoMeta({
             {{ content.accrocheBody }}
           </p>
         </figure>
+      </template>
+
+      <!-- Phrase signature + CTA intégrés au hero, SOUS les deux colonnes
+           (demande Éléonore : plus de section dédiée « Structurer sans
+           déshumaniser »). Marine en dégradé, comme le hero de l'accueil, et
+           non plus le marine très sombre. -->
+      <template v-if="content?.accrocheSignature" #below>
+        <div
+          class="bg-ink-gradient relative isolate flex flex-col gap-6 overflow-hidden rounded-3xl p-8 shadow-lift sm:flex-row sm:items-center sm:justify-between sm:p-10"
+        >
+          <InkBlob class="absolute -right-10 -top-14 -z-10 h-56 w-56 text-orange-400/10" />
+          <p
+            class="max-w-2xl whitespace-pre-line text-left font-display text-xl font-medium leading-relaxed text-paper"
+          >
+            <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
+            {{ content.accrocheSignature }}
+          </p>
+          <NuxtLink
+            to="/contact"
+            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
+          >
+            Prendre rendez-vous
+            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+          </NuxtLink>
+        </div>
       </template>
     </PageHero>
 
