@@ -45,6 +45,10 @@ export const ICON_CHOICES = [
   { text: "Objectif / cible (target)", value: "target" },
   { text: "Levier / clé (key)", value: "key" },
   { text: "Inspiration / idée (emoji-objects)", value: "emoji-objects" },
+  // Jeu élargi (2026-08-03) — « Le Laboratoire » : outils en préparation.
+  { text: "Laboratoire / expérimentation (science)", value: "science" },
+  { text: "Jeu pédagogique / dés (casino)", value: "casino" },
+  { text: "Carnet / prise de notes (edit-note)", value: "edit-note" },
 ] as const;
 
 // Sous-champ `icon` d'un répéteur (1re position, demi-largeur, liste déroulante

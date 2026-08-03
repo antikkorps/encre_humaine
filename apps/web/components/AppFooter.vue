@@ -1,8 +1,7 @@
 <script setup lang="ts">
 // Pied de page — docs/00-global.md §Layout. Contenu réel depuis site_settings (Directus) = item BACKLOG.
-// Le lien « Boutique » suit l'activation de la boutique (shop_page).
+// « Le Laboratoire » est une page vitrine : toujours visible (cf. AppHeader).
 const year = new Date().getFullYear();
-const { data: shop } = await useShopPage();
 // Sur une page d'erreur (404/5xx), le bandeau porte déjà un grand filigrane poulpe :
 // on masque celui du footer pour éviter deux poulpes empilés. Ailleurs, useError() est nul.
 const appError = useError();
@@ -42,11 +41,10 @@ const appError = useError();
           </NuxtLink>
           <p class="mt-2 text-xs text-paper/50">Premier échange sans engagement</p>
           <NuxtLink
-            v-if="shop?.enabled"
-            to="/boutique"
+            to="/laboratoire"
             class="mt-4 inline-block text-sm font-medium text-sand-300 hover:text-sand-400"
           >
-            Boutique →
+            Le Laboratoire →
           </NuxtLink>
         </div>
 
@@ -181,7 +179,7 @@ const appError = useError();
       <div
         class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-5 text-xs text-paper/50 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p>TVA non applicable, art. 293 B du CGI · © {{ year }} L'Encre Humaine — Eléonore Morée</p>
+        <p>TVA non applicable, art. 293 B du CGI · © {{ year }} L'Encre Humaine - Eléonore Morée</p>
         <ul class="flex flex-wrap items-center gap-x-4 gap-y-2">
           <li><NuxtLink to="/mentions-legales" class="hover:text-teal-300">Mentions légales</NuxtLink></li>
           <li>

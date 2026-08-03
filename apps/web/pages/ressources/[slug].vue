@@ -76,6 +76,7 @@ if (article.value) {
     <!-- Filigrane tentacule (ADN encre) — discret, teinté blog (orange). overflow-x-clip
          pour préserver le sticky du sommaire. -->
     <TentacleAccent
+      side="left"
       name="tentacule-2-trait"
       class="absolute -left-20 top-32 -z-10 hidden w-72 text-orange-500/[0.06] lg:block"
     />

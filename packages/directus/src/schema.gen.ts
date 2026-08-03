@@ -42,6 +42,8 @@ export interface AboutPage {
   what_i_dont_do: unknown | null;
   cta_title: string | null;
   cta_body: string | null;
+  story_photo_2: string | DirectusFile | null;
+  story_body_2: string | null;
 }
 
 export interface ArticleCategories {
@@ -139,6 +141,12 @@ export interface ContactPage {
   reasons_b2c: unknown | null;
   final_cta_title: string | null;
   final_cta_body: string | null;
+  accroche_subtitle: string | null;
+  contact_intro: string | null;
+  steps_title: string | null;
+  reasons_org_lead: string | null;
+  reasons_b2c_lead: string | null;
+  final_cta_subtext: string | null;
 }
 
 export interface FaqItems {
@@ -405,6 +413,7 @@ export interface ResourcesPage {
   positioning_body: string | null;
   cta_title: string | null;
   positioning_photo: string | DirectusFile | null;
+  explore_cards: unknown | null;
 }
 
 export interface ShopPage {
@@ -417,6 +426,24 @@ export interface ShopPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  hero_body: string | null;
+  hero_image: string | DirectusFile | null;
+  catalog_title: string | null;
+  catalog_items: unknown | null;
+  focus_eyebrow: string | null;
+  focus_title: string | null;
+  focus_body: string | null;
+  focus_image: string | DirectusFile | null;
+  focus_cta_label: string | null;
+  focus_cta_url: string | null;
+  manifesto_title: string | null;
+  manifesto_subtitle: string | null;
+  manifesto_body: string | null;
+  manifesto_image: string | DirectusFile | null;
+  why_title: string | null;
+  why_items: unknown | null;
+  newsletter_title: string | null;
+  newsletter_body: string | null;
 }
 
 export interface SiteSettings {
@@ -475,4 +502,5 @@ export interface Schema {
   shop_page: ShopPage;
   site_settings: SiteSettings;
   testimonials: Testimonials[];
+  directus_files: DirectusFile[];
 }

@@ -14,6 +14,15 @@ if (process.env.NODE_ENV !== "production") {
   loadEnv({ path: here(".env.local"), override: true }); // surcouche dev → prioritaire
 }
 
+// CSP : l'allow-list vise la PROD (https://cms.encrehumaine.fr). En dev local, le
+// CMS tourne sur http://127.0.0.1:8055 → sans cette exception (dev UNIQUEMENT, et
+// seulement pour une origine http locale), toutes les images Directus sont
+// bloquées et la mise en page ne peut pas être relue.
+const devCmsOrigin =
+  process.env.NODE_ENV !== "production" && process.env.DIRECTUS_PUBLIC_URL?.startsWith("http://")
+    ? [new URL(process.env.DIRECTUS_PUBLIC_URL).origin]
+    : [];
+
 // docs/00-global.md (SEO/perf/a11y) + docs/06 (sécurité) + docs/07 (env).
 // FR uniquement, SSG/ISR par défaut, hydratation minimale.
 export default defineNuxtConfig({
@@ -88,6 +97,12 @@ export default defineNuxtConfig({
         "material-symbols:target",
         "material-symbols:timeline",
         "material-symbols:workspace-premium",
+        // Jeu élargi run 9 — « Le Laboratoire » (miroir de ICON_CHOICES) + le
+        // sablier de statut, utilisé par le code seul.
+        "material-symbols:science",
+        "material-symbols:casino",
+        "material-symbols:edit-note",
+        "material-symbols:hourglass-top",
       ],
     },
   },
@@ -128,6 +143,7 @@ export default defineNuxtConfig({
           "https://*.stripe.com",
           "https://app.cal.com",
           "https://app.cal.eu",
+          ...devCmsOrigin,
         ],
         "font-src": ["'self'", "data:"],
         "connect-src": [
@@ -138,6 +154,7 @@ export default defineNuxtConfig({
           "https://challenges.cloudflare.com",
           "https://app.cal.com",
           "https://app.cal.eu",
+          ...devCmsOrigin,
         ],
         "frame-src": [
           "https://js.stripe.com",
@@ -225,8 +242,12 @@ export default defineNuxtConfig({
   // Redirections. La landing d'inscription `/newsletter` a fusionné dans la section
   // newsletter de `/ressources` (« Les Tentacules ») → 301. `/newsletter/confirmation`
   // (page inerte du double opt-in) reste une route à part (non redirigée).
+  // `/boutique` est devenue « Le Laboratoire » (/laboratoire) : 301 sur la page
+  // et sur les fiches produit, pour ne casser aucun lien déjà partagé.
   routeRules: {
     "/newsletter": { redirect: { to: "/ressources", statusCode: 301 } },
+    "/boutique": { redirect: { to: "/laboratoire", statusCode: 301 } },
+    "/boutique/**": { redirect: { to: "/laboratoire/**", statusCode: 301 } },
   },
 
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.

@@ -64,10 +64,16 @@ describe("mapContactContent", () => {
     expect(c.stepsConclusion).toBe("Pas de vente forcée.");
     expect(c.reasons).toEqual({
       title: "Vous pouvez me contacter si…",
+      orgLead: null,
       org: ["Structurer vos RH"], // entrée vide filtrée
+      b2cLead: null,
       b2c: ["Une transition"],
     });
-    expect(c.finalCta).toEqual({ title: "Parlons-en", body: "30 minutes suffisent." });
+    expect(c.finalCta).toEqual({
+      title: "Parlons-en",
+      body: "30 minutes suffisent.",
+      subtext: null,
+    });
   });
 
   it("mappe next_steps, FAQ assainie, coordonnées et SEO (fallback site_settings)", () => {

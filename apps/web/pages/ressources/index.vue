@@ -22,39 +22,17 @@ const activeKeywords = computed(
   () => content.value?.filters.find((f) => f.group === activeGroup.value)?.keywords ?? null,
 );
 
-// Carrousel « Derniers contenus » (remplace la pagination numérotée) : défilement
-// horizontal en scroll-snap **natif** — on hérite gratuitement du clavier, du tactile
-// et de `prefers-reduced-motion`, sans dépendance. Le nombre de cartes visibles est
-// piloté par la largeur des items (1 en mobile, 2 en tablette, 3 en desktop) : pour en
-// afficher un autre nombre, il suffit de changer les classes `basis-*` de la liste.
-const track = ref<HTMLElement | null>(null);
-const atStart = ref(true);
-const atEnd = ref(true);
+// Le carrousel « Derniers contenus » est porté par `ArticleCarousel` (mutualisé
+// avec l'accueil) : défilement scroll-snap natif, flèches, carte finale.
 
-function updateArrows() {
-  const el = track.value;
-  if (!el) return;
-  // Tolérance d'1px : les navigateurs arrondissent scrollLeft en zoom non entier.
-  atStart.value = el.scrollLeft <= 1;
-  atEnd.value = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
-}
-function scrollByPage(direction: -1 | 1) {
-  const el = track.value;
-  if (!el) return;
-  el.scrollBy({ left: direction * el.clientWidth, behavior: "smooth" });
-}
-
-// Au changement de filtre : retour au début (sinon on reste scrollé dans le vide).
-watch(activeGroup, async () => {
-  await nextTick();
-  track.value?.scrollTo({ left: 0 });
-  updateArrows();
+// Visuel du positionnement : largeur d'affichage plafonnée, hauteur déduite du
+// ratio natif → image entière (schéma non rogné) et place réservée (zéro CLS).
+const POSITIONING_WIDTH = 640;
+const positioningSize = computed(() => {
+  const photo = content.value?.positioning?.photo;
+  const ratio = photo?.width && photo.height ? photo.height / photo.width : 1.25;
+  return { width: POSITIONING_WIDTH, height: Math.round(POSITIONING_WIDTH * ratio) };
 });
-onMounted(() => {
-  updateArrows();
-  window.addEventListener("resize", updateArrows, { passive: true });
-});
-onBeforeUnmount(() => window.removeEventListener("resize", updateArrows));
 
 // Portes d'entrée « Explorer les Tentacules » : applique le filtre + descend
 // jusqu'à la grille des publications.
@@ -84,6 +62,7 @@ useSeoMeta({
       eyebrow="Les Tentacules"
       :body="content?.accrocheBody ?? undefined"
       variant="neutral"
+      tentacle-side="left"
     >
       <!-- Signature + double CTA dans la colonne de gauche (façon maquette). -->
       <div class="mt-8">
@@ -103,7 +82,7 @@ useSeoMeta({
           </NuxtLink>
           <NuxtLink
             to="#newsletter"
-            class="inline-flex items-center gap-2 rounded-full border border-teal-700/30 bg-white/70 px-6 py-3 font-semibold text-teal-800 shadow-soft transition-colors hover:border-teal-700/60 hover:bg-white"
+            class="inline-flex items-center gap-2 rounded-full bg-orange-400 px-6 py-3 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
           >
             Recevoir les Tentacules
           </NuxtLink>
@@ -133,183 +112,184 @@ useSeoMeta({
         v-if="content.filters.length"
         id="explorer"
         v-reveal
-        class="mx-auto max-w-6xl scroll-mt-24 px-4 pt-16"
+        class="relative isolate scroll-mt-24 overflow-hidden"
       >
-        <SectionHeading title="Explorer les Tentacules" eyebrow="Accès aux contenus" align="center" />
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
-          <button
-            v-for="filter in content.filters"
-            :key="filter.group"
-            type="button"
-            class="group flex flex-col rounded-3xl border border-ink/5 bg-white p-7 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
-            @click="exploreGroup(filter.group)"
-          >
-            <span
-              class="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-2xl ring-1 ring-teal-100"
-              aria-hidden="true"
+        <TentacleAccent
+          side="right"
+          name="tentacule-1-trait"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 pt-16">
+          <SectionHeading title="Explorer les Tentacules" eyebrow="Accès aux contenus" align="center" />
+          <div class="mt-10 grid gap-6 md:grid-cols-3">
+            <!-- Icône ronde pleine, alternée doré / marine (maquette Éléonore) :
+                 les émojis faisaient tache face aux icônes du reste du site. -->
+            <button
+              v-for="(filter, i) in content.filters"
+              :key="filter.group"
+              type="button"
+              class="group flex flex-col rounded-3xl border border-ink/5 bg-paper p-7 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+              @click="exploreGroup(filter.group)"
             >
-              {{ filter.emoji }}
-            </span>
-            <h3 class="mt-4 font-display text-xl font-semibold text-ink">{{ filter.label }}</h3>
-            <span aria-hidden="true" class="mt-2 h-px w-10 bg-orange-300"></span>
-            <ul class="mt-4 flex flex-wrap gap-2">
-              <li
-                v-for="(kw, i) in filter.keywords.split('•')"
-                :key="i"
-                class="rounded-full border border-ink/10 px-3 py-1 text-xs font-medium text-ink/60"
-              >
-                {{ kw.trim() }}
-              </li>
-            </ul>
-            <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-teal-700">
-              Explorer
-              <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
-            </span>
-          </button>
+              <div class="flex items-center gap-4">
+                <span
+                  class="grid h-14 w-14 flex-none place-items-center rounded-full"
+                  :class="i % 2 === 1 ? 'bg-teal-900 text-sand-300' : 'bg-sand-400 text-ink-900'"
+                  aria-hidden="true"
+                >
+                  <Icon :name="`material-symbols:${filter.icon}`" class="h-7 w-7" />
+                </span>
+                <div>
+                  <h3 class="font-display text-xl font-semibold text-ink">{{ filter.label }}</h3>
+                  <span aria-hidden="true" class="mt-2 block h-px w-12 bg-sand-400"></span>
+                </div>
+              </div>
+              <ul class="mt-5 flex flex-wrap gap-2">
+                <li
+                  v-for="(kw, j) in filter.keywords.split('•')"
+                  :key="j"
+                  class="rounded-full border border-sand-400/40 bg-white/60 px-3 py-1 text-xs font-medium text-ink/70"
+                >
+                  {{ kw.trim() }}
+                </li>
+              </ul>
+              <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-accent">
+                Explorer
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+              </span>
+            </button>
+          </div>
         </div>
       </section>
 
       <!-- 3. À lire en premier (article vedette) — masqué si non défini -->
-      <section v-if="content.featuredArticle" v-reveal class="mx-auto max-w-5xl px-4 py-16">
-        <SectionHeading title="À lire en premier" eyebrow="Article mis en avant" />
-        <NuxtLink
-          :to="`/ressources/${content.featuredArticle.slug}`"
-          class="mt-8 grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-2 md:p-8"
-        >
-          <NuxtImg
-            v-if="content.featuredArticle.coverImage"
-            :src="content.featuredArticle.coverImage"
-            :alt="content.featuredArticle.coverAlt || content.featuredArticle.title"
-            width="640"
-            height="480"
-            fit="cover"
-            format="webp"
-            sizes="100vw md:50vw lg:480px"
-            loading="lazy"
-            decoding="async"
-            class="aspect-[4/3] w-full rounded-2xl object-cover"
-          />
-          <div>
-            <p
-              v-if="content.featuredArticle.categoryName"
-              class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent"
-            >
-              <span aria-hidden="true" class="h-px w-5 bg-orange-300"></span>
-              {{ content.featuredArticle.categoryName }}
-            </p>
-            <h3 class="mt-2 font-display text-2xl font-bold text-ink">
-              {{ content.featuredArticle.title }}
-            </h3>
-            <p v-if="content.featuredArticle.excerpt" class="mt-3 leading-relaxed text-ink/65">
-              {{ content.featuredArticle.excerpt }}
-            </p>
-            <span class="mt-6 inline-flex items-center gap-1.5 font-semibold text-teal-700">
-              Lire l'article <span aria-hidden="true">→</span>
-            </span>
-          </div>
-        </NuxtLink>
+      <section v-if="content.featuredArticle" v-reveal class="relative isolate overflow-hidden">
+        <TentacleAccent
+          side="left"
+          name="tentacule-4-plein"
+          class="absolute -left-24 top-8 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
+        />
+        <div class="mx-auto max-w-5xl px-4 py-16">
+          <SectionHeading title="À lire en premier" eyebrow="Article mis en avant" />
+          <NuxtLink
+            :to="`/ressources/${content.featuredArticle.slug}`"
+            class="mt-8 grid items-center gap-8 overflow-hidden rounded-3xl border border-ink/5 bg-white p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-2 md:p-8"
+          >
+            <NuxtImg
+              v-if="content.featuredArticle.coverImage"
+              :src="content.featuredArticle.coverImage"
+              :alt="content.featuredArticle.coverAlt || content.featuredArticle.title"
+              width="640"
+              height="480"
+              fit="cover"
+              format="webp"
+              sizes="100vw md:50vw lg:480px"
+              loading="lazy"
+              decoding="async"
+              class="aspect-[4/3] w-full rounded-2xl object-cover"
+            />
+            <div>
+              <p
+                v-if="content.featuredArticle.categoryName"
+                class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-accent"
+              >
+                <span aria-hidden="true" class="h-px w-5 bg-orange-300"></span>
+                {{ content.featuredArticle.categoryName }}
+              </p>
+              <h3 class="mt-2 font-display text-2xl font-bold text-ink">
+                {{ content.featuredArticle.title }}
+              </h3>
+              <p v-if="content.featuredArticle.excerpt" class="mt-3 leading-relaxed text-ink/65">
+                {{ content.featuredArticle.excerpt }}
+              </p>
+              <span class="mt-6 inline-flex items-center gap-1.5 font-semibold text-teal-700">
+                Lire l'article <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </NuxtLink>
+        </div>
       </section>
 
-      <!-- 4. Dernières publiées (grille + filtres) -->
-      <section
-        id="tentacules"
-        class="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24"
-        :class="content.featuredArticle ? '' : 'pt-4'"
-      >
-        <SectionHeading title="Dernières tentacules publiées" eyebrow="Derniers contenus" />
-
-        <div v-if="content.filters.length" class="mt-6" role="group" aria-label="Filtrer par thème">
-          <div class="flex flex-wrap gap-2">
-            <button
-              type="button"
-              class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
-              :class="activeGroup === null
-                ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
-                : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-              :aria-pressed="activeGroup === null"
-              @click="activeGroup = null"
-            >
-              Tout
-            </button>
-            <button
-              v-for="filter in content.filters"
-              :key="filter.group"
-              type="button"
-              class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
-              :class="activeGroup === filter.group
-                ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
-                : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-              :aria-pressed="activeGroup === filter.group"
-              @click="activeGroup = filter.group"
-            >
-              <span aria-hidden="true">{{ filter.emoji }}</span> {{ filter.label }}
-            </button>
-          </div>
-          <p v-if="activeKeywords" class="mt-3 text-sm text-ink/55">{{ activeKeywords }}</p>
-        </div>
-
-        <!-- État vide (0 article) : pas de section cassée -->
-        <p
-          v-if="!visibleArticles.length"
-          class="mt-12 text-center text-ink/65"
-          role="status"
+      <!-- 4. Dernières publiées (carrousel + filtres) -->
+      <section id="tentacules" class="relative isolate scroll-mt-24 overflow-hidden">
+        <TentacleAccent
+          side="right"
+          name="tentacule-3-trait"
+          class="absolute -right-16 bottom-8 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
+        />
+        <div
+          class="mx-auto max-w-6xl px-4 pb-24"
+          :class="content.featuredArticle ? '' : 'pt-4'"
         >
-          Les premières tentacules arrivent bientôt. En attendant, inscrivez-vous à
-          <NuxtLink to="#newsletter" class="text-teal-700 underline">la newsletter</NuxtLink>.
-        </p>
+          <SectionHeading title="Dernières tentacules publiées" eyebrow="Derniers contenus" />
 
-        <!-- Carrousel : la liste défile, les flèches font défiler d'une « page » de
-             cartes. `tabindex="0"` + `role="region"` → la zone est atteignable et
-             défilable au clavier (exigence a11y d'un conteneur scrollable). -->
-        <div v-else class="relative mt-10">
-          <ul
-            ref="track"
-            tabindex="0"
-            role="region"
-            aria-label="Derniers contenus"
-            class="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600 [&::-webkit-scrollbar]:hidden"
-            @scroll.passive="updateArrows"
-          >
-            <li
-              v-for="article in visibleArticles"
-              :key="article.slug"
-              class="w-[82%] shrink-0 snap-start sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
-            >
-              <ArticleCard :article="article" />
-            </li>
-          </ul>
+          <div v-if="content.filters.length" class="mt-6" role="group" aria-label="Filtrer par thème">
+            <div class="flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
+                :class="activeGroup === null
+                  ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
+                  : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
+                :aria-pressed="activeGroup === null"
+                @click="activeGroup = null"
+              >
+                Tout
+              </button>
+              <button
+                v-for="filter in content.filters"
+                :key="filter.group"
+                type="button"
+                class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
+                :class="activeGroup === filter.group
+                  ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
+                  : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
+                :aria-pressed="activeGroup === filter.group"
+                @click="activeGroup = filter.group"
+              >
+                <Icon
+                  :name="`material-symbols:${filter.icon}`"
+                  class="mr-1 inline h-4 w-4 align-[-0.2em]"
+                  aria-hidden="true"
+                />{{ filter.label }}
+              </button>
+            </div>
+            <p v-if="activeKeywords" class="mt-3 text-sm text-ink/55">{{ activeKeywords }}</p>
+          </div>
 
-          <nav
-            v-if="!(atStart && atEnd)"
-            class="mt-6 flex items-center justify-center gap-3"
-            aria-label="Navigation du carrousel"
+          <!-- État vide (0 article) : pas de section cassée -->
+          <p
+            v-if="!visibleArticles.length"
+            class="mt-12 text-center text-ink/65"
+            role="status"
           >
-            <button
-              type="button"
-              class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
-              :disabled="atStart"
-              @click="scrollByPage(-1)"
-            >
-              <Icon name="material-symbols:arrow-back" class="h-5 w-5" aria-hidden="true" />
-              <span class="sr-only">Contenus précédents</span>
-            </button>
-            <button
-              type="button"
-              class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 text-ink/70 transition-colors hover:border-teal-300 hover:bg-teal-50 disabled:opacity-40 disabled:hover:border-ink/15 disabled:hover:bg-transparent"
-              :disabled="atEnd"
-              @click="scrollByPage(1)"
-            >
-              <Icon name="material-symbols:arrow-forward" class="h-5 w-5" aria-hidden="true" />
-              <span class="sr-only">Contenus suivants</span>
-            </button>
-          </nav>
+            Les premières tentacules arrivent bientôt. En attendant, inscrivez-vous à
+            <NuxtLink to="#newsletter" class="text-teal-700 underline">la newsletter</NuxtLink>.
+          </p>
+
+          <!-- Carrousel mutualisé avec l'accueil : mêmes cartes, mêmes codes
+               couleur, et carte finale « poulpe doré + flèche » qui signale le
+               défilement (maquette Éléonore). -->
+          <div v-else class="mt-10">
+            <ArticleCarousel
+              :articles="visibleArticles"
+              tone="light"
+              see-all-to="#newsletter"
+              see-all-label="Recevoir les Tentacules"
+            />
+          </div>
         </div>
       </section>
 
       <!-- 5. Newsletter intégrée « Les Tentacules » — bandeau marine (maquette) -->
-      <section id="newsletter" v-reveal class="relative isolate scroll-mt-24 overflow-hidden bg-teal-900">
+      <section id="newsletter" v-reveal class="bg-ink-gradient relative isolate scroll-mt-24 overflow-hidden">
         <OctopusWatermark
           class="absolute -bottom-16 -right-10 -z-10 hidden h-[24rem] rotate-[6deg] text-orange-300/[0.06] lg:block"
+        />
+        <TentacleAccent
+          side="left"
+          name="tentacule-5-plein"
+          class="absolute -left-24 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-5xl px-4 py-20">
           <SectionHeading
@@ -365,41 +345,55 @@ useSeoMeta({
       <!-- 6. Positionnement — masqué si vide. Visuel optionnel à côté du texte (même
            trame que le portrait d'« À propos ») : sans photo, le texte reste en
            colonne simple plutôt que de s'étaler sur toute la largeur. -->
-      <section v-if="content.positioning" v-reveal class="mx-auto max-w-6xl px-4 py-20">
-        <div
-          class="grid items-center gap-10"
-          :class="content.positioning.photo ? 'md:grid-cols-[1fr_0.8fr]' : ''"
-        >
-          <div :class="content.positioning.photo ? '' : 'max-w-3xl'">
-            <SectionHeading
-              :title="content.positioning.title || 'Une approche terrain'"
-              eyebrow="Positionnement"
+      <section v-if="content.positioning" v-reveal class="relative isolate overflow-hidden">
+        <TentacleAccent
+          side="right"
+          name="tentacule-2-trait"
+          class="absolute -right-16 top-8 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div
+            class="grid items-center gap-10"
+            :class="content.positioning.photo ? 'md:grid-cols-[1fr_0.8fr]' : ''"
+          >
+            <div :class="content.positioning.photo ? '' : 'max-w-3xl'">
+              <SectionHeading
+                :title="content.positioning.title || 'Une approche terrain'"
+                eyebrow="Positionnement"
+              />
+              <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
+            </div>
+            <!-- Visuel servi ENTIER (schéma, illustration…) : `fit=inside` + ratio
+                 natif, sinon un schéma se ferait rogner par le cadrage 4/5. -->
+            <NuxtImg
+              v-if="content.positioning.photo"
+              :src="content.positioning.photo.url"
+              :alt="content.positioning.photo.alt"
+              :width="positioningSize.width"
+              :height="positioningSize.height"
+              fit="inside"
+              format="webp"
+              sizes="100vw md:480px"
+              loading="lazy"
+              decoding="async"
+              class="h-auto w-full rounded-3xl"
             />
-            <RichText v-if="content.positioning.bodyHtml" :html="content.positioning.bodyHtml" class="mt-5" />
           </div>
-          <NuxtImg
-            v-if="content.positioning.photo"
-            :src="content.positioning.photo.url"
-            :alt="content.positioning.photo.alt"
-            :width="content.positioning.photo.width ?? 720"
-            :height="content.positioning.photo.height ?? 900"
-            fit="cover"
-            format="webp"
-            sizes="100vw md:420px"
-            loading="lazy"
-            decoding="async"
-            class="aspect-[4/5] w-full rounded-3xl object-cover shadow-lift"
-          />
         </div>
       </section>
 
       <!-- 7. CTA final → section newsletter -->
-      <section v-reveal class="mx-auto max-w-6xl px-4 pb-24">
+      <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 pb-24">
+        <TentacleAccent
+          side="left"
+          name="tentacule-5-trait"
+          class="absolute -left-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 -rotate-6 text-teal-600/[0.05] lg:block"
+        />
         <CtaBlock
           :title="content.ctaTitle || 'Commencer à y voir plus clair'"
           cta-label="S'inscrire aux prochaines Tentacules"
           to="#newsletter"
-          variant="teal"
+          variant="orange"
         />
       </section>
     </template>

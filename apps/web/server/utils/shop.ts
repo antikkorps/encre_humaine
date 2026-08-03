@@ -122,7 +122,7 @@ export function mergeCatalog(
   return catalog;
 }
 
-// — Fiche produit (docs/06 §`/boutique/{slug}`) —
+// — Fiche produit (docs/06 §`/laboratoire/{slug}`) —
 
 /** Caractéristique de jeu (`game_details`, répéteur label/value). */
 export interface ProductGameDetail {

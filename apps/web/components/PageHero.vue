@@ -13,8 +13,10 @@ withDefaults(
     eyebrow?: string;
     body?: string;
     variant?: "teal" | "orange" | "neutral";
+    /** Côté du tentacule décoratif : à gauche quand la carte `aside` le rognerait. */
+    tentacleSide?: "left" | "right";
   }>(),
-  { variant: "neutral" },
+  { variant: "neutral", tentacleSide: "right" },
 );
 const slots = useSlots();
 
@@ -47,12 +49,25 @@ const tentacle: Record<string, string> = {
 
 <template>
   <section class="relative isolate overflow-hidden" :class="tint[variant]">
-    <InkBlob class="absolute -right-20 -top-24 -z-10 h-80 w-80 rotate-12" :class="blob[variant]" />
-    <InkBlob class="absolute -left-24 -bottom-16 -z-10 h-64 w-64 -rotate-45" :class="blob[variant]" />
+    <!-- Le rond décoratif du côté de la tentacule est retiré : les deux se
+         superposaient et brouillaient le coin (demande Éléonore sur /contact). -->
+    <InkBlob
+      v-if="tentacleSide !== 'right'"
+      class="absolute -right-20 -top-24 -z-10 h-80 w-80 rotate-12"
+      :class="blob[variant]"
+    />
+    <InkBlob
+      v-if="tentacleSide !== 'left'"
+      class="absolute -left-24 -bottom-16 -z-10 h-64 w-64 -rotate-45"
+      :class="blob[variant]"
+    />
+    <!-- `side` : TentacleAccent retourne le dessin si besoin pour que la coupe
+         sorte du cadre (chaque tentacule n'a pas sa base du même côté). -->
     <TentacleAccent
       name="tentacule-3-trait"
-      class="absolute -bottom-8 -right-10 -z-10 hidden w-[32rem] lg:block"
-      :class="tentacle[variant]"
+      :side="tentacleSide"
+      class="absolute -bottom-8 -z-10 hidden w-[32rem] lg:block"
+      :class="[tentacle[variant], tentacleSide === 'left' ? '-left-10' : '-right-10']"
     />
 
     <div class="mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -82,6 +97,12 @@ const tentacle: Record<string, string> = {
         <div v-if="slots.aside">
           <slot name="aside" />
         </div>
+      </div>
+
+      <!-- Bandeau pleine largeur SOUS les deux colonnes (phrase signature + CTA
+           des hubs) : Éléonore veut ce bloc intégré au hero, pas en section à part. -->
+      <div v-if="slots.below" class="mt-12">
+        <slot name="below" />
       </div>
     </div>
   </section>

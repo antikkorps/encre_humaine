@@ -125,6 +125,9 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait · `[!]` bloqué.
 - [x] CI Forgejo (lint + typecheck + tests bloquants → build → deploy) — 2 workflows `.forgejo/workflows/` : **`ci.yml`** (push `main` + PR → lint/typecheck/tests/build dans `node:26.0.0-bookworm-slim`, runner Docker dédié) + **`deploy.yml`** (tag `v*` ou `workflow_dispatch` → SSH Hetzner → `git checkout` + `docker compose up -d --build --wait`, **build sur le serveur**, `.env` maintenu à la main sur l'hôte). Tests PGlite fiabilisés (`hookTimeout: 60s`). README de setup (`.forgejo/workflows/README.md`) : secrets Forgejo `DEPLOY_*`, pré-requis serveur, durcissement firewall CF. ⚠️ **reste côté Franck** : enregistrer le runner (label `docker`), créer les secrets `DEPLOY_SSH_KEY`/`KNOWN_HOSTS`/`USER`/`HOST`/`PATH`, cloner le dépôt + créer `infra/env/.env` sur Hetzner. YAML validé + commandes éprouvées en local ; exécution Forgejo réelle non testée ici.
 - [x] Miroir GitHub — en place (configuré depuis Forgejo).
 - [ ] DNS Cloudflare (`@`, `cms`, `stats`) + token DNS scope
+- [ ] **Vérifier que la sauvegarde du site est fonctionnelle** (roadmap Franck, run 9) : sauvegarde
+  jouée (`make prod-backup`), dump récupérable depuis R2, **et restauration réellement testée** sur
+  une instance jetable. Tant que la restauration n'est pas prouvée, on n'a pas de sauvegarde.
 - [ ] Restauration d'un dump testée avant prod
 
 ---

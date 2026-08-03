@@ -48,8 +48,8 @@ stripe.checkout.sessions.create({
   custom_text: {
     submit: { message: "TVA non applicable, art. 293 B du CGI" } // tant que !VAT_ENABLED
   },
-  success_url: `${BASE}/boutique/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-  cancel_url: `${BASE}/boutique`,
+  success_url: `${BASE}/laboratoire/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+  cancel_url: `${BASE}/laboratoire`,
   metadata: { /* ids internes éventuels */ }
 })
 ```
@@ -73,7 +73,7 @@ Variable `VAT_ENABLED` (+ `VAT_RATE` si besoin). Quand le client dépasse le seu
 
 ## 5. Confirmation & emails
 
-- **Page** `/boutique/confirmation?session_id=...` : récupère la session (lecture), affiche un récap. La **persistance réelle** est faite par le webhook (`03` §1), pas par cette page (l'utilisateur peut ne jamais revenir).
+- **Page** `/laboratoire/confirmation?session_id=...` : récupère la session (lecture), affiche un récap. La **persistance réelle** est faite par le webhook (`03` §1), pas par cette page (l'utilisateur peut ne jamais revenir).
 - **Email client** (Resend, marque L'Encre Humaine) : confirmation de commande, récap, délai d'expédition indicatif.
 - **Email Eléonore** (Resend) : nouvelle commande à préparer (produit, quantité, adresse) — son signal d'expédition en complément du Dashboard Stripe.
 

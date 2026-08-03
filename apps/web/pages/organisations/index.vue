@@ -27,8 +27,10 @@ useSeoMeta({
     <!-- 1. Accroche B2B — hero 2 colonnes : discours à gauche, carte « constat » à droite -->
     <PageHero
       :title="heading"
+      eyebrow="Organisations"
       :body="content?.accrocheSubtitle ?? undefined"
-      variant="teal"
+      variant="neutral"
+      tentacle-side="left"
     >
       <template v-if="content?.accrocheBody" #aside>
         <figure
@@ -44,6 +46,31 @@ useSeoMeta({
             {{ content.accrocheBody }}
           </p>
         </figure>
+      </template>
+
+      <!-- Phrase signature + CTA intégrés au hero, SOUS les deux colonnes
+           (demande Éléonore : plus de section dédiée « Structurer sans
+           déshumaniser »). Marine en dégradé, comme le hero de l'accueil, et
+           non plus le marine très sombre. -->
+      <template v-if="content?.accrocheSignature" #below>
+        <div
+          class="bg-ink-gradient relative isolate flex flex-col gap-6 overflow-hidden rounded-3xl p-8 shadow-lift sm:flex-row sm:items-center sm:justify-between sm:p-10"
+        >
+          <InkBlob class="absolute -right-10 -top-14 -z-10 h-56 w-56 text-orange-400/10" />
+          <p
+            class="max-w-2xl whitespace-pre-line text-left font-display text-xl font-medium leading-relaxed text-paper"
+          >
+            <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
+            {{ content.accrocheSignature }}
+          </p>
+          <NuxtLink
+            to="/contact"
+            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
+          >
+            Prendre rendez-vous
+            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+          </NuxtLink>
+        </div>
       </template>
     </PageHero>
 
@@ -72,27 +99,13 @@ useSeoMeta({
         />
       </section>
 
-      <!-- Phrase signature → bandeau marine + CTA doré -->
-      <section v-if="content.accrocheSignature" v-reveal class="mx-auto max-w-6xl px-4 py-14">
-        <div
-          class="flex flex-col gap-6 rounded-3xl bg-teal-900 p-8 shadow-lift sm:flex-row sm:items-center sm:justify-between sm:p-10"
-        >
-          <p class="max-w-2xl whitespace-pre-line font-display text-xl font-medium leading-relaxed text-paper">
-            <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
-            {{ content.accrocheSignature }}
-          </p>
-          <NuxtLink
-            to="/contact"
-            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
-          >
-            Prendre rendez-vous
-            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
-          </NuxtLink>
-        </div>
-      </section>
-
-      <!-- 2. Ce que j'observe -->
-      <section v-if="content.observe" v-reveal class="bg-paper-2">
+      <!-- 2. Ce que j'observe — tentacule à droite (alternance sur la page) -->
+      <section v-if="content.observe" v-reveal class="relative isolate overflow-hidden bg-paper-2">
+        <TentacleAccent
+          side="right"
+          name="tentacule-1-trait"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.observe.title || 'Ce que j\'observe'"
@@ -131,100 +144,139 @@ useSeoMeta({
       <section
         v-if="content.situations.length"
         v-reveal
-        class="mx-auto max-w-6xl px-4 py-20"
+        class="relative isolate overflow-hidden"
       >
-        <SectionHeading
-          :title="content.situationsTitle || 'Trois enjeux, trois accompagnements'"
-          :subtitle="content.situationsIntro ?? undefined"
-          eyebrow="Comment je peux vous aider"
+        <TentacleAccent
+          side="left"
+          name="tentacule-4-plein"
+          class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
         />
-        <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <article
-            v-for="(situation, i) in content.situations"
-            :key="i"
-            class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
-          >
-            <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-teal-500"></span>
-            <h3 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h3>
-            <p
-              v-if="situation.body"
-              class="mt-3 whitespace-pre-line leading-relaxed text-ink/65"
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.situationsTitle || 'Trois enjeux, trois accompagnements'"
+            :subtitle="content.situationsIntro ?? undefined"
+            eyebrow="Comment je peux vous aider"
+          />
+          <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <article
+              v-for="(situation, i) in content.situations"
+              :key="i"
+              class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
-              {{ situation.body }}
-            </p>
-            <div v-if="situation.audience" class="mt-5">
-              <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">Pour qui ?</p>
-              <p class="mt-1 whitespace-pre-line leading-relaxed text-ink/70">
-                {{ situation.audience }}
-              </p>
-            </div>
-            <div v-if="situation.items.length" class="mt-5">
-              <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">
-                Ce que nous travaillons
-              </p>
-              <ul class="mt-2 space-y-2">
-                <li
-                  v-for="(item, j) in situation.items"
-                  :key="j"
-                  class="flex items-start gap-2.5 text-ink/75"
-                >
-                  <Icon
-                    name="material-symbols:check-circle-rounded"
-                    class="mt-0.5 h-5 w-5 flex-none text-teal-500"
-                  />
-                  <span>{{ item }}</span>
-                </li>
-              </ul>
-            </div>
-            <!-- Pied de carte (résultat + CTA) poussé en bas → aligné entre les cartes -->
-            <div v-if="situation.result || situation.ctaLabel" class="mt-auto pt-6">
+              <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-teal-500"></span>
+              <h3 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h3>
               <p
-                v-if="situation.result"
-                class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
+                v-if="situation.body"
+                class="mt-3 whitespace-pre-line leading-relaxed text-ink/65"
               >
-                <span class="font-semibold text-teal-700">Résultat : </span>{{ situation.result }}
+                {{ situation.body }}
               </p>
-              <NuxtLink
-                v-if="situation.ctaLabel"
-                :to="situation.ctaLink"
-                class="inline-flex w-fit items-center gap-1.5 rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-700"
-                :class="situation.result ? 'mt-5' : ''"
-              >
-                {{ situation.ctaLabel }}
-                <span aria-hidden="true">→</span>
-              </NuxtLink>
-            </div>
-          </article>
+              <div v-if="situation.audience" class="mt-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">Pour qui ?</p>
+                <p class="mt-1 whitespace-pre-line leading-relaxed text-ink/70">
+                  {{ situation.audience }}
+                </p>
+              </div>
+              <div v-if="situation.items.length" class="mt-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">
+                  Ce que nous travaillons
+                </p>
+                <ul class="mt-2 space-y-2">
+                  <li
+                    v-for="(item, j) in situation.items"
+                    :key="j"
+                    class="flex items-start gap-2.5 text-ink/75"
+                  >
+                    <Icon
+                      name="material-symbols:check-circle-rounded"
+                      class="mt-0.5 h-5 w-5 flex-none text-teal-500"
+                    />
+                    <span>{{ item }}</span>
+                  </li>
+                </ul>
+              </div>
+              <!-- Pied de carte (résultat + CTA) poussé en bas → aligné entre les cartes -->
+              <div v-if="situation.result || situation.ctaLabel" class="mt-auto pt-6">
+                <p
+                  v-if="situation.result"
+                  class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
+                >
+                  <span class="font-semibold text-teal-700">Résultat : </span>{{ situation.result }}
+                </p>
+                <NuxtLink
+                  v-if="situation.ctaLabel"
+                  :to="situation.ctaLink"
+                  class="inline-flex w-fit items-center gap-1.5 rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-700"
+                  :class="situation.result ? 'mt-5' : ''"
+                >
+                  {{ situation.ctaLabel }}
+                  <span aria-hidden="true">→</span>
+                </NuxtLink>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
       <section
         v-else-if="content.offers.length"
         v-reveal
-        class="mx-auto max-w-6xl px-4 py-20"
+        class="relative isolate overflow-hidden"
       >
-        <SectionHeading :title="content.offersTitle" eyebrow="Comment je peux vous aider" />
-        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <OfferCard v-for="offer in content.offers" :key="offer.slug" :offer="offer" />
+        <TentacleAccent
+          side="left"
+          name="tentacule-4-plein"
+          class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading :title="content.offersTitle" eyebrow="Comment je peux vous aider" />
+          <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <OfferCard v-for="offer in content.offers" :key="offer.slug" :offer="offer" />
+          </div>
         </div>
       </section>
 
-      <!-- 4. Ma façon de travailler -->
-      <section v-if="content.method" v-reveal class="bg-teal-50">
-        <div class="mx-auto max-w-5xl px-4 py-20">
+      <!-- 4. Ma façon de travailler — même traitement que « Ma méthode » sur
+           l'accueil (demande Éléonore) : fond marine, titre clair et frise
+           numérotée CENTRÉE reliée par un filet doré. -->
+      <section
+        v-if="content.method"
+        v-reveal
+        class="bg-ink-gradient relative isolate overflow-hidden text-paper"
+      >
+        <TentacleAccent
+          side="right"
+          name="tentacule-5-plein"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
           <SectionHeading
             :title="content.method.title || 'Ma façon de travailler'"
             :subtitle="content.method.intro ?? undefined"
             eyebrow="Ma façon de travailler"
+            tone="dark"
+            align="center"
+            wide
           />
-          <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            <li v-for="(step, i) in content.method.steps" :key="i">
-              <span class="font-display text-4xl font-bold text-orange-300" aria-hidden="true">
+          <ol class="mx-auto mt-14 grid max-w-5xl gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="(step, i) in content.method.steps" :key="i" class="relative text-center">
+              <!-- Filet doré reliant les pastilles centrées (desktop). -->
+              <span
+                v-if="i < content.method.steps.length - 1"
+                aria-hidden="true"
+                class="absolute left-1/2 top-6 hidden h-px w-[calc(100%+2rem)] bg-sand-400/30 lg:block"
+              ></span>
+              <span
+                aria-hidden="true"
+                class="relative mx-auto grid h-12 w-12 place-items-center rounded-full bg-sand-400 font-display text-lg font-bold text-ink-900"
+              >
                 {{ String(Number(step.number) || i + 1).padStart(2, "0") }}
               </span>
-              <h3 v-if="step.title" class="mt-4 font-display text-lg font-semibold text-ink">
+              <h3 v-if="step.title" class="mt-5 font-display text-lg font-bold text-paper">
                 {{ step.title }}
               </h3>
-              <p v-if="step.description" class="mt-2 text-sm leading-relaxed text-ink/65">
+              <!-- `text-center` reprend la main sur la justification globale
+                   (colonnes étroites → sinon de gros blancs entre les mots). -->
+              <p v-if="step.description" class="mt-2 text-center leading-relaxed text-paper/70">
                 {{ step.description }}
               </p>
             </li>
@@ -233,15 +285,27 @@ useSeoMeta({
       </section>
 
       <!-- 5. Ce qui différencie mon approche -->
-      <section v-if="content.differentiator" v-reveal class="mx-auto max-w-6xl px-4 py-20">
-        <div class="max-w-3xl">
-          <SectionHeading :title="content.differentiator.title || 'Mon approche'" eyebrow="Ce qui différencie mon approche" />
-          <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
+      <section v-if="content.differentiator" v-reveal class="relative isolate overflow-hidden">
+        <TentacleAccent
+          side="left"
+          name="tentacule-2-trait"
+          class="absolute -left-16 bottom-0 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="max-w-3xl">
+            <SectionHeading :title="content.differentiator.title || 'Mon approche'" eyebrow="Ce qui différencie mon approche" />
+            <RichText :html="content.differentiator.bodyHtml" class="mt-5" />
+          </div>
         </div>
       </section>
 
-      <!-- 6. Cet accompagnement est fait pour vous si… -->
-      <section v-if="content.audience" v-reveal class="bg-teal-50">
+      <!-- 6. Cet accompagnement est fait pour vous si… — beige soutenu -->
+      <section v-if="content.audience" v-reveal class="relative isolate overflow-hidden bg-paper-3">
+        <TentacleAccent
+          side="right"
+          name="tentacule-3-trait"
+          class="absolute -right-16 top-8 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
             <SectionHeading :title="content.audience.title || 'Pour qui ?'" eyebrow="Cet accompagnement est fait pour vous si…" />
@@ -272,9 +336,14 @@ useSeoMeta({
       <section
         v-if="content.testimonials.length"
         v-reveal
-        class="bg-paper-2"
+        class="relative isolate overflow-hidden bg-paper-2"
         aria-label="Témoignages"
       >
+        <TentacleAccent
+          side="left"
+          name="tentacule-1-plein"
+          class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
+        />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.testimonialsTitle" eyebrow="Témoignages" />
           <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -287,14 +356,21 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 8. CTA final (bandeau marine mutualisé) -->
-      <section v-reveal class="mx-auto max-w-6xl px-4 py-16">
-        <CtaBanner
+      <!-- 8. CTA final — même bloc que l'accueil (marine dégradé + 2 bulles,
+           bouton doré) plutôt que le bandeau marine sombre (demande Éléonore). -->
+      <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
+        <TentacleAccent
+          side="right"
+          name="tentacule-5-trait"
+          class="absolute -right-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 rotate-6 text-teal-600/[0.05] lg:block"
+        />
+        <CtaBlock
           :title="content.cta.title"
-          :body="content.cta.body ?? undefined"
+          :description="content.cta.body ?? undefined"
           :cta-label="content.cta.label"
-          to="/contact"
           :subtext="content.cta.subtext ?? undefined"
+          to="/contact"
+          variant="orange"
         />
       </section>
     </template>

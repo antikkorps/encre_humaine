@@ -46,20 +46,23 @@ const publishedLabel = computed(() => {
     <div class="flex flex-1 flex-col p-6">
       <p
         v-if="article.categoryName"
-        class="text-xs font-semibold uppercase tracking-[0.1em] text-brand-accent"
+        class="inline-flex w-fit items-center rounded-md bg-orange-100 px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-orange-700 ring-1 ring-inset ring-orange-300/50"
       >
         {{ article.categoryName }}
       </p>
-      <h3 class="mt-1.5 font-display text-xl font-semibold text-ink group-hover:text-teal-700">
+      <h3 class="mt-2.5 font-display text-xl font-semibold text-ink group-hover:text-teal-700">
         <NuxtLink :to="to" class="after:absolute after:inset-0">{{ article.title }}</NuxtLink>
       </h3>
       <p v-if="article.excerpt" class="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
         {{ article.excerpt }}
       </p>
-      <p class="mt-4 flex items-center gap-2 text-xs text-ink/45">
+      <p class="mt-4 flex items-center gap-1.5 text-xs text-ink/45">
         <time v-if="publishedLabel" :datetime="article.publishedAt">{{ publishedLabel }}</time>
         <span v-if="publishedLabel && article.readingTime" aria-hidden="true">·</span>
-        <span v-if="article.readingTime">{{ article.readingTime }} min de lecture</span>
+        <template v-if="article.readingTime">
+          <Icon name="material-symbols:schedule" class="h-3.5 w-3.5 text-ink/40" aria-hidden="true" />
+          <span>{{ article.readingTime }} min de lecture</span>
+        </template>
       </p>
     </div>
   </article>

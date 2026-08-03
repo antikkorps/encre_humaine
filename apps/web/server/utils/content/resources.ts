@@ -7,6 +7,7 @@ import {
   mapPhoto,
   mapSeo,
   type RawSiteDefaults,
+  records,
   str,
 } from "./_shared";
 import { mapArticle, mapArticles, type RawArticle } from "./home";
@@ -22,26 +23,29 @@ import {
  * Source : `resources_page` + `articles` (publiés) + `newsletter_page` (section
  * d'inscription) + `site_settings`. Doit fonctionner **avec 0 article** (état vide
  * propre). Cartes article via `mapArticle(s)` (DRY, partagé avec l'accueil). Filtres
- * dérivés des `article_categories.group` présents, enrichis d'un chrome statique
- * (emoji + mots-clés). `positioning_body` (resources_page) et `promise_body`
+ * dérivés des `article_categories.group` présents, enrichis d'un chrome ÉDITABLE
+ * (icône + mots-clés, `explore_cards`). `positioning_body` (resources_page) et `promise_body`
  * (newsletter_page) sont du rich text → **assainis serveur** (sanitizer injecté).
  */
 
-/** Chrome statique des filtres par groupe (taxonomie fixe, non éditoriale). */
-const GROUP_META: Record<string, { label: string; emoji: string; keywords: string }> = {
+/**
+ * Repli des filtres par groupe : servent tant que `resources_page.explore_cards`
+ * n'est pas renseigné (la taxonomie, elle, reste fixe : 3 groupes).
+ */
+const GROUP_META: Record<string, { label: string; icon: string; keywords: string }> = {
   organisations: {
     label: "Organisations",
-    emoji: "🏢",
+    icon: "groups",
     keywords: "GEPP • compétences • management • RH • formation • structuration",
   },
   particuliers: {
     label: "Parcours professionnels",
-    emoji: "👤",
+    icon: "person-search",
     keywords: "transition • reconversion • CV • LinkedIn • recherche d'emploi",
   },
   terrain: {
     label: "Terrain",
-    emoji: "🔎",
+    icon: "explore",
     keywords: "analyses • observations • situations réelles",
   },
 };
@@ -51,6 +55,7 @@ export interface RawResourcesPage {
   accroche_body?: string | null;
   hero_signature?: string | null;
   featured_article?: RawArticle | string | null;
+  explore_cards?: unknown; // répéteur { group, icon, label, keywords }
   positioning_title?: string | null;
   positioning_body?: string | null; // rich text
   positioning_photo?: FileField;
@@ -65,7 +70,8 @@ export interface RawResourcesPage {
 export interface CategoryFilter {
   group: string;
   label: string;
-  emoji: string;
+  /** Clé Material Symbols (sans préfixe) — remplace les anciens emoji. */
+  icon: string;
   keywords: string;
 }
 
@@ -86,12 +92,30 @@ export interface ResourcesContent {
   seo: ContentSeo;
 }
 
-/** Filtres = groupes documentés effectivement présents parmi les articles. */
-export function buildFilters(articles: ArticleSummary[]): CategoryFilter[] {
+/**
+ * Filtres = groupes documentés effectivement présents parmi les articles, dont
+ * le chrome (icône, libellé, mots-clés) est **éditable** via le répéteur
+ * `resources_page.explore_cards`. Chaque valeur vide retombe sur GROUP_META :
+ * une carte à moitié remplie reste correcte.
+ */
+export function buildFilters(articles: ArticleSummary[], raw?: unknown): CategoryFilter[] {
   const present = new Set(articles.map((a) => a.categoryGroup).filter(Boolean));
+  const overrides = new Map(
+    records(raw)
+      .map((card) => [str(card.group), card] as const)
+      .filter(([group]) => group),
+  );
   return Object.entries(GROUP_META)
     .filter(([group]) => present.has(group))
-    .map(([group, meta]) => ({ group, ...meta }));
+    .map(([group, meta]) => {
+      const override = overrides.get(group);
+      return {
+        group,
+        label: str(override?.label) || meta.label,
+        icon: str(override?.icon) || meta.icon,
+        keywords: str(override?.keywords) || meta.keywords,
+      };
+    });
 }
 
 /** Featured article « à lire en premier » : requiert un titre + slog, sinon masqué. */
@@ -125,7 +149,7 @@ export function mapResourcesContent(
     accrocheBody: str(page.accroche_body) || null,
     heroSignature: str(page.hero_signature) || null,
     featuredArticle: mapFeaturedArticle(page.featured_article, assetBase),
-    filters: buildFilters(articles),
+    filters: buildFilters(articles, page.explore_cards),
     articles,
     positioning:
       positioningTitle || positioningBodyHtml
@@ -164,9 +188,12 @@ export async function loadResourcesContent(): Promise<ResourcesContent> {
               { category: ["name", "slug", "group"] },
             ],
           },
+          "explore_cards",
           "positioning_title",
           "positioning_body",
-          "positioning_photo",
+          // Visuel du positionnement : champ EXPANSÉ (dimensions natives + alt)
+          // → affiché en entier, sans rognage (cf. les photos d'« À propos »).
+          { positioning_photo: ["id", "width", "height", "title", "description"] },
           "cta_title",
           "meta_title",
           "meta_description",

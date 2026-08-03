@@ -22,6 +22,7 @@ const directusUrl = useRuntimeConfig().public.directusPublicUrl;
     <!-- Accents décoratifs (encre) : tentacule en haut à gauche (ample en desktop),
          poulpe du hero (illustration détaillée) en bas à droite. -->
     <TentacleAccent
+      side="left"
       name="tentacule-2-trait"
       class="pointer-events-none absolute -left-16 -top-12 h-64 w-64 text-teal-700/10 lg:-left-28 lg:-top-24 lg:h-[36rem] lg:w-[36rem]"
     />

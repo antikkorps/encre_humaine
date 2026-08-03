@@ -79,24 +79,32 @@
 /*
  * Justification du corps de texte (demande Éléonore : fins de lignes « propres »).
  * Portée : les paragraphes du contenu principal (`<main>`) — le header et le pied
- * de page gardent leur alignement propre. `:where()` garde la spécificité à zéro,
- * donc TOUTE classe Tailwind d'alignement (text-center, text-left…) reprend la main
- * là où le design l'impose (citations centrées, listes…). `hyphens: auto` (html
- * lang=fr) referme les grands trous de justification en français.
+ * de page gardent leur alignement propre. `hyphens: auto` (html lang=fr) referme
+ * les grands trous de justification en français.
+ *
+ * ⚠️ La règle est DANS `@layer base`, et c'est indispensable : les utilitaires
+ * Tailwind vivent dans `@layer utilities`, qui l'emporte sur `base`. Écrite hors
+ * layer (son état d'origine), elle battait au contraire TOUTES les classes
+ * `text-center` / `text-left` — la spécificité n'entre même pas en jeu, du CSS
+ * sans layer gagne toujours face à du CSS en layer. Les alignements explicites du
+ * design (titres de frise centrés, citations, sous-textes de CTA) étaient donc
+ * silencieusement ignorés.
  */
-main :where(p) {
-  text-align: justify;
-  text-justify: inter-word;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-  /*
-   * Resserre la césure pour éviter les « trous » de justification : on ne
-   * coupe que les mots d'au moins 6 lettres, en laissant ≥ 3 lettres avant
-   * et ≥ 2 après le tiret (fragments plus lisibles, moins de lignes trouées).
-   */
-  -webkit-hyphenate-limit-before: 3;
-  -webkit-hyphenate-limit-after: 2;
-  hyphenate-limit-chars: 6 3 2;
+@layer base {
+  main :where(p) {
+    text-align: justify;
+    text-justify: inter-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    /*
+     * Resserre la césure pour éviter les « trous » de justification : on ne
+     * coupe que les mots d'au moins 6 lettres, en laissant ≥ 3 lettres avant
+     * et ≥ 2 après le tiret (fragments plus lisibles, moins de lignes trouées).
+     */
+    -webkit-hyphenate-limit-before: 3;
+    -webkit-hyphenate-limit-after: 2;
+    hyphenate-limit-chars: 6 3 2;
+  }
 }
 
 /* Cible tactile ≥ 24px, focus visibles (WCAG 2.2 AA). */
@@ -178,6 +186,24 @@ main :where(p) {
   padding-inline-start: 1rem;
   color: var(--color-teal-800);
   font-style: italic;
+}
+
+/* Variante sur fond sombre (sections marine) — à poser EN PLUS de `.rich-text`
+ * (ex. `<RichText class="rich-text-invert" />`). Déclarée après pour l'emporter
+ * à specificité égale. */
+.rich-text-invert {
+  color: color-mix(in oklab, var(--color-paper) 82%, transparent);
+}
+.rich-text-invert :where(h2, h3),
+.rich-text-invert :where(strong) {
+  color: var(--color-paper);
+}
+.rich-text-invert :where(a) {
+  color: var(--color-sand-300);
+}
+.rich-text-invert :where(blockquote) {
+  border-inline-start-color: var(--color-sand-400);
+  color: var(--color-paper);
 }
 
 /*

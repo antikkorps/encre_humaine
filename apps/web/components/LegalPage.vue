@@ -44,6 +44,7 @@ useSeoMeta({
     <!-- Filigrane tentacule (ADN encre) — discret, derrière le corps. overflow-x-clip
          (et non overflow-hidden) pour ne pas casser le sticky du sommaire. -->
     <TentacleAccent
+      side="left"
       name="tentacule-4-trait"
       class="absolute -left-20 top-24 -z-10 hidden w-72 text-teal-700/[0.05] lg:block"
     />

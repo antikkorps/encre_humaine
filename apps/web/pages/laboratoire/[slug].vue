@@ -8,7 +8,11 @@ const route = useRoute();
 // Boutique non activée (shop_page) → fiche inaccessible.
 const { data: shop } = await useShopPage();
 if (!shop.value?.enabled) {
-  throw createError({ statusCode: 404, statusMessage: "Boutique indisponible", fatal: true });
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Le Laboratoire est indisponible",
+    fatal: true,
+  });
 }
 
 const { data: product, error } = await useFetch(() => `/api/shop/products/${route.params.slug}`);
@@ -87,12 +91,12 @@ if (product.value) {
     ],
   });
 
-  // Fil d'Ariane structuré (Accueil > Boutique > produit).
+  // Fil d'Ariane structuré (Accueil > Le Laboratoire > produit).
   useSchemaOrg([
     defineBreadcrumb({
       itemListElement: [
         { name: "Accueil", item: "/" },
-        { name: "Boutique", item: "/boutique" },
+        { name: "Le Laboratoire", item: "/laboratoire" },
         { name: p.name },
       ],
     }),
@@ -104,11 +108,12 @@ if (product.value) {
   <div v-if="product" class="relative isolate mx-auto max-w-6xl overflow-x-clip px-4 py-12 sm:py-16">
     <!-- Filigrane tentacule (ADN encre) — discret, derrière la colonne infos. -->
     <TentacleAccent
+      side="right"
       name="tentacule-1-trait"
       class="absolute -right-16 bottom-8 -z-10 hidden w-96 text-teal-600/[0.06] lg:block"
     />
     <nav class="mb-6 text-sm font-medium text-teal-700" aria-label="Fil d'Ariane">
-      <NuxtLink to="/boutique" class="underline-offset-2 hover:underline">← Boutique</NuxtLink>
+      <NuxtLink to="/laboratoire" class="underline-offset-2 hover:underline">← Le Laboratoire</NuxtLink>
     </nav>
 
     <div class="grid gap-10 md:grid-cols-2">
