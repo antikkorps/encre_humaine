@@ -97,6 +97,12 @@ export default defineNuxtConfig({
         "material-symbols:target",
         "material-symbols:timeline",
         "material-symbols:workspace-premium",
+        // Jeu élargi run 9 — « Le Laboratoire » (miroir de ICON_CHOICES) + le
+        // sablier de statut, utilisé par le code seul.
+        "material-symbols:science",
+        "material-symbols:casino",
+        "material-symbols:edit-note",
+        "material-symbols:hourglass-top",
       ],
     },
   },
@@ -236,8 +242,12 @@ export default defineNuxtConfig({
   // Redirections. La landing d'inscription `/newsletter` a fusionné dans la section
   // newsletter de `/ressources` (« Les Tentacules ») → 301. `/newsletter/confirmation`
   // (page inerte du double opt-in) reste une route à part (non redirigée).
+  // `/boutique` est devenue « Le Laboratoire » (/laboratoire) : 301 sur la page
+  // et sur les fiches produit, pour ne casser aucun lien déjà partagé.
   routeRules: {
     "/newsletter": { redirect: { to: "/ressources", statusCode: 301 } },
+    "/boutique": { redirect: { to: "/laboratoire", statusCode: 301 } },
+    "/boutique/**": { redirect: { to: "/laboratoire/**", statusCode: 301 } },
   },
 
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.

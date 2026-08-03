@@ -6,7 +6,7 @@ import type { ProductSummary } from "~/types/content";
 
 const props = defineProps<{ product: ProductSummary }>();
 
-const to = computed(() => `/boutique/${props.product.slug}`);
+const to = computed(() => `/laboratoire/${props.product.slug}`);
 const unavailable = computed(() => props.product.available === false);
 </script>
 

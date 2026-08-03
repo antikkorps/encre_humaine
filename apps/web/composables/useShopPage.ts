@@ -1,6 +1,6 @@
 /**
  * Réglages boutique partagés (activation + libellés) — `GET /api/content/shop`.
- * Clé explicite : l'en-tête, le pied de page et les pages `/boutique` partagent
+ * Clé explicite : l'en-tête, le pied de page et les pages `/laboratoire` partagent
  * une seule requête (dédupliquée par Nuxt). Type inféré de l'endpoint.
  */
 export function useShopPage() {

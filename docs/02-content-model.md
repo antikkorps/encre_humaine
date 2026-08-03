@@ -241,7 +241,7 @@ Règles :
 | `/ressources/[slug]` | `articles` (par slug) |
 | `/newsletter` | `newsletter_page` |
 | `/contact` | `contact_page` + `faq_items` (contact) |
-| `/boutique` + `/boutique/[slug]` | `products` (+ Stripe pour prix) |
+| `/laboratoire` + `/laboratoire/[slug]` | `products` (+ Stripe pour prix) |
 | `/mentions-legales`, CGV… | `legal_documents` |
 
 ---

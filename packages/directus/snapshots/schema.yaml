@@ -16440,7 +16440,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 6
       special: null
       translations: null
       validation: null
@@ -16481,7 +16481,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 28
       special:
         - alias
         - no-data
@@ -16506,7 +16506,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -16546,7 +16546,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 30
       special: null
       translations: null
       validation: null
@@ -16586,7 +16586,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 31
       special:
         - file
       translations: null
@@ -16627,7 +16627,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 32
       special:
         - cast-boolean
       translations: null
@@ -16643,6 +16643,1068 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: hero_body
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: hero_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: Paragraphes d'introduction du Laboratoire
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hero_body
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: hero_image
+    type: uuid
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: hero_image
+      group: null
+      hidden: false
+      interface: file-image
+      note: Illustration du hero (optionnelle, masquée si vide)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hero_image
+      table: shop_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: shop_page
+    field: catalog_divider
+    type: alias
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: catalog_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Ce que vous trouverez bientôt
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: shop_page
+    field: catalog_title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: catalog_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: catalog_title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: catalog_items
+    type: json
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: catalog_items
+      group: null
+      hidden: false
+      interface: list
+      note: >-
+        Familles d'outils : icône + titre + description + statut (ex. « En cours
+        de conception »)
+      options:
+        fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+              width: half
+            name: icon
+            type: string
+          - field: status
+            meta:
+              field: status
+              interface: input
+              width: half
+            name: status
+            type: string
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: catalog_items
+      table: shop_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: focus_divider
+    type: alias
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: En ce moment…
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: shop_page
+    field: focus_eyebrow
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « En ce moment… »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: focus_eyebrow
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: focus_title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: focus_title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: focus_body
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: focus_body
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: focus_image
+    type: uuid
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_image
+      group: null
+      hidden: false
+      interface: file-image
+      note: Visuel à gauche du texte (optionnel)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: focus_image
+      table: shop_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: shop_page
+    field: focus_cta_label
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « Contribuer au questionnaire »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: focus_cta_label
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: focus_cta_url
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: focus_cta_url
+      group: null
+      hidden: false
+      interface: input
+      note: Lien du bouton (questionnaire externe)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: focus_cta_url
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: manifesto_divider
+    type: alias
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: manifesto_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Le parti pris du jeu
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: shop_page
+    field: manifesto_title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: manifesto_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: manifesto_title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: manifesto_subtitle
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: manifesto_subtitle
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: manifesto_subtitle
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: manifesto_body
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: manifesto_body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: manifesto_body
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: manifesto_image
+    type: uuid
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: manifesto_image
+      group: null
+      hidden: false
+      interface: file-image
+      note: Visuel à droite du texte (optionnel)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: manifesto_image
+      table: shop_page
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: shop_page
+    field: why_divider
+    type: alias
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Pourquoi ce Laboratoire ?
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: shop_page
+    field: why_title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: why_title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: why_items
+    type: json
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_items
+      group: null
+      hidden: false
+      interface: list
+      note: 'Section optionnelle : masquée tant qu''aucun item n''est saisi'
+      options:
+        fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+              width: half
+            name: icon
+            type: string
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: why_items
+      table: shop_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: newsletter_divider
+    type: alias
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: newsletter_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Invitation à la newsletter
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: shop_page
+    field: newsletter_title
+    type: string
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: newsletter_title
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « Vous souhaitez être informé des prochaines sorties ? »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: newsletter_title
+      table: shop_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: shop_page
+    field: newsletter_body
+    type: text
+    meta:
+      collection: shop_page
+      conditions: null
+      display: null
+      display_options: null
+      field: newsletter_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: newsletter_body
+      table: shop_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -18610,6 +19672,69 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: shop_page_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: shop_page
+    field: hero_image
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: shop_page
+      many_field: hero_image
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: shop_page
+      column: hero_image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: shop_page_hero_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: shop_page
+    field: focus_image
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: shop_page
+      many_field: focus_image
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: shop_page
+      column: focus_image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: shop_page_focus_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: shop_page
+    field: manifesto_image
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: shop_page
+      many_field: manifesto_image
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: shop_page
+      column: manifesto_image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: shop_page_manifesto_image_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: site_settings

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 // Nav principale — docs/00-global.md §Layout. Partagée avec le menu mobile (NavMobile).
-// Le lien « Boutique » n'apparaît que si la boutique est activée (shop_page,
-// piloté par Eléonore) — sinon la boutique reste masquée de la navigation.
+// « Le Laboratoire » est une page VITRINE (ce qui se prépare) : elle figure donc
+// toujours dans la navigation. `shop_enabled` ne pilote plus que l'ouverture du
+// catalogue et du paiement à l'intérieur de cette page.
 import type { NavItem } from "~/types/content";
-
-const { data: shop } = await useShopPage();
 
 // Nav desktop : sections principales, libellés courts (1 ligne, cohérents). Pas
 // d'« Accueil » (le logo y mène) ni de « Contact » (le bouton « Prendre RDV » le couvre).
@@ -14,8 +13,8 @@ const nav = computed<NavItem[]>(() => {
     { label: "Organisations", to: "/organisations" },
     { label: "Particuliers", to: "/particuliers" },
     { label: "Ressources", to: "/ressources" },
+    { label: "Le Laboratoire", to: "/laboratoire" },
   ];
-  if (shop.value?.enabled) items.push({ label: "Boutique", to: "/boutique" });
   return items;
 });
 

@@ -50,7 +50,7 @@ export default defineEventHandler(async (): Promise<SitemapEntry[]> => {
       });
     }
 
-    // Produits → /boutique/{slug}, uniquement si la boutique est activée.
+    // Produits → /laboratoire/{slug}, uniquement si la boutique est activée.
     const shop = await directus.request(readSingleton("shop_page", { fields: ["shop_enabled"] }));
     if (shop?.shop_enabled === true) {
       const products = await directus.request(
@@ -62,7 +62,7 @@ export default defineEventHandler(async (): Promise<SitemapEntry[]> => {
       );
       for (const p of products) {
         if (!p.slug) continue;
-        entries.push({ loc: `/boutique/${p.slug}`, lastmod: p.date_updated ?? undefined });
+        entries.push({ loc: `/laboratoire/${p.slug}`, lastmod: p.date_updated ?? undefined });
       }
     }
 

@@ -48,8 +48,8 @@ export default defineEventHandler(async (event) => {
     ...(vatEnabled
       ? {}
       : { custom_text: { submit: { message: "TVA non applicable, art. 293 B du CGI" } } }),
-    success_url: `${base}/boutique/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${base}/boutique`,
+    success_url: `${base}/laboratoire/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${base}/laboratoire`,
   });
 
   if (!session.url) {

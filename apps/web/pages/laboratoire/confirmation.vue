@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Confirmation de commande — retour de Stripe Checkout (docs/06 §Parcours).
-// success_url = /boutique/confirmation?session_id={CHECKOUT_SESSION_ID}. La commande
+// success_url = /laboratoire/confirmation?session_id={CHECKOUT_SESSION_ID}. La commande
 // est enregistrée et l'email envoyé par le webhook Stripe (docs/05 §5.1) ; cette page
 // se contente d'un accusé sobre. Pas indexée (page transactionnelle).
 const route = useRoute();
@@ -38,10 +38,10 @@ useSeoMeta({
       </template>
 
       <NuxtLink
-        to="/boutique"
+        to="/laboratoire"
         class="mt-8 inline-flex items-center gap-1.5 rounded-full bg-teal-700 px-7 py-3 font-semibold text-white shadow-soft transition-colors hover:bg-teal-800"
       >
-        Retour à la boutique
+        Retour au Laboratoire
       </NuxtLink>
     </div>
   </section>

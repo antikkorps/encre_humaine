@@ -422,17 +422,62 @@ const singletons: CollectionDef[] = [
   {
     collection: "shop_page",
     singleton: true,
-    icon: "storefront",
-    note: "Boutique : activation + libellés éditoriaux (générique — pas seulement des jeux)",
+    icon: "science",
+    note: "« Le Laboratoire » (/laboratoire) : page vitrine des outils en préparation + boutique quand elle ouvre",
     fields: [
       f.bool("shop_enabled", false, {
-        note: "Active la boutique : lien de navigation + accès aux pages /boutique",
+        note: "Ouvre la VENTE : catalogue produits + paiement. La page vitrine, elle, est toujours visible",
       }),
-      f.input("title", { note: "Titre de la page (ex. « La boutique »)" }),
-      f.textarea("intro", { note: "Chapeau sous le titre" }),
+      f.input("title", { note: "Titre de la page (ex. « Le Laboratoire »)" }),
+      f.textarea("intro", {
+        note: "Sous-titre sous le titre (ex. « Des outils conçus à partir du terrain. »)",
+      }),
+      f.richtext("hero_body", { note: "Paragraphes d'introduction du Laboratoire" }),
+      f.imageFile("hero_image", { note: "Illustration du hero (optionnelle, masquée si vide)" }),
       f.textarea("empty_message", {
-        note: "Affiché quand la boutique est ouverte mais sans produit disponible",
+        note: "Affiché quand la vente est ouverte mais qu'aucun produit n'est disponible",
       }),
+      // §2 Ce que vous trouverez bientôt
+      f.divider("catalog_divider", "Ce que vous trouverez bientôt"),
+      f.input("catalog_title"),
+      f.repeater(
+        "catalog_items",
+        [
+          ICON_SUBFIELD,
+          { field: "status", width: "half" },
+          { field: "title" },
+          { field: "body", interface: "input-multiline" },
+        ],
+        {
+          note: "Familles d'outils : icône + titre + description + statut (ex. « En cours de conception »)",
+        },
+      ),
+      // §3 En ce moment…
+      f.divider("focus_divider", "En ce moment…"),
+      f.input("focus_eyebrow", { note: "Ex. « En ce moment… »" }),
+      f.input("focus_title"),
+      f.richtext("focus_body"),
+      f.imageFile("focus_image", { note: "Visuel à gauche du texte (optionnel)" }),
+      f.input("focus_cta_label", { note: "Ex. « Contribuer au questionnaire »", half: true }),
+      f.input("focus_cta_url", { note: "Lien du bouton (questionnaire externe)", half: true }),
+      // §4 Manifeste
+      f.divider("manifesto_divider", "Le parti pris du jeu"),
+      f.input("manifesto_title"),
+      f.input("manifesto_subtitle"),
+      f.richtext("manifesto_body"),
+      f.imageFile("manifesto_image", { note: "Visuel à droite du texte (optionnel)" }),
+      // §5 Pourquoi ce Laboratoire (optionnel : masqué tant qu'il est vide)
+      f.divider("why_divider", "Pourquoi ce Laboratoire ?"),
+      f.input("why_title"),
+      f.repeater("why_items", [ICON_SUBFIELD, { field: "title" }, { field: "body" }], {
+        note: "Section optionnelle : masquée tant qu'aucun item n'est saisi",
+      }),
+      // §6 Invitation newsletter
+      f.divider("newsletter_divider", "Invitation à la newsletter"),
+      f.input("newsletter_title", {
+        note: "Ex. « Vous souhaitez être informé des prochaines sorties ? »",
+      }),
+      f.textarea("newsletter_body"),
       ...f.seoBlock(),
     ],
   },

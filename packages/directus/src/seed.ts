@@ -1678,12 +1678,58 @@ async function main(): Promise<void> {
       "Un premier échange de 30 minutes, sans engagement, pour faire le point sur votre situation RH ou votre parcours professionnel et voir comment je peux vous aider.",
   });
 
+  // « Le Laboratoire » (ex-boutique) — textes d'Eléonore (run 9). La VENTE reste
+  // fermée : la page est une vitrine de ce qui se prépare.
   await setSingleton("shop_page", {
-    shop_enabled: true,
-    title: "La boutique",
-    intro: "Des serious games conçus pour explorer, apprendre et coopérer autrement.",
-    empty_message: "Les premiers jeux arrivent très bientôt. Revenez vite !",
-    meta_title: "Boutique — L'Encre Humaine",
+    shop_enabled: false,
+    title: "Le Laboratoire",
+    intro: "Des outils conçus à partir du terrain.",
+    hero_body:
+      "<p>Pendant plus de dix ans, j'ai accompagné des organisations, des managers et des personnes en transition professionnelle.</p>" +
+      "<p>Au fil de ces expériences, une évidence s'est imposée : certains sujets sont difficiles à faire évoluer uniquement avec des procédures, des présentations ou des formations descendantes.</p>" +
+      "<p><strong>Le Laboratoire est l'espace où je conçois des ressources pour apprendre autrement : plus concrètement, plus simplement et plus durablement.</strong></p>",
+    empty_message: "Les premiers outils arrivent bientôt. Revenez très vite !",
+    catalog_title: "Ce que vous trouverez bientôt",
+    catalog_items: [
+      {
+        icon: "casino",
+        title: "Jeux pédagogiques RH",
+        body: "Apprendre par l'expérimentation.\n\nPour travailler le management, les compétences, les risques psychosociaux, la communication ou les parcours professionnels.",
+        status: "En cours de conception",
+      },
+      {
+        icon: "menu-book",
+        title: "Guides & méthodes",
+        body: "Des méthodes directement utilisables.\n\nPas de théorie inutile.\n\nDes outils conçus pour passer plus facilement à l'action.",
+        status: "En cours de conception",
+      },
+      {
+        icon: "edit-note",
+        title: "Carnets de travail",
+        body: "Pour réfléchir.\n\nClarifier.\n\nStructurer.\n\nPrendre du recul.",
+        status: "En cours de conception",
+      },
+      {
+        icon: "description",
+        title: "Modèles & supports",
+        body: "Des trames, check-lists et outils RH issus de ma pratique.",
+        status: "En cours de conception",
+      },
+    ],
+    focus_eyebrow: "En ce moment…",
+    focus_title: "Je développe une première collection de jeux pédagogiques RH.",
+    focus_body:
+      "<p>Avant de créer ces outils, je souhaite comprendre les besoins réels des professionnels RH, des managers et des organisations.</p>" +
+      "<p>Parce qu'un bon outil ne commence pas par une idée.</p><p>Il commence par un problème de terrain.</p>",
+    focus_cta_label: "Contribuer au questionnaire",
+    manifesto_title: "Et si une heure de jeu valait plus que trois heures de slides ?",
+    manifesto_subtitle: "Réinventer la formation en entreprise.",
+    manifesto_body:
+      "<p>Le jeu n'est pas une fin.</p><p>C'est un moyen de créer des prises de conscience, de favoriser les échanges et d'ancrer les apprentissages dans la pratique.</p>",
+    newsletter_title: "Vous souhaitez être informé des prochaines sorties ?",
+    newsletter_body:
+      "Recevez les informations sur les nouveaux outils, jeux pédagogiques, guides et analyses directement dans votre boîte mail.",
+    meta_title: "Le Laboratoire — L'Encre Humaine",
   });
 
   // ── legal_documents ─────────────────────────────────────────────────────────

@@ -218,7 +218,6 @@ useSeoMeta({
           :description="content.finalCta.body ?? undefined"
           cta-label="Réserver un échange"
           to="#contact"
-          variant="teal"
         />
       </section>
 

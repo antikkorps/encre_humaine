@@ -420,6 +420,24 @@ export interface ShopPage {
   meta_description: string | null;
   og_image: string | DirectusFile | null;
   no_index: boolean;
+  hero_body: string | null;
+  hero_image: string | DirectusFile | null;
+  catalog_title: string | null;
+  catalog_items: unknown | null;
+  focus_eyebrow: string | null;
+  focus_title: string | null;
+  focus_body: string | null;
+  focus_image: string | DirectusFile | null;
+  focus_cta_label: string | null;
+  focus_cta_url: string | null;
+  manifesto_title: string | null;
+  manifesto_subtitle: string | null;
+  manifesto_body: string | null;
+  manifesto_image: string | DirectusFile | null;
+  why_title: string | null;
+  why_items: unknown | null;
+  newsletter_title: string | null;
+  newsletter_body: string | null;
 }
 
 export interface SiteSettings {
