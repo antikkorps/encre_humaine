@@ -80,7 +80,9 @@ const button = computed(() =>
       </div>
       <!-- `text-center` : la justification globale des paragraphes de `main`
            l'emporterait sur l'alignement hérité du panneau. -->
-      <p v-if="subtext" class="mt-5 text-center text-sm text-paper/60">{{ subtext }}</p>
+      <p v-if="subtext" class="mt-5 whitespace-pre-line text-center text-sm text-paper/60">
+        {{ subtext }}
+      </p>
     </div>
   </section>
 </template>

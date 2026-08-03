@@ -506,14 +506,17 @@ const singletons: CollectionDef[] = [
     note: "FAQ branchée dynamiquement (faq_items scope=contact)",
     fields: [
       f.input("accroche_title"),
-      f.textarea("accroche_body"),
-      // Deux voies de contact (onglets RDV / message)
-      f.textarea("booking_intro", { note: "Texte au-dessus de l'embed RDV" }),
+      f.textarea("accroche_subtitle", { note: "Chapeau sous le titre (hero)" }),
+      f.textarea("accroche_body", { note: "Encadré « Certaines situations… » à droite du hero" }),
+      // Deux voies de contact (carte RDV + carte message)
+      f.textarea("contact_intro", { note: "Introduction sous le titre de la section « Premier contact »" }),
+      f.textarea("booking_intro", { note: "Texte de la carte « Réserver un échange »" }),
       f.textarea("booking_reassurance", {
         note: "Réassurance sous le RDV (ex. « 🐙 Aucun tentacule commercial caché… »)",
       }),
-      f.textarea("message_intro", { note: "Texte au-dessus du formulaire message" }),
+      f.textarea("message_intro", { note: "Texte de la carte « M'envoyer un message »" }),
       // Comment se déroule le premier échange
+      f.input("steps_title", { note: "Ex. « Comment se déroule notre premier échange ? »" }),
       f.repeater("next_steps", [
         { field: "number" },
         { field: "title" },
@@ -524,9 +527,11 @@ const singletons: CollectionDef[] = [
       // Vous pouvez me contacter si…
       f.divider("reasons_divider", "Vous pouvez me contacter si…"),
       f.input("reasons_title"),
+      f.input("reasons_org_lead", { note: "Amorce de la colonne organisations (ex. « Vous souhaitez… »)" }),
       f.repeater("reasons_org", [{ field: "text", interface: "input-multiline" }], {
         note: "Pour les organisations",
       }),
+      f.input("reasons_b2c_lead", { note: "Amorce de la colonne particuliers (ex. « Aujourd'hui… »)" }),
       f.repeater("reasons_b2c", [{ field: "text", interface: "input-multiline" }], {
         note: "Pour les particuliers",
       }),
@@ -534,6 +539,7 @@ const singletons: CollectionDef[] = [
       f.divider("contact_cta_divider", "CTA final"),
       f.input("final_cta_title"),
       f.textarea("final_cta_body"),
+      f.textarea("final_cta_subtext", { note: "Réassurance sous le bouton du CTA final" }),
       ...f.seoBlock(),
     ],
   },

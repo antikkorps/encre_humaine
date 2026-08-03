@@ -145,7 +145,7 @@ async function main(): Promise<void> {
   const faqs: Array<{ q: string; a: string; scope: string }> = [
     {
       q: "Le premier échange est-il gratuit ?",
-      a: P("Oui.", "Il s'agit d'un échange découverte de 30 minutes, sans engagement."),
+      a: P("Oui.", "Il s'agit d'un temps de découverte mutuelle, sans engagement."),
       scope: "contact",
     },
     {
@@ -154,7 +154,7 @@ async function main(): Promise<void> {
       scope: "contact",
     },
     {
-      q: "Sous quel délai répondez-vous ?",
+      q: "Sous quel délai recevrai-je une réponse ?",
       a: P("Je réponds généralement sous 48 heures ouvrées."),
       scope: "contact",
     },
@@ -1617,27 +1617,31 @@ async function main(): Promise<void> {
   await setSingleton("contact_page", {
     // S1 — Hero
     accroche_title: "Vous avez une situation à clarifier ?",
+    accroche_subtitle:
+      "Que vous soyez une organisation en réflexion sur ses pratiques RH ou une personne en questionnement professionnel, un premier échange permet souvent d'y voir plus clair.",
     accroche_body:
-      "Que vous soyez une organisation en réflexion sur ses pratiques RH ou une personne en questionnement professionnel, un premier échange permet souvent d'y voir plus clair.\n\n" +
       "Certaines situations ont simplement besoin d'un regard extérieur.\n\n" +
-      "Un projet RH qui n'avance pas.\n\n" +
-      "Une équipe qui cherche ses repères.\n\n" +
-      "Une transition professionnelle.\n\n" +
+      "Un projet RH qui n'avance pas.\n" +
+      "Une équipe qui cherche ses repères.\n" +
+      "Une transition professionnelle.\n" +
       "Une idée qui tourne en boucle depuis plusieurs mois.\n\n" +
       "Ce premier échange est là pour faire le point et voir ce qui pourrait être utile.",
-    // S2 — Deux façons de me contacter
+    // S2 — Premier contact
+    contact_intro:
+      "Que vous préfériez un échange de vive voix ou un premier message, choisissez simplement la formule qui vous convient.",
     booking_intro:
-      "Vous préférez en parler directement ? Réservez un créneau de 30 minutes. Nous faisons le point sur votre situation et je vous indique si je peux vous aider, et comment.",
+      "Vous préférez en parler directement ?\n\nRéservez un créneau de 30 minutes.\n\nNous faisons le point sur votre situation et voyons ensemble si je suis la bonne personne pour vous accompagner.",
     booking_reassurance:
       "🐙 Aucun tentacule commercial caché. Juste une conversation pour comprendre votre situation.",
     message_intro:
-      "Vous préférez prendre contact par écrit ? Décrivez votre situation en quelques lignes. Je vous répondrai sous 48 heures ouvrées.",
-    // S3 — Comment se déroule le premier échange
+      "Vous préférez prendre contact par écrit ?\n\nDécrivez simplement votre situation en quelques lignes.\n\nJe vous répondrai dans les meilleurs délais, généralement sous 48 heures ouvrées.",
+    // S3 — À quoi vous attendre
+    steps_title: "Comment se déroule notre premier échange ?",
     next_steps: [
       {
         number: 1,
         title: "Vous m'expliquez votre situation",
-        description: "Sans préparation particulière. Avec vos mots.",
+        description: "Sans préparation particulière.\n\nAvec vos mots.",
       },
       {
         number: 2,
@@ -1648,20 +1652,23 @@ async function main(): Promise<void> {
         number: 3,
         title: "Nous identifions ensemble les prochaines étapes",
         description:
-          "Parfois cela débouche sur un accompagnement. Parfois sur quelques pistes de réflexion. Parfois sur une orientation vers une autre ressource ou un autre professionnel.",
+          "Parfois cela débouche sur un accompagnement.\n\nParfois sur quelques pistes de réflexion.\n\nParfois sur une orientation vers une autre ressource ou un autre professionnel.",
       },
     ],
     steps_conclusion:
-      "L'objectif n'est pas de vous vendre quelque chose. L'objectif est de comprendre si je suis la bonne personne pour vous aider.",
-    response_time_note: "Je réponds généralement sous 48 heures ouvrées.",
-    // S4 — Vous pouvez me contacter si…
+      "L'objectif n'est pas de vous convaincre.\n\nL'objectif est de comprendre votre situation et de vérifier ensemble si je suis la bonne personne pour vous accompagner.",
+    response_time_note:
+      "🐙 Parce qu'avant de chercher des solutions, il faut souvent commencer par mettre des mots sur la situation.",
+    // S4 — Pour quelles situations ?
     reasons_title: "Vous pouvez me contacter si…",
+    reasons_org_lead: "Vous souhaitez…",
     reasons_org: [
-      { text: "Vous souhaitez structurer vos pratiques RH." },
-      { text: "Vous travaillez sur vos compétences, votre GEPP ou vos parcours." },
-      { text: "Vos managers manquent de repères." },
-      { text: "Vous préparez une phase de croissance ou de transformation." },
+      { text: "structurer vos pratiques RH," },
+      { text: "mieux identifier les compétences de vos équipes," },
+      { text: "accompagner vos managers," },
+      { text: "préparer une phase de croissance ou de transformation." },
     ],
+    reasons_b2c_lead: "Aujourd'hui…",
     reasons_b2c: [
       { text: "Vous traversez une transition professionnelle." },
       { text: "Vous envisagez une reconversion." },
@@ -1670,9 +1677,12 @@ async function main(): Promise<void> {
     ],
     // CTA final
     final_cta_title:
-      "Parfois, 30 minutes suffisent pour remettre un peu de clarté dans une situation.",
+      "Certaines situations deviennent plus claires dès qu'on prend le temps d'en parler.",
     final_cta_body:
-      "Que votre question concerne les RH, le management, les compétences, une transition professionnelle ou une recherche d'emploi, le plus simple est souvent d'en parler.",
+      "Projet RH, management, compétences, évolution professionnelle ou transition de carrière : un premier échange permet souvent de repartir avec une vision plus claire de la situation et des prochaines étapes.\n\n" +
+      "Si je pense qu'un autre professionnel ou une autre approche serait plus adaptée à votre situation, je vous le dirai en toute transparence.",
+    final_cta_subtext:
+      "30 minutes d'échange, sans engagement, pour faire le point sur votre situation.\n🐙 Aucun tentacule commercial caché. Juste une conversation pour comprendre votre situation.",
     meta_title: "Contact — L'Encre Humaine",
     meta_description:
       "Un premier échange de 30 minutes, sans engagement, pour faire le point sur votre situation RH ou votre parcours professionnel et voir comment je peux vous aider.",

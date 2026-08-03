@@ -49,8 +49,18 @@ const tentacle: Record<string, string> = {
 
 <template>
   <section class="relative isolate overflow-hidden" :class="tint[variant]">
-    <InkBlob class="absolute -right-20 -top-24 -z-10 h-80 w-80 rotate-12" :class="blob[variant]" />
-    <InkBlob class="absolute -left-24 -bottom-16 -z-10 h-64 w-64 -rotate-45" :class="blob[variant]" />
+    <!-- Le rond décoratif du côté de la tentacule est retiré : les deux se
+         superposaient et brouillaient le coin (demande Éléonore sur /contact). -->
+    <InkBlob
+      v-if="tentacleSide !== 'right'"
+      class="absolute -right-20 -top-24 -z-10 h-80 w-80 rotate-12"
+      :class="blob[variant]"
+    />
+    <InkBlob
+      v-if="tentacleSide !== 'left'"
+      class="absolute -left-24 -bottom-16 -z-10 h-64 w-64 -rotate-45"
+      :class="blob[variant]"
+    />
     <!-- `side` : TentacleAccent retourne le dessin si besoin pour que la coupe
          sorte du cadre (chaque tentacule n'a pas sa base du même côté). -->
     <TentacleAccent

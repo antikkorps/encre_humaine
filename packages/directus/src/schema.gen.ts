@@ -141,6 +141,12 @@ export interface ContactPage {
   reasons_b2c: unknown | null;
   final_cta_title: string | null;
   final_cta_body: string | null;
+  accroche_subtitle: string | null;
+  contact_intro: string | null;
+  steps_title: string | null;
+  reasons_org_lead: string | null;
+  reasons_b2c_lead: string | null;
+  final_cta_subtext: string | null;
 }
 
 export interface FaqItems {
