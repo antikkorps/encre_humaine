@@ -142,8 +142,8 @@ const singletons: CollectionDef[] = [
       f.textarea("b2c_section_text"),
       f.repeater(
         "b2c_cards",
-        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Cartes accompagnement particuliers" },
+        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Cartes accompagnement particuliers (icône éditable + titre + texte)" },
       ),
       f.input("b2c_cta_label"),
       // — Témoignage vedette —

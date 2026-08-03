@@ -1,0 +1,93 @@
+<script setup lang="ts">
+// Carrousel d'articles — « Les Tentacules de L'Encre Humaine » (accueil, docs/01 §6).
+// Défilement horizontal natif (scroll-snap, aucune dépendance JS) : on peut « se
+// balader » à la souris, au doigt ou au clavier. Les flèches pilotent le scroll
+// programmatique. Une carte finale « Voir toutes les ressources » clôt la piste.
+// Pensé pour un fond SOMBRE (les cartes crème « ressortent »).
+import type { ArticleSummary } from "~/types/content";
+
+defineProps<{
+  articles: ArticleSummary[];
+  seeAllTo: string;
+  seeAllLabel: string;
+}>();
+
+const track = ref<HTMLElement | null>(null);
+
+/** Défile d'environ une carte (85 % de la largeur visible) dans le sens donné. */
+function scrollByCard(direction: 1 | -1) {
+  const el = track.value;
+  if (!el) return;
+  el.scrollBy({ left: direction * el.clientWidth * 0.85, behavior: "smooth" });
+}
+</script>
+
+<template>
+  <div
+    role="group"
+    aria-roledescription="carrousel"
+    aria-label="Derniers articles des Tentacules"
+  >
+    <!-- Piste défilante : scroll-snap, débordant volontairement des marges pour
+         un rendu « pleine largeur » agréable au doigt sur mobile. -->
+    <ul
+      ref="track"
+      class="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-4 pb-2"
+    >
+      <li
+        v-for="article in articles"
+        :key="article.slug"
+        class="w-[82%] shrink-0 snap-start sm:w-[20rem] lg:w-[21rem]"
+      >
+        <ArticleCard :article="article" />
+      </li>
+
+      <!-- Carte finale : accès à toute la rubrique (calquée sur la maquette). -->
+      <li class="w-[82%] shrink-0 snap-start sm:w-[20rem] lg:w-[21rem]">
+        <NuxtLink
+          :to="seeAllTo"
+          class="group flex h-full flex-col items-center justify-center gap-5 rounded-3xl border border-sand-400/30 bg-paper p-8 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+        >
+          <OctopusMark class="h-16 w-16 text-sand-400 transition-transform duration-500 group-hover:scale-105" />
+          <span class="font-display text-xl font-semibold text-ink">{{ seeAllLabel }}</span>
+          <span
+            aria-hidden="true"
+            class="grid h-12 w-12 place-items-center rounded-full bg-sand-400 text-ink transition-colors group-hover:bg-sand-500"
+          >
+            <Icon name="material-symbols:arrow-forward" class="h-6 w-6" />
+          </span>
+        </NuxtLink>
+      </li>
+    </ul>
+
+    <!-- Flèches de navigation (le scroll natif reste la voie principale). -->
+    <div class="mt-6 flex items-center gap-3">
+      <button
+        type="button"
+        aria-label="Articles précédents"
+        class="grid h-11 w-11 place-items-center rounded-full border border-paper/25 text-paper/80 transition-colors hover:border-sand-400 hover:text-sand-300"
+        @click="scrollByCard(-1)"
+      >
+        <Icon name="material-symbols:arrow-forward" class="h-5 w-5 rotate-180" />
+      </button>
+      <button
+        type="button"
+        aria-label="Articles suivants"
+        class="grid h-11 w-11 place-items-center rounded-full border border-paper/25 text-paper/80 transition-colors hover:border-sand-400 hover:text-sand-300"
+        @click="scrollByCard(1)"
+      >
+        <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+/* Masque la barre de défilement (le geste et les flèches suffisent). */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>

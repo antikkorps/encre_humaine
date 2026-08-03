@@ -181,7 +181,7 @@ const appError = useError();
       <div
         class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-5 text-xs text-paper/50 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p>TVA non applicable, art. 293 B du CGI · © {{ year }} L'Encre Humaine — Eléonore Morée</p>
+        <p>TVA non applicable, art. 293 B du CGI · © {{ year }} L'Encre Humaine - Eléonore Morée</p>
         <ul class="flex flex-wrap items-center gap-x-4 gap-y-2">
           <li><NuxtLink to="/mentions-legales" class="hover:text-teal-300">Mentions légales</NuxtLink></li>
           <li>

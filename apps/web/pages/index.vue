@@ -66,6 +66,9 @@ const buildIcons = [
   "material-symbols:self-improvement",
   "material-symbols:timeline",
 ];
+// Icônes par défaut des axes « particuliers » (éditables dans Directus au run 9,
+// sous-champ `icon` de `b2c_cards`) ; à défaut, cyclage pour un rendu qui parle.
+const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
 </script>
 
 <template>
@@ -79,10 +82,9 @@ const buildIcons = [
         class="pointer-events-none absolute -right-12 top-1/2 -z-10 hidden h-[44rem] -translate-y-1/2 text-sand-300/[0.10] lg:block"
       />
       <InkBlob class="absolute -left-20 top-10 -z-10 h-72 w-72 -rotate-45 text-teal-500/15" />
-      <InkBlob class="absolute -bottom-12 right-1/4 -z-10 h-56 w-56 text-orange-400/10" />
 
       <div class="mx-auto max-w-6xl px-4 py-20 lg:py-28">
-        <div class="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
+        <div class="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
           <!-- Colonne texte (gauche) -->
           <div class="max-w-2xl">
             <p
@@ -146,7 +148,7 @@ const buildIcons = [
 
           <!-- Colonne droite : micro-preuves sur une carte givrée (ne pas les poser
                à même le filigrane poulpe → illisible). Le poulpe reste ambiant derrière. -->
-          <div v-if="hero.proofs.length" class="lg:pl-6 lg:pt-16">
+          <div v-if="hero.proofs.length" class="lg:pl-6">
             <div
               class="rounded-3xl border border-paper/15 bg-paper/[0.06] p-6 shadow-soft backdrop-blur sm:p-8"
             >
@@ -444,38 +446,55 @@ const buildIcons = [
       <!-- 8. Pour les particuliers — 2 axes d'accompagnement (registre chaud) -->
       <section v-if="content.b2c" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
+        <!-- Tentacule retournée (-scale-x) pour qu'elle « sorte » du bord droit. -->
         <TentacleAccent
           name="tentacule-4-trait"
-          class="absolute -right-20 top-6 -z-10 hidden w-[26rem] rotate-6 text-orange-400/[0.10] lg:block"
+          class="absolute -right-20 top-6 -z-10 hidden w-[26rem] -scale-x-100 rotate-6 text-orange-400/[0.10] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.b2c.title" eyebrow="Pour les particuliers" />
+          <SectionHeading
+            :title="content.b2c.title"
+            eyebrow="Pour les particuliers"
+            align="center"
+          />
           <p
             v-if="content.b2c.text"
-            class="mt-5 max-w-2xl text-lg leading-relaxed text-ink/70"
+            class="mx-auto mt-5 max-w-2xl text-center text-lg leading-relaxed text-ink/70"
           >
             {{ content.b2c.text }}
           </p>
+          <!-- Deux axes indépendants (pas un parcours) : icônes plutôt que 1/2, cartes
+               centrées dans la page, et effet de survol « qui ressort » (comme les
+               offres organisations). -->
           <div
             v-if="content.b2c.cards.length"
-            class="mt-10 grid max-w-3xl gap-6 sm:grid-cols-2"
+            class="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2"
           >
             <article
               v-for="(card, i) in content.b2c.cards"
               :key="i"
-              class="rounded-3xl border border-orange-200/70 bg-white p-8 shadow-soft"
+              class="flex flex-col items-center rounded-3xl border border-orange-200/70 bg-white p-8 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
               <span
                 aria-hidden="true"
-                class="grid h-10 w-10 place-items-center rounded-full bg-orange-100 font-display text-base font-bold text-orange-600 ring-1 ring-inset ring-orange-300/50"
+                class="grid h-12 w-12 place-items-center rounded-full bg-orange-100 text-orange-600 ring-1 ring-inset ring-orange-300/50"
               >
-                {{ i + 1 }}
+                <Icon
+                  :name="
+                    card.icon
+                      ? `material-symbols:${card.icon}`
+                      : b2cIcons[i % b2cIcons.length]!
+                  "
+                  class="h-6 w-6"
+                />
               </span>
               <h3 class="mt-4 font-display text-xl font-bold text-ink">{{ card.title }}</h3>
-              <p v-if="card.body" class="mt-2 leading-relaxed text-ink/65">{{ card.body }}</p>
+              <p v-if="card.body" class="mt-2 text-center leading-relaxed text-ink/65">
+                {{ card.body }}
+              </p>
             </article>
           </div>
-          <div class="mt-10">
+          <div class="mt-10 flex justify-center">
             <NuxtLink
               to="/particuliers"
               class="inline-flex items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
@@ -502,41 +521,36 @@ const buildIcons = [
         <TestimonialCard :testimonial="content.featuredTestimonial" />
       </section>
 
-      <!-- 10. Les Tentacules — 3 derniers articles, masquée si aucun -->
+      <!-- 10. Les Tentacules — derniers articles en carrousel sur fond sombre -->
       <section
         v-if="content.articles.length"
         v-reveal
-        class="relative isolate overflow-hidden bg-teal-50"
+        class="bg-ink-gradient relative isolate overflow-hidden text-paper"
       >
+        <!-- Tentacule retournée (-scale-x) + éclaircie pour ressortir sur le marine. -->
         <TentacleAccent
           name="tentacule-3-trait"
-          class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] text-teal-600/[0.07] lg:block"
+          class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] -scale-x-100 text-sand-300/[0.08] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.resources.title"
             eyebrow="🐙 Les Tentacules de L'Encre Humaine"
             :subtitle="content.resources.subtitle ?? undefined"
+            tone="dark"
             wide
           />
-          <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <ArticleCard
-              v-for="article in content.articles"
-              :key="article.slug"
-              :article="article"
+          <div class="mt-10">
+            <ArticleCarousel
+              :articles="content.articles"
+              see-all-to="/ressources"
+              :see-all-label="content.resources.ctaLabel"
             />
           </div>
-          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <NuxtLink
-              to="/ressources"
-              class="inline-flex items-center gap-1.5 font-semibold text-teal-700 transition-colors hover:text-teal-800"
-            >
-              {{ content.resources.ctaLabel }}
-              <span aria-hidden="true">→</span>
-            </NuxtLink>
+          <div class="mt-8">
             <NuxtLink
               to="/ressources#newsletter"
-              class="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 transition-colors hover:text-orange-700"
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-200 transition-colors hover:text-orange-100"
             >
               🐙 Recevoir les prochaines Tentacules
             </NuxtLink>
