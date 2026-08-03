@@ -509,7 +509,9 @@ const singletons: CollectionDef[] = [
       f.textarea("accroche_subtitle", { note: "Chapeau sous le titre (hero)" }),
       f.textarea("accroche_body", { note: "Encadré « Certaines situations… » à droite du hero" }),
       // Deux voies de contact (carte RDV + carte message)
-      f.textarea("contact_intro", { note: "Introduction sous le titre de la section « Premier contact »" }),
+      f.textarea("contact_intro", {
+        note: "Introduction sous le titre de la section « Premier contact »",
+      }),
       f.textarea("booking_intro", { note: "Texte de la carte « Réserver un échange »" }),
       f.textarea("booking_reassurance", {
         note: "Réassurance sous le RDV (ex. « 🐙 Aucun tentacule commercial caché… »)",
@@ -527,11 +529,15 @@ const singletons: CollectionDef[] = [
       // Vous pouvez me contacter si…
       f.divider("reasons_divider", "Vous pouvez me contacter si…"),
       f.input("reasons_title"),
-      f.input("reasons_org_lead", { note: "Amorce de la colonne organisations (ex. « Vous souhaitez… »)" }),
+      f.input("reasons_org_lead", {
+        note: "Amorce de la colonne organisations (ex. « Vous souhaitez… »)",
+      }),
       f.repeater("reasons_org", [{ field: "text", interface: "input-multiline" }], {
         note: "Pour les organisations",
       }),
-      f.input("reasons_b2c_lead", { note: "Amorce de la colonne particuliers (ex. « Aujourd'hui… »)" }),
+      f.input("reasons_b2c_lead", {
+        note: "Amorce de la colonne particuliers (ex. « Aujourd'hui… »)",
+      }),
       f.repeater("reasons_b2c", [{ field: "text", interface: "input-multiline" }], {
         note: "Pour les particuliers",
       }),
