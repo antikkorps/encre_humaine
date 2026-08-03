@@ -40,7 +40,10 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA app GRANT ALL ON SEQUENCES TO app_user;
 ALTER ROLE app_user SET search_path = app;
 REVOKE ALL ON SCHEMA directus, umami FROM app_user;
 
--- ── directus_user : confiné au schéma `directus` (NE VOIT PAS `app`) ─────────
+-- ── directus_user : confiné au schéma `directus` ────────────────────────────
+-- Seule exception, accordée APRÈS coup par la migration 0001 (la table n'existe
+-- pas encore ici) : un SELECT sur `app.contact_leads`, pour afficher les messages
+-- du formulaire dans l'admin. Le REVOKE ci-dessous reste donc la règle par défaut.
 GRANT USAGE, CREATE ON SCHEMA directus TO directus_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA directus GRANT ALL ON TABLES TO directus_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA directus GRANT ALL ON SEQUENCES TO directus_user;

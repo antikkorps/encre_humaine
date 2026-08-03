@@ -41,7 +41,13 @@ Script d'init (premier boot) :
    - `app_user` : limité au schéma `app`.
 3. `search_path` adapté par rôle.
 
-> C'est l'isolation citée en `02` §6 et `06` §9 : Directus ne peut **pas** lire `orders`/`leads`/`subscribers`.
+> C'est l'isolation citée en `02` §6 et `06` §9 : Directus ne peut **pas** lire `orders`/`subscribers`.
+>
+> **Une exception, explicite** : `directus_user` reçoit un `SELECT` — et rien d'autre —
+> sur `app.contact_leads`, pour qu'Eléonore consulte les messages du formulaire dans
+> l'admin (docs/09 §Consulter les messages reçus). Le grant est posé par la migration
+> `0001`, pas par `init.sql` : au moment où `init.sql` s'exécute, la table n'existe pas
+> encore. Toute écriture reste refusée par Postgres.
 
 ---
 
@@ -114,7 +120,29 @@ UMAMI_APP_SECRET=...
 ## 6. Stockage & sauvegardes
 
 - **Assets Directus** : adaptateur S3 → **R2** (`R2_BUCKET_ASSETS`). App stateless côté fichiers.
-- **Backups** : tâche planifiée (conteneur cron ou cron hôte) `pg_dump` → chiffré → **rclone** → `R2_BUCKET_BACKUPS`. Rétention (ex. 7 quotidiens / 4 hebdo). **Test de restauration** documenté avant prod (`06` §11).
+- **Backups** : conteneur cron `pg_dump` → chiffré (GPG, `BACKUP_PASSPHRASE`) → **rclone** → `R2_BUCKET_BACKUPS`. Rétention `BACKUP_KEEP_DAILY` / `BACKUP_KEEP_WEEKLY`.
+
+### Deux niveaux de preuve
+
+| Script | Ce qu'il prouve |
+|---|---|
+| `infra/backup/test-restore.sh` | Le **mécanisme** : dump → chiffrement → transfert → déchiffrement → restauration, sur deux clusters jetables et des données factices. Aucun accès réseau. |
+| `infra/backup/drill-restore-prod.sh` | La **sauvegarde réelle** : récupère le dernier dump de prod sur R2, le restaure dans un cluster jetable et affiche ce qu'il contient (nombre de pages, articles, messages, et un échantillon de texte). Lecture seule sur R2, ne touche ni la prod ni la stack locale. |
+
+Le second est le seul qui compte : tant qu'on n'a pas vu du contenu réel ressortir
+d'un dump réel, on n'a pas de sauvegarde, on a un fichier. À rejouer après tout
+changement de schéma ou de rôles.
+
+> **Piège vérifié en exercice** : un dump référence le **superutilisateur de la source**
+> dans ses `ALTER DEFAULT PRIVILEGES`. Si ce rôle n'existe pas dans le cluster cible,
+> `pg_restore` rejette ces instructions une par une : structure et données passent,
+> **les privilèges par défaut non**. L'erreur est noyée dans un `errors ignored on
+> restore: N` en fin de sortie. `drill-restore-prod.sh` crée le rôle au préalable
+> (`SOURCE_POSTGRES_USER`, défaut `postgres_encre`) — et en restauration prod → prod,
+> le rôle existe déjà.
+
+**Dernier exercice joué** : 2026-08-03 sur le dump du jour — 18 collections, 6 articles
+publiés, 5 offres, 9 messages, 3 abonnés, contenu éditorial intact.
 
 ---
 

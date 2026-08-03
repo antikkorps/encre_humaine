@@ -60,6 +60,35 @@ vérifié de bout en bout par `infra/backup/test-restore.sh`, qui :
 ./infra/backup/test-restore.sh
 ```
 
-> Le remote `local` ne couvre pas les spécificités S3/R2 (endpoint, clés) — non
-> testables sans bucket réel —, mais valide toute la chaîne pg_dump↔pg_restore et
-> le chiffrement. Le câblage R2 réel relève de l'étape déploiement (secrets).
+> Le remote `local` ne couvre pas les spécificités S3/R2 (endpoint, clés), mais
+> valide toute la chaîne pg_dump↔pg_restore et le chiffrement.
+
+## Exercice sur la sauvegarde RÉELLE
+
+`test-restore.sh` prouve le mécanisme sur des données factices. Il ne dit rien de
+ce qui dort réellement sur R2. C'est le rôle de :
+
+```sh
+./infra/backup/drill-restore-prod.sh          # dernier dump
+./infra/backup/drill-restore-prod.sh encre-20260801T030000Z.dump.gpg   # un dump précis
+```
+
+Il récupère le dump sur R2 (**lecture seule**), le restaure dans un cluster jetable
+— ni la prod ni la stack locale ne sont touchées — puis affiche ce qu'il contient :
+nombre de pages, articles, offres, messages, abonnés, et un échantillon du texte
+éditorial. Tant qu'on n'a pas vu du contenu réel ressortir d'un dump réel, on n'a
+pas de sauvegarde : on a un fichier. À rejouer après tout changement de schéma ou
+de rôles.
+
+### Le piège des privilèges par défaut
+
+Un dump référence le **superutilisateur de la source** dans ses
+`ALTER DEFAULT PRIVILEGES`. Si ce rôle n'existe pas dans le cluster cible,
+`pg_restore` rejette ces instructions une par une : la structure et les données
+passent, **les privilèges par défaut non**. Le symptôme est discret — un
+`errors ignored on restore: N` en fin de sortie. Le script crée donc le rôle au
+préalable (`SOURCE_POSTGRES_USER`, défaut `postgres_encre`). En restauration
+prod → prod, le rôle existe déjà et l'étape est sans effet.
+
+**Dernier exercice** : 2026-08-03, dump du jour — 18 collections, 6 articles publiés,
+5 offres, 9 messages, 3 abonnés, contenu éditorial intact.
