@@ -180,6 +180,24 @@ main :where(p) {
   font-style: italic;
 }
 
+/* Variante sur fond sombre (sections marine) — à poser EN PLUS de `.rich-text`
+ * (ex. `<RichText class="rich-text-invert" />`). Déclarée après pour l'emporter
+ * à specificité égale. */
+.rich-text-invert {
+  color: color-mix(in oklab, var(--color-paper) 82%, transparent);
+}
+.rich-text-invert :where(h2, h3),
+.rich-text-invert :where(strong) {
+  color: var(--color-paper);
+}
+.rich-text-invert :where(a) {
+  color: var(--color-sand-300);
+}
+.rich-text-invert :where(blockquote) {
+  border-inline-start-color: var(--color-sand-400);
+  color: var(--color-paper);
+}
+
 /*
  * Mouvement (décor + reveal au scroll) — docs/00 §a11y.
  * Compositeur uniquement (transform/opacity → zéro CLS, zéro reflow, aucun impact

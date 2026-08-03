@@ -174,8 +174,16 @@ const singletons: CollectionDef[] = [
       f.richtext("accroche_body"),
       // §2 Mon parcours
       f.input("story_title"),
-      f.imageFile("story_photo", { note: "Portrait (optionnel, masqué si vide)" }),
-      f.richtext("story_body", { note: "Mon parcours" }),
+      f.imageFile("story_photo", {
+        note: "Photo du 1er bloc, affichée à DROITE (optionnelle, non rognée)",
+      }),
+      f.richtext("story_body", { note: "Mon parcours — 1er bloc (texte à gauche)" }),
+      f.imageFile("story_photo_2", {
+        note: "Photo du 2e bloc, affichée à GAUCHE (optionnelle, non rognée)",
+      }),
+      f.richtext("story_body_2", {
+        note: "Mon parcours — 2e bloc (texte à droite). Vide = bloc masqué",
+      }),
       // §3 Pourquoi L'Encre Humaine ? + le poulpe
       f.input("why_title"),
       f.richtext("why_body", { note: "L'encre" }),

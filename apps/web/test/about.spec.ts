@@ -58,7 +58,13 @@ describe("mapAboutContent", () => {
       wrap,
     );
     expect(c.accroche).toEqual({ title: "", bodyHtml: "clean(<p>a</p>)" });
-    expect(c.story).toEqual({ title: "", photo: null, bodyHtml: "clean(<p>hi</p>)" });
+    expect(c.story).toEqual({
+      title: "",
+      photo: null,
+      bodyHtml: "clean(<p>hi</p>)",
+      photo2: null,
+      bodyHtml2: "",
+    });
     expect(c.why).toEqual({ title: "", bodyHtml: "clean(<b>x</b>)" });
     expect(c.octopus).toEqual({ subtitle: "", bodyHtml: "clean(<i>o</i>)" });
   });
@@ -69,7 +75,34 @@ describe("mapAboutContent", () => {
       title: "",
       photo: { url: `${BASE}/assets/f1`, alt: "", width: null, height: null },
       bodyHtml: "",
+      photo2: null,
+      bodyHtml2: "",
     });
+  });
+
+  it("« Mon parcours » : 2e bloc (photo expansée + corps) mappé, dimensions natives", () => {
+    const c = mapAboutContent(
+      {
+        story_photo: { id: "f1", width: 1200, height: 1600, title: "Eléonore" },
+        story_body_2: "<p>suite</p>",
+        story_photo_2: { id: "f2", width: 900, height: 1200, description: "Au bureau" },
+      },
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.story).toEqual({
+      title: "",
+      photo: { url: `${BASE}/assets/f1`, alt: "Eléonore", width: 1200, height: 1600 },
+      bodyHtml: "",
+      photo2: { url: `${BASE}/assets/f2`, alt: "Au bureau", width: 900, height: 1200 },
+      bodyHtml2: "clean(<p>suite</p>)",
+    });
+  });
+
+  it("« Mon parcours » visible avec le seul 2e bloc", () => {
+    const c = mapAboutContent({ story_body_2: "<p>x</p>" }, {}, BASE, wrap);
+    expect(c.story?.bodyHtml2).toBe("clean(<p>x</p>)");
   });
 
   it("liste « ce que je ne fais pas » + principes titre/corps", () => {

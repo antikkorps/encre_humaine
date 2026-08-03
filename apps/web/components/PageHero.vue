@@ -13,8 +13,10 @@ withDefaults(
     eyebrow?: string;
     body?: string;
     variant?: "teal" | "orange" | "neutral";
+    /** Côté du tentacule décoratif : à gauche quand la carte `aside` le rognerait. */
+    tentacleSide?: "left" | "right";
   }>(),
-  { variant: "neutral" },
+  { variant: "neutral", tentacleSide: "right" },
 );
 const slots = useSlots();
 
@@ -51,8 +53,11 @@ const tentacle: Record<string, string> = {
     <InkBlob class="absolute -left-24 -bottom-16 -z-10 h-64 w-64 -rotate-45" :class="blob[variant]" />
     <TentacleAccent
       name="tentacule-3-trait"
-      class="absolute -bottom-8 -right-10 -z-10 hidden w-[32rem] lg:block"
-      :class="tentacle[variant]"
+      class="absolute -bottom-8 -z-10 hidden w-[32rem] lg:block"
+      :class="[
+        tentacle[variant],
+        tentacleSide === 'left' ? '-left-10 -scale-x-100' : '-right-10',
+      ]"
     />
 
     <div class="mx-auto max-w-6xl px-4 py-16 sm:py-24">

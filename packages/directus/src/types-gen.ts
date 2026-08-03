@@ -129,8 +129,12 @@ export interface DirectusFile {
   height: number | null;
 }`;
 
+// `directus_files` est déclarée dans le Schema (collection système) : sans elle,
+// le SDK ne sait pas typer la **sélection imbriquée** d'un champ fichier
+// (`fields: [{ story_photo: ["width", "height"] }]`), utile quand la vue a besoin
+// des dimensions natives d'une image.
 const body = `${header}\n\n${interfaces}\n\n/** Schéma consommé par le SDK Directus (createDirectus<Schema>). */
-export interface Schema {\n${schemaEntries}\n}\n`;
+export interface Schema {\n${schemaEntries}\n  directus_files: DirectusFile[];\n}\n`;
 
 writeFileSync(OUT, body);
 console.log(`✓ types Directus → ${OUT} (${userCollections.length} collections)`);

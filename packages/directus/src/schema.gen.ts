@@ -18,6 +18,8 @@ export interface AboutPage {
   id: string;
   story_photo: string | DirectusFile | null;
   story_body: string | null;
+  story_photo_2: string | DirectusFile | null;
+  story_body_2: string | null;
   why_title: string | null;
   why_body: string | null;
   octopus_body: string | null;
@@ -475,4 +477,5 @@ export interface Schema {
   shop_page: ShopPage;
   site_settings: SiteSettings;
   testimonials: Testimonials[];
+  directus_files: DirectusFile[];
 }

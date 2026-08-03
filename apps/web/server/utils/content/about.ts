@@ -28,6 +28,8 @@ export interface RawAbout {
   story_title?: string | null;
   story_photo?: FileField;
   story_body?: string | null; // rich text
+  story_photo_2?: FileField;
+  story_body_2?: string | null; // rich text (2e bloc, optionnel)
   why_title?: string | null;
   why_body?: string | null; // rich text
   octopus_subtitle?: string | null;
@@ -57,7 +59,17 @@ export type AboutConviction = TitledItem;
 export interface AboutContent {
   /** Accroche : `title` = source du `h1` (fallback d'affichage côté page). */
   accroche: { title: string; bodyHtml: string } | null;
-  story: { title: string; photo: ContentPhoto | null; bodyHtml: string } | null;
+  /**
+   * « Mon parcours » : bloc 1 (texte à gauche, photo à droite) + bloc 2 optionnel
+   * (photo à gauche, texte à droite) pour aérer un texte long avec 2 visuels.
+   */
+  story: {
+    title: string;
+    photo: ContentPhoto | null;
+    bodyHtml: string;
+    photo2: ContentPhoto | null;
+    bodyHtml2: string;
+  } | null;
   why: { title: string; bodyHtml: string } | null;
   octopus: { subtitle: string; bodyHtml: string } | null;
   convictions: { title: string; items: AboutConviction[] } | null;
@@ -73,6 +85,9 @@ export interface AboutContent {
   cta: { title: string; body: string | null; label: string };
   seo: ContentSeo;
 }
+
+/** Sous-champs demandés pour une photo expansée (dimensions natives + alt). */
+const PHOTO_FIELDS = ["id", "width", "height", "title", "description"] as const;
 
 /** Signature du sanitizer injecté (cf. `sanitizeRichText`). */
 type Sanitize = (html?: string | null) => string;
@@ -94,6 +109,8 @@ export function mapAboutContent(
   const storyTitle = str(raw.story_title);
   const storyHtml = sanitize(raw.story_body);
   const storyPhoto = mapPhoto(raw.story_photo, assetBase);
+  const storyHtml2 = sanitize(raw.story_body_2);
+  const storyPhoto2 = mapPhoto(raw.story_photo_2, assetBase);
   const whyTitle = str(raw.why_title);
   const whyHtml = sanitize(raw.why_body);
   const octoSubtitle = str(raw.octopus_subtitle);
@@ -111,8 +128,14 @@ export function mapAboutContent(
     accroche:
       accrocheTitle || accrocheHtml ? { title: accrocheTitle, bodyHtml: accrocheHtml } : null,
     story:
-      storyTitle || storyHtml || storyPhoto
-        ? { title: storyTitle, photo: storyPhoto, bodyHtml: storyHtml }
+      storyTitle || storyHtml || storyPhoto || storyHtml2 || storyPhoto2
+        ? {
+            title: storyTitle,
+            photo: storyPhoto,
+            bodyHtml: storyHtml,
+            photo2: storyPhoto2,
+            bodyHtml2: storyHtml2,
+          }
         : null,
     why: whyTitle || whyHtml ? { title: whyTitle, bodyHtml: whyHtml } : null,
     octopus: octoSubtitle || octoHtml ? { subtitle: octoSubtitle, bodyHtml: octoHtml } : null,
@@ -149,8 +172,13 @@ export async function loadAboutContent(): Promise<AboutContent> {
           "accroche_body",
           "story_title",
           // Champs fichier = ID brut (directus_files hors Schema typé) → URL d'asset.
-          "story_photo",
+          // EXCEPTION, les photos du parcours : champ **expansé** (dimensions +
+          // alt) — les dimensions natives permettent d'afficher le portrait
+          // ENTIER (sans rognage) tout en réservant la place (zéro CLS).
+          { story_photo: PHOTO_FIELDS },
           "story_body",
+          { story_photo_2: PHOTO_FIELDS },
+          "story_body_2",
           "why_title",
           "why_body",
           "octopus_subtitle",
