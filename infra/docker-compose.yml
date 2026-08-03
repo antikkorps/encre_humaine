@@ -45,7 +45,12 @@ services:
       SECRET: ${DIRECTUS_SECRET}
       DB_CLIENT: pg
       DB_CONNECTION_STRING: postgres://directus_user:${DIRECTUS_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      DB_SEARCH_PATH: directus
+      # `app` en second : Directus VOIT la table `app.contact_leads` (messages du
+      # formulaire) pour l'exposer en LECTURE SEULE à Eléonore. `directus` reste en
+      # tête, donc ses propres tables continuent d'être résolues en priorité. Le
+      # rôle `directus_user` n'a qu'un SELECT sur cette table : même une fausse
+      # manœuvre dans l'admin ne peut ni modifier ni supprimer un message.
+      DB_SEARCH_PATH: directus,app
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
       ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
       PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
