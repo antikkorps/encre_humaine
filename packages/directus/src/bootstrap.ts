@@ -6,6 +6,7 @@
 // Pré-requis : la stack tourne et l'API répond (make cms-up).
 
 import { bootstrapAccess } from "./access.ts";
+import { adoptContactLeads } from "./adopt-app-tables.ts";
 import {
   ensureCollection,
   ensureField,
@@ -131,6 +132,8 @@ async function main(): Promise<void> {
   console.log(
     `  schéma : +${created.collections} collections, +${created.fields} champs, +${created.relations} relations, ~${created.sorted} ordres`,
   );
+  console.log("→ Tables applicatives exposées en lecture…");
+  await adoptContactLeads();
   console.log("→ Rôles & permissions…");
   await bootstrapAccess();
   console.log("  rôles : Éditrice + API (lecture, published-only) + token statique");

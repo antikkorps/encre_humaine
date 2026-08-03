@@ -105,6 +105,10 @@ export async function bootstrapAccess(): Promise<void> {
       editorRules.push({ collection: t.collection, action });
     }
   }
+  // Messages du formulaire : LECTURE SEULE. La table appartient à l'application
+  // (migrations Drizzle) ; l'admin sert uniquement à les consulter quand l'email
+  // de notification n'arrive pas (cf. adopt-app-tables.ts).
+  editorRules.push({ collection: "contact_leads", action: "read" });
   for (const action of ["create", "read", "update", "delete"] as Action[]) {
     editorRules.push({ collection: "directus_files", action });
   }
