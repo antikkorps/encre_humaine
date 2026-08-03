@@ -14,6 +14,7 @@
     "types": "tsx src/types-gen.ts",
     "seed": "tsx src/seed.ts",
     "seed:home": "tsx src/seed-home.ts",
+    "seed:run9": "tsx src/seed-run9.ts",
     "reconcile": "tsx src/reconcile.ts"
   },
   "devDependencies": {
