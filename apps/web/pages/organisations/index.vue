@@ -102,8 +102,9 @@ useSeoMeta({
       <!-- 2. Ce que j'observe — tentacule à droite (alternance sur la page) -->
       <section v-if="content.observe" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent
+          side="right"
           name="tentacule-1-trait"
-          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -146,6 +147,7 @@ useSeoMeta({
         class="relative isolate overflow-hidden"
       >
         <TentacleAccent
+          side="left"
           name="tentacule-4-plein"
           class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
         />
@@ -221,6 +223,7 @@ useSeoMeta({
         class="relative isolate overflow-hidden"
       >
         <TentacleAccent
+          side="left"
           name="tentacule-4-plein"
           class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
         />
@@ -241,8 +244,9 @@ useSeoMeta({
         class="bg-ink-gradient relative isolate overflow-hidden text-paper"
       >
         <TentacleAccent
+          side="right"
           name="tentacule-5-plein"
-          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
           <SectionHeading
@@ -283,6 +287,7 @@ useSeoMeta({
       <!-- 5. Ce qui différencie mon approche -->
       <section v-if="content.differentiator" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
+          side="left"
           name="tentacule-2-trait"
           class="absolute -left-16 bottom-0 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
@@ -297,8 +302,9 @@ useSeoMeta({
       <!-- 6. Cet accompagnement est fait pour vous si… — beige soutenu -->
       <section v-if="content.audience" v-reveal class="relative isolate overflow-hidden bg-paper-3">
         <TentacleAccent
+          side="right"
           name="tentacule-3-trait"
-          class="absolute -right-16 top-8 -z-10 hidden w-[28rem] -scale-x-100 rotate-6 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 top-8 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
@@ -334,6 +340,7 @@ useSeoMeta({
         aria-label="Témoignages"
       >
         <TentacleAccent
+          side="left"
           name="tentacule-1-plein"
           class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
         />
@@ -353,8 +360,9 @@ useSeoMeta({
            bouton doré) plutôt que le bandeau marine sombre (demande Éléonore). -->
       <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
         <TentacleAccent
+          side="right"
           name="tentacule-5-trait"
-          class="absolute -scale-x-100 -right-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 rotate-6 text-teal-600/[0.05] lg:block"
+          class="absolute -right-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 rotate-6 text-teal-600/[0.05] lg:block"
         />
         <CtaBlock
           :title="content.cta.title"

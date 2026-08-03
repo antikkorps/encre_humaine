@@ -76,6 +76,7 @@ useSchemaOrg([
            au scroll sur desktop. -->
       <section v-if="content.story" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
+          side="left"
           name="tentacule-2-trait"
           class="absolute -left-20 top-24 -z-10 hidden w-[26rem] -rotate-3 text-teal-700/[0.06] lg:block"
         />
@@ -154,8 +155,9 @@ useSchemaOrg([
         class="bg-ink-gradient relative isolate overflow-hidden text-paper"
       >
         <TentacleAccent
+          side="right"
           name="tentacule-5-plein"
-          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.07] lg:block"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.07] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
@@ -172,8 +174,9 @@ useSchemaOrg([
       <!-- 3b. Le poulpe (clin d'œil à la mascotte) -->
       <section v-if="content.octopus" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
+          side="right"
           name="tentacule-4-trait"
-          class="absolute -right-20 top-8 -z-10 hidden w-[26rem] -scale-x-100 rotate-6 text-orange-400/[0.10] lg:block"
+          class="absolute -right-20 top-8 -z-10 hidden w-[26rem] rotate-6 text-orange-400/[0.10] lg:block"
         />
         <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-20 md:grid-cols-[auto_1fr]">
           <OctopusLogo class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
@@ -187,6 +190,7 @@ useSchemaOrg([
       <!-- 4. Mes convictions -->
       <section v-if="content.convictions" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent
+          side="left"
           name="tentacule-1-plein"
           class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
         />
@@ -215,8 +219,9 @@ useSchemaOrg([
       <!-- 5. Ma manière d'accompagner -->
       <section v-if="content.work" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
+          side="right"
           name="tentacule-3-trait"
-          class="absolute -scale-x-100 -right-16 top-10 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 top-10 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
@@ -261,6 +266,7 @@ useSchemaOrg([
       <!-- 6. Ce que je ne fais pas — beige soutenu (transition vers le pied de page) -->
       <section v-if="content.whatIDontDo" v-reveal class="relative isolate overflow-hidden bg-paper-3">
         <TentacleAccent
+          side="left"
           name="tentacule-5-trait"
           class="absolute -left-16 bottom-0 -z-10 hidden w-[30rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
@@ -291,8 +297,9 @@ useSchemaOrg([
         aria-label="Portrait"
       >
         <TentacleAccent
+          side="right"
           name="tentacule-1-trait"
-          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <figure class="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 py-20 text-center">
           <NuxtImg
@@ -316,8 +323,14 @@ useSchemaOrg([
         </figure>
       </section>
 
-      <!-- 8. CTA -->
-      <section v-reveal class="mx-auto max-w-6xl px-4 pb-20">
+      <!-- 8. CTA — `py-20` : sans marge haute, le bloc collait à la section
+           précédente (la section « portrait » qui l'aérait est optionnelle). -->
+      <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
+        <TentacleAccent
+          side="left"
+          name="tentacule-5-trait"
+          class="absolute -left-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 -rotate-6 text-teal-600/[0.05] lg:block"
+        />
         <CtaBlock
           :title="content.cta.title || 'Travaillons ensemble'"
           :description="content.cta.body ?? undefined"

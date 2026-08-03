@@ -115,8 +115,9 @@ useSeoMeta({
         class="relative isolate scroll-mt-24 overflow-hidden"
       >
         <TentacleAccent
+          side="right"
           name="tentacule-1-trait"
-          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 pt-16">
           <SectionHeading title="Explorer les Tentacules" eyebrow="Accès aux contenus" align="center" />
@@ -164,6 +165,7 @@ useSeoMeta({
       <!-- 3. À lire en premier (article vedette) — masqué si non défini -->
       <section v-if="content.featuredArticle" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
+          side="left"
           name="tentacule-4-plein"
           class="absolute -left-24 top-8 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
         />
@@ -211,8 +213,9 @@ useSeoMeta({
       <!-- 4. Dernières publiées (carrousel + filtres) -->
       <section id="tentacules" class="relative isolate scroll-mt-24 overflow-hidden">
         <TentacleAccent
+          side="right"
           name="tentacule-3-trait"
-          class="absolute -right-16 bottom-8 -z-10 hidden w-[28rem] -scale-x-100 rotate-6 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 bottom-8 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
         <div
           class="mx-auto max-w-6xl px-4 pb-24"
@@ -284,6 +287,7 @@ useSeoMeta({
           class="absolute -bottom-16 -right-10 -z-10 hidden h-[24rem] rotate-[6deg] text-orange-300/[0.06] lg:block"
         />
         <TentacleAccent
+          side="left"
           name="tentacule-5-plein"
           class="absolute -left-24 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
@@ -343,8 +347,9 @@ useSeoMeta({
            colonne simple plutôt que de s'étaler sur toute la largeur. -->
       <section v-if="content.positioning" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
+          side="right"
           name="tentacule-2-trait"
-          class="absolute -right-16 top-8 -z-10 hidden w-[32rem] -scale-x-100 rotate-6 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 top-8 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div
@@ -380,6 +385,7 @@ useSeoMeta({
       <!-- 7. CTA final → section newsletter -->
       <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 pb-24">
         <TentacleAccent
+          side="left"
           name="tentacule-5-trait"
           class="absolute -left-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 -rotate-6 text-teal-600/[0.05] lg:block"
         />

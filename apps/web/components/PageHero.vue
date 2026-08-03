@@ -51,16 +51,13 @@ const tentacle: Record<string, string> = {
   <section class="relative isolate overflow-hidden" :class="tint[variant]">
     <InkBlob class="absolute -right-20 -top-24 -z-10 h-80 w-80 rotate-12" :class="blob[variant]" />
     <InkBlob class="absolute -left-24 -bottom-16 -z-10 h-64 w-64 -rotate-45" :class="blob[variant]" />
+    <!-- `side` : TentacleAccent retourne le dessin si besoin pour que la coupe
+         sorte du cadre (chaque tentacule n'a pas sa base du même côté). -->
     <TentacleAccent
       name="tentacule-3-trait"
+      :side="tentacleSide"
       class="absolute -bottom-8 -z-10 hidden w-[32rem] lg:block"
-      :class="[
-        tentacle[variant],
-        // Le dessin a sa base COUPÉE à gauche et sa pointe à droite : posé à
-        // droite, il faut le retourner pour que la coupe sorte du cadre (sinon
-        // elle « flotte » au milieu de la page).
-        tentacleSide === 'left' ? '-left-10' : '-right-10 -scale-x-100',
-      ]"
+      :class="[tentacle[variant], tentacleSide === 'left' ? '-left-10' : '-right-10']"
     />
 
     <div class="mx-auto max-w-6xl px-4 py-16 sm:py-24">

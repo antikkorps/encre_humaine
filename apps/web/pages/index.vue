@@ -210,8 +210,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       <!-- 3. Les défis (« Vous vous reconnaissez ? ») -->
       <section v-if="content.recognition" class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent
+          side="right"
           name="tentacule-1-trait"
-          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -262,6 +263,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         class="relative isolate scroll-mt-24 overflow-hidden bg-paper"
       >
         <TentacleAccent
+          side="left"
           name="tentacule-4-plein"
           class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
         />
@@ -312,8 +314,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         class="bg-ink-gradient relative isolate scroll-mt-24 overflow-hidden text-paper"
       >
         <TentacleAccent
+          side="right"
           name="tentacule-5-plein"
-          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
           <!-- Titre + intro en pleine largeur (demande Éléonore : « prendre la page »). -->
@@ -352,6 +355,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       <section v-if="content.why" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/[0.08]" />
         <TentacleAccent
+          side="left"
           name="tentacule-1-plein"
           class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
         />
@@ -395,6 +399,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       <!-- 7. Derrière l'Encre Humaine — portrait ovale cadre doré -->
       <section v-if="content.intro" v-reveal class="relative isolate overflow-hidden bg-paper">
         <TentacleAccent
+          side="left"
           name="tentacule-2-trait"
           class="absolute -left-16 bottom-0 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
@@ -448,8 +453,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
         <!-- Tentacule retournée (-scale-x) pour qu'elle « sorte » du bord droit. -->
         <TentacleAccent
+          side="right"
           name="tentacule-4-trait"
-          class="absolute -right-20 top-6 -z-10 hidden w-[26rem] -scale-x-100 rotate-6 text-orange-400/[0.10] lg:block"
+          class="absolute -right-20 top-6 -z-10 hidden w-[26rem] rotate-6 text-orange-400/[0.10] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -529,6 +535,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       >
         <!-- Tentacule retournée (-scale-x) + éclaircie pour ressortir sur le marine. -->
         <TentacleAccent
+          side="left"
           name="tentacule-3-trait"
           class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.08] lg:block"
         />
@@ -565,6 +572,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20"
       >
         <TentacleAccent
+          side="left"
           name="tentacule-5-trait"
           class="absolute -left-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 -rotate-6 text-teal-600/[0.05] lg:block"
         />

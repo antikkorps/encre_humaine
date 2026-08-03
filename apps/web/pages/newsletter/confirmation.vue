@@ -66,6 +66,7 @@ useSeoMeta({
   <section class="relative isolate mx-auto max-w-2xl overflow-hidden px-4 py-24">
     <!-- Filigrane tentacule discret qui affleure derrière la carte (parité avec la confirmation de commande). -->
     <TentacleAccent
+      side="left"
       name="tentacule-5-trait"
       class="absolute -left-12 -bottom-8 -z-10 w-72 -rotate-6 text-teal-700/[0.08]"
     />
