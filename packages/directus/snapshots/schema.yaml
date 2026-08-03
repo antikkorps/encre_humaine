@@ -15664,7 +15664,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special:
         - alias
         - no-data
@@ -15689,7 +15689,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -15729,7 +15729,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -15769,7 +15769,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special:
         - file
       translations: null
@@ -15810,7 +15810,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special:
         - cast-boolean
       translations: null
@@ -15933,7 +15933,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 7
       special:
         - alias
         - no-data
@@ -15958,7 +15958,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 8
       special: null
       translations: null
       validation: null
@@ -15998,7 +15998,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -16038,7 +16038,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -16078,7 +16078,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special:
         - file
       translations: null
@@ -16102,6 +16102,165 @@ fields:
       has_auto_increment: false
       foreign_key_table: directus_files
       foreign_key_column: id
+  - collection: resources_page
+    field: explore_cards
+    type: json
+    meta:
+      collection: resources_page
+      conditions: null
+      display: null
+      display_options: null
+      field: explore_cards
+      group: null
+      hidden: false
+      interface: list
+      note: >-
+        Cartes « Explorer les Tentacules » : le groupe doit correspondre à une
+        catégorie d'articles ; mots-clés séparés par « • ». Non renseigné =
+        valeurs par défaut.
+      options:
+        fields:
+          - field: group
+            meta:
+              field: group
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Organisations
+                    value: organisations
+                  - text: Particuliers
+                    value: particuliers
+                  - text: Terrain
+                    value: terrain
+              width: half
+            name: group
+            type: string
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+              width: half
+            name: icon
+            type: string
+          - field: label
+            meta:
+              field: label
+              interface: input
+              width: full
+            name: label
+            type: string
+          - field: keywords
+            meta:
+              field: keywords
+              interface: input-multiline
+              width: full
+            name: keywords
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: explore_cards
+      table: resources_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: shop_page
     field: id
     type: uuid

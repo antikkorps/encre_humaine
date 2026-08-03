@@ -45,6 +45,7 @@ const ICON_REPEATERS: [string, string][] = [
   ["home_page", "recognition_items"],
   ["home_page", "build_blocks"],
   ["home_page", "b2c_cards"],
+  ["resources_page", "explore_cards"],
 ];
 
 type SubField = {

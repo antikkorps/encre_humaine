@@ -2,7 +2,7 @@
 //
 // Composition de la page fusionnée « Les Tentacules » (blog + newsletter) — /ressources.
 // Vérifie : article vedette, filtres dérivés des groupes présents (ordre documenté +
-// chrome emoji/mots-clés), positionnement rich text assaini, section newsletter,
+// chrome icône/mots-clés), positionnement rich text assaini, section newsletter,
 // 0 article → état vide propre, SEO.
 import { describe, expect, it } from "vitest";
 import {
@@ -36,7 +36,7 @@ describe("mapFeaturedArticle", () => {
 });
 
 describe("buildFilters", () => {
-  it("ne garde que les groupes présents (ordre documenté) + chrome emoji/label", () => {
+  it("ne garde que les groupes présents (ordre documenté) + chrome icône/label", () => {
     const filters = buildFilters([
       { title: "A", slug: "a", categoryGroup: "terrain" } as never,
       { title: "B", slug: "b", categoryGroup: "organisations" } as never,
@@ -46,15 +46,37 @@ describe("buildFilters", () => {
     expect(filters[0]).toMatchObject({
       group: "organisations",
       label: "Organisations",
-      emoji: "🏢",
+      icon: "groups",
     });
-    expect(filters[1]).toMatchObject({ group: "terrain", label: "Terrain", emoji: "🔎" });
+    expect(filters[1]).toMatchObject({ group: "terrain", label: "Terrain", icon: "explore" });
     // le groupe « particuliers » est relabellé « Parcours professionnels »
     expect(filters.every((f) => typeof f.keywords === "string" && f.keywords.length)).toBe(true);
   });
 
   it("aucun filtre si aucun groupe", () => {
     expect(buildFilters([])).toEqual([]);
+  });
+
+  it("le répéteur `explore_cards` surcharge icône, libellé et mots-clés", () => {
+    const filters = buildFilters(
+      [{ title: "A", slug: "a", categoryGroup: "organisations" } as never],
+      [
+        { group: "organisations", icon: "hub", label: "Systèmes RH", keywords: "GEPP • GPEC" },
+        { group: "inconnu", icon: "target" },
+      ],
+    );
+    expect(filters).toEqual([
+      { group: "organisations", label: "Systèmes RH", icon: "hub", keywords: "GEPP • GPEC" },
+    ]);
+  });
+
+  it("une carte à moitié remplie retombe sur les valeurs par défaut", () => {
+    const [filter] = buildFilters(
+      [{ title: "A", slug: "a", categoryGroup: "terrain" } as never],
+      [{ group: "terrain", icon: "target" }],
+    );
+    expect(filter).toMatchObject({ label: "Terrain", icon: "target" });
+    expect(filter?.keywords).toContain("analyses");
   });
 });
 

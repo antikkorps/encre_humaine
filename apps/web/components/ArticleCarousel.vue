@@ -6,13 +6,31 @@
 // Pensé pour un fond SOMBRE (les cartes crème « ressortent »).
 import type { ArticleSummary } from "~/types/content";
 
-defineProps<{
-  articles: ArticleSummary[];
-  seeAllTo: string;
-  seeAllLabel: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    articles: ArticleSummary[];
+    seeAllTo: string;
+    seeAllLabel: string;
+    /** Fond de la section : pilote le contraste des flèches. */
+    tone?: "dark" | "light";
+  }>(),
+  { tone: "dark" },
+);
 
 const track = ref<HTMLElement | null>(null);
+
+// Changement de jeu d'articles (filtre de /ressources) → retour au début, sinon
+// on reste scrollé dans le vide.
+watch(
+  () => props.articles,
+  () => track.value?.scrollTo({ left: 0 }),
+);
+
+const arrowClass = computed(() =>
+  props.tone === "dark"
+    ? "border-paper/25 text-paper/80 hover:border-sand-400 hover:text-sand-300"
+    : "border-ink/15 text-ink/70 hover:border-sand-400 hover:text-sand-500",
+);
 
 /** Défile d'environ une carte (85 % de la largeur visible) dans le sens donné. */
 function scrollByCard(direction: 1 | -1) {
@@ -65,7 +83,8 @@ function scrollByCard(direction: 1 | -1) {
       <button
         type="button"
         aria-label="Articles précédents"
-        class="grid h-11 w-11 place-items-center rounded-full border border-paper/25 text-paper/80 transition-colors hover:border-sand-400 hover:text-sand-300"
+        class="grid h-11 w-11 place-items-center rounded-full border transition-colors"
+        :class="arrowClass"
         @click="scrollByCard(-1)"
       >
         <Icon name="material-symbols:arrow-forward" class="h-5 w-5 rotate-180" />
@@ -73,7 +92,8 @@ function scrollByCard(direction: 1 | -1) {
       <button
         type="button"
         aria-label="Articles suivants"
-        class="grid h-11 w-11 place-items-center rounded-full border border-paper/25 text-paper/80 transition-colors hover:border-sand-400 hover:text-sand-300"
+        class="grid h-11 w-11 place-items-center rounded-full border transition-colors"
+        :class="arrowClass"
         @click="scrollByCard(1)"
       >
         <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />

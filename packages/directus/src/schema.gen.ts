@@ -407,6 +407,7 @@ export interface ResourcesPage {
   positioning_body: string | null;
   cta_title: string | null;
   positioning_photo: string | DirectusFile | null;
+  explore_cards: unknown | null;
 }
 
 export interface ShopPage {

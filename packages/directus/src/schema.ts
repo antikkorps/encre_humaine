@@ -392,6 +392,23 @@ const singletons: CollectionDef[] = [
       f.m2o("featured_resource", "resources", {
         note: "Ancien lead magnet vedette — déprécié (le lead magnet vit dans newsletter_page)",
       }),
+      f.repeater(
+        "explore_cards",
+        [
+          {
+            field: "group",
+            interface: "select-dropdown",
+            width: "half",
+            options: { choices: ARTICLE_GROUP, allowNone: true },
+          },
+          ICON_SUBFIELD,
+          { field: "label" },
+          { field: "keywords", interface: "input-multiline" },
+        ],
+        {
+          note: "Cartes « Explorer les Tentacules » : le groupe doit correspondre à une catégorie d'articles ; mots-clés séparés par « • ». Non renseigné = valeurs par défaut.",
+        },
+      ),
       f.divider("positioning_divider", "Positionnement"),
       f.input("positioning_title"),
       f.richtext("positioning_body", { note: "Approche terrain (listes possibles)" }),
