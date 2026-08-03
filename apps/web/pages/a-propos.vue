@@ -155,7 +155,7 @@ useSchemaOrg([
       >
         <TentacleAccent
           name="tentacule-5-plein"
-          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.07] lg:block"
+          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.07] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
@@ -216,7 +216,7 @@ useSchemaOrg([
       <section v-if="content.work" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
           name="tentacule-3-trait"
-          class="absolute -right-16 top-10 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-16 top-10 -z-10 hidden w-[28rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
@@ -292,7 +292,7 @@ useSchemaOrg([
       >
         <TentacleAccent
           name="tentacule-1-trait"
-          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <figure class="mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 py-20 text-center">
           <NuxtImg

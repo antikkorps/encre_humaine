@@ -103,7 +103,7 @@ useSeoMeta({
       <section v-if="content.observe" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent
           name="tentacule-1-trait"
-          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -242,7 +242,7 @@ useSeoMeta({
       >
         <TentacleAccent
           name="tentacule-5-plein"
-          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
           <SectionHeading
@@ -354,7 +354,7 @@ useSeoMeta({
       <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
         <TentacleAccent
           name="tentacule-5-trait"
-          class="absolute -right-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 rotate-6 text-teal-600/[0.05] lg:block"
+          class="absolute -scale-x-100 -right-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 rotate-6 text-teal-600/[0.05] lg:block"
         />
         <CtaBlock
           :title="content.cta.title"

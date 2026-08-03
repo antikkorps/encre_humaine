@@ -116,7 +116,7 @@ useSeoMeta({
       >
         <TentacleAccent
           name="tentacule-1-trait"
-          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 pt-16">
           <SectionHeading title="Explorer les Tentacules" eyebrow="Accès aux contenus" align="center" />

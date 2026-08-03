@@ -105,7 +105,7 @@ useSeoMeta({
       <section v-if="content.outcomes.length" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <TentacleAccent
           name="tentacule-1-trait"
-          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-orange-500/[0.08] lg:block"
+          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-orange-500/[0.08] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -215,7 +215,7 @@ useSeoMeta({
       >
         <TentacleAccent
           name="tentacule-5-plein"
-          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
@@ -325,7 +325,7 @@ useSeoMeta({
       >
         <TentacleAccent
           name="tentacule-1-plein"
-          class="absolute -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
+          class="absolute -scale-x-100 -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
         />
         <div class="mx-auto max-w-5xl px-4 py-20">
           <SectionHeading title="Ce qu'en disent les personnes accompagnées" eyebrow="Témoignages" />

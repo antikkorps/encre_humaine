@@ -56,7 +56,10 @@ const tentacle: Record<string, string> = {
       class="absolute -bottom-8 -z-10 hidden w-[32rem] lg:block"
       :class="[
         tentacle[variant],
-        tentacleSide === 'left' ? '-left-10 -scale-x-100' : '-right-10',
+        // Le dessin a sa base COUPÉE à gauche et sa pointe à droite : posé à
+        // droite, il faut le retourner pour que la coupe sorte du cadre (sinon
+        // elle « flotte » au milieu de la page).
+        tentacleSide === 'left' ? '-left-10' : '-right-10 -scale-x-100',
       ]"
     />
 

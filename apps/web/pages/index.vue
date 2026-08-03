@@ -211,7 +211,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       <section v-if="content.recognition" class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent
           name="tentacule-1-trait"
-          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
@@ -313,7 +313,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       >
         <TentacleAccent
           name="tentacule-5-plein"
-          class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+          class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
           <!-- Titre + intro en pleine largeur (demande Éléonore : « prendre la page »). -->
@@ -530,7 +530,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         <!-- Tentacule retournée (-scale-x) + éclaircie pour ressortir sur le marine. -->
         <TentacleAccent
           name="tentacule-3-trait"
-          class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] -scale-x-100 text-sand-300/[0.08] lg:block"
+          class="absolute -left-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.08] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading

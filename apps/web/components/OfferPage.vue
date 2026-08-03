@@ -194,7 +194,7 @@ useSchemaOrg([
     >
       <TentacleAccent
         name="tentacule-5-plein"
-        class="absolute -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
+        class="absolute -scale-x-100 -right-20 -top-16 -z-10 hidden w-[28rem] text-sand-300/[0.06] lg:block"
       />
       <div class="mx-auto max-w-6xl px-4 py-20 lg:py-24">
         <SectionHeading
@@ -272,7 +272,7 @@ useSchemaOrg([
     <section v-if="content.approche" v-reveal class="relative isolate overflow-hidden">
       <TentacleAccent
         name="tentacule-1-trait"
-        class="absolute -right-16 top-8 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
+        class="absolute -scale-x-100 -right-16 top-8 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
       />
       <div class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading
@@ -409,7 +409,7 @@ useSchemaOrg([
     <section v-if="content.takeaways" v-reveal class="relative isolate overflow-hidden" :class="theme.soft">
       <TentacleAccent
         name="tentacule-1-plein"
-        class="absolute -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
+        class="absolute -scale-x-100 -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
       />
       <div class="mx-auto max-w-3xl px-4 py-20">
         <SectionHeading
@@ -483,7 +483,7 @@ useSchemaOrg([
     >
       <TentacleAccent
         name="tentacule-2-plein"
-        class="absolute -right-24 top-8 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
+        class="absolute -scale-x-100 -right-24 top-8 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
       />
       <div class="mx-auto max-w-5xl px-4 py-20">
         <SectionHeading title="Ce qu'en disent les personnes accompagnées" eyebrow="Témoignages" />
@@ -497,14 +497,21 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 10. CTA final → contact (bandeau marine mutualisé) -->
-    <section v-reveal class="mx-auto max-w-6xl px-4 py-16">
-      <CtaBanner
+    <!-- 10. CTA final → contact. Même bloc que l'accueil (dégradé marine + les
+         deux bulles, bouton doré) que sur les hubs : le bandeau marine sombre
+         détonnait d'une page à l'autre. -->
+    <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
+      <TentacleAccent
+        name="tentacule-5-trait"
+        class="absolute -left-16 top-1/2 -z-10 hidden w-[24rem] -translate-y-1/2 -rotate-6 text-teal-600/[0.05] lg:block"
+      />
+      <CtaBlock
         :title="content.ctaTitle || 'Travaillons ensemble'"
-        :body="content.ctaBody ?? undefined"
+        :description="content.ctaBody ?? undefined"
         :cta-label="content.ctaLabel"
-        to="/contact"
         :subtext="content.ctaSubtext ?? undefined"
+        to="/contact"
+        variant="orange"
       />
     </section>
   </div>
