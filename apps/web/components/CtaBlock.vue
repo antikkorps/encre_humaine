@@ -8,6 +8,8 @@ const props = withDefaults(
     ctaLabel: string;
     to: string;
     description?: string;
+    /** Réassurance sous le bouton (ex. « 30 minutes, sans engagement »). */
+    subtext?: string;
     variant?: "teal" | "orange";
   }>(),
   { variant: "teal" },
@@ -41,5 +43,8 @@ const button = computed(() =>
       {{ ctaLabel }}
       <span aria-hidden="true">→</span>
     </NuxtLink>
+    <!-- `text-center` : la justification globale des paragraphes de `main`
+         l'emporterait sur l'alignement hérité du panneau. -->
+    <p v-if="subtext" class="mt-5 text-center text-sm text-paper/60">{{ subtext }}</p>
   </section>
 </template>
