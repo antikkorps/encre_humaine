@@ -94,6 +94,13 @@ const missionHeading = computed(
 );
 const formatHeading = computed(() => (isB2c.value ? "Le format" : "Comment ça se passe"));
 
+/**
+ * Frise « ce que ça change » : 4 pastilles par ligne quand le compte est
+ * multiple de 4, 3 sinon (5 items → 3 + 2 centrés, demande Éléonore). Sert aussi
+ * à masquer le filet de liaison en fin de ligne, sinon il part dans le vide.
+ */
+const outcomesPerRow = computed(() => ((content.value?.outcomes.length ?? 0) % 4 === 0 ? 4 : 3));
+
 /** Clé Material Symbols d'un item, avec repli par section. */
 const icon = (key: string | undefined, fallback: string) => `material-symbols:${key || fallback}`;
 const num = (i: number) => String(i + 1).padStart(2, "0");
@@ -206,11 +213,16 @@ useSchemaOrg([
           align="center"
           wide
         />
-        <ol class="mx-auto mt-14 grid max-w-5xl gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-          <li v-for="(outcome, i) in content.outcomes" :key="i" class="relative text-center">
-            <!-- Filet doré reliant les pastilles centrées (desktop). -->
+        <ol class="mx-auto mt-14 flex max-w-5xl flex-wrap justify-center gap-x-8 gap-y-12">
+          <li
+            v-for="(outcome, i) in content.outcomes"
+            :key="i"
+            class="relative w-full text-center sm:w-[calc(50%-1rem)]"
+            :class="outcomesPerRow === 4 ? 'lg:w-[calc(25%-1.5rem)]' : 'lg:w-[calc(33.333%-1.5rem)]'"
+          >
+            <!-- Filet doré reliant les pastilles d'une même ligne (desktop). -->
             <span
-              v-if="i < content.outcomes.length - 1"
+              v-if="i < content.outcomes.length - 1 && (i + 1) % outcomesPerRow !== 0"
               aria-hidden="true"
               class="absolute left-1/2 top-6 hidden h-px w-[calc(100%+2rem)] bg-sand-400/30 lg:block"
             ></span>
@@ -244,11 +256,11 @@ useSchemaOrg([
           :title="content.context.title || 'Ce que je vois souvent'"
           :eyebrow="eyebrows.context ?? 'Le constat'"
         />
-        <div v-if="content.context.items.length" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-if="content.context.items.length" class="mt-10 flex flex-wrap justify-center gap-6">
           <article
             v-for="(item, i) in content.context.items"
             :key="i"
-            class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft"
+            class="w-full rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]"
           >
             <span
               class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
@@ -277,21 +289,33 @@ useSchemaOrg([
         name="tentacule-1-trait"
         class="absolute -right-16 top-8 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
       />
-      <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading
-          :title="content.approche.title || 'Mon approche'"
-          :eyebrow="eyebrows.approche ?? 'Approche'"
-        />
-        <RichText v-if="content.approche.bodyHtml" :html="content.approche.bodyHtml" class="mt-5" />
-        <aside
-          v-if="content.approche.signature"
-          class="mt-8 rounded-3xl border border-orange-200 bg-orange-50/60 p-6"
-        >
-          <Icon name="material-symbols:format-quote" class="h-7 w-7 text-orange-500" />
-          <p class="mt-2 whitespace-pre-line font-display text-lg leading-relaxed text-ink/85">
-            {{ content.approche.signature }}
-          </p>
-        </aside>
+      <div class="mx-auto max-w-6xl px-4 py-20">
+        <div class="grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
+          <div>
+            <SectionHeading
+              :title="content.approche.title || 'Mon approche'"
+              :eyebrow="eyebrows.approche ?? 'Approche'"
+            />
+            <RichText
+              v-if="content.approche.bodyHtml"
+              :html="content.approche.bodyHtml"
+              class="mt-5"
+            />
+          </div>
+          <!-- Encadré signature à DROITE du texte (demande Éléonore), collant au
+               scroll sur grand écran comme sur le hub particuliers. -->
+          <aside
+            v-if="content.approche.signature"
+            class="rounded-3xl border border-orange-200 bg-orange-50/60 p-7 lg:sticky lg:top-28"
+          >
+            <Icon name="material-symbols:format-quote" class="h-7 w-7 text-orange-500" />
+            <p
+              class="mt-2 whitespace-pre-line text-left font-display text-lg leading-relaxed text-ink/85"
+            >
+              {{ content.approche.signature }}
+            </p>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -327,7 +351,7 @@ useSchemaOrg([
           <!-- Mission — panneau marine sombre -->
           <div
             v-if="content.missionIncludes.length"
-            class="rounded-3xl bg-teal-900 p-8 text-paper shadow-lift sm:p-10"
+            class="bg-ink-gradient rounded-3xl p-8 text-paper shadow-lift sm:p-10"
           >
             <p class="text-sm font-semibold uppercase tracking-[0.14em] text-orange-300">
               {{ missionHeading }}
