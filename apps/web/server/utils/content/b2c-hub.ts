@@ -11,6 +11,7 @@ import {
   mapTestimonials,
   mapTitledItems,
   type RawSiteDefaults,
+  safeHref,
   str,
   TESTIMONIAL_FIELDS,
   TESTIMONIAL_SORT,
@@ -157,7 +158,7 @@ export function mapSituation(
     items,
     result: result || null,
     ctaLabel: str(raw.ctaLabel) || null,
-    ctaLink: str(raw.ctaLink) || defaultLink,
+    ctaLink: safeHref(raw.ctaLink) || defaultLink,
   };
 }
 

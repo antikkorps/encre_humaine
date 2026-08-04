@@ -13,6 +13,7 @@ import {
   mapTitledItems,
   type RawSiteDefaults,
   records,
+  safeHref,
   str,
   type TitledItem,
 } from "./_shared";
@@ -182,7 +183,7 @@ export function mapBuild(home: RawHome): HomeContent["build"] {
     title,
     blocks,
     ctaLabel: str(home.build_cta_label) || null,
-    ctaUrl: str(home.build_cta_url) || "/organisations",
+    ctaUrl: safeHref(home.build_cta_url) || "/organisations",
   };
 }
 
