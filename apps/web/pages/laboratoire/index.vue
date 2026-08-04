@@ -6,6 +6,11 @@
 // `shop_page` (Directus) et chaque section se masque si elle est vide. Le
 // catalogue produits et le paiement ne s'affichent QUE si Eléonore a ouvert la
 // vente (`shop_enabled`) — le reste de la page vit indépendamment.
+
+// Illustration signée Éléonore (l'établi du Labo) : asset local → import Vite,
+// comme le poulpe stagiaire de la 404. Elle sert de REPLI au champ Directus
+// `hero_image` : si Eléonore en dépose une dans le CMS, c'est la sienne qui prime.
+import laboIllustration from "~/assets/labo/Labo.webp";
 import type { ProductSummary } from "~/types/content";
 
 const { data: shop } = await useShopPage();
@@ -55,8 +60,9 @@ useSeoMeta({
       tentacle-side="left"
     >
       <RichText v-if="shop?.heroBodyHtml" :html="shop.heroBodyHtml" class="mt-6 max-w-xl" />
-      <template v-if="shop?.heroImage" #aside>
+      <template #aside>
         <NuxtImg
+          v-if="shop?.heroImage"
           :src="shop.heroImage.url"
           :alt="shop.heroImage.alt"
           :width="imageSize(shop.heroImage, 720).width"
@@ -67,6 +73,16 @@ useSeoMeta({
           loading="eager"
           decoding="async"
           class="h-auto w-full"
+        />
+        <img
+          v-else
+          :src="laboIllustration"
+          alt="Illustration : un poulpe à son établi entouré de carnets, prototypes et jeux de cartes, sous une affiche « Le Labo — explorer, comprendre, concevoir, expérimenter » — signée Éléonore."
+          width="1600"
+          height="1214"
+          decoding="async"
+          fetchpriority="high"
+          class="mx-auto w-full max-w-lg select-none lg:max-w-none"
         />
       </template>
     </PageHero>

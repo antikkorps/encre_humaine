@@ -7,6 +7,7 @@ import {
   mapSeo,
   type RawSiteDefaults,
   records,
+  safeHref,
   str,
 } from "./_shared";
 
@@ -142,7 +143,7 @@ export function mapShopPage(
             bodyHtml: focusHtml,
             image: mapPhoto(raw.focus_image, assetBase),
             ctaLabel: str(raw.focus_cta_label) || null,
-            ctaUrl: str(raw.focus_cta_url) || null,
+            ctaUrl: safeHref(raw.focus_cta_url) || null,
           }
         : null,
     manifesto:

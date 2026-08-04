@@ -4,6 +4,11 @@
 // Deux voies : prise de RDV (BookingEmbed, Cal.com, chargé au consentement) et
 // formulaire (ContactForm, validation partagée + Turnstile serveur). Page chaude :
 // simple et rassurante. Sections vides masquées ; échec fetch → message sobre.
+// Illustration signée Éléonore (le poulpe qui répond au courrier) : asset local
+// → import Vite, comme le poulpe stagiaire de la 404. Le provider @nuxt/image
+// est bindé à Directus et ne sert que les médias distants.
+import contactIllustration from "~/assets/contact/Contact.webp";
+
 const { data: content, error } = await useFetch("/api/content/contact", {
   query: usePreviewQuery(),
 });
@@ -32,21 +37,29 @@ useSeoMeta({
       variant="neutral"
       tentacle-side="left"
     >
-      <template v-if="content?.accrocheBody" #aside>
-        <figure
-          class="relative overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/70 p-8 shadow-lift backdrop-blur-sm"
-        >
-          <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-orange-100/70" aria-hidden="true"></div>
-          <span
-            class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-900 text-orange-300 shadow-soft"
-          >
-            <Icon name="material-symbols:forum" class="h-6 w-6" />
-          </span>
-          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
-            {{ content.accrocheBody }}
-          </p>
+      <!-- L'illustration prend la place de la carte « constat » : le dessin dit
+           déjà ce que la carte disait (« merci pour votre message, je réponds
+           bientôt »). Le texte d'accroche repasse dans la colonne de gauche. -->
+      <template #aside>
+        <figure class="relative">
+          <img
+            :src="contactIllustration"
+            alt="Illustration : un poulpe attablé écrit à la plume « Bonjour, merci pour votre message. Je vous réponds très bientôt. Eléonore », entouré d'enveloppes, d'un encrier « L'Encre Humaine » et d'une tasse « à votre écoute » — signée Éléonore."
+            width="1600"
+            height="1311"
+            decoding="async"
+            fetchpriority="high"
+            class="mx-auto w-full max-w-lg select-none lg:max-w-none"
+          />
         </figure>
       </template>
+
+      <p
+        v-if="content?.accrocheBody"
+        class="mt-6 max-w-xl whitespace-pre-line leading-relaxed text-ink/70"
+      >
+        {{ content.accrocheBody }}
+      </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
         <NuxtLink

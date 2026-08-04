@@ -57,6 +57,37 @@ export function str(val: unknown): string {
   return typeof val === "string" ? val.trim() : "";
 }
 
+/** Schémas d'URL autorisés dans un `href` rendu par le site. */
+const ALLOWED_HREF_PROTOCOLS = new Set(["http:", "https:", "mailto:", "tel:"]);
+
+/** Base fictive servant à résoudre les chemins relatifs sans les altérer. */
+const RELATIVE_BASE = "https://relative.invalid/";
+
+/**
+ * Lien saisi dans l'admin, **validé avant d'atterrir dans un `href`** : seuls
+ * `http(s)`, `mailto:`, `tel:` et les chemins relatifs (`/…`, `#…`, `?…`)
+ * passent. Un `javascript:` ou un `data:` retombe sur "" → le bouton se masque.
+ *
+ * Même défense en profondeur que l'assainissement du rich text (docs/06 §1) :
+ * l'éditrice est de confiance et il faut un compte pour saisir ces champs, mais
+ * on ne rend jamais une URL sans en vérifier le schéma. Les URL protocol-relative
+ * (`//ailleurs.tld`) sont refusées : externes déguisées en chemin relatif.
+ */
+export function safeHref(val: unknown): string {
+  const raw = str(val);
+  if (!raw || raw.startsWith("//")) return "";
+  if (raw.startsWith("/") || raw.startsWith("#") || raw.startsWith("?")) return raw;
+  try {
+    // Résolu contre une base https : un relatif (`contact`) hérite du schéma et
+    // passe ; un `javascript:…` garde le sien et se fait refuser. Le WHATWG URL
+    // retire au passage les tabulations/retours ligne d'un `java\tscript:`.
+    const url = new URL(raw, RELATIVE_BASE);
+    return ALLOWED_HREF_PROTOCOLS.has(url.protocol) ? raw : "";
+  } catch {
+    return "";
+  }
+}
+
 /** Sous-ensemble objet d'un tableau (répéteur JSON Directus). */
 export function records(val: unknown): Record<string, unknown>[] {
   return Array.isArray(val)

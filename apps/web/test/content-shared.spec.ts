@@ -13,6 +13,7 @@ import {
   mapTestimonialItem,
   mapTestimonials,
   mapTitledItems,
+  safeHref,
 } from "../server/utils/content/_shared";
 
 const BASE = "https://cms.example.fr";
@@ -244,5 +245,47 @@ describe("mapFaqItems", () => {
 
   it("renvoie [] hors tableau", () => {
     expect(mapFaqItems(null, wrap)).toEqual([]);
+  });
+});
+
+describe("safeHref", () => {
+  it("laisse passer http(s), mailto, tel et les chemins relatifs", () => {
+    for (const href of [
+      "https://cal.com/eleonore/30min",
+      "http://exemple.fr",
+      "mailto:contact@encrehumaine.fr",
+      "tel:+33600000000",
+      "/organisations/audit-rh",
+      "#rdv",
+      "?filtre=terrain",
+      "ressources/le-flou",
+    ]) {
+      expect(safeHref(href)).toBe(href);
+    }
+  });
+
+  it("refuse les schémas exécutables, y compris obfusqués (espaces, tabulation, casse)", () => {
+    for (const href of [
+      "javascript:alert(1)",
+      "JavaScript:alert(1)",
+      "java\tscript:alert(1)",
+      "  javascript:alert(1)  ",
+      "data:text/html;base64,PHNjcmlwdD4=",
+      "vbscript:msgbox(1)",
+      "file:///etc/passwd",
+    ]) {
+      expect(safeHref(href)).toBe("");
+    }
+  });
+
+  it("refuse les URL protocol-relative (externe déguisée en chemin)", () => {
+    expect(safeHref("//ailleurs.tld/piege")).toBe("");
+  });
+
+  it('renvoie "" pour une entrée vide ou non-chaîne', () => {
+    expect(safeHref("")).toBe("");
+    expect(safeHref("   ")).toBe("");
+    expect(safeHref(null)).toBe("");
+    expect(safeHref(42)).toBe("");
   });
 });

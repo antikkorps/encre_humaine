@@ -9,6 +9,7 @@ import {
   mapStringList,
   type NumberedStep,
   type RawSiteDefaults,
+  safeHref,
   str,
 } from "./_shared";
 
@@ -95,7 +96,7 @@ export function mapContactContent(
   assetBase: string,
   sanitize: Sanitize,
 ): ContactContent {
-  const bookingUrl = str(settings.booking_url);
+  const bookingUrl = safeHref(settings.booking_url);
   const reasonsTitle = str(page.reasons_title);
   const reasonsOrg = mapStringList(page.reasons_org);
   const reasonsB2c = mapStringList(page.reasons_b2c);
@@ -139,7 +140,7 @@ export function mapContactContent(
         : null,
     contact: {
       email: str(settings.contact_email) || null,
-      linkedin: str(settings.linkedin_url) || null,
+      linkedin: safeHref(settings.linkedin_url) || null,
       location: str(settings.location_label) || null,
     },
     seo: mapSeo(page, settings, assetBase),
