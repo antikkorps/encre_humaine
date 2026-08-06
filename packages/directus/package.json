@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./schema": "./src/schema.gen.ts"
+    "./schema": "./src/schema.gen.ts",
+    "./schema-def": "./src/schema.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

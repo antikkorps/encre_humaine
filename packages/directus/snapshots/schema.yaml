@@ -98,6 +98,36 @@ collections:
       versioning: false
     schema:
       name: b2c_hub_page
+  - collection: contact_leads
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: contact_leads
+      color: null
+      display_template: '{{first_name}} — {{audience}}'
+      group: null
+      hidden: false
+      icon: inbox
+      item_duplication_fields: null
+      note: >-
+        Messages reçus via le formulaire de contact. Lecture seule : ils sont
+        enregistrés automatiquement par le site.
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: '-created_at'
+      translations:
+        - language: fr-FR
+          plural: messages
+          singular: message
+          translation: Messages reçus
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: contact_leads
   - collection: contact_page
     meta:
       accountability: all
@@ -1801,8 +1831,16 @@ fields:
     meta:
       collection: article_categories
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Organisations
+            value: organisations
+          - text: Particuliers
+            value: particuliers
+          - text: Terrain
+            value: terrain
+        showAsDot: false
       field: group
       group: null
       hidden: false
@@ -3778,6 +3816,96 @@ fields:
       note: Bénéfices (titre + corps)
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title
@@ -4688,6 +4816,384 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: created_at
+    type: timestamp
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: created_at
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Reçu le
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: created_at
+      table: contact_leads
+      data_type: timestamp with time zone
+      default_value: now()
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: first_name
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: first_name
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Prénom
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: first_name
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: email
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: email
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: E-mail
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: email
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: audience
+    type: unknown
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: audience
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Public
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: audience
+      table: contact_leads
+      data_type: audience
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: source_page
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: source_page
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Page d'origine
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: source_page
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: status
+    type: unknown
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Statut
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: contact_leads
+      data_type: lead_status
+      default_value: new
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: notification_sent
+    type: boolean
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: notification_sent
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Notification envoyée
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: notification_sent
+      table: contact_leads
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: message
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: message
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Message
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: message
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: updated_at
+    type: timestamp
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: updated_at
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Mis à jour le
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: updated_at
+      table: contact_leads
+      data_type: timestamp with time zone
+      default_value: now()
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -5905,8 +6411,26 @@ fields:
     meta:
       collection: faq_items
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Page /contact
+            value: contact
+          - text: Page /organisations
+            value: org
+          - text: Offre Audit RH
+            value: audit
+          - text: Offre Compétences & parcours
+            value: competences
+          - text: Offre Managers & équipes
+            value: managers
+          - text: Page /particuliers + offre Clarifier & avancer
+            value: b2c
+          - text: Offre Booster sa recherche
+            value: booster
+          - text: Toutes les offres (transverse)
+            value: general
+        showAsDot: false
       field: scope
       group: null
       hidden: false
@@ -5914,19 +6438,21 @@ fields:
       note: null
       options:
         choices:
-          - text: Contact
+          - text: Page /contact
             value: contact
-          - text: Audit
+          - text: Page /organisations
+            value: org
+          - text: Offre Audit RH
             value: audit
-          - text: Compétences
+          - text: Offre Compétences & parcours
             value: competences
-          - text: Managers
+          - text: Offre Managers & équipes
             value: managers
-          - text: Particuliers
+          - text: Page /particuliers + offre Clarifier & avancer
             value: b2c
-          - text: Booster recherche
+          - text: Offre Booster sa recherche
             value: booster
-          - text: Général
+          - text: Toutes les offres (transverse)
             value: general
       readonly: false
       required: true
@@ -7157,6 +7683,96 @@ fields:
       note: Problématiques (5–6, une par entrée)
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: icon
+            type: string
           - field: text
             meta:
               field: text
@@ -7312,6 +7928,96 @@ fields:
       note: Blocs services (titre + texte)
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title
@@ -7958,6 +8664,96 @@ fields:
       note: Cartes accompagnement particuliers
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title
@@ -9452,8 +10248,14 @@ fields:
     meta:
       collection: offers
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Organisation
+            value: organisation
+          - text: Particulier
+            value: particulier
+        showAsDot: false
       field: audience
       group: null
       hidden: false
@@ -9831,6 +10633,48 @@ fields:
                     value: insights
                   - text: Validation / coche (check-circle)
                     value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
               width: half
             name: icon
             type: string
@@ -10752,6 +11596,48 @@ fields:
                     value: insights
                   - text: Validation / coche (check-circle)
                     value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
               width: half
             name: icon
             type: string
@@ -10936,6 +11822,48 @@ fields:
                     value: insights
                   - text: Validation / coche (check-circle)
                     value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
               width: half
             name: icon
             type: string
@@ -12355,6 +13283,96 @@ fields:
       note: Constats (titre + corps)
       options:
         fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: icon
+            type: string
           - field: title
             meta:
               field: title
@@ -14216,8 +15234,16 @@ fields:
     meta:
       collection: products
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Organisation
+            value: organisation
+          - text: Particulier
+            value: particulier
+          - text: Les deux
+            value: both
+        showAsDot: false
       field: audience
       group: null
       hidden: false
@@ -15197,8 +16223,14 @@ fields:
     meta:
       collection: resources
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Organisation
+            value: organisation
+          - text: Particulier
+            value: particulier
+        showAsDot: false
       field: audience
       group: null
       hidden: false
@@ -16360,22 +17392,6 @@ fields:
         valeurs par défaut.
       options:
         fields:
-          - field: group
-            meta:
-              field: group
-              interface: select-dropdown
-              options:
-                allowNone: true
-                choices:
-                  - text: Organisations
-                    value: organisations
-                  - text: Particuliers
-                    value: particuliers
-                  - text: Terrain
-                    value: terrain
-              width: half
-            name: group
-            type: string
           - field: icon
             meta:
               field: icon
@@ -16457,8 +17473,30 @@ fields:
                     value: key
                   - text: Inspiration / idée (emoji-objects)
                     value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
               width: half
             name: icon
+            type: string
+          - field: group
+            meta:
+              field: group
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Organisations
+                    value: organisations
+                  - text: Particuliers
+                    value: particuliers
+                  - text: Terrain
+                    value: terrain
+              width: half
+            name: group
             type: string
           - field: label
             meta:
@@ -17136,6 +18174,12 @@ fields:
                     value: key
                   - text: Inspiration / idée (emoji-objects)
                     value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
               width: half
             name: icon
             type: string
@@ -17803,6 +18847,12 @@ fields:
                     value: key
                   - text: Inspiration / idée (emoji-objects)
                     value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
               width: half
             name: icon
             type: string
@@ -18870,8 +19920,14 @@ fields:
     meta:
       collection: testimonials
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Organisation
+            value: organisation
+          - text: Particulier
+            value: particulier
+        showAsDot: false
       field: audience
       group: null
       hidden: false

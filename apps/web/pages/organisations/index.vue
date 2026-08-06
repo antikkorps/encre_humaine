@@ -332,7 +332,25 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 7. Témoignages B2B — masqués si vides -->
+      <!-- 7. FAQ (faq_items scope=org) — même traitement que le hub Particuliers :
+           colonne centrée, masquée tant qu'aucune question n'est rangée dans ce périmètre. -->
+      <section v-if="content.faq.length" v-reveal class="relative isolate overflow-hidden bg-orange-50">
+        <TentacleAccent
+          side="left"
+          name="tentacule-4-trait"
+          class="absolute -left-20 top-8 -z-10 hidden w-[26rem] rotate-6 text-orange-500/[0.08] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <div class="mx-auto max-w-3xl">
+            <SectionHeading title="Questions fréquentes" eyebrow="FAQ" align="center" />
+            <div class="mt-10">
+              <FaqAccordion :items="content.faq" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Témoignages B2B — masqués si vides -->
       <section
         v-if="content.testimonials.length"
         v-reveal
@@ -340,9 +358,9 @@ useSeoMeta({
         aria-label="Témoignages"
       >
         <TentacleAccent
-          side="left"
+          side="right"
           name="tentacule-1-plein"
-          class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
+          class="absolute -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading :title="content.testimonialsTitle" eyebrow="Témoignages" />
@@ -356,7 +374,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 8. CTA final — même bloc que l'accueil (marine dégradé + 2 bulles,
+      <!-- 9. CTA final — même bloc que l'accueil (marine dégradé + 2 bulles,
            bouton doré) plutôt que le bandeau marine sombre (demande Éléonore). -->
       <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
         <TentacleAccent

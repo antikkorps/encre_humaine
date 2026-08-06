@@ -6,18 +6,12 @@
 // contenu (uniquement des `meta` de champs → visibilité/édition dans l'admin).
 import { get, patch } from "./api.ts";
 import { ICON_SUBFIELD } from "./icons.ts";
+import { allCollections } from "./schema.ts";
 
-// 1) Choix du select `faq_items.scope` (le bootstrap ne met pas à jour les choix
-//    d'un select existant). Liste complète = miroir de FAQ_SCOPE (schema.ts).
-const FAQ_SCOPE_CHOICES = [
-  { text: "Contact", value: "contact" },
-  { text: "Audit", value: "audit" },
-  { text: "Compétences", value: "competences" },
-  { text: "Managers", value: "managers" },
-  { text: "Particuliers", value: "b2c" },
-  { text: "Booster recherche", value: "booster" },
-  { text: "Général", value: "general" },
-];
+// 1) Listes déroulantes (`select-dropdown`) : choix + rendu en vue liste, resynchronisés
+//    depuis schema.ts — source unique, aucune liste dupliquée ici. Le bootstrap étant
+//    additif-only, un select déjà créé conserve indéfiniment ses anciens libellés :
+//    c'est donc ici que les renommages (ex. périmètres de FAQ) atterrissent en prod.
 
 // 2) Sous-champ `icon` (1re position, demi-largeur) des répéteurs éditoriaux, en
 //    select-dropdown fermé (choix = ICON_CHOICES, miroir du clientBundle). Le
@@ -54,21 +48,62 @@ type SubField = {
   field: string;
   meta?: { interface?: string; options?: { choices?: unknown[] } };
 };
+type Choice = { text?: string; value?: string };
 type FieldMeta = {
-  meta: { options?: { choices?: { value: string }[]; fields?: SubField[] } | null };
+  meta: {
+    interface?: string | null;
+    display?: string | null;
+    display_options?: Record<string, unknown> | null;
+    options?: { choices?: Choice[]; fields?: SubField[] } | null;
+  };
+};
+/** Spec de champ telle que produite par `fields.ts` (partie utile ici). */
+type SelectSpec = {
+  interface?: string;
+  display?: string;
+  display_options?: Record<string, unknown>;
+  options?: { choices?: Choice[] };
 };
 
-async function reconcileFaqScope(): Promise<void> {
-  const cur = await get<FieldMeta>("/fields/faq_items/scope");
-  const values = (cur.meta.options?.choices ?? []).map((c) => c.value);
-  if (values.includes("booster")) {
-    console.log("= faq_items.scope : choix « booster » déjà présent");
-    return;
+/** Empreinte comparable d'une liste de choix (ordre significatif : c'est l'ordre du menu). */
+const choiceKey = (choices: Choice[] | undefined): string =>
+  JSON.stringify((choices ?? []).map((c) => [c.value ?? "", c.text ?? ""]));
+
+/** Vrai si l'instance porte déjà exactement les choix + le rendu voulus. */
+function selectUpToDate(cur: FieldMeta["meta"], want: SelectSpec): boolean {
+  if (choiceKey(cur.options?.choices) !== choiceKey(want.options?.choices)) return false;
+  if ((cur.display ?? null) !== (want.display ?? null)) return false;
+  const curOpts = cur.display_options ?? {};
+  return Object.entries(want.display_options ?? {}).every(
+    ([k, v]) => JSON.stringify(curOpts[k]) === JSON.stringify(v),
+  );
+}
+
+async function reconcileSelects(): Promise<void> {
+  let changed = 0;
+  for (const def of allCollections) {
+    for (const spec of def.fields) {
+      const want = spec.meta as SelectSpec;
+      if (want.interface !== "select-dropdown" || !want.options?.choices) continue;
+      const path = `/fields/${def.collection}/${spec.field}`;
+      const cur = await get<FieldMeta>(path);
+      if (selectUpToDate(cur.meta, want)) continue;
+      await patch(path, {
+        meta: {
+          // Les autres options éventuelles de l'instance sont préservées.
+          options: { ...(cur.meta.options ?? {}), choices: want.options.choices },
+          display: want.display ?? null,
+          display_options: {
+            ...(cur.meta.display_options ?? {}),
+            ...(want.display_options ?? {}),
+          },
+        },
+      });
+      console.log(`~ ${def.collection}.${spec.field} : choix & affichage resynchronisés`);
+      changed++;
+    }
   }
-  await patch("/fields/faq_items/scope", {
-    meta: { options: { ...(cur.meta.options ?? {}), choices: FAQ_SCOPE_CHOICES } },
-  });
-  console.log("+ faq_items.scope : choix « booster » ajouté");
+  if (!changed) console.log("= listes déroulantes : déjà alignées sur schema.ts");
 }
 
 async function reconcileIconSubfields(): Promise<void> {
@@ -97,7 +132,7 @@ async function reconcileIconSubfields(): Promise<void> {
 
 async function main(): Promise<void> {
   console.log("→ Réconciliation admin (meta de champs existants)…");
-  await reconcileFaqScope();
+  await reconcileSelects();
   await reconcileIconSubfields();
   console.log("✓ Réconciliation terminée.");
 }

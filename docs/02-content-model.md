@@ -92,6 +92,7 @@ Deux familles de contenu, deux traitements :
 - Méthode : `method_steps` (répéteur : `number` + `title` + `description`) — Cadrage / Diagnostic / Construction / Restitution
 - « Pour qui » : `audience_items` (répéteur : `text`)
 - Témoignages : M2M ou filtre dynamique `testimonials` `audience=organisation`
+- FAQ : filtre `faq_items` `scope=org`
 - CTA : `cta_title`, `cta_label`
 
 ### `b2c_hub_page`
@@ -163,7 +164,21 @@ Deux familles de contenu, deux traitements :
 
 ### `faq_items`
 - `question`, `answer` (rich text)
-- `scope` (`contact`|`audit`|`competences`|`managers`|`b2c`|`general`)
+- `scope` — **le libellé affiché nomme la ou les PAGES d'affichage**, pas un thème : l'éditrice doit savoir où sortira sa question sans lire le code. Valeurs stockées (stables) et libellés admin :
+
+| Valeur | Libellé admin | Pages qui l'affichent |
+|--------|---------------|------------------------|
+| `contact` | Page /contact | `/contact` |
+| `org` | Page /organisations | hub `/organisations` |
+| `audit` | Offre Audit RH | `/organisations/audit-rh` |
+| `competences` | Offre Compétences & parcours | `/organisations/competences-parcours` |
+| `managers` | Offre Managers & équipes | `/organisations/managers-equipes` |
+| `b2c` | Page /particuliers + offre Clarifier & avancer | hub `/particuliers` **et** `/particuliers/clarifier-avancer` |
+| `booster` | Offre Booster sa recherche | `/particuliers/booster-recherche` |
+| `general` | Toutes les offres (transverse) | les **5 pages d'offre** uniquement — ni hubs, ni `/contact` |
+
+> Deux pièges que les libellés existent précisément pour désamorcer : `b2c` alimente **deux** pages (modifier une question change les deux), et `general` **ne sort pas** sur les hubs ni sur `/contact`. Un test (`apps/web/test/faq-scopes.spec.ts`) échoue si un périmètre proposé dans l'admin n'est rendu par aucune page.
+
 - `sort`, statut
 
 ### `articles`
@@ -233,7 +248,7 @@ Règles :
 |------|----------------------|
 | `/` | `home_page` + `articles` (3 derniers) + `testimonials` (vedette) |
 | `/a-propos` | `about_page` |
-| `/organisations` | `org_hub_page` + `offers` (b2b) + `testimonials` (b2b) |
+| `/organisations` | `org_hub_page` + `offers` (b2b) + `faq_items` (org) + `testimonials` (b2b) |
 | `/particuliers` | `b2c_hub_page` + `faq_items` (b2c) + `testimonials` (b2c) |
 | `/organisations/*` (offres) | `offers` (par slug) + `faq_items` + `testimonials` |
 | `/particuliers/*` (offres) | `offers` (par slug) + `faq_items` |

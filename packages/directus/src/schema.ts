@@ -20,14 +20,25 @@ const AUDIENCE = [
   { text: "Particulier", value: "particulier" },
 ];
 const AUDIENCE_BOTH = [...AUDIENCE, { text: "Les deux", value: "both" }];
-const FAQ_SCOPE = [
-  { text: "Contact", value: "contact" },
-  { text: "Audit", value: "audit" },
-  { text: "Compétences", value: "competences" },
-  { text: "Managers", value: "managers" },
-  { text: "Particuliers", value: "b2c" },
-  { text: "Booster recherche", value: "booster" },
-  { text: "Général", value: "general" },
+/**
+ * Périmètres de FAQ. **Le libellé nomme la ou les PAGES d'affichage**, pas un thème :
+ * c'est la seule façon pour l'éditrice de savoir où sortira sa question sans lire le
+ * code (retour Éléonore 2026-08-06 — « je ne sais pas comment modifier la FAQ de
+ * /particuliers »). Deux non-évidences que les libellés doivent porter :
+ *  - `b2c` alimente le hub /particuliers **et** l'offre Clarifier & avancer ;
+ *  - `general` ne sort **que** sur les 5 pages d'offre (ni hubs, ni contact).
+ * Les valeurs stockées ne changent jamais (contenu existant préservé) ; seuls les
+ * libellés évoluent. Consommé par le bootstrap ET par `reconcile.ts` (source unique).
+ */
+export const FAQ_SCOPE = [
+  { text: "Page /contact", value: "contact" },
+  { text: "Page /organisations", value: "org" },
+  { text: "Offre Audit RH", value: "audit" },
+  { text: "Offre Compétences & parcours", value: "competences" },
+  { text: "Offre Managers & équipes", value: "managers" },
+  { text: "Page /particuliers + offre Clarifier & avancer", value: "b2c" },
+  { text: "Offre Booster sa recherche", value: "booster" },
+  { text: "Toutes les offres (transverse)", value: "general" },
 ];
 const ARTICLE_GROUP = [
   { text: "Organisations", value: "organisations" },
@@ -223,7 +234,7 @@ const singletons: CollectionDef[] = [
     collection: "org_hub_page",
     singleton: true,
     icon: "corporate_fare",
-    note: "Offres & témoignages branchés dynamiquement (audience=organisation)",
+    note: "Offres, témoignages & FAQ (scope=org) branchés dynamiquement (audience=organisation)",
     fields: [
       // §1 Accroche
       f.input("accroche_title"),
@@ -679,7 +690,7 @@ const collections: CollectionDef[] = [
   {
     collection: "faq_items",
     icon: "help",
-    note: "FAQ réutilisables, filtrées par périmètre (scope)",
+    note: "FAQ réutilisables — le périmètre (scope) nomme la page où la question s'affiche",
     fields: [
       f.input("question"),
       f.richtext("answer"),
