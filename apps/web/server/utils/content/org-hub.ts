@@ -1,9 +1,10 @@
 import { readItems, readSingleton } from "@directus/sdk";
-import type { OfferSummary, TestimonialItem } from "~/types/content";
+import type { FaqItem, OfferSummary, TestimonialItem } from "~/types/content";
 import {
   type ContentPhoto,
   type ContentSeo,
   type FileField,
+  mapFaqItems,
   mapNumberedSteps,
   mapOffers,
   mapPhoto,
@@ -22,7 +23,8 @@ import { type B2cSituation, mapSituation } from "./b2c-hub";
 
 /**
  * Contenu du hub Organisations (B2B) — docs/03-organisations-hub.md.
- * Source : `org_hub_page` + `offers` (audience=organisation) + `testimonials`
+ * Source : `org_hub_page` + `offers` (audience=organisation) + `faq_items`
+ * (scope=org, périmètre propre au hub — symétrique du hub B2C) + `testimonials`
  * (b2b) + `site_settings`. **La page oriente, elle ne détaille pas** : on ne lit
  * que le résumé des offres (titre/slug/phrase/durée/tarif), le lien mène au
  * gabarit `/organisations/[slug]`. Cartes offres **dynamiques** : ajouter une
@@ -109,6 +111,8 @@ export interface OrgHubContent {
   method: { title: string; intro: string | null; steps: NumberedStep[] } | null;
   differentiator: { title: string; bodyHtml: string } | null;
   audience: { title: string; items: string[]; conclusion: string | null } | null;
+  /** FAQ du hub (scope=org) ; section masquée tant qu'aucune question n'y est rangée. */
+  faq: FaqItem[];
   testimonialsTitle: string;
   testimonials: TestimonialItem[];
   /** Toujours présent (conversion) ; fallbacks = garde-fous d'affichage. */
@@ -123,6 +127,7 @@ type Sanitize = (html?: string | null) => string;
 export function mapOrgHubContent(
   hub: RawOrgHub,
   offers: unknown,
+  faq: unknown,
   testimonials: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
@@ -208,6 +213,7 @@ export function mapOrgHubContent(
       audienceTitle || audienceItems.length || audienceConclusion
         ? { title: audienceTitle, items: audienceItems, conclusion: audienceConclusion || null }
         : null,
+    faq: mapFaqItems(faq, sanitize),
     testimonialsTitle: str(hub.testimonials_title) || "Ils m'ont fait confiance",
     testimonials: mapTestimonials(testimonials),
     cta: {
@@ -225,7 +231,7 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
   const client = directusServer();
   const assetBase = useRuntimeConfig().public.directusPublicUrl;
 
-  const [hub, offers, testimonials, settings] = await Promise.all([
+  const [hub, offers, faq, testimonials, settings] = await Promise.all([
     client.request(
       readSingleton("org_hub_page", {
         fields: [
@@ -299,6 +305,14 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
       }),
     ),
     client.request(
+      readItems("faq_items", {
+        filter: { status: { _eq: "published" }, scope: { _eq: "org" } },
+        sort: ["sort"],
+        limit: -1,
+        fields: ["question", "answer"],
+      }),
+    ),
+    client.request(
       readItems("testimonials", {
         filter: { status: { _eq: "published" }, audience: { _eq: "organisation" } },
         sort: [...TESTIMONIAL_SORT],
@@ -316,6 +330,7 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
   return mapOrgHubContent(
     hub as unknown as RawOrgHub,
     offers,
+    faq,
     testimonials,
     settings as unknown as RawSiteDefaults,
     assetBase,

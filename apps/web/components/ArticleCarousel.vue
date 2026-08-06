@@ -19,6 +19,14 @@ const props = withDefaults(
 
 const track = ref<HTMLElement | null>(null);
 
+/**
+ * Largeur de carte. Sur grand écran on cale QUATRE cartes dans la piste
+ * (`gap-6` = 1.5rem, soit 3 gouttières) : l'accueil affiche ainsi ses 3 articles
+ * ET la carte poulpe finale sans avoir à défiler (demande Éléonore, 2026-08-06).
+ * Sur /ressources, cela met simplement plus d'articles sous les yeux d'emblée.
+ */
+const CARD_WIDTH = "w-[82%] shrink-0 snap-start sm:w-[20rem] lg:w-[calc((100%-4.5rem)/4)]";
+
 // Changement de jeu d'articles (filtre de /ressources) → retour au début, sinon
 // on reste scrollé dans le vide.
 watch(
@@ -55,7 +63,7 @@ function scrollByCard(direction: 1 | -1) {
       <li
         v-for="article in articles"
         :key="article.slug"
-        class="w-[82%] shrink-0 snap-start sm:w-[20rem] lg:w-[21rem]"
+        :class="CARD_WIDTH"
       >
         <ArticleCard :article="article" />
       </li>
@@ -67,7 +75,13 @@ function scrollByCard(direction: 1 | -1) {
           class="group flex h-full flex-col items-center justify-center gap-5 rounded-3xl border border-sand-400/30 bg-paper p-8 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
         >
           <OctopusMark class="h-16 w-16 text-sand-400 transition-transform duration-500 group-hover:scale-105" />
-          <span class="font-display text-xl font-semibold text-ink">{{ seeAllLabel }}</span>
+          <!-- `w-full` : sans largeur imposée, cet enfant de flex colonne se
+               dimensionne sur son contenu et déborde de la carte au lieu de
+               passer à la ligne (visible depuis que les cartes se resserrent
+               pour tenir à quatre). -->
+          <span class="w-full text-balance font-display text-xl font-semibold text-ink">
+            {{ seeAllLabel }}
+          </span>
           <span
             aria-hidden="true"
             class="grid h-12 w-12 place-items-center rounded-full bg-sand-400 text-ink transition-colors group-hover:bg-sand-500"

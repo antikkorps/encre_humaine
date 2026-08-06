@@ -1,6 +1,6 @@
 # 04 / 03 — Hub Organisations (B2B)
 
-**Route** : `/organisations` · **Source** : `org_hub_page` + `offers` (audience=organisation) + `testimonials` (b2b) · **Rendu** : SSG/ISR.
+**Route** : `/organisations` · **Source** : `org_hub_page` + `offers` (audience=organisation) + `faq_items` (`scope=org`) + `testimonials` (b2b) · **Rendu** : SSG/ISR.
 
 ## Objectif
 Présenter les 3 offres B2B, qualifier le besoin, orienter vers la bonne page offre. **Cette page oriente, elle ne détaille pas** (une phrase + un lien par offre).
@@ -10,11 +10,13 @@ Présenter les 3 offres B2B, qualifier le besoin, orienter vers la bonne page of
 2. **Les 3 offres** — `OfferCard` × N depuis `offers` (b2b), triées par `sort` : icône, titre, `short_description`, `duration_label`, `price_label`, bouton « Découvrir » → page offre.
 3. **Ma méthode en 4 étapes** — `method_steps` (Cadrage → Diagnostic → Construction → Restitution).
 4. **Pour qui ?** — `audience_items` (répéteur).
-5. **Témoignages B2B** — `testimonials` (audience=organisation) ; **masqué si vide**.
-6. **CTA** — `cta_title` + bouton `/contact`.
+5. **FAQ** — `faq_items` `scope=org` ; **masquée si vide**. Périmètre propre au hub, symétrique de `scope=b2c` côté Particuliers : les FAQ des 3 offres B2B ne remontent pas ici (elles restent sur leur page offre).
+6. **Témoignages B2B** — `testimonials` (audience=organisation) ; **masqué si vide**.
+7. **CTA** — `cta_title` + bouton `/contact`.
 
 ## A11y / SEO
 - `h1` = `accroche_title`. Cartes offres = liens accessibles, prix annoncés en texte.
 
 ## Critères d'acceptation
 - Les cartes reflètent dynamiquement la collection `offers` (ajout d'une offre en back-office → carte sans dev). Liens corrects vers chaque page offre (slug). Témoignages masqués si absents.
+- FAQ masquée tant qu'aucune question n'est rangée dans `scope=org` : la page se livre sans contenu FAQ, l'éditrice l'ouvre quand elle le décide, sans intervention de dev.

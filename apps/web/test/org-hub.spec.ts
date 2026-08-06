@@ -2,8 +2,8 @@
 //
 // Composition du hub Organisations — docs/03-organisations-hub.md.
 // Vérifie : accroche, constats, offres dynamiques (résumé + audience), méthode,
-// différenciateur (rich text assaini), pour-qui, témoignages b2b masqués si
-// vides, CTA (titre/texte/sous-texte) avec fallbacks, SEO.
+// différenciateur (rich text assaini), pour-qui, FAQ (scope=org) masquée si vide,
+// témoignages b2b masqués si vides, CTA (titre/texte/sous-texte) avec fallbacks, SEO.
 import { describe, expect, it } from "vitest";
 import { mapOrgHubContent } from "../server/utils/content/org-hub";
 
@@ -12,7 +12,7 @@ const wrap = (h?: string | null) => (h ? `clean(${h})` : "");
 
 describe("mapOrgHubContent", () => {
   it("hub vide : sections masquées, CTA replié sur ses fallbacks", () => {
-    const c = mapOrgHubContent({}, [], [], {}, BASE, wrap);
+    const c = mapOrgHubContent({}, [], [], [], {}, BASE, wrap);
     expect(c.accrocheTitle).toBeNull();
     expect(c.observe).toBeNull();
     expect(c.offers).toEqual([]);
@@ -22,6 +22,7 @@ describe("mapOrgHubContent", () => {
     expect(c.method).toBeNull();
     expect(c.differentiator).toBeNull();
     expect(c.audience).toBeNull();
+    expect(c.faq).toEqual([]);
     expect(c.testimonials).toEqual([]);
     expect(c.cta).toEqual({
       title: "Travaillons ensemble",
@@ -57,6 +58,7 @@ describe("mapOrgHubContent", () => {
         { title: "Audit RH", slug: "audit-rh", short_description: "État des lieux." },
         { slug: "sans-titre" }, // filtré (pas de titre)
       ],
+      [{ question: "Faut-il un service RH ?", answer: "<p>Non.</p>" }],
       [{ quote: "Un vrai partenaire.", author_name: "Marie", audience: "organisation" }],
       { brand_name: "L'Encre Humaine" },
       BASE,
@@ -87,6 +89,8 @@ describe("mapOrgHubContent", () => {
       items: ["Vous grandissez vite", "Vous voulez structurer"],
       conclusion: "Avancer ensemble.",
     });
+    // FAQ propre au hub (scope=org) — réponse assainie comme partout ailleurs.
+    expect(c.faq).toEqual([{ question: "Faut-il un service RH ?", answer: "clean(<p>Non.</p>)" }]);
     expect(c.testimonials).toHaveLength(1);
     expect(c.testimonialsTitle).toBe("Elles en parlent");
     expect(c.cta).toEqual({
@@ -111,6 +115,7 @@ describe("mapOrgHubContent", () => {
         // situation B entièrement vide → filtrée
         situation_c_title: "Managers & équipes",
       },
+      [],
       [],
       [],
       {},

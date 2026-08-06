@@ -100,6 +100,12 @@ export const tags = (field: string, o?: Opt): Spec =>
     o,
   );
 
+/**
+ * Liste déroulante. `display: "labels"` est indispensable : sans lui, la vue LISTE
+ * de l'admin affiche la valeur brute stockée (`b2c`, `general`…) alors que le
+ * formulaire affiche le libellé — deux vocabulaires pour un même champ, source de
+ * confusion pour l'éditrice (retour Éléonore 2026-08-06).
+ */
 export const select = (
   field: string,
   choices: { text: string; value: string }[],
@@ -108,7 +114,12 @@ export const select = (
   base(
     field,
     "string",
-    { interface: "select-dropdown", options: { choices } },
+    {
+      interface: "select-dropdown",
+      options: { choices },
+      display: "labels",
+      display_options: { choices, showAsDot: false },
+    },
     { is_nullable: !o?.required, default_value: o?.default ?? null },
     o,
   );

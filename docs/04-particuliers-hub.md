@@ -12,7 +12,7 @@ Accueillir avec empathie, orienter vers la bonne offre. **Ton différent du B2B*
 4. **Ma façon d'accompagner** — `how_i_work_title` + `how_i_work_body` (rich text) + `how_i_work_signature` (encadré).
 5. **Pourquoi c'est différent** — `why_different_title` + `why_different_body` (rich text, liste possible).
 6. **Comment se déroule l'accompagnement** — `format_title` + `format_items` (puces) + `format_body`.
-7. **FAQ** — `faq_items` (scope=b2c) via `FaqAccordion` (CPF non, c'est pour qui, 1ᵉʳ échange).
+7. **FAQ** — `faq_items` (scope=b2c) via `FaqAccordion` (CPF non, c'est pour qui, 1ᵉʳ échange). ⚠️ Ce périmètre est **partagé** avec l'offre `/particuliers/clarifier-avancer` : une question modifiée ici change les deux pages. Le libellé admin du périmètre le dit explicitement (docs/02 §5 `faq_items`).
 8. **Témoignages** — **centralisés** : liste `testimonials` filtrée `audience=particulier`, vedettes d'abord (`-featured, sort`) ; **masqué si vide**.
 
 > **Centralisation (2026-07) :** les témoignages ne sont plus pinnés par page (M2O). Chaque surface
