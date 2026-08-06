@@ -10,7 +10,8 @@
 1. **Hero** — `accroche_title` + `accroche_body` + `hero_signature` (🐙 signature).
 2. **Explorer les Tentacules** — filtres par `article_categories.group` (Organisations / Parcours professionnels / Terrain), chrome statique (emoji + mots-clés). Composant filtre accessible.
 3. **À lire en premier** — `featured_article` (M2O `articles`) : article éditorial vedette. Masqué si vide.
-4. **Dernières tentacules publiées** — carrousel `ArticleCarousel` limité aux **3 dernières** publications du filtre actif, la carte poulpe finale (→ `/ressources/tous`) arrivant en 4e position, visible sans défiler. **État vide propre si aucun article.**
+4. **Dernières tentacules publiées** — carrousel `ArticleCarousel` limité aux **3 dernières** publications du filtre actif, la carte poulpe finale (→ `/ressources/tous`) arrivant en 4e position, donc à un cran de flèche. **État vide propre si aucun article.**
+   > Les cartes gardent la largeur de la maquette (21 rem) : les resserrer pour faire tenir les quatre d'un coup tassait les titres sur trois lignes et trouait le chapô justifié. La 4e carte dépasse donc légèrement — c'est le signal de défilement attendu.
 5. **Newsletter intégrée** (`id="newsletter"`) — `newsletter_page` + `NewsletterForm` (cf. `08`).
 6. **Positionnement** — `positioning_title` + `positioning_body` (rich text assaini). Masqué si vide.
 7. **CTA final** — `cta_title` → ancre `#newsletter`.
