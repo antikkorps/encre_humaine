@@ -14,7 +14,7 @@ import laboIllustration from "~/assets/labo/Labo.webp";
 import type { ProductSummary } from "~/types/content";
 
 const { data: shop } = await useShopPage();
-const { data, status, error } = await useFetch("/api/shop/products");
+const { data, error } = await useFetch("/api/shop/products");
 
 const siteName = "L'Encre Humaine";
 const title = computed(() => shop.value?.title ?? "Le Laboratoire");
@@ -41,10 +41,13 @@ const imageSize = (photo: { width: number | null; height: number | null }, width
   return { width, height: Math.round(width * ratio) };
 };
 
+// Le champ « Titre SEO » de Directus fait FOI quand il est renseigné (comme sur
+// toutes les autres pages) : Éléonore maîtrise alors le titre d'onglet en entier,
+// ponctuation comprise. Sans lui, on retombe sur le gabarit « Titre — Marque ».
 useSeoMeta({
-  title: () => `${title.value} — ${siteName}`,
+  title: () => shop.value?.seo.title ?? `${title.value} — ${siteName}`,
   description: () => shop.value?.seo.description ?? shop.value?.intro ?? undefined,
-  ogTitle: () => `${title.value} — ${siteName}`,
+  ogTitle: () => shop.value?.seo.title ?? `${title.value} — ${siteName}`,
   ogType: "website",
   robots: () => (shop.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
@@ -134,8 +137,12 @@ useSeoMeta({
       </div>
     </section>
 
-    <!-- 2bis. Catalogue — uniquement quand la vente est ouverte -->
-    <section v-if="enabled" v-reveal class="relative isolate overflow-hidden">
+    <!-- 2bis. Catalogue — vente ouverte ET quelque chose à montrer.
+         Un catalogue ouvert mais vide n'affichait qu'un « revenez bientôt » sous
+         un titre « Disponible maintenant » : section sans contenu, retirée à la
+         demande d'Éléonore (2026-08-06). Elle revient d'elle-même dès qu'un
+         produit est achetable — aucun réglage à penser. -->
+    <section v-if="enabled && (products.length || error)" v-reveal class="relative isolate overflow-hidden">
       <TentacleAccent
         side="left"
         name="tentacule-4-plein"
@@ -144,27 +151,9 @@ useSeoMeta({
       <div class="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading title="Disponible maintenant" eyebrow="Le catalogue" />
 
-        <!-- Chargement : squelette discret -->
-        <div
-          v-if="status === 'pending'"
-          class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          aria-hidden="true"
-        >
-          <div
-            v-for="i in 3"
-            :key="i"
-            class="h-80 animate-pulse rounded-3xl border border-ink/5 bg-paper-2"
-          />
-        </div>
-
         <!-- Erreur : message sobre -->
-        <p v-else-if="error" class="mt-10 text-center text-ink/65" role="status">
+        <p v-if="error" class="mt-10 text-center text-ink/65" role="status">
           Le catalogue est momentanément indisponible. Merci de réessayer dans un instant.
-        </p>
-
-        <!-- Ouvert mais sans produit : message éditorial -->
-        <p v-else-if="!products.length" class="mt-10 text-center text-ink/65" role="status">
-          {{ shop?.emptyMessage }}
         </p>
 
         <div v-else class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -305,8 +294,9 @@ useSeoMeta({
         :title="shop?.newsletter.title || 'Vous souhaitez être informé des prochaines sorties ?'"
         :description="shop?.newsletter.body ?? undefined"
         eyebrow="Les Tentacules de L'Encre Humaine"
+        layout="split"
       >
-        <div class="mx-auto max-w-md rounded-3xl bg-white/95 p-6 text-left shadow-lift sm:p-7">
+        <div class="rounded-3xl bg-white/95 p-6 text-left shadow-lift">
           <NewsletterForm submit-label="Recevoir les Tentacules" />
         </div>
       </CtaBlock>

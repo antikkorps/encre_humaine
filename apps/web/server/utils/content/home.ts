@@ -372,9 +372,11 @@ export async function loadHomeContent(): Promise<HomeContent> {
       readItems("articles", {
         filter: { status: { _eq: "published" } },
         sort: ["-published_at"],
-        // Carrousel « Les Tentacules » (run 9) : on charge jusqu'à 8 articles pour
-        // qu'on puisse « se balader » ; la carte finale renvoie vers /ressources.
-        limit: 8,
+        // Carrousel « Les Tentacules » : 3 articles, la carte poulpe « voir
+        // toutes les ressources » arrivant en 4e position. Au-delà, l'appel à
+        // l'action se retrouvait derrière un long défilement horizontal une fois
+        // le blog fourni (demande Éléonore, 2026-08-06).
+        limit: 3,
         fields: [
           "title",
           "slug",

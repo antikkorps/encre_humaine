@@ -72,15 +72,16 @@ useSeoMeta({
         class="pointer-events-none absolute -bottom-24 -right-16 -z-10 h-96 w-96 rotate-12 text-teal-500/10"
       />
 
-      <!-- Colonne image resserrée (~26rem) + colonne texte qui prend tout le
-           reste → on récupère le vide entre l'illustration et le texte, ce qui
-           laisse la place aux deux CTA côte à côte avec leur libellé complet. -->
+      <!-- Le rapport d'incident passant en pile verticale (voir plus bas), la
+           colonne texte a besoin de moins de largeur : on la rend à
+           l'illustration, qui gagne ~6rem et redevient la vedette de la page
+           (demande Éléonore, 2026-08-06). -->
       <div
-        class="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-14"
+        class="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,32rem)_minmax(0,1fr)] lg:gap-14"
       >
         <!-- HÉROS : l'illustration. Halo doré pour la décoller du fond
              sombre + flottement lent (coupé sous prefers-reduced-motion). -->
-        <figure class="relative order-first mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md">
+        <figure class="relative order-first mx-auto w-full max-w-sm sm:max-w-md lg:max-w-xl">
           <div
             aria-hidden="true"
             class="pointer-events-none absolute inset-0 -z-10 scale-125 rounded-full bg-[radial-gradient(circle_at_center,rgba(201,168,76,0.22),transparent_62%)] blur-2xl"
@@ -121,29 +122,33 @@ useSeoMeta({
           </div>
 
           <!-- Rapport d'incident tamponné : chips qui « flottent » librement sous
-               la carte (dérive lente désynchronisée, coupée sous reduced-motion). -->
+               la carte (dérive lente désynchronisée, coupée sous reduced-motion).
+               Empilées et agrandies (demande Éléonore) : les trois lignes se
+               lisent d'un coup et la colonne texte se resserre, ce qui laisse
+               d'autant plus de place au poulpe. -->
           <dl
-            class="mt-6 flex flex-wrap gap-2.5 font-mono text-[0.68rem] uppercase tracking-wider text-paper/45"
+            class="mt-6 flex flex-col items-start gap-3 font-mono text-xs uppercase tracking-wider text-paper/50 sm:text-sm"
           >
             <div
               v-for="(item, index) in report"
               :key="item.label"
-              class="motion-drift-slow inline-flex items-center gap-2 rounded-full border border-paper/10 bg-ink-950/50 px-3.5 py-2 backdrop-blur-sm"
+              class="motion-drift-slow inline-flex items-center gap-2.5 rounded-full border border-paper/10 bg-ink-950/50 px-4 py-2.5 backdrop-blur-sm"
               :style="{ animationDelay: `${index * -4}s` }"
             >
               <span
-                class="h-1.5 w-1.5 shrink-0 rounded-full bg-sand-400"
+                class="h-2 w-2 shrink-0 rounded-full bg-sand-400"
                 :class="item.live && 'animate-pulse'"
               />
               <dt class="inline">{{ item.label }} :</dt>
-              <dd class="inline text-paper/70">{{ item.value }}</dd>
+              <dd class="inline text-paper/75">{{ item.value }}</dd>
             </div>
           </dl>
 
           <!-- Actions : retour accueil (icône maison de la navbar) + contact.
-               La colonne texte élargie laisse les deux boutons côte à côte avec
-               leur libellé complet ; `flex-wrap` reste un filet pour les largeurs
-               intermédiaires. Empilés pleine largeur sur mobile. -->
+               La colonne texte ayant été resserrée au profit de l'illustration,
+               `flex-wrap` empile désormais les deux boutons sur la plupart des
+               largeurs — lisible, et chaque libellé reste complet. Empilés
+               pleine largeur sur mobile. -->
           <div class="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <button
               type="button"
@@ -167,9 +172,11 @@ useSeoMeta({
               </svg>
               Retour à un espace plus structuré
             </button>
+            <!-- Bouton doré (même style que les CTA du site) : c'est l'action
+                 que l'on veut voir en premier sur une page d'erreur. -->
             <NuxtLink
               to="/contact"
-              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-paper/40 px-7 py-3.5 font-semibold text-paper transition-colors hover:border-paper hover:bg-paper/10"
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
             >
               <!-- Icône enveloppe au trait, assortie à l'icône maison. -->
               <svg

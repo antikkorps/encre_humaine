@@ -13,14 +13,20 @@ const heading = computed(() => content.value?.accrocheTitle ?? "Ressources");
 
 // Filtre par groupe de catégorie (null = tout).
 const activeGroup = ref<string | null>(null);
-const visibleArticles = computed(() => {
+const filteredArticles = computed(() => {
   const all = content.value?.articles ?? [];
   return activeGroup.value ? all.filter((a) => a.categoryGroup === activeGroup.value) : all;
 });
-// Mots-clés du filtre actif (chrome de taxonomie) — masqué sur « Tout ».
-const activeKeywords = computed(
-  () => content.value?.filters.find((f) => f.group === activeGroup.value)?.keywords ?? null,
-);
+
+/**
+ * Le carrousel n'affiche que les 3 dernières publications : la carte poulpe
+ * arrive ainsi en 4e position, visible sans défiler, au lieu d'être repoussée
+ * derrière tout le catalogue une fois le blog fourni (demande Éléonore,
+ * 2026-08-06). Le reste se parcourt sur /ressources/tous, qui reprend les mêmes
+ * filtres avec une grille paginée — aucun article n'est hors d'atteinte.
+ */
+const CAROUSEL_COUNT = 3;
+const visibleArticles = computed(() => filteredArticles.value.slice(0, CAROUSEL_COUNT));
 
 // Le carrousel « Derniers contenus » est porté par `ArticleCarousel` (mutualisé
 // avec l'accueil) : défilement scroll-snap natif, flèches, carte finale.
@@ -223,39 +229,7 @@ useSeoMeta({
         >
           <SectionHeading title="Dernières tentacules publiées" eyebrow="Derniers contenus" />
 
-          <div v-if="content.filters.length" class="mt-6" role="group" aria-label="Filtrer par thème">
-            <div class="flex flex-wrap gap-2">
-              <button
-                type="button"
-                class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
-                :class="activeGroup === null
-                  ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
-                  : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-                :aria-pressed="activeGroup === null"
-                @click="activeGroup = null"
-              >
-                Tout
-              </button>
-              <button
-                v-for="filter in content.filters"
-                :key="filter.group"
-                type="button"
-                class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
-                :class="activeGroup === filter.group
-                  ? 'border-teal-700 bg-teal-700 text-white shadow-soft'
-                  : 'border-ink/15 text-ink/70 hover:border-teal-300 hover:bg-teal-50'"
-                :aria-pressed="activeGroup === filter.group"
-                @click="activeGroup = filter.group"
-              >
-                <Icon
-                  :name="`material-symbols:${filter.icon}`"
-                  class="mr-1 inline h-4 w-4 align-[-0.2em]"
-                  aria-hidden="true"
-                />{{ filter.label }}
-              </button>
-            </div>
-            <p v-if="activeKeywords" class="mt-3 text-sm text-ink/55">{{ activeKeywords }}</p>
-          </div>
+          <ArticleFilters v-model="activeGroup" :filters="content.filters" class="mt-6" />
 
           <!-- État vide (0 article) : pas de section cassée -->
           <p
@@ -274,8 +248,8 @@ useSeoMeta({
             <ArticleCarousel
               :articles="visibleArticles"
               tone="light"
-              see-all-to="#newsletter"
-              see-all-label="Recevoir les Tentacules"
+              see-all-to="/ressources/tous"
+              see-all-label="Voir tous les articles"
             />
           </div>
         </div>
