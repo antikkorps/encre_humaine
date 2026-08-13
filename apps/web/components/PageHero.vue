@@ -1,15 +1,16 @@
 <script setup lang="ts">
 // En-tête de page réutilisable (pages intérieures) — docs/00-global.md §Layout.
 // Hero **éditorial** aligné à gauche, calqué sur la maquette : eyebrow + grand titre
-// Fraunces (mot d'accent doré possible via `accent`) + chapô + CTA (slot défaut), et
-// une **colonne de contenu à droite** (slot `aside` : carte constat, citation…) qui
-// remplit le hero façon maquette. Sans `aside` → une seule colonne. Le hero sombre
-// de l'accueil reste la pièce maîtresse. `variant` aligne l'accent sur le public.
+// Fraunces + chapô + CTA (slot défaut), et une **colonne de contenu à droite**
+// (slot `aside` : carte constat, citation…) qui remplit le hero façon maquette.
+// Sans `aside` → une seule colonne. Le hero sombre de l'accueil reste la pièce
+// maîtresse. `variant` aligne l'accent sur le public.
+//
+// Titre et chapô passent par `AccentText` : `**un fragment**` saisi dans Directus
+// ressort en gras doré (cf. `utils/accent.ts`).
 withDefaults(
   defineProps<{
     title: string;
-    /** Fragment du titre mis en doré (ex. « vraiment. ») — rendu après `title`. */
-    accent?: string;
     eyebrow?: string;
     body?: string;
     variant?: "teal" | "orange" | "neutral";
@@ -83,13 +84,13 @@ const tentacle: Record<string, string> = {
             {{ eyebrow }}
           </p>
           <h1 class="mt-4 max-w-2xl font-display text-4xl font-bold leading-[1.08] text-ink sm:text-5xl">
-            {{ title }}<template v-if="accent"> <span :class="accentColor[variant]">{{ accent }}</span></template>
+            <AccentText :text="title" />
           </h1>
           <p
             v-if="body"
             class="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-ink/70"
           >
-            {{ body }}
+            <AccentText :text="body" />
           </p>
           <slot />
         </div>

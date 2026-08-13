@@ -22,8 +22,8 @@ const track = ref<HTMLElement | null>(null);
 /**
  * Largeur de carte. Piste abandonnée : les resserrer pour faire tenir les quatre
  * cartes d'un coup (3 articles + poulpe) donnait des titres sur trois lignes et
- * un chapô justifié plein de trous — tassé et illisible. On garde la largeur de
- * la maquette ; la 4e carte dépasse un peu, ce qui est précisément le signal de
+ * un chapô tassé et illisible. On garde la largeur de la maquette ; la 4e carte
+ * dépasse un peu, ce qui est précisément le signal de
  * défilement attendu d'un carrousel. L'appel à l'action reste à un cran de
  * flèche puisque la piste est limitée à 3 articles (2026-08-06).
  */

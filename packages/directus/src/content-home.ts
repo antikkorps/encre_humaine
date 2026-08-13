@@ -2,6 +2,11 @@
 // consommée par `seed.ts` (seed complet) et `seed-home.ts` (seed ciblé home).
 // N'inclut PAS `featured_testimonial` : c'est une relation vers un ID de
 // témoignage, câblée à l'exécution par le seed complet (le seed ciblé n'y touche pas).
+//
+// Convention `**…**` : un fragment ainsi encadré s'affiche en GRAS DORÉ sur le
+// site (cf. apps/web/utils/accent.ts). Elle vaut pour tous les champs texte de
+// Directus — Éléonore peut donc mettre un mot en avant depuis l'admin. Sur une
+// instance déjà remplie, `mark:accents` pose ces marques sans réécrire le texte.
 
 /** Champs `home_page` (hors `featured_testimonial` + SEO géré à part). */
 export const homePageContent = {
@@ -30,9 +35,9 @@ export const homePageContent = {
     { text: "Vous manquez de temps pour prendre du recul" },
   ],
   recognition_conclusion:
-    "Vous n'avez pas forcément besoin d'un RH à temps plein.\nVous avez besoin de visibilité, de méthode et d'un plan d'action adapté à votre réalité.",
+    "Vous n'avez pas forcément besoin d'un RH à temps plein.\nVous avez besoin de **visibilité**, de méthode et d'un plan d'action adapté à votre réalité.",
   // Promesse / Offre
-  build_title: "Des RH plus claires. Des managers mieux équipés. Des équipes qui avancent.",
+  build_title: "Des RH plus claires. Des managers mieux équipés. **Des équipes qui avancent.**",
   build_blocks: [
     {
       title: "Audit & feuille de route RH",
@@ -85,7 +90,7 @@ export const homePageContent = {
   why_conclusion:
     "Cette double vision des organisations et des parcours me permet d'agir à la fois sur les systèmes et sur les personnes qui les font vivre.",
   // À propos
-  intro_title: "Je suis Eléonore Morée.",
+  intro_title: "Je suis **Eléonore Morée**.",
   intro_text:
     "Depuis plus de 10 ans, j'accompagne des personnes, des managers et des organisations confrontés à la même difficulté : avancer sans toujours savoir où aller.\n\nJ'ai travaillé dans l'insertion professionnelle, la formation et les RH. J'ai accompagné des demandeurs d'emploi, piloté des dispositifs de formation, construit des plans de développement des compétences et participé à la structuration RH d'organisations en transformation.\n\nAujourd'hui, avec L'Encre Humaine, j'aide les organisations à remettre de la clarté là où les pratiques, les compétences ou les parcours en manquent.",
   intro_cta_label: "Découvrir mon parcours",

@@ -274,8 +274,6 @@ useSeoMeta({
               <h3 v-if="step.title" class="mt-5 font-display text-lg font-bold text-paper">
                 {{ step.title }}
               </h3>
-              <!-- `text-center` reprend la main sur la justification globale
-                   (colonnes étroites → sinon de gros blancs entre les mots). -->
               <p v-if="step.description" class="mt-2 text-center leading-relaxed text-paper/70">
                 {{ step.description }}
               </p>

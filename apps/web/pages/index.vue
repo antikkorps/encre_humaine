@@ -103,7 +103,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               v-if="hero.subtitle"
               class="mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-paper/80"
             >
-              {{ hero.subtitle }}
+              <AccentText :text="hero.subtitle" tone="dark" />
             </p>
 
             <!-- Phrase signature (doré, italique, guillemet) -->
@@ -117,7 +117,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                 >“</span
               >
               <p class="font-display text-lg italic leading-relaxed text-paper/85">
-                {{ hero.signature }}
+                <AccentText :text="hero.signature" tone="dark" />
               </p>
             </blockquote>
 
@@ -243,14 +243,18 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                   class="h-5 w-5"
                 />
               </span>
-              <span class="leading-relaxed text-ink/75">{{ item.text }}</span>
+              <span class="leading-relaxed text-ink/75">
+                <AccentText :text="item.text" />
+              </span>
             </li>
           </ul>
+          <!-- Conclusion : plus d'italique (demande Éléonore, 2026-08-13) — le
+               poids éditorial passe par la taille + la mise en avant dorée. -->
           <p
             v-if="content.recognition.conclusion"
-            class="mx-auto mt-12 max-w-3xl whitespace-pre-line text-center font-display text-xl italic leading-relaxed text-teal-800"
+            class="mx-auto mt-12 max-w-3xl whitespace-pre-line text-center font-display text-xl leading-relaxed text-teal-800"
           >
-            {{ content.recognition.conclusion }}
+            <AccentText :text="content.recognition.conclusion" />
           </p>
         </div>
       </section>
@@ -267,13 +271,20 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           name="tentacule-4-plein"
           class="absolute -left-24 top-10 -z-10 hidden w-[28rem] -rotate-6 text-teal-600/[0.05] lg:block"
         />
+        <!-- Section CENTRÉE de bout en bout (titre, cartes, icônes, CTA) —
+             demande Éléonore du 2026-08-13 : c'est ce qui se lit le mieux ici,
+             et cela aligne ce bloc sur la section « particuliers », déjà centrée. -->
         <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading :title="content.build.title" eyebrow="Ce que je vous aide à construire" />
+          <SectionHeading
+            :title="content.build.title"
+            eyebrow="Ce que je vous aide à construire"
+            align="center"
+          />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
             <article
               v-for="(block, i) in content.build.blocks"
               :key="i"
-              class="flex flex-col rounded-3xl border border-ink/5 bg-white p-8 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+              class="flex flex-col items-center rounded-3xl border border-ink/5 bg-white p-8 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
               <span
                 aria-hidden="true"
@@ -288,13 +299,17 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                   class="h-6 w-6"
                 />
               </span>
-              <h3 class="mt-5 font-display text-xl font-bold text-ink">{{ block.title }}</h3>
+              <!-- Titres des 3 cartes en doré (Éléonore) ; le doré antique
+                   `orange-500` reste AA sur blanc, le doré vif non. -->
+              <h3 class="mt-5 font-display text-xl font-bold text-orange-500">
+                {{ block.title }}
+              </h3>
               <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
-                {{ block.body }}
+                <AccentText :text="block.body" />
               </p>
             </article>
           </div>
-          <div v-if="content.build.ctaLabel" class="mt-12">
+          <div v-if="content.build.ctaLabel" class="mt-12 flex justify-center">
             <NuxtLink
               :to="content.build.ctaUrl"
               class="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
@@ -344,7 +359,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               </span>
               <h3 class="mt-5 font-display text-lg font-bold text-paper">{{ step.title }}</h3>
               <p v-if="step.body" class="mt-2 text-center leading-relaxed text-paper/70">
-                {{ step.body }}
+                <AccentText :text="step.body" tone="dark" />
               </p>
             </li>
           </ol>
@@ -374,7 +389,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                   class="block h-1.5 w-10 rounded-full bg-sand-400"
                 ></span>
                 <h3 class="mt-4 font-display text-lg font-bold text-ink">{{ item.title }}</h3>
-                <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">{{ item.body }}</p>
+                <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
+                  <AccentText :text="item.body" />
+                </p>
               </article>
             </div>
             <blockquote
@@ -389,7 +406,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               <p
                 class="relative whitespace-pre-line font-display text-lg italic leading-relaxed text-teal-800"
               >
-                {{ content.why.conclusion }}
+                <AccentText :text="content.why.conclusion" />
               </p>
             </blockquote>
           </div>
@@ -436,13 +453,13 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               Derrière l'Encre Humaine
             </p>
             <h2 class="mt-4 font-display text-3xl font-bold text-ink sm:text-4xl">
-              {{ content.intro.title }}
+              <AccentText :text="content.intro.title" />
             </h2>
             <p
               v-if="content.intro.text"
               class="mt-5 whitespace-pre-line text-lg leading-relaxed text-ink/70"
             >
-              {{ content.intro.text }}
+              <AccentText :text="content.intro.text" />
             </p>
           </div>
         </div>
@@ -467,7 +484,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
             v-if="content.b2c.text"
             class="mx-auto mt-5 max-w-2xl text-center text-lg leading-relaxed text-ink/70"
           >
-            {{ content.b2c.text }}
+            <AccentText :text="content.b2c.text" />
           </p>
           <!-- Deux axes indépendants (pas un parcours) : icônes plutôt que 1/2, cartes
                centrées dans la page, et effet de survol « qui ressort » (comme les
@@ -496,7 +513,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               </span>
               <h3 class="mt-4 font-display text-xl font-bold text-ink">{{ card.title }}</h3>
               <p v-if="card.body" class="mt-2 text-center leading-relaxed text-ink/65">
-                {{ card.body }}
+                <AccentText :text="card.body" />
               </p>
             </article>
           </div>

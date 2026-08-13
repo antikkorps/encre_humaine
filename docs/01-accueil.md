@@ -8,8 +8,8 @@ Dérouler un tunnel narratif B2B (PME) — du problème à la prise de rendez-vo
 ## Sections (ordre)
 1. **Hero** — `hero_title` (h1), `hero_subtitle`, `hero_tagline` (ligne d'expertise • séparée), `hero_proofs` (micro-preuves ✓). 2 CTA : principal `hero_cta_primary_label` → `/contact` (RDV, papier), secondaire `hero_cta_secondary_label` → ancre `#approche` (scroll méthode). Fond encre sombre.
 2. **Ligne de crédibilité** — `stats` (répéteur valeur/label). **Masquée si vide** (par défaut vide au seed : la preuve est portée par le hero).
-3. **Problème** — `recognition_title`, `recognition_subtitle`, `recognition_items` (5–6 problématiques), `recognition_conclusion`. **Masquée si tout est vide.**
-4. **Promesse / Offre** (`#offres`) — `build_title`, `build_blocks` (3 blocs `title`/`body`), CTA de section `build_cta_label` → `build_cta_url` (défaut `/organisations`). CTA masqué si sans libellé.
+3. **Problème** — `recognition_title`, `recognition_subtitle`, `recognition_items` (5–6 problématiques), `recognition_conclusion` (**pas d'italique** : le poids vient de la taille et de la mise en avant dorée). **Masquée si tout est vide.**
+4. **Promesse / Offre** (`#offres`) — `build_title`, `build_blocks` (3 blocs `title`/`body`), CTA de section `build_cta_label` → `build_cta_url` (défaut `/organisations`). CTA masqué si sans libellé. Section **centrée de bout en bout** (titre, icônes, cartes, CTA) et **titres des 3 cartes en doré** (Éléonore, 2026-08-13).
 5. **Méthode** (`#approche`) — `method_title`, `method_subtitle`, `method_steps` (répéteur `title`/`body`, **numérotés à l'affichage**). Fond teal clair.
 6. **Signature / Positionnement** — `why_title`, `why_subtitle`, `why_items` (piliers de la double expertise), `why_conclusion` (bloc différenciant).
 7. **À propos** — `intro_photo` (2 colonnes) + `intro_title`/`intro_text` + CTA `intro_cta_label` → `/a-propos`. Fond gris clair.
