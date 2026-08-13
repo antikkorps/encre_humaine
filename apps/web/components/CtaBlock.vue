@@ -74,16 +74,16 @@ const button = computed(() =>
           aria-hidden="true"
           class="hidden h-28 w-auto flex-none text-sand-400 sm:block"
         />
-        <!-- `text-left` explicite : la justification globale des paragraphes de
-             `main` l'emporterait sinon sur l'alignement du panneau. -->
         <div class="text-left">
-          <h2 class="font-display text-2xl font-bold text-paper sm:text-3xl">{{ title }}</h2>
+          <h2 class="font-display text-2xl font-bold text-paper sm:text-3xl">
+            <AccentText :text="title" tone="dark" />
+          </h2>
           <p v-if="eyebrow" class="mt-1 font-display text-lg text-paper/85 sm:text-xl">
             {{ eyebrow }}
           </p>
           <span aria-hidden="true" class="mt-4 block h-0.5 w-16 rounded-full bg-sand-400" />
           <p v-if="description" class="mt-4 text-left text-sm leading-relaxed text-paper/70">
-            {{ description }}
+            <AccentText :text="description" tone="dark" />
           </p>
         </div>
       </div>
@@ -104,10 +104,10 @@ const button = computed(() =>
         {{ eyebrow }}
       </p>
       <h2 class="font-display text-3xl font-bold text-paper sm:text-4xl">
-        {{ title }}
+        <AccentText :text="title" tone="dark" />
       </h2>
       <p v-if="description" class="mx-auto mt-4 max-w-2xl text-center text-paper/75">
-        {{ description }}
+        <AccentText :text="description" tone="dark" />
       </p>
       <NuxtLink
         v-if="ctaLabel && to"
@@ -122,8 +122,6 @@ const button = computed(() =>
       <div v-if="$slots.default" class="mt-8">
         <slot />
       </div>
-      <!-- `text-center` : la justification globale des paragraphes de `main`
-           l'emporterait sur l'alignement hérité du panneau. -->
       <p v-if="subtext" class="mt-5 whitespace-pre-line text-center text-sm text-paper/60">
         {{ subtext }}
       </p>

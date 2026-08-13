@@ -16,6 +16,7 @@
     "seed": "tsx src/seed.ts",
     "seed:home": "tsx src/seed-home.ts",
     "seed:run9": "tsx src/seed-run9.ts",
+    "mark:accents": "tsx src/mark-accents.ts",
     "reconcile": "tsx src/reconcile.ts"
   },
   "devDependencies": {

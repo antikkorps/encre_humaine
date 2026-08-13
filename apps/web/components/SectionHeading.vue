@@ -8,14 +8,14 @@
 //     sur crème/blanc).
 //   - `tone="dark"` : pastille dorée translucide + texte doré vif (fonds sombres,
 //     ex. section méthode).
-// Un `accent` optionnel met un fragment du titre en doré souligné (pop).
+// Titre ET sous-titre passent par `AccentText` : un fragment encadré de `**`
+// dans Directus (ex. `**Des parcours mieux compris.**`) s'affiche en gras doré,
+// sans toucher au code (cf. `utils/accent.ts`).
 withDefaults(
   defineProps<{
     title: string;
     eyebrow?: string;
     subtitle?: string;
-    /** Fragment du titre à mettre en avant (souligné doré). */
-    accent?: string;
     align?: "left" | "center";
     tone?: "light" | "dark";
     level?: 2 | 3;
@@ -49,14 +49,7 @@ withDefaults(
       class="mt-4 font-display text-3xl font-bold sm:text-4xl"
       :class="tone === 'dark' ? 'text-paper' : 'text-ink'"
     >
-      <template v-if="accent && title.includes(accent)">
-        {{ title.slice(0, title.indexOf(accent)) }}<span
-          class="ink-underline"
-          :class="tone === 'dark' ? 'text-paper' : 'text-ink'"
-          >{{ accent }}</span
-        >{{ title.slice(title.indexOf(accent) + accent.length) }}
-      </template>
-      <template v-else>{{ title }}</template>
+      <AccentText :text="title" :tone="tone" />
     </component>
     <p
       v-if="subtitle"
@@ -67,7 +60,7 @@ withDefaults(
         tone === 'dark' ? 'text-paper/75' : 'text-ink/70',
       ]"
     >
-      {{ subtitle }}
+      <AccentText :text="subtitle" :tone="tone" />
     </p>
   </div>
 </template>

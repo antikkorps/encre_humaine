@@ -77,35 +77,19 @@
 }
 
 /*
- * Justification du corps de texte (demande Éléonore : fins de lignes « propres »).
- * Portée : les paragraphes du contenu principal (`<main>`) — le header et le pied
- * de page gardent leur alignement propre. `hyphens: auto` (html lang=fr) referme
- * les grands trous de justification en français.
+ * ⛔ PAS de justification globale du corps de texte.
  *
- * ⚠️ La règle est DANS `@layer base`, et c'est indispensable : les utilitaires
- * Tailwind vivent dans `@layer utilities`, qui l'emporte sur `base`. Écrite hors
- * layer (son état d'origine), elle battait au contraire TOUTES les classes
- * `text-center` / `text-left` — la spécificité n'entre même pas en jeu, du CSS
- * sans layer gagne toujours face à du CSS en layer. Les alignements explicites du
- * design (titres de frise centrés, citations, sous-textes de CTA) étaient donc
- * silencieusement ignorés.
+ * Historique : le texte de `<main>` a été justifié un temps (fins de lignes
+ * « propres »), avec césure automatique pour refermer les trous. Retiré le
+ * 2026-08-13 à la demande d'Éléonore : dans les colonnes étroites (cartes,
+ * frises en 3-4 colonnes), la justification creuse de gros blancs entre les
+ * mots — capture à l'appui — et le remède (césure) hachait les mots.
+ *
+ * Si le besoin revient sur un bloc large PRÉCIS, le poser localement sur ce
+ * bloc (`text-justify` + `hyphens-auto` en utilitaires Tailwind), jamais en
+ * règle globale : la version globale écrasait aussi silencieusement les
+ * alignements explicites du design tant qu'elle n'était pas dans `@layer base`.
  */
-@layer base {
-  main :where(p) {
-    text-align: justify;
-    text-justify: inter-word;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-    /*
-     * Resserre la césure pour éviter les « trous » de justification : on ne
-     * coupe que les mots d'au moins 6 lettres, en laissant ≥ 3 lettres avant
-     * et ≥ 2 après le tiret (fragments plus lisibles, moins de lignes trouées).
-     */
-    -webkit-hyphenate-limit-before: 3;
-    -webkit-hyphenate-limit-after: 2;
-    hyphenate-limit-chars: 6 3 2;
-  }
-}
 
 /* Cible tactile ≥ 24px, focus visibles (WCAG 2.2 AA). */
 :where(a, button, [role="button"]) {

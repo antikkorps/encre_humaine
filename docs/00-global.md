@@ -39,4 +39,9 @@
 
 ## Composants réutilisables (inventaire)
 
-`AppHeader`, `AppFooter`, `NavMobile`, `ConsentBanner`, `CtaBlock`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `FaqAccordion`, `StatRow`, `SectionHeading`, `ContactForm`, `NewsletterForm`, `BookingEmbed` (prise de RDV, chargé au consentement), `RichText` (rendu sûr du WYSIWYG Directus).
+`AppHeader`, `AppFooter`, `NavMobile`, `ConsentBanner`, `CtaBlock`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `FaqAccordion`, `StatRow`, `SectionHeading`, `ContactForm`, `NewsletterForm`, `BookingEmbed` (prise de RDV, chargé au consentement), `RichText` (rendu sûr du WYSIWYG Directus), `AccentText` (mise en avant `**…**`, ci-dessous).
+
+## Typographie éditoriale
+
+- **Mise en avant `**…**`** : dans **tout champ texte simple** de Directus (`input`/`textarea`), un fragment encadré de `**` s'affiche en **gras doré** — doré antique sur fond clair, doré vif sur fond marine (AA dans les deux cas). Éléonore met donc un mot en avant depuis l'admin, sans code ni déploiement. Rendu par `AccentText` en `<strong>` (jamais en `v-html`) ; les champs WYSIWYG gardent leur gras natif. Sur une instance déjà remplie : `pnpm --filter @encre/directus mark:accents` pose les marques sans réécrire les phrases.
+- **Pas de justification** : le corps de texte est aligné à gauche. La justification globale a été retirée le 2026-08-13 (colonnes étroites → gros blancs entre les mots). À reposer localement, sur un bloc large précis, si le besoin revient.
