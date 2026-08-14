@@ -24,7 +24,9 @@ const topBar = computed(() => (isOrg.value ? "bg-teal-500" : "bg-orange-400"));
     <h3 class="mt-1 font-display text-xl font-semibold text-ink group-hover:text-teal-700">
       <NuxtLink :to="to" class="after:absolute after:inset-0">{{ offer.title }}</NuxtLink>
     </h3>
-    <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/65">{{ offer.shortDescription }}</p>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
+      <AccentText :text="offer.shortDescription" />
+    </p>
 
     <dl class="mt-4 space-y-1.5 text-sm">
       <div v-if="offer.durationLabel" class="flex gap-2">

@@ -24,12 +24,12 @@ const attribution = computed(() => {
       &rdquo;
     </span>
     <blockquote class="relative flex-1 font-display text-lg leading-relaxed text-ink sm:text-xl">
-      <p>«&#160;{{ testimonial.quote }}&#160;»</p>
+      <p>«&#160;<AccentText :text="testimonial.quote" />&#160;»</p>
     </blockquote>
     <figcaption class="mt-5 text-sm">
       <span class="font-semibold text-teal-700">{{ attribution }}</span>
       <span v-if="testimonial.context" class="mt-1 block text-ink/55">
-        {{ testimonial.context }}
+        <AccentText :text="testimonial.context" />
       </span>
     </figcaption>
   </figure>

@@ -76,7 +76,7 @@ useSeoMeta({
           v-if="content?.heroSignature"
           class="max-w-md whitespace-pre-line font-display text-lg font-medium leading-relaxed text-ink/80"
         >
-          {{ content.heroSignature }}
+          <AccentText :text="content.heroSignature" />
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <NuxtLink
@@ -203,10 +203,10 @@ useSeoMeta({
                 {{ content.featuredArticle.categoryName }}
               </p>
               <h3 class="mt-2 font-display text-2xl font-bold text-ink">
-                {{ content.featuredArticle.title }}
+                <AccentText :text="content.featuredArticle.title" />
               </h3>
               <p v-if="content.featuredArticle.excerpt" class="mt-3 leading-relaxed text-ink/65">
-                {{ content.featuredArticle.excerpt }}
+                <AccentText :text="content.featuredArticle.excerpt" />
               </p>
               <span class="mt-6 inline-flex items-center gap-1.5 font-semibold text-teal-700">
                 Lire l'article <span aria-hidden="true">→</span>
@@ -283,7 +283,7 @@ useSeoMeta({
                     class="flex items-start gap-2.5 text-paper/80"
                   >
                     <span class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-teal-800 text-xs font-bold text-orange-300 ring-1 ring-orange-300/30" aria-hidden="true">✓</span>
-                    <span>{{ item }}</span>
+                    <span><AccentText :text="item" tone="dark" /></span>
                   </li>
                 </ul>
               </div>
@@ -296,7 +296,7 @@ useSeoMeta({
                     class="flex items-start gap-2.5 text-paper/80"
                   >
                     <span class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-teal-800 text-xs font-bold text-orange-300 ring-1 ring-orange-300/30" aria-hidden="true">•</span>
-                    <span>{{ item }}</span>
+                    <span><AccentText :text="item" tone="dark" /></span>
                   </li>
                 </ul>
               </div>
@@ -309,7 +309,7 @@ useSeoMeta({
               >
                 <span aria-hidden="true">📘</span>
                 <span class="font-semibold text-orange-700"> Offert à l'inscription : </span>
-                {{ content.newsletter.welcomeGiftLabel }}
+                <AccentText :text="content.newsletter.welcomeGiftLabel" />
               </p>
             </div>
           </div>

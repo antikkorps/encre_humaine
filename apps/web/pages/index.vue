@@ -177,7 +177,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                       />
                     </svg>
                   </span>
-                  <span class="leading-relaxed text-paper/85">{{ proof }}</span>
+                  <span class="leading-relaxed text-paper/85">
+                    <AccentText :text="proof" tone="dark" />
+                  </span>
                 </li>
               </ul>
             </div>
@@ -302,7 +304,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               <!-- Titres des 3 cartes en doré (Éléonore) ; le doré antique
                    `orange-500` reste AA sur blanc, le doré vif non. -->
               <h3 class="mt-5 font-display text-xl font-bold text-orange-500">
-                {{ block.title }}
+                <AccentText :text="block.title" />
               </h3>
               <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
                 <AccentText :text="block.body" />
@@ -357,7 +359,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               >
                 {{ i + 1 }}
               </span>
-              <h3 class="mt-5 font-display text-lg font-bold text-paper">{{ step.title }}</h3>
+              <h3 class="mt-5 font-display text-lg font-bold text-paper">
+                <AccentText :text="step.title" tone="dark" />
+              </h3>
               <p v-if="step.body" class="mt-2 text-center leading-relaxed text-paper/70">
                 <AccentText :text="step.body" tone="dark" />
               </p>
@@ -388,7 +392,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                   aria-hidden="true"
                   class="block h-1.5 w-10 rounded-full bg-sand-400"
                 ></span>
-                <h3 class="mt-4 font-display text-lg font-bold text-ink">{{ item.title }}</h3>
+                <h3 class="mt-4 font-display text-lg font-bold text-ink">
+                  <AccentText :text="item.title" />
+                </h3>
                 <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
                   <AccentText :text="item.body" />
                 </p>
@@ -511,7 +517,9 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                   class="h-6 w-6"
                 />
               </span>
-              <h3 class="mt-4 font-display text-xl font-bold text-ink">{{ card.title }}</h3>
+              <h3 class="mt-4 font-display text-xl font-bold text-ink">
+                <AccentText :text="card.title" />
+              </h3>
               <p v-if="card.body" class="mt-2 text-center leading-relaxed text-ink/65">
                 <AccentText :text="card.body" />
               </p>

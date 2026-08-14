@@ -58,7 +58,7 @@ useSeoMeta({
         v-if="content?.accrocheBody"
         class="mt-6 max-w-xl whitespace-pre-line leading-relaxed text-ink/70"
       >
-        {{ content.accrocheBody }}
+        <AccentText :text="content.accrocheBody" />
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
@@ -117,7 +117,7 @@ useSeoMeta({
                 v-if="content.booking.intro"
                 class="mt-2 whitespace-pre-line text-left leading-relaxed text-ink/65"
               >
-                {{ content.booking.intro }}
+                <AccentText :text="content.booking.intro" />
               </p>
               <NuxtLink
                 to="#rdv"
@@ -139,7 +139,7 @@ useSeoMeta({
                 v-if="content.messageIntro"
                 class="mt-2 whitespace-pre-line text-left leading-relaxed text-ink/65"
               >
-                {{ content.messageIntro }}
+                <AccentText :text="content.messageIntro" />
               </p>
               <NuxtLink
                 to="#message"
@@ -157,7 +157,7 @@ useSeoMeta({
               v-if="content.booking.reassurance"
               class="mt-6 text-center text-sm text-ink/60"
             >
-              {{ content.booking.reassurance }}
+              <AccentText :text="content.booking.reassurance" />
             </p>
           </div>
 
@@ -216,13 +216,13 @@ useSeoMeta({
                 {{ step.number || i + 1 }}
               </span>
               <h3 v-if="step.title" class="mt-5 font-display text-lg font-bold text-paper">
-                {{ step.title }}
+                <AccentText :text="step.title" tone="dark" />
               </h3>
               <p
                 v-if="step.description"
                 class="mt-2 whitespace-pre-line text-center leading-relaxed text-paper/70"
               >
-                {{ step.description }}
+                <AccentText :text="step.description" tone="dark" />
               </p>
             </li>
           </ol>
@@ -230,13 +230,13 @@ useSeoMeta({
             v-if="content.stepsConclusion"
             class="mx-auto mt-14 max-w-2xl whitespace-pre-line text-center leading-relaxed text-paper/80"
           >
-            {{ content.stepsConclusion }}
+            <AccentText :text="content.stepsConclusion" tone="dark" />
           </p>
           <p
             v-if="content.responseTimeNote"
             class="mx-auto mt-6 max-w-2xl text-center text-sm text-paper/60"
           >
-            {{ content.responseTimeNote }}
+            <AccentText :text="content.responseTimeNote" tone="dark" />
           </p>
         </div>
       </section>
@@ -260,7 +260,7 @@ useSeoMeta({
             >
               <p class="font-display text-lg font-bold text-teal-800">Pour les organisations</p>
               <p v-if="content.reasons.orgLead" class="mt-1 text-left text-ink/60">
-                {{ content.reasons.orgLead }}
+                <AccentText :text="content.reasons.orgLead" />
               </p>
               <ul class="mt-4 space-y-3">
                 <li
@@ -272,7 +272,7 @@ useSeoMeta({
                     name="material-symbols:check-circle-rounded"
                     class="mt-0.5 h-5 w-5 flex-none text-orange-500"
                   />
-                  <span>{{ item }}</span>
+                  <span><AccentText :text="item" /></span>
                 </li>
               </ul>
             </div>
@@ -282,7 +282,7 @@ useSeoMeta({
             >
               <p class="font-display text-lg font-bold text-orange-700">Pour les particuliers</p>
               <p v-if="content.reasons.b2cLead" class="mt-1 text-left text-ink/60">
-                {{ content.reasons.b2cLead }}
+                <AccentText :text="content.reasons.b2cLead" />
               </p>
               <ul class="mt-4 space-y-3">
                 <li
@@ -294,7 +294,7 @@ useSeoMeta({
                     name="material-symbols:check-circle-rounded"
                     class="mt-0.5 h-5 w-5 flex-none text-orange-500"
                   />
-                  <span>{{ item }}</span>
+                  <span><AccentText :text="item" /></span>
                 </li>
               </ul>
             </div>

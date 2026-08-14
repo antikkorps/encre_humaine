@@ -54,7 +54,7 @@ const publishedLabel = computed(() => {
         <NuxtLink :to="to" class="after:absolute after:inset-0">{{ article.title }}</NuxtLink>
       </h3>
       <p v-if="article.excerpt" class="mt-2 flex-1 text-sm leading-relaxed text-ink/65">
-        {{ article.excerpt }}
+        <AccentText :text="article.excerpt" />
       </p>
       <p class="mt-4 flex items-center gap-1.5 text-xs text-ink/45">
         <time v-if="publishedLabel" :datetime="article.publishedAt">{{ publishedLabel }}</time>

@@ -98,7 +98,7 @@ if (article.value) {
             {{ article.category.name }}
           </p>
           <h1 class="mt-2 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
-            {{ article.title }}
+            <AccentText :text="article.title" />
           </h1>
           <p class="mt-4 flex items-center gap-2 text-sm text-ink/45">
             <time v-if="publishedLabel" :datetime="article.publishedAt ?? undefined">

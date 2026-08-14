@@ -163,7 +163,7 @@ useSchemaOrg([
             <Icon name="material-symbols:lightbulb" class="h-6 w-6" />
           </span>
           <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
-            {{ content.accrocheBody }}
+            <AccentText :text="content.accrocheBody" />
           </p>
         </figure>
       </template>
@@ -179,7 +179,7 @@ useSchemaOrg([
             class="max-w-2xl whitespace-pre-line text-left font-display text-xl font-medium leading-relaxed text-paper"
           >
             <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
-            {{ content.accrocheSignature }}
+            <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
           <NuxtLink
             to="/contact"
@@ -235,10 +235,10 @@ useSchemaOrg([
               <template v-else>{{ num(i) }}</template>
             </span>
             <h3 v-if="outcome.title" class="mt-5 font-display text-lg font-bold text-paper">
-              {{ outcome.title }}
+              <AccentText :text="outcome.title" tone="dark" />
             </h3>
             <p v-if="outcome.body" class="mt-2 text-center leading-relaxed text-paper/70">
-              {{ outcome.body }}
+              <AccentText :text="outcome.body" tone="dark" />
             </p>
           </li>
         </ol>
@@ -269,16 +269,18 @@ useSchemaOrg([
               <Icon :name="icon(item.icon, 'lightbulb')" class="h-6 w-6" />
             </span>
             <h3 v-if="item.title" class="mt-4 font-display text-base font-semibold text-ink">
-              {{ item.title }}
+              <AccentText :text="item.title" />
             </h3>
-            <p v-if="item.body" class="mt-1.5 text-sm leading-relaxed text-ink/65">{{ item.body }}</p>
+            <p v-if="item.body" class="mt-1.5 text-sm leading-relaxed text-ink/65">
+              <AccentText :text="item.body" />
+            </p>
           </article>
         </div>
         <p
           v-if="content.context.conclusion"
           class="mx-auto mt-10 max-w-2xl whitespace-pre-line text-center text-lg leading-relaxed text-ink/80"
         >
-          {{ content.context.conclusion }}
+          <AccentText :text="content.context.conclusion" />
         </p>
       </div>
     </section>
@@ -313,7 +315,7 @@ useSchemaOrg([
             <p
               class="mt-2 whitespace-pre-line text-left font-display text-lg leading-relaxed text-ink/85"
             >
-              {{ content.approche.signature }}
+              <AccentText :text="content.approche.signature" />
             </p>
           </aside>
         </div>
@@ -358,9 +360,11 @@ useSchemaOrg([
               {{ missionHeading }}
             </p>
             <h2 class="mt-3 font-display text-2xl font-bold text-paper">
-              {{ content.missionTitle || missionHeading }}
+              <AccentText :text="content.missionTitle || missionHeading" tone="dark" />
             </h2>
-            <p v-if="content.missionIntro" class="mt-2 text-paper/70">{{ content.missionIntro }}</p>
+            <p v-if="content.missionIntro" class="mt-2 text-paper/70">
+              <AccentText :text="content.missionIntro" tone="dark" />
+            </p>
             <ul class="mt-8 space-y-5">
               <li v-for="(item, i) in content.missionIncludes" :key="i" class="flex items-start gap-4">
                 <span
@@ -369,8 +373,12 @@ useSchemaOrg([
                   <Icon :name="icon(item.icon, 'check-circle')" class="h-6 w-6" />
                 </span>
                 <div>
-                  <p v-if="item.title" class="font-display font-semibold text-paper">{{ item.title }}</p>
-                  <p v-if="item.body" class="mt-0.5 text-sm leading-relaxed text-paper/65">{{ item.body }}</p>
+                  <p v-if="item.title" class="font-display font-semibold text-paper">
+                    <AccentText :text="item.title" tone="dark" />
+                  </p>
+                  <p v-if="item.body" class="mt-0.5 text-sm leading-relaxed text-paper/65">
+                    <AccentText :text="item.body" tone="dark" />
+                  </p>
                 </div>
               </li>
             </ul>
@@ -383,7 +391,7 @@ useSchemaOrg([
           >
             <p class="text-sm font-semibold uppercase tracking-[0.14em] text-orange-600">Pour qui ?</p>
             <h2 class="mt-3 font-display text-2xl font-bold text-ink">
-              {{ content.audienceFitTitle || 'Cette mission est faite pour vous si…' }}
+              <AccentText :text="content.audienceFitTitle || 'Cette mission est faite pour vous si…'" />
             </h2>
             <ul v-if="content.audienceFit.length" class="mt-6 space-y-3">
               <li v-for="(item, i) in content.audienceFit" :key="i" class="flex items-start gap-3 text-ink/80">
@@ -391,7 +399,7 @@ useSchemaOrg([
                   name="material-symbols:check-circle-rounded"
                   class="mt-0.5 h-5 w-5 flex-none text-orange-500"
                 />
-                <span>{{ item }}</span>
+                <span><AccentText :text="item" /></span>
               </li>
             </ul>
             <template v-if="content.audienceFitExclude.length">
@@ -405,7 +413,7 @@ useSchemaOrg([
                   class="flex items-start gap-3 text-ink/55"
                 >
                   <Icon name="material-symbols:cancel" class="mt-0.5 h-5 w-5 flex-none text-ink/30" />
-                  <span>{{ item }}</span>
+                  <span><AccentText :text="item" /></span>
                 </li>
               </ul>
             </template>
@@ -413,7 +421,7 @@ useSchemaOrg([
               v-if="content.audienceFitConclusion"
               class="mt-8 whitespace-pre-line rounded-2xl bg-paper-2 p-4 text-sm leading-relaxed text-ink/75"
             >
-              {{ content.audienceFitConclusion }}
+              <AccentText :text="content.audienceFitConclusion" />
             </p>
           </div>
         </div>
@@ -452,7 +460,7 @@ useSchemaOrg([
         <ul class="mt-8 space-y-3">
           <li v-for="(item, i) in content.takeaways.items" :key="i" class="flex items-start gap-3 text-ink/80">
             <Icon name="material-symbols:check-circle-rounded" class="mt-0.5 h-5 w-5 flex-none text-orange-500" />
-            <span>{{ item }}</span>
+            <span><AccentText :text="item" /></span>
           </li>
         </ul>
       </div>
@@ -483,7 +491,7 @@ useSchemaOrg([
               Conditions
             </dt>
             <dd class="mt-2 whitespace-pre-line text-sm leading-relaxed text-paper/70">
-              {{ content.priceNote }}
+              <AccentText :text="content.priceNote" tone="dark" />
             </dd>
           </div>
         </dl>

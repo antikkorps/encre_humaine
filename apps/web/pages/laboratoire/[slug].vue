@@ -158,7 +158,9 @@ if (product.value) {
       <!-- Infos + achat -->
       <div>
         <h1 class="font-display text-4xl font-bold text-ink">{{ product.name }}</h1>
-        <p v-if="product.tagline" class="mt-3 text-lg leading-relaxed text-ink/70">{{ product.tagline }}</p>
+        <p v-if="product.tagline" class="mt-3 text-lg leading-relaxed text-ink/70">
+          <AccentText :text="product.tagline" />
+        </p>
 
         <p class="mt-5 font-display text-3xl font-bold text-teal-700">{{ priceLabel }}</p>
         <!-- Franchise en base de TVA (docs/06 §4, ADR #4) — près du prix. -->

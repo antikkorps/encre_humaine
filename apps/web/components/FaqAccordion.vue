@@ -23,7 +23,7 @@ defineProps<{ items: FaqItem[] }>();
         <AccordionTrigger
           class="group flex w-full items-center justify-between gap-4 py-5 text-left font-display text-lg font-semibold text-ink transition-colors hover:text-teal-700"
         >
-          <span>{{ item.question }}</span>
+          <span><AccentText :text="item.question" /></span>
           <span
             aria-hidden="true"
             class="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal-50 text-lg text-teal-700 transition-transform group-data-[state=open]:rotate-45"

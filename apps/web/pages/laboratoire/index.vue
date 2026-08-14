@@ -116,13 +116,13 @@ useSeoMeta({
               <Icon :name="`material-symbols:${item.icon || 'science'}`" class="h-7 w-7" />
             </span>
             <h3 v-if="item.title" class="mt-5 font-display text-lg font-semibold text-ink">
-              {{ item.title }}
+              <AccentText :text="item.title" />
             </h3>
             <p
               v-if="item.body"
               class="mt-2 whitespace-pre-line text-left leading-relaxed text-ink/65"
             >
-              {{ item.body }}
+              <AccentText :text="item.body" />
             </p>
             <!-- Statut poussé en bas → aligné d'une carte à l'autre. -->
             <p
@@ -225,13 +225,13 @@ useSeoMeta({
         >
           <div>
             <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
-              {{ shop.manifesto.title }}
+              <AccentText :text="shop.manifesto.title" />
             </h2>
             <p
               v-if="shop.manifesto.subtitle"
               class="mt-3 text-left font-display text-lg font-semibold text-brand-accent"
             >
-              {{ shop.manifesto.subtitle }}
+              <AccentText :text="shop.manifesto.subtitle" />
             </p>
             <RichText v-if="shop.manifesto.bodyHtml" :html="shop.manifesto.bodyHtml" class="mt-5" />
           </div>
@@ -278,10 +278,10 @@ useSeoMeta({
               <Icon :name="`material-symbols:${item.icon || 'check-circle'}`" class="h-6 w-6" />
             </span>
             <h3 v-if="item.title" class="mt-4 font-display text-lg font-semibold text-ink">
-              {{ item.title }}
+              <AccentText :text="item.title" />
             </h3>
             <p v-if="item.body" class="mt-2 text-center leading-relaxed text-ink/65">
-              {{ item.body }}
+              <AccentText :text="item.body" />
             </p>
           </li>
         </ul>
