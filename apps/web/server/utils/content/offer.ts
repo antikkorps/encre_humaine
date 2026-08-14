@@ -130,8 +130,14 @@ type Sanitize = (html?: string | null) => string;
 /**
  * Scope `faq_items` par slug d'offre (docs/02 §5, docs/05). Les choix `scope`
  * (`audit`/`competences`/`managers`/`b2c`/`booster`/`general`) couvrent les 5 offres
- * (clarifier partage le scope `b2c` du hub ; booster a le sien) ; `general`
- * (transverse) est toujours ajouté. Slug inconnu → seulement `general`.
+ * — chacune a le sien ; `general` (transverse) est toujours ajouté. Slug inconnu →
+ * seulement `general`.
+ *
+ * `b2c` est le périmètre de l'offre Clarifier & avancer (et non du hub, malgré son
+ * nom) : il était partagé avec /particuliers jusqu'au 2026-08-14, où Éléonore a
+ * demandé une FAQ propre à chaque hub. Les questions déjà publiées sous `b2c`
+ * étaient écrites pour l'offre : elles y sont restées, valeur inchangée. Le hub a
+ * pris `b2c_hub` (cf. `FAQ_SCOPE`, packages/directus/src/schema.ts).
  */
 export const FAQ_SCOPE_BY_SLUG: Record<string, string> = {
   "audit-rh": "audit",

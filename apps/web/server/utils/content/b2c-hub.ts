@@ -20,7 +20,9 @@ import {
 
 /**
  * Contenu du hub Particuliers (B2C) — docs/04-particuliers-hub.md.
- * Source : `b2c_hub_page` + `faq_items` (scope=b2c) + `testimonials` (b2c, M2O
+ * Source : `b2c_hub_page` + `faq_items` (scope=b2c_hub — périmètre PROPRE au hub
+ * depuis le 2026-08-14, symétrique de `org` ; `b2c` est resté sur l'offre
+ * Clarifier & avancer) + `testimonials` (b2c, M2O
  * unique `testimonial`) + `site_settings`. Ton empathique (9 sections, gabarit
  * riche calqué sur `offers`) : accroche, bénéfices, deux cartes situation
  * détaillées, façon d'accompagner, « pourquoi c'est différent », format, FAQ,
@@ -284,7 +286,7 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
     ),
     client.request(
       readItems("faq_items", {
-        filter: { status: { _eq: "published" }, scope: { _eq: "b2c" } },
+        filter: { status: { _eq: "published" }, scope: { _eq: "b2c_hub" } },
         sort: ["sort"],
         limit: -1,
         fields: ["question", "answer"],

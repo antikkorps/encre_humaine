@@ -24,19 +24,26 @@ const AUDIENCE_BOTH = [...AUDIENCE, { text: "Les deux", value: "both" }];
  * Périmètres de FAQ. **Le libellé nomme la ou les PAGES d'affichage**, pas un thème :
  * c'est la seule façon pour l'éditrice de savoir où sortira sa question sans lire le
  * code (retour Éléonore 2026-08-06 — « je ne sais pas comment modifier la FAQ de
- * /particuliers »). Deux non-évidences que les libellés doivent porter :
- *  - `b2c` alimente le hub /particuliers **et** l'offre Clarifier & avancer ;
+ * /particuliers »). Une non-évidence que les libellés doivent porter :
  *  - `general` ne sort **que** sur les 5 pages d'offre (ni hubs, ni contact).
  * Les valeurs stockées ne changent jamais (contenu existant préservé) ; seuls les
  * libellés évoluent. Consommé par le bootstrap ET par `reconcile.ts` (source unique).
+ *
+ * ⚠️ `b2c` désigne l'**offre Clarifier & avancer**, pas le hub. Ce périmètre était
+ * partagé entre les deux jusqu'au 2026-08-14 ; Éléonore a tranché que ses questions
+ * étaient justes pour l'offre, et a demandé une FAQ propre à chaque hub. La valeur
+ * est restée `b2c` pour que ses 5 questions publiées ne bougent pas de page — la
+ * renommer aurait exigé une migration de données sur la prod pour un gain purement
+ * cosmétique. Le hub, lui, a désormais `b2c_hub` (symétrique de `org`).
  */
 export const FAQ_SCOPE = [
   { text: "Page /contact", value: "contact" },
   { text: "Page /organisations", value: "org" },
+  { text: "Page /particuliers", value: "b2c_hub" },
   { text: "Offre Audit RH", value: "audit" },
   { text: "Offre Compétences & parcours", value: "competences" },
   { text: "Offre Managers & équipes", value: "managers" },
-  { text: "Page /particuliers + offre Clarifier & avancer", value: "b2c" },
+  { text: "Offre Clarifier & avancer", value: "b2c" },
   { text: "Offre Booster sa recherche", value: "booster" },
   { text: "Toutes les offres (transverse)", value: "general" },
 ];

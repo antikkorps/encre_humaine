@@ -1,6 +1,6 @@
 # 04 / 04 — Hub Particuliers (B2C)
 
-**Route** : `/particuliers` · **Source** : `b2c_hub_page` + `faq_items` (scope=b2c) + `testimonials` (b2c) · **Rendu** : SSG/ISR.
+**Route** : `/particuliers` · **Source** : `b2c_hub_page` + `faq_items` (scope=b2c_hub) + `testimonials` (b2c) · **Rendu** : SSG/ISR.
 
 ## Objectif
 Accueillir avec empathie, orienter vers la bonne offre. **Ton différent du B2B** : moins de chiffres, plus d'émotion. Gabarit riche calqué sur `offers` (bénéfices, cartes détaillées, encadrés signature).
@@ -12,7 +12,7 @@ Accueillir avec empathie, orienter vers la bonne offre. **Ton différent du B2B*
 4. **Ma façon d'accompagner** — `how_i_work_title` + `how_i_work_body` (rich text) + `how_i_work_signature` (encadré).
 5. **Pourquoi c'est différent** — `why_different_title` + `why_different_body` (rich text, liste possible).
 6. **Comment se déroule l'accompagnement** — `format_title` + `format_items` (puces) + `format_body`.
-7. **FAQ** — `faq_items` (scope=b2c) via `FaqAccordion` (CPF non, c'est pour qui, 1ᵉʳ échange). ⚠️ Ce périmètre est **partagé** avec l'offre `/particuliers/clarifier-avancer` : une question modifiée ici change les deux pages. Le libellé admin du périmètre le dit explicitement (docs/02 §5 `faq_items`).
+7. **FAQ** — `faq_items` (scope=b2c_hub) via `FaqAccordion` ; **masquée si vide**. Périmètre **propre au hub** depuis le 2026-08-14 (demande Éléonore), symétrique de `scope=org` côté Organisations : les questions de l'offre Clarifier & avancer (`scope=b2c`) ne remontent plus ici. Le hub est livré **sans question** — l'éditrice ouvre la section quand elle le décide, sans intervention de dev.
 8. **Témoignages** — **centralisés** : liste `testimonials` filtrée `audience=particulier`, vedettes d'abord (`-featured, sort`) ; **masqué si vide**.
 
 > **Centralisation (2026-07) :** les témoignages ne sont plus pinnés par page (M2O). Chaque surface
