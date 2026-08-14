@@ -90,7 +90,7 @@ const button = computed(() =>
       <div>
         <slot />
         <p v-if="subtext" class="mt-4 whitespace-pre-line text-left text-sm text-paper/60">
-          {{ subtext }}
+          <AccentText :text="subtext" tone="dark" />
         </p>
       </div>
     </div>
@@ -123,7 +123,7 @@ const button = computed(() =>
         <slot />
       </div>
       <p v-if="subtext" class="mt-5 whitespace-pre-line text-center text-sm text-paper/60">
-        {{ subtext }}
+        <AccentText :text="subtext" tone="dark" />
       </p>
     </div>
   </section>

@@ -43,5 +43,9 @@
 
 ## Typographie éditoriale
 
-- **Mise en avant `**…**`** : dans **tout champ texte simple** de Directus (`input`/`textarea`), un fragment encadré de `**` s'affiche en **gras doré** — doré antique sur fond clair, doré vif sur fond marine (AA dans les deux cas). Éléonore met donc un mot en avant depuis l'admin, sans code ni déploiement. Rendu par `AccentText` en `<strong>` (jamais en `v-html`) ; les champs WYSIWYG gardent leur gras natif. Sur une instance déjà remplie : `pnpm --filter @encre/directus mark:accents` pose les marques sans réécrire les phrases.
+- **Mise en avant `**…**`** : dans **n'importe quel champ de contenu** de Directus, un fragment encadré de `**` s'affiche en **gras doré** — doré antique sur fond clair, doré vif sur fond marine (AA dans les deux cas). Éléonore met donc un mot en avant depuis l'admin, sans code ni déploiement, **sans avoir à retenir quel type de champ l'accepte** :
+  - `input` / `textarea`, y compris **à l'intérieur des blocs répétables** (convictions, situations, étapes, cartes, listes à puces, témoignages, FAQ…) → rendu par `AccentText`, en `<strong>` et en nœuds Vue (jamais de `v-html`) ;
+  - **WYSIWYG** → la même convention est appliquée par `server/utils/sanitize.ts`, **après** l'assainissement (`<strong class="accent">`, classe fixe, aucun attribut repris de l'entrée ; le fragment ne peut contenir ni `<` ni `>`, donc il reste toujours en position de texte). Le gras **natif** de l'éditeur, lui, reste sobre : il sert de mise en relief structurelle dans les pages légales.
+  - Restent volontairement littéraux : libellés de boutons, surtitres, prix, dates et coordonnées — un mot doré n'y a pas de sens.
+  Sur une instance déjà remplie : `pnpm --filter @encre/directus mark:accents` pose les marques sans réécrire les phrases.
 - **Pas de justification** : le corps de texte est aligné à gauche. La justification globale a été retirée le 2026-08-13 (colonnes étroites → gros blancs entre les mots). À reposer localement, sur un bloc large précis, si le besoin revient.

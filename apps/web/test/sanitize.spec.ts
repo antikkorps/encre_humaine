@@ -31,6 +31,32 @@ describe("sanitizeRichText", () => {
     expect(sanitizeRichText('<a href="mailto:hi@exemple.fr">mail</a>')).toContain("mailto:");
   });
 
+  // Mise en avant dorée : la convention `**…**` vaut AUSSI dans le WYSIWYG, pour
+  // qu'Éléonore n'ait pas à retenir quel type de champ l'accepte.
+  it("transforme `**…**` en gras doré", () => {
+    expect(sanitizeRichText("<p>un mot **en avant** ici</p>")).toBe(
+      '<p>un mot <strong class="accent">en avant</strong> ici</p>',
+    );
+  });
+
+  it("laisse le `**` non apparié tel quel (aucune perte de texte)", () => {
+    expect(sanitizeRichText("<p>2 ** 3 = 8</p>")).toBe("<p>2 ** 3 = 8</p>");
+  });
+
+  it("ne met pas en avant à cheval sur une balise (emboîtement invalide)", () => {
+    const html = "<p>**début</p><p>fin**</p>";
+    expect(sanitizeRichText(html)).toBe(html);
+  });
+
+  it("n'injecte aucun attribut venant de l'entrée", () => {
+    // Le fragment ne peut contenir ni `<` ni `>` : il atterrit toujours APRÈS le
+    // `>` de notre `<strong>`, donc en position de texte. Une tentative d'y
+    // glisser un attribut reste du contenu inerte, guillemets compris.
+    expect(sanitizeRichText('<p>**x" onclick="evil()**</p>')).toBe(
+      '<p><strong class="accent">x" onclick="evil()</strong></p>',
+    );
+  });
+
   it('renvoie "" pour une entrée vide ou nulle', () => {
     expect(sanitizeRichText(null)).toBe("");
     expect(sanitizeRichText(undefined)).toBe("");

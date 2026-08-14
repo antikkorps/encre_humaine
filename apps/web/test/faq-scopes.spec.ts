@@ -19,11 +19,11 @@ import { FAQ_SCOPE_BY_SLUG } from "../server/utils/content/offer";
  * Périmètres chargés par une page, hors gabarit d'offre. Miroir des filtres
  * `faq_items` dans les `load*Content()` correspondants :
  *  - `contact` → server/utils/content/contact.ts
- *  - `b2c`     → server/utils/content/b2c-hub.ts (hub /particuliers)
+ *  - `b2c_hub` → server/utils/content/b2c-hub.ts (hub /particuliers)
  *  - `org`     → server/utils/content/org-hub.ts (hub /organisations)
  * `general` est ajouté à toute offre par `faqScopesForSlug` (offer.ts).
  */
-const HUB_SCOPES = ["contact", "b2c", "org"];
+const HUB_SCOPES = ["contact", "b2c_hub", "org"];
 const RENDERED = new Set([...HUB_SCOPES, ...Object.values(FAQ_SCOPE_BY_SLUG), "general"]);
 
 describe("périmètres de FAQ", () => {
@@ -39,10 +39,14 @@ describe("périmètres de FAQ", () => {
 
   it("le libellé annonce la ou les pages d'affichage, pas un thème", () => {
     const label = (value: string) => FAQ_SCOPE.find((c) => c.value === value)?.text ?? "";
-    // `b2c` alimente DEUX pages : le libellé doit le dire, sinon l'éditrice croit
-    // n'en modifier qu'une (retour Éléonore 2026-08-06).
-    expect(label("b2c")).toContain("/particuliers");
+    // Chaque périmètre n'alimente plus qu'UNE page depuis le 2026-08-14 : le
+    // libellé doit la nommer sans ambiguïté. `b2c` porte l'offre malgré son nom
+    // (valeur conservée pour ne pas déplacer les questions déjà publiées), donc
+    // c'est au libellé de dire la vérité — et de ne pas laisser croire au hub.
     expect(label("b2c")).toContain("Clarifier");
+    expect(label("b2c")).not.toContain("/particuliers");
+    expect(label("b2c_hub")).toContain("/particuliers");
+    expect(label("org")).toContain("/organisations");
     // `general` ne sort que sur les pages d'offre — jamais sur les hubs ni /contact.
     expect(label("general")).toContain("offres");
     expect(label("general")).not.toContain("Général");

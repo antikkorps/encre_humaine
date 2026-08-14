@@ -76,7 +76,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <p v-if="intro" class="mb-4 text-ink/70">{{ intro }}</p>
+    <p v-if="intro" class="mb-4 text-ink/70"><AccentText :text="intro" /></p>
 
     <ClientOnly>
       <div v-if="thirdParty" ref="container" style="min-width: 320px; height: 700px" />

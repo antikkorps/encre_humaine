@@ -10,7 +10,7 @@ Présenter les 3 offres B2B, qualifier le besoin, orienter vers la bonne page of
 2. **Les 3 offres** — `OfferCard` × N depuis `offers` (b2b), triées par `sort` : icône, titre, `short_description`, `duration_label`, `price_label`, bouton « Découvrir » → page offre.
 3. **Ma méthode en 4 étapes** — `method_steps` (Cadrage → Diagnostic → Construction → Restitution).
 4. **Pour qui ?** — `audience_items` (répéteur).
-5. **FAQ** — `faq_items` `scope=org` ; **masquée si vide**. Périmètre propre au hub, symétrique de `scope=b2c` côté Particuliers : les FAQ des 3 offres B2B ne remontent pas ici (elles restent sur leur page offre).
+5. **FAQ** — `faq_items` `scope=org` ; **masquée si vide**. Périmètre propre au hub, symétrique de `scope=b2c_hub` côté Particuliers : les FAQ des 3 offres B2B ne remontent pas ici (elles restent sur leur page offre).
 6. **Témoignages B2B** — `testimonials` (audience=organisation) ; **masqué si vide**.
 7. **CTA** — `cta_title` + bouton `/contact`.
 

@@ -43,7 +43,7 @@ useSeoMeta({
             <Icon name="material-symbols:forum" class="h-6 w-6" />
           </span>
           <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
-            {{ content.accrocheBody }}
+            <AccentText :text="content.accrocheBody" />
           </p>
         </figure>
       </template>
@@ -61,7 +61,7 @@ useSeoMeta({
             class="max-w-2xl whitespace-pre-line text-left font-display text-xl font-medium leading-relaxed text-paper"
           >
             <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
-            {{ content.accrocheSignature }}
+            <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
           <NuxtLink
             v-if="content.accrocheCtaLabel"
@@ -126,9 +126,11 @@ useSeoMeta({
                 <Icon :name="`material-symbols:${outcome.icon || 'check-circle'}`" class="h-6 w-6" />
               </span>
               <h3 v-if="outcome.title" class="mt-4 font-display text-lg font-semibold text-ink">
-                {{ outcome.title }}
+                <AccentText :text="outcome.title" />
               </h3>
-              <p v-if="outcome.body" class="mt-2 leading-relaxed text-ink/65">{{ outcome.body }}</p>
+              <p v-if="outcome.body" class="mt-2 leading-relaxed text-ink/65">
+                <AccentText :text="outcome.body" />
+              </p>
             </li>
           </ul>
         </div>
@@ -154,17 +156,19 @@ useSeoMeta({
               class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
               <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-orange-400"></span>
-              <h2 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h2>
+              <h2 class="font-display text-2xl font-bold text-ink">
+                <AccentText :text="situation.title" />
+              </h2>
               <p
                 v-if="situation.body"
                 class="mt-3 whitespace-pre-line leading-relaxed text-ink/65"
               >
-                {{ situation.body }}
+                <AccentText :text="situation.body" />
               </p>
               <div v-if="situation.audience" class="mt-5">
                 <p class="text-xs font-semibold uppercase tracking-wide text-orange-600">Pour qui ?</p>
                 <p class="mt-1 whitespace-pre-line leading-relaxed text-ink/70">
-                  {{ situation.audience }}
+                  <AccentText :text="situation.audience" />
                 </p>
               </div>
               <div v-if="situation.items.length" class="mt-5">
@@ -181,7 +185,7 @@ useSeoMeta({
                       name="material-symbols:check-circle-rounded"
                       class="mt-0.5 h-5 w-5 flex-none text-orange-500"
                     />
-                    <span>{{ item }}</span>
+                    <span><AccentText :text="item" /></span>
                   </li>
                 </ul>
               </div>
@@ -191,7 +195,8 @@ useSeoMeta({
                   v-if="situation.result"
                   class="rounded-2xl bg-orange-50 p-4 text-sm leading-relaxed text-ink/75"
                 >
-                  <span class="font-semibold text-orange-700">Résultat : </span>{{ situation.result }}
+                  <span class="font-semibold text-orange-700">Résultat : </span
+                  ><AccentText :text="situation.result" />
                 </p>
                 <NuxtLink
                   v-if="situation.ctaLabel"
@@ -242,7 +247,7 @@ useSeoMeta({
               <p
                 class="mt-2 whitespace-pre-line text-left font-display text-lg leading-relaxed text-paper/90"
               >
-                {{ content.howIWorkSignature }}
+                <AccentText :text="content.howIWorkSignature" tone="dark" />
               </p>
             </aside>
           </div>
@@ -292,14 +297,14 @@ useSeoMeta({
                   name="material-symbols:check-circle-rounded"
                   class="mt-0.5 h-5 w-5 flex-none text-orange-500"
                 />
-                <span>{{ item }}</span>
+                <span><AccentText :text="item" /></span>
               </li>
             </ul>
             <p
               v-if="content.formatBody"
               class="mt-8 whitespace-pre-line leading-relaxed text-ink/75"
             >
-              {{ content.formatBody }}
+              <AccentText :text="content.formatBody" />
             </p>
           </div>
         </div>

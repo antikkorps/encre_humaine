@@ -43,7 +43,7 @@ useSeoMeta({
             <Icon name="material-symbols:lightbulb" class="h-6 w-6" />
           </span>
           <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
-            {{ content.accrocheBody }}
+            <AccentText :text="content.accrocheBody" />
           </p>
         </figure>
       </template>
@@ -61,7 +61,7 @@ useSeoMeta({
             class="max-w-2xl whitespace-pre-line text-left font-display text-xl font-medium leading-relaxed text-paper"
           >
             <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
-            {{ content.accrocheSignature }}
+            <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
           <NuxtLink
             to="/contact"
@@ -124,16 +124,18 @@ useSeoMeta({
                 <Icon :name="`material-symbols:${item.icon || 'insights'}`" class="h-6 w-6" />
               </span>
               <h3 v-if="item.title" class="mt-4 font-display text-lg font-semibold text-ink">
-                {{ item.title }}
+                <AccentText :text="item.title" />
               </h3>
-              <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">{{ item.body }}</p>
+              <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
+                <AccentText :text="item.body" />
+              </p>
             </article>
           </div>
           <p
             v-if="content.observe.conclusion"
             class="mt-10 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
           >
-            {{ content.observe.conclusion }}
+            <AccentText :text="content.observe.conclusion" />
           </p>
         </div>
       </section>
@@ -164,17 +166,19 @@ useSeoMeta({
               class="group relative flex flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white p-8 pl-9 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
               <span aria-hidden="true" class="absolute inset-y-0 left-0 w-1.5 bg-teal-500"></span>
-              <h3 class="font-display text-2xl font-bold text-ink">{{ situation.title }}</h3>
+              <h3 class="font-display text-2xl font-bold text-ink">
+                <AccentText :text="situation.title" />
+              </h3>
               <p
                 v-if="situation.body"
                 class="mt-3 whitespace-pre-line leading-relaxed text-ink/65"
               >
-                {{ situation.body }}
+                <AccentText :text="situation.body" />
               </p>
               <div v-if="situation.audience" class="mt-5">
                 <p class="text-xs font-semibold uppercase tracking-wide text-teal-700">Pour qui ?</p>
                 <p class="mt-1 whitespace-pre-line leading-relaxed text-ink/70">
-                  {{ situation.audience }}
+                  <AccentText :text="situation.audience" />
                 </p>
               </div>
               <div v-if="situation.items.length" class="mt-5">
@@ -191,7 +195,7 @@ useSeoMeta({
                       name="material-symbols:check-circle-rounded"
                       class="mt-0.5 h-5 w-5 flex-none text-teal-500"
                     />
-                    <span>{{ item }}</span>
+                    <span><AccentText :text="item" /></span>
                   </li>
                 </ul>
               </div>
@@ -201,7 +205,8 @@ useSeoMeta({
                   v-if="situation.result"
                   class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
                 >
-                  <span class="font-semibold text-teal-700">Résultat : </span>{{ situation.result }}
+                  <span class="font-semibold text-teal-700">Résultat : </span
+                  ><AccentText :text="situation.result" />
                 </p>
                 <NuxtLink
                   v-if="situation.ctaLabel"
@@ -272,10 +277,10 @@ useSeoMeta({
                 {{ String(Number(step.number) || i + 1).padStart(2, "0") }}
               </span>
               <h3 v-if="step.title" class="mt-5 font-display text-lg font-bold text-paper">
-                {{ step.title }}
+                <AccentText :text="step.title" tone="dark" />
               </h3>
               <p v-if="step.description" class="mt-2 text-center leading-relaxed text-paper/70">
-                {{ step.description }}
+                <AccentText :text="step.description" tone="dark" />
               </p>
             </li>
           </ol>
@@ -317,14 +322,14 @@ useSeoMeta({
                   name="material-symbols:check-circle-rounded"
                   class="mt-0.5 h-5 w-5 flex-none text-orange-500"
                 />
-                <span>{{ item }}</span>
+                <span><AccentText :text="item" /></span>
               </li>
             </ul>
             <p
               v-if="content.audience.conclusion"
               class="mt-8 whitespace-pre-line leading-relaxed text-ink/80"
             >
-              {{ content.audience.conclusion }}
+              <AccentText :text="content.audience.conclusion" />
             </p>
           </div>
         </div>

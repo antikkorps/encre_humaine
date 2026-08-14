@@ -39,7 +39,7 @@ const unavailable = computed(() => props.product.available === false);
         <NuxtLink :to="to" class="after:absolute after:inset-0">{{ product.name }}</NuxtLink>
       </h3>
       <p v-if="product.tagline" class="mt-1.5 flex-1 text-sm leading-relaxed text-ink/65">
-        {{ product.tagline }}
+        <AccentText :text="product.tagline" />
       </p>
       <p class="mt-4 font-display text-lg font-bold text-teal-700">
         <span v-if="product.priceLabel">{{ product.priceLabel }}</span>

@@ -203,13 +203,13 @@ useSchemaOrg([
               class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
             >
               <h3 v-if="conviction.title" class="font-display text-lg font-semibold text-ink">
-                {{ conviction.title }}
+                <AccentText :text="conviction.title" />
               </h3>
               <p
                 v-if="conviction.body"
                 class="mt-2 whitespace-pre-line leading-relaxed text-ink/65"
               >
-                {{ conviction.body }}
+                <AccentText :text="conviction.body" />
               </p>
             </li>
           </ul>
@@ -233,7 +233,7 @@ useSchemaOrg([
               v-if="content.work.intro"
               class="mt-4 whitespace-pre-line text-lg leading-relaxed text-ink/70"
             >
-              {{ content.work.intro }}
+              <AccentText :text="content.work.intro" />
             </p>
             <ul v-if="content.work.principles.length" class="mt-8 space-y-6">
               <li
@@ -242,13 +242,13 @@ useSchemaOrg([
                 class="border-l-2 border-orange-200 pl-4"
               >
                 <h3 v-if="principle.title" class="font-display text-lg font-semibold text-ink">
-                  {{ principle.title }}
+                  <AccentText :text="principle.title" />
                 </h3>
                 <p
                   v-if="principle.body"
                   class="mt-1 whitespace-pre-line leading-relaxed text-ink/65"
                 >
-                  {{ principle.body }}
+                  <AccentText :text="principle.body" />
                 </p>
               </li>
             </ul>
@@ -257,7 +257,7 @@ useSchemaOrg([
               v-if="content.work.location"
               class="mt-8 rounded-2xl border border-ink/5 bg-white px-5 py-4 leading-relaxed text-ink/75 shadow-soft"
             >
-              {{ content.work.location }}
+              <AccentText :text="content.work.location" />
             </p>
           </div>
         </div>
@@ -283,7 +283,7 @@ useSchemaOrg([
                 aria-hidden="true"
                 >✗</span
               >
-              <span>{{ item }}</span>
+              <span><AccentText :text="item" /></span>
             </li>
           </ul>
         </div>
@@ -317,7 +317,7 @@ useSchemaOrg([
           />
           <blockquote v-if="content.portrait.quote" class="max-w-2xl">
             <p class="font-display text-2xl leading-relaxed text-ink">
-              «&#160;{{ content.portrait.quote }}&#160;»
+              «&#160;<AccentText :text="content.portrait.quote" />&#160;»
             </p>
           </blockquote>
         </figure>

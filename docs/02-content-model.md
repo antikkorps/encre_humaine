@@ -100,7 +100,7 @@ Deux familles de contenu, deux traitements :
 - Deux situations : `situation_a_title/body/cta_label/cta_link`, `situation_b_title/body/cta_label/cta_link`
 - `how_i_work_body`
 - Témoignage : M2O → `testimonials`
-- FAQ : filtre `faq_items` `scope=b2c`
+- FAQ : filtre `faq_items` `scope=b2c_hub`
 - CTA : `cta_label`
 
 ### `resources_page`
@@ -170,14 +170,17 @@ Deux familles de contenu, deux traitements :
 |--------|---------------|------------------------|
 | `contact` | Page /contact | `/contact` |
 | `org` | Page /organisations | hub `/organisations` |
+| `b2c_hub` | Page /particuliers | hub `/particuliers` |
 | `audit` | Offre Audit RH | `/organisations/audit-rh` |
 | `competences` | Offre Compétences & parcours | `/organisations/competences-parcours` |
 | `managers` | Offre Managers & équipes | `/organisations/managers-equipes` |
-| `b2c` | Page /particuliers + offre Clarifier & avancer | hub `/particuliers` **et** `/particuliers/clarifier-avancer` |
+| `b2c` | Offre Clarifier & avancer | `/particuliers/clarifier-avancer` |
 | `booster` | Offre Booster sa recherche | `/particuliers/booster-recherche` |
 | `general` | Toutes les offres (transverse) | les **5 pages d'offre** uniquement — ni hubs, ni `/contact` |
 
-> Deux pièges que les libellés existent précisément pour désamorcer : `b2c` alimente **deux** pages (modifier une question change les deux), et `general` **ne sort pas** sur les hubs ni sur `/contact`. Un test (`apps/web/test/faq-scopes.spec.ts`) échoue si un périmètre proposé dans l'admin n'est rendu par aucune page.
+> **Un périmètre = une page** depuis le 2026-08-14. `b2c` était partagé entre le hub `/particuliers` et l'offre Clarifier & avancer ; Éléonore a tranché que ses questions étaient justes **pour l'offre**, et a demandé une FAQ propre à chaque hub. La valeur `b2c` est donc restée sur l'offre (ses 5 questions publiées n'ont pas bougé de page — la renommer aurait exigé une migration de données sur la prod pour un gain cosmétique) et le hub a pris `b2c_hub`. ⚠️ **Le nom de la valeur `b2c` ment : c'est le libellé qui fait foi.**
+>
+> Piège restant : `general` **ne sort pas** sur les hubs ni sur `/contact`. Un test (`apps/web/test/faq-scopes.spec.ts`) échoue si un périmètre proposé dans l'admin n'est rendu par aucune page, et vérifie que les libellés nomment bien la bonne page.
 
 - `sort`, statut
 

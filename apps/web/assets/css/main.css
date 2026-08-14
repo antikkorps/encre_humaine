@@ -165,6 +165,11 @@
   text-underline-offset: 2px;
 }
 .rich-text :where(strong) { font-weight: 600; color: var(--color-ink-950); }
+/* Mise en avant `**…**` (cf. `server/utils/sanitize.ts`) : même doré et même
+ * règle de lisibilité que `AccentText` — doré antique sur fond clair (le doré
+ * vif y tomberait à 2.3:1), doré vif sur marine. Pas de `:where()` : cette
+ * couleur doit l'emporter sur le `strong` sobre déclaré juste au-dessus. */
+.rich-text strong.accent { font-weight: 700; color: var(--color-orange-500); }
 .rich-text :where(blockquote) {
   border-inline-start: 3px solid var(--color-sand-400);
   padding-inline-start: 1rem;
@@ -181,6 +186,9 @@
 .rich-text-invert :where(h2, h3),
 .rich-text-invert :where(strong) {
   color: var(--color-paper);
+}
+.rich-text-invert strong.accent {
+  color: var(--color-sand-300);
 }
 .rich-text-invert :where(a) {
   color: var(--color-sand-300);
