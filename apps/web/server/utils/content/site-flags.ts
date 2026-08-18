@@ -43,8 +43,9 @@ export async function loadSiteFlags(): Promise<SiteFlags> {
   const now = Date.now();
   if (cache && now - cache.at < TTL_MS) return cache.value;
   try {
-    // `*` : ces deux champs ne seront typés qu'après régénération du snapshot
-    // Directus (cf. TESTIMONIAL_FIELDS) ; le singleton tient sur une ligne.
+    // `*` (cf. TESTIMONIAL_FIELDS) : demander nommément `site_open` à une instance
+    // pas encore bootstrapée ferait échouer la requête ; le singleton tient sur
+    // une ligne, autant tout lire.
     const raw = (await directusServer().request(
       readSingleton("site_settings", { fields: ["*"] }),
     )) as unknown as RawSiteFlags;

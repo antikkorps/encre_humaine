@@ -6418,13 +6418,15 @@ fields:
             value: contact
           - text: Page /organisations
             value: org
+          - text: Page /particuliers
+            value: b2c_hub
           - text: Offre Audit RH
             value: audit
           - text: Offre Compétences & parcours
             value: competences
           - text: Offre Managers & équipes
             value: managers
-          - text: Page /particuliers + offre Clarifier & avancer
+          - text: Offre Clarifier & avancer
             value: b2c
           - text: Offre Booster sa recherche
             value: booster
@@ -6442,13 +6444,15 @@ fields:
             value: contact
           - text: Page /organisations
             value: org
+          - text: Page /particuliers
+            value: b2c_hub
           - text: Offre Audit RH
             value: audit
           - text: Offre Compétences & parcours
             value: competences
           - text: Offre Managers & équipes
             value: managers
-          - text: Page /particuliers + offre Clarifier & avancer
+          - text: Offre Clarifier & avancer
             value: b2c
           - text: Offre Booster sa recherche
             value: booster
@@ -19061,7 +19065,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 1
+      sort: 5
       special: null
       translations: null
       validation: null
@@ -19101,7 +19105,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 2
+      sort: 6
       special: null
       translations: null
       validation: null
@@ -19141,7 +19145,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 7
       special: null
       translations: null
       validation: null
@@ -19181,7 +19185,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 8
       special: null
       translations: null
       validation: null
@@ -19221,7 +19225,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -19261,7 +19265,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -19316,7 +19320,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 11
       special:
         - cast-json
       translations: null
@@ -19358,7 +19362,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 12
       special:
         - alias
         - no-data
@@ -19383,7 +19387,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -19423,7 +19427,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -19463,7 +19467,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -19503,7 +19507,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -19543,7 +19547,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -19583,7 +19587,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -19624,7 +19628,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 19
       special:
         - alias
         - no-data
@@ -19649,7 +19653,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 20
       special:
         - file
       translations: null
@@ -19690,7 +19694,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -19713,6 +19717,145 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: site_settings
+    field: launch_divider
+    type: alias
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: launch_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Ouverture du site
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: site_settings
+    field: site_open
+    type: boolean
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: site_open
+      group: null
+      hidden: false
+      interface: boolean
+      note: >-
+        Coché = le site est ouvert au public. Décoché = seule la page « bientôt
+        disponible » s'affiche (vous, connectée à l'admin, voyez le vrai site).
+        Prise en compte en moins d'une minute.
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: site_open
+      table: site_settings
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: site_settings
+    field: show_cgv
+    type: boolean
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: show_cgv
+      group: null
+      hidden: false
+      interface: boolean
+      note: >-
+        Coché = les CGV s'affichent (lien en pied de page + page /cgv). À cocher
+        le jour où la vente en ligne ouvre.
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: show_cgv
+      table: site_settings
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: site_settings
+    field: identity_divider
+    type: alias
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: identity_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Identité & contacts
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: testimonials
     field: id
     type: uuid
@@ -19982,7 +20125,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -20022,7 +20165,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 10
       special:
         - cast-boolean
       translations: null
@@ -20078,7 +20221,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -20118,7 +20261,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -20158,7 +20301,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 10
+      sort: 13
       special:
         - date-created
       translations: null
@@ -20199,7 +20342,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 11
+      sort: 14
       special:
         - date-updated
       translations: null
@@ -20240,7 +20383,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 12
+      sort: 15
       special:
         - user-created
       translations: null
@@ -20281,7 +20424,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 13
+      sort: 16
       special:
         - user-updated
       translations: null
@@ -20296,6 +20439,179 @@ fields:
       max_length: null
       numeric_precision: null
       numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: testimonials
+    field: offer_scopes
+    type: json
+    meta:
+      collection: testimonials
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: Offre Audit RH (organisations)
+            value: audit-rh
+          - text: Offre Compétences & parcours (organisations)
+            value: competences-parcours
+          - text: Offre Managers & équipes (organisations)
+            value: managers-equipes
+          - text: Offre Clarifier & avancer (particuliers)
+            value: clarifier-avancer
+          - text: Offre Booster sa recherche (particuliers)
+            value: booster-recherche
+        showAsDot: false
+      field: offer_scopes
+      group: null
+      hidden: false
+      interface: select-multiple-checkbox
+      note: >-
+        Cochez une ou plusieurs offres : le témoignage n'apparaîtra que sur
+        celles-ci (en plus du hub de son public). Aucune case cochée = il
+        apparaît sur TOUTES les offres de son public.
+      options:
+        choices:
+          - text: Offre Audit RH (organisations)
+            value: audit-rh
+          - text: Offre Compétences & parcours (organisations)
+            value: competences-parcours
+          - text: Offre Managers & équipes (organisations)
+            value: managers-equipes
+          - text: Offre Clarifier & avancer (particuliers)
+            value: clarifier-avancer
+          - text: Offre Booster sa recherche (particuliers)
+            value: booster-recherche
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: offer_scopes
+      table: testimonials
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: testimonials
+    field: photo
+    type: uuid
+    meta:
+      collection: testimonials
+      conditions: null
+      display: null
+      display_options: null
+      field: photo
+      group: null
+      hidden: false
+      interface: file-image
+      note: >-
+        Photo de la personne, affichée en bulle ronde. Sans photo (ou si la
+        personne ne le souhaite pas), le petit poulpe s'affiche à la place.
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: photo
+      table: testimonials
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: testimonials
+    field: rating
+    type: integer
+    meta:
+      collection: testimonials
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: ★★★★★ — 5/5
+            value: 5
+          - text: ★★★★☆ — 4/5
+            value: 4
+          - text: ★★★☆☆ — 3/5
+            value: 3
+          - text: ★★☆☆☆ — 2/5
+            value: 2
+          - text: ★☆☆☆☆ — 1/5
+            value: 1
+        showAsDot: false
+      field: rating
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: Satisfaction globale. Vide = aucune étoile affichée.
+      options:
+        choices:
+          - text: ★★★★★ — 5/5
+            value: 5
+          - text: ★★★★☆ — 4/5
+            value: 4
+          - text: ★★★☆☆ — 3/5
+            value: 3
+          - text: ★★☆☆☆ — 2/5
+            value: 2
+          - text: ★☆☆☆☆ — 1/5
+            value: 1
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: rating
+      table: testimonials
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -21052,5 +21368,26 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: site_settings_default_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: testimonials
+    field: photo
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: testimonials
+      many_field: photo
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: testimonials
+      column: photo
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: testimonials_photo_foreign
       on_update: NO ACTION
       on_delete: SET NULL

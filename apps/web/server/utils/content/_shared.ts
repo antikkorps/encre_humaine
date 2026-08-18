@@ -185,11 +185,12 @@ export function mapTestimonialItem(raw: unknown, assetBase = ""): TestimonialIte
  * (+ tri `-featured, sort`) plutôt que de pinner un M2O. `offer_scopes` épingle
  * en plus un témoignage sur des pages d'offre précises (cf. `testimonialsForOffer`).
  *
- * `*` (et non la liste nominative) : la collection est minuscule et 100 % publique,
- * et surtout les champs ajoutés côté CMS (photo, note, périmètres d'offre) ne
- * seraient typés qu'APRÈS régénération du snapshot Directus (`make cms-snapshot
- * && make cms-types`, qui exige Docker). Lire `*` garde le code juste des deux
- * côtés de cette régénération. Rien de ce brut ne part au navigateur : les
+ * `*` (et non la liste nominative) **découple le déploiement du bootstrap CMS** :
+ * demander nommément un champ que l'instance n'a pas encore (image web déployée
+ * avant `bootstrap`, cf. docs/07) fait échouer la requête Directus — donc un 500
+ * sur les hubs et les offres pendant toute la fenêtre. Avec `*`, le champ manquant
+ * est simplement absent et le mapper retombe sur son défaut. La collection est
+ * minuscule et 100 % publique, et rien de ce brut ne part au navigateur : les
  * endpoints ne renvoient que l'objet mappé.
  */
 export const TESTIMONIAL_FIELDS = ["*"] as const;
