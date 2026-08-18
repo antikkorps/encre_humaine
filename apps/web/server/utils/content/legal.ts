@@ -1,4 +1,5 @@
 import { readItems, readSingleton } from "@directus/sdk";
+import type { SiteFlags } from "~/types/content";
 import { type ContentSeo, mapSeo, type RawSiteDefaults, str } from "./_shared";
 
 /**
@@ -84,8 +85,19 @@ export function mapLegalDocument(
   };
 }
 
+/**
+ * Documents dont l'affichage dépend d'un interrupteur de `site_settings`
+ * (docs/10-legal.md). Les CGV n'ont de sens qu'avec une vente en ligne : tant que
+ * `show_cgv` est décoché, la page est introuvable (404) et le lien disparaît du
+ * pied de page — recocher les fait réapparaître, sans toucher au contenu.
+ */
+const FLAGGED_SLUGS: Record<string, keyof SiteFlags> = { cgv: "showCgv" };
+
 /** Charge un document légal par slug (Directus published, lecture seule). */
 export async function loadLegalDocument(slug: string): Promise<LegalDocument | null> {
+  const flag = FLAGGED_SLUGS[slug];
+  if (flag && !(await loadSiteFlags())[flag]) return null;
+
   const client = directusServer();
   const assetBase = useRuntimeConfig().public.directusPublicUrl;
 

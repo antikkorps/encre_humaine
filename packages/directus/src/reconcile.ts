@@ -8,7 +8,8 @@ import { get, patch } from "./api.ts";
 import { ICON_SUBFIELD } from "./icons.ts";
 import { allCollections } from "./schema.ts";
 
-// 1) Listes déroulantes (`select-dropdown`) : choix + rendu en vue liste, resynchronisés
+// 1) Listes de choix (`select-dropdown` et cases à cocher multiples) : choix + rendu
+//    en vue liste, resynchronisés
 //    depuis schema.ts — source unique, aucune liste dupliquée ici. Le bootstrap étant
 //    additif-only, un select déjà créé conserve indéfiniment ses anciens libellés :
 //    c'est donc ici que les renommages (ex. périmètres de FAQ) atterrissent en prod.
@@ -48,7 +49,7 @@ type SubField = {
   field: string;
   meta?: { interface?: string; options?: { choices?: unknown[] } };
 };
-type Choice = { text?: string; value?: string };
+type Choice = { text?: string; value?: string | number };
 type FieldMeta = {
   meta: {
     interface?: string | null;
@@ -64,6 +65,9 @@ type SelectSpec = {
   display_options?: Record<string, unknown>;
   options?: { choices?: Choice[] };
 };
+
+/** Interfaces pilotées par une liste de choix (fields.ts : select / selectInt / selectMulti). */
+const CHOICE_INTERFACES = new Set(["select-dropdown", "select-multiple-checkbox"]);
 
 /** Empreinte comparable d'une liste de choix (ordre significatif : c'est l'ordre du menu). */
 const choiceKey = (choices: Choice[] | undefined): string =>
@@ -84,7 +88,8 @@ async function reconcileSelects(): Promise<void> {
   for (const def of allCollections) {
     for (const spec of def.fields) {
       const want = spec.meta as SelectSpec;
-      if (want.interface !== "select-dropdown" || !want.options?.choices) continue;
+      if (!want.interface || !CHOICE_INTERFACES.has(want.interface)) continue;
+      if (!want.options?.choices) continue;
       const path = `/fields/${def.collection}/${spec.field}`;
       const cur = await get<FieldMeta>(path);
       if (selectUpToDate(cur.meta, want)) continue;
@@ -103,7 +108,7 @@ async function reconcileSelects(): Promise<void> {
       changed++;
     }
   }
-  if (!changed) console.log("= listes déroulantes : déjà alignées sur schema.ts");
+  if (!changed) console.log("= listes de choix : déjà alignées sur schema.ts");
 }
 
 async function reconcileIconSubfields(): Promise<void> {

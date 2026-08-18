@@ -263,8 +263,9 @@ useSchemaOrg([
             :key="i"
             class="w-full rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]"
           >
+            <!-- Pastille centrée dans la carte (retour Éléonore 2026-08-18). -->
             <span
-              class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
+              class="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
             >
               <Icon :name="icon(item.icon, 'lightbulb')" class="h-6 w-6" />
             </span>
@@ -474,7 +475,9 @@ useSchemaOrg([
       v-reveal
       class="mx-auto max-w-4xl px-4 py-20"
     >
-      <div class="relative isolate overflow-hidden rounded-[1.75rem] bg-teal-900 p-8 shadow-lift sm:p-10">
+      <!-- Même marine que les blocs CTA de bas de page (retour Éléonore 2026-08-18 :
+           le marine plein était nettement plus sombre que le reste de la page). -->
+      <div class="bg-ink-gradient relative isolate overflow-hidden rounded-[1.75rem] p-8 shadow-lift sm:p-10">
         <InkBlob class="absolute -right-16 -top-20 -z-10 h-72 w-72 rotate-12 text-orange-300/[0.07]" />
         <SectionHeading tone="dark" eyebrow="Investissement" :title="content.priceLabel || 'Sur devis'" />
         <dl class="mt-8 grid gap-6 sm:grid-cols-2">

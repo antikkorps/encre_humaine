@@ -109,8 +109,9 @@ useSeoMeta({
             :key="i"
             class="flex w-full flex-col rounded-3xl border border-ink/5 bg-paper p-7 shadow-soft sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)]"
           >
+            <!-- Pastille centrée dans la carte (retour Éléonore 2026-08-18). -->
             <span
-              class="grid h-14 w-14 place-items-center rounded-full bg-sand-400/15 text-sand-500 ring-1 ring-inset ring-sand-400/40"
+              class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-sand-400/15 text-sand-500 ring-1 ring-inset ring-sand-400/40"
               aria-hidden="true"
             >
               <Icon :name="`material-symbols:${item.icon || 'science'}`" class="h-7 w-7" />

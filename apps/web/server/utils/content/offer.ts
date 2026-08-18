@@ -15,6 +15,7 @@ import {
   TESTIMONIAL_FIELDS,
   TESTIMONIAL_SORT,
   type TitledItem,
+  testimonialsForOffer,
 } from "./_shared";
 
 /**
@@ -216,7 +217,12 @@ export function mapOfferContent(
     priceLabel: str(raw.price_label) || null,
     priceNote: str(raw.price_note) || null,
     faq: mapFaqItems(faqRaw, sanitize),
-    testimonials: mapTestimonials(testimonialsRaw),
+    // Épinglage par offre (`offer_scopes`) sinon repli sur le public de l'offre.
+    testimonials: testimonialsForOffer(
+      mapTestimonials(testimonialsRaw, assetBase),
+      str(raw.slug),
+      asAudience(raw.audience) ?? null,
+    ),
     ctaTitle: str(raw.cta_title) || null,
     ctaBody: str(raw.cta_body) || null,
     ctaLabel: str(raw.cta_label) || "Prendre rendez-vous",
@@ -286,10 +292,9 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
 
   if (!offer) return null;
 
-  // Témoignages centralisés : filtrés sur l'audience de l'offre (B2B → organisation,
-  // B2C → particulier), vedettes d'abord (plus de pin M2O par offre).
-  const offerAudience = str((offer as { audience?: string | null }).audience);
-
+  // Témoignages centralisés : tous les publiés sont chargés (volume anecdotique),
+  // le tri Directus (vedettes d'abord) est conservé et le choix de ceux qui sortent
+  // sur CETTE offre est fait dans le mapper pur (`testimonialsForOffer`, testable).
   const [faq, testimonials, settings] = await Promise.all([
     client.request(
       readItems("faq_items", {
@@ -301,7 +306,7 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
     ),
     client.request(
       readItems("testimonials", {
-        filter: { status: { _eq: "published" }, audience: { _eq: offerAudience } },
+        filter: { status: { _eq: "published" } },
         sort: [...TESTIMONIAL_SORT],
         limit: -1,
         fields: [...TESTIMONIAL_FIELDS],

@@ -2,6 +2,14 @@
 // Pied de page — docs/00-global.md §Layout. Contenu réel depuis site_settings (Directus) = item BACKLOG.
 // « Le Laboratoire » est une page vitrine : toujours visible (cf. AppHeader).
 const year = new Date().getFullYear();
+
+// Interrupteurs globaux (site_settings) : les CGV n'apparaissent que si l'éditrice
+// les a activées — pas de vente en ligne à date. Repli fermé si l'appel échoue :
+// mieux vaut un lien manquant qu'un lien vers une page introuvable.
+const { data: flags } = await useFetch("/api/site-flags", {
+  key: "site-flags",
+  default: () => ({ siteOpen: false, showCgv: false }),
+});
 // Sur une page d'erreur (404/5xx), le bandeau porte déjà un grand filigrane poulpe :
 // on masque celui du footer pour éviter deux poulpes empilés. Ailleurs, useError() est nul.
 const appError = useError();
@@ -187,7 +195,9 @@ const appError = useError();
               Politique de confidentialité
             </NuxtLink>
           </li>
-          <li><NuxtLink to="/cgv" class="hover:text-teal-300">CGV</NuxtLink></li>
+          <li v-if="flags.showCgv">
+            <NuxtLink to="/cgv" class="hover:text-teal-300">CGV</NuxtLink>
+          </li>
           <li><NuxtLink to="/cgu" class="hover:text-teal-300">CGU</NuxtLink></li>
         </ul>
       </div>

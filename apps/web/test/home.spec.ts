@@ -178,6 +178,8 @@ describe("mapTestimonial", () => {
       company: "Acme",
       context: "PME industrie",
       audience: "organisation",
+      offers: [],
+      rating: undefined,
     });
     expect(mapTestimonial({ quote: "x", audience: "n'importe quoi" })?.audience).toBeUndefined();
   });

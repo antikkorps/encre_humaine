@@ -17,6 +17,14 @@ export interface Stat {
   label: string;
 }
 
+/** Image résolue côté page (URL d'asset Directus). `alt` vide = décoratif. */
+export interface ContentPhoto {
+  url: string;
+  alt: string;
+  width: number | null;
+  height: number | null;
+}
+
 /** Témoignage réutilisable — `testimonials` (docs/02 §5). */
 export interface TestimonialItem {
   quote: string;
@@ -26,6 +34,22 @@ export interface TestimonialItem {
   /** Secteur / enjeu, optionnel. */
   context?: string;
   audience?: Audience;
+  /** Photo de la personne (bulle ronde) ; absente → le poulpe s'affiche. */
+  photo?: ContentPhoto;
+  /** Satisfaction globale 1–5 ; absente → aucune étoile. */
+  rating?: number;
+  /** Slugs d'offres où le témoignage est épinglé ; vide = toutes celles de son public. */
+  offers: string[];
+}
+
+/**
+ * Interrupteurs globaux du site (`site_settings`) exposés par `/api/site-flags` :
+ * ouverture au public (porte « bientôt disponible ») et affichage des CGV.
+ * Éditables par l'éditrice sans redéploiement ni redémarrage.
+ */
+export interface SiteFlags {
+  siteOpen: boolean;
+  showCgv: boolean;
 }
 
 /** Carte d'offre pour les hubs — sous-ensemble de `offers` (docs/02 §5). */

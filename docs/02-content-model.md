@@ -56,6 +56,9 @@ Deux familles de contenu, deux traitements :
 ## 4. Singletons (champs)
 
 ### `site_settings` (global)
+- **Ouverture du site** (interrupteurs de l'éditrice, en tête du formulaire) :
+  - `site_open` — coché = site ouvert au public. Décoché **et** `COMING_SOON=true` côté serveur = page « bientôt disponible » (cf. docs/07 §porte de lancement). Prise en compte en < 1 min, sans redéploiement.
+  - `show_cgv` — coché = CGV visibles (lien de pied de page + page `/cgv`). Décoché tant qu'il n'y a pas de vente en ligne : la page répond 404 et le lien disparaît.
 - `brand_name` (« L'Encre Humaine »)
 - `tagline`
 - `contact_email`
@@ -156,9 +159,15 @@ Deux familles de contenu, deux traitements :
 
 ### `testimonials`
 - `quote`, `author_name`, `author_title`, `company`
-- `audience` (`organisation`|`particulier`)
+- `audience` (`organisation`|`particulier`) — **1er menu** : le hub où le témoignage sort (`/organisations` ou `/particuliers`)
+- `offer_scopes` (cases à cocher, valeurs = **slugs d'offre**) — **2e menu** : les pages d'offre où il sort *en plus* du hub
+- `photo` (image, optionnelle) — bulle ronde ; **sans photo, le poulpe prend sa place** (personne qui ne souhaite pas sa tête sur le site)
+- `rating` (1–5, optionnel) — satisfaction globale rendue en étoiles ; vide = aucune étoile
 - `context` (secteur / enjeu, optionnel)
 - `featured` (booléen), `sort`, statut
+
+**Règle d'affichage sur une page d'offre** (une phrase à retenir côté admin) :
+des offres cochées → le témoignage ne sort **que** sur celles-là ; aucune case cochée → il sort sur **toutes** les offres de son public. Cocher une offre *ajoute* une page, ça n'en retire jamais au hub.
 
 > Le client n'aura pas de témoignages au lancement. **Toutes les sections témoignage doivent se masquer proprement si vide** (critère d'acceptation).
 

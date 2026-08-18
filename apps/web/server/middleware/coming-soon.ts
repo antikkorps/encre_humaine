@@ -20,8 +20,15 @@ import { serverEnv } from "../utils/env";
  * site pour relire/corriger le rendu avant l'ouverture — cf. hasValidDirectusSession.
  * Le public et les robots, sans session, ne voient que la page d'attente.
  *
- * Bascule : variable d'env `COMING_SOON` (validée au boot, cf. packages/shared
- * env). Aucun rebuild — un redémarrage du conteneur suffit.
+ * Deux bascules, dans cet ordre :
+ *  1. `COMING_SOON` (env, validée au boot) — le garde-fou d'infra : à `false`,
+ *     la porte n'existe plus du tout (aucun appel Directus, coût nul) ;
+ *  2. `site_settings.site_open` (Directus) — **l'interrupteur d'Éléonore** : à
+ *     `true`, le site s'ouvre au public en moins d'une minute, sans
+ *     redéploiement ni redémarrage du conteneur (retour du 2026-08-18 :
+ *     « qu'elle puisse peut-être l'activer seule »).
+ * Une fois l'ouverture confirmée, passer `COMING_SOON=false` retire la porte
+ * définitivement (et avec elle la lecture Directus à chaque navigation).
  */
 
 const COMING_SOON_PATH = "/coming-soon";
@@ -30,6 +37,8 @@ const COMING_SOON_PATH = "/coming-soon";
 const ALLOW_LIST: RegExp[] = [
   // La page d'attente elle-même (rendue en interne, cf. plus bas).
   /^\/coming-soon\/?$/,
+  // Interrupteurs globaux (lus par le pied de page rendu en SSR pour l'éditrice).
+  /^\/api\/site-flags\/?$/,
   // Parcours newsletter : inscription + confirmation double opt-in.
   /^\/api\/newsletter\/(subscribe|confirm)\/?$/,
   /^\/newsletter\/confirmation\/?$/,
@@ -51,6 +60,8 @@ const ROBOTS_DISALLOW_ALL = "User-agent: *\nDisallow: /\n";
 
 export default defineEventHandler(async (event) => {
   if (!serverEnv().COMING_SOON) return;
+  // Ouverture pilotée depuis l'admin : le site redevient un site normal.
+  if ((await loadSiteFlags()).siteOpen) return;
 
   const path = event.path.split("?")[0] ?? event.path;
 

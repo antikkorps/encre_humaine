@@ -5,7 +5,11 @@
  * Tout est **pur** (testable sans réseau).
  */
 import type { Audience } from "@encre/shared/validation";
-import type { FaqItem, OfferSummary, TestimonialItem } from "~/types/content";
+import type { ContentPhoto, FaqItem, OfferSummary, TestimonialItem } from "~/types/content";
+
+// Ré-exporté : les loaders importent toutes leurs formes depuis `_shared`, mais la
+// définition vit dans `~/types/content` (partagée avec les composants). DRY.
+export type { ContentPhoto };
 
 export interface RawFileRef {
   id?: string;
@@ -21,14 +25,6 @@ export interface RawFileRef {
  * (cf. shop.ts). La forme objet reste tolérée (tests, évolution future).
  */
 export type FileField = string | RawFileRef | null | undefined;
-
-/** Image résolue côté page. `alt` vide = décoratif (pas de métadonnée fichier). */
-export interface ContentPhoto {
-  url: string;
-  alt: string;
-  width: number | null;
-  height: number | null;
-}
 
 export interface ContentSeo {
   title: string;
@@ -152,15 +148,24 @@ export function asAudience(val: unknown): Audience | undefined {
   return val === "organisation" || val === "particulier" ? val : undefined;
 }
 
+/** Note de satisfaction bornée à 1–5 (entier) ; toute autre valeur → `undefined`. */
+export function asRating(val: unknown): number | undefined {
+  const n = typeof val === "number" ? val : Number.parseInt(str(val), 10);
+  return Number.isInteger(n) && n >= 1 && n <= 5 ? n : undefined;
+}
+
 /**
  * Témoignage réutilisable (home featured, hubs, pages offres). Requiert une
  * citation ; renvoie `null` si absent ou relation M2O non résolue (string).
+ * `assetBase` sert à résoudre la photo (bulle ronde) ; sans lui, pas de photo —
+ * l'affichage retombe sur le poulpe.
  */
-export function mapTestimonialItem(raw: unknown): TestimonialItem | null {
+export function mapTestimonialItem(raw: unknown, assetBase = ""): TestimonialItem | null {
   if (!raw || typeof raw !== "object") return null;
   const r = raw as Record<string, unknown>;
   const quote = str(r.quote);
   if (!quote) return null;
+  const photo = assetBase ? mapPhoto(r.photo as FileField, assetBase) : null;
   return {
     quote,
     authorName: str(r.author_name),
@@ -168,31 +173,53 @@ export function mapTestimonialItem(raw: unknown): TestimonialItem | null {
     company: str(r.company) || undefined,
     context: str(r.context) || undefined,
     audience: asAudience(r.audience),
+    ...(photo ? { photo } : {}),
+    rating: asRating(r.rating),
+    offers: mapStringList(r.offer_scopes),
   };
 }
 
 /**
- * Champs `testimonials` consommés à l'affichage (DRY — hubs + offres). Les
+ * Champs `testimonials` consommés à l'affichage (DRY — home + hubs + offres). Les
  * témoignages sont **centralisés** : chaque surface filtre par `audience`
- * (+ tri `-featured, sort`) plutôt que de pinner un M2O.
+ * (+ tri `-featured, sort`) plutôt que de pinner un M2O. `offer_scopes` épingle
+ * en plus un témoignage sur des pages d'offre précises (cf. `testimonialsForOffer`).
+ *
+ * `*` (et non la liste nominative) : la collection est minuscule et 100 % publique,
+ * et surtout les champs ajoutés côté CMS (photo, note, périmètres d'offre) ne
+ * seraient typés qu'APRÈS régénération du snapshot Directus (`make cms-snapshot
+ * && make cms-types`, qui exige Docker). Lire `*` garde le code juste des deux
+ * côtés de cette régénération. Rien de ce brut ne part au navigateur : les
+ * endpoints ne renvoient que l'objet mappé.
  */
-export const TESTIMONIAL_FIELDS = [
-  "quote",
-  "author_name",
-  "author_title",
-  "company",
-  "context",
-  "audience",
-] as const;
+export const TESTIMONIAL_FIELDS = ["*"] as const;
 
 /** Tri des témoignages : vedettes d'abord, puis ordre manuel. */
 export const TESTIMONIAL_SORT = ["-featured", "sort"] as const;
 
 /** Liste de témoignages publiés (filtrée en amont par audience) ; vides exclus. */
-export function mapTestimonials(raws: unknown): TestimonialItem[] {
+export function mapTestimonials(raws: unknown, assetBase = ""): TestimonialItem[] {
   return (Array.isArray(raws) ? raws : [])
-    .map(mapTestimonialItem)
+    .map((raw) => mapTestimonialItem(raw, assetBase))
     .filter((t): t is TestimonialItem => t !== null);
+}
+
+/**
+ * Témoignages d'une PAGE D'OFFRE (retour Éléonore 2026-08-18). Deux règles, une
+ * seule phrase à retenir côté admin :
+ *  - des offres cochées → le témoignage ne sort que sur celles-là ;
+ *  - aucune case cochée → il sort sur toutes les offres de son public.
+ * Les hubs, eux, continuent de n'écouter que le public (`audience`) : cocher une
+ * offre AJOUTE une page, ça n'en retire jamais au hub.
+ */
+export function testimonialsForOffer(
+  items: TestimonialItem[],
+  slug: string,
+  audience: string | null,
+): TestimonialItem[] {
+  return items.filter((t) =>
+    t.offers.length ? t.offers.includes(slug) : Boolean(audience) && t.audience === audience,
+  );
 }
 
 /** Sous-ensemble `offers` consommé en carte de hub (docs/02 §5). */
