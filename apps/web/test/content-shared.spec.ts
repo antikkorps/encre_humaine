@@ -14,6 +14,7 @@ import {
   mapTestimonials,
   mapTitledItems,
   safeHref,
+  testimonialsForOffer,
 } from "../server/utils/content/_shared";
 
 const BASE = "https://cms.example.fr";
@@ -128,8 +129,27 @@ describe("mapTestimonialItem / mapTestimonials", () => {
       company: "Acme",
       context: "PME",
       audience: "organisation",
+      offers: [],
+      rating: undefined,
     });
     expect(mapTestimonialItem({ quote: "x", audience: "autre" })?.audience).toBeUndefined();
+  });
+
+  it("résout la photo (bulle) et borne la note de satisfaction à 1–5", () => {
+    const t = mapTestimonialItem({ quote: "x", photo: "file-uuid", rating: 4 }, BASE);
+    expect(t?.photo).toEqual({
+      url: `${BASE}/assets/file-uuid`,
+      alt: "",
+      width: null,
+      height: null,
+    });
+    expect(t?.rating).toBe(4);
+    // Sans base d'assets (mappers appelés sans URL), pas de photo → poulpe à l'affichage.
+    expect(mapTestimonialItem({ quote: "x", photo: "file-uuid" })?.photo).toBeUndefined();
+    // Notes hors bornes ou non entières : ignorées (aucune étoile affichée).
+    for (const rating of [0, 6, 2.5, "beaucoup", null]) {
+      expect(mapTestimonialItem({ quote: "x", rating }, BASE)?.rating).toBeUndefined();
+    }
   });
 
   it("filtre les entrées invalides de la liste", () => {
@@ -141,9 +161,51 @@ describe("mapTestimonialItem / mapTestimonials", () => {
         company: undefined,
         context: undefined,
         audience: undefined,
+        offers: [],
+        rating: undefined,
       },
     ]);
     expect(mapTestimonials(null)).toEqual([]);
+  });
+});
+
+describe("testimonialsForOffer", () => {
+  const item = (quote: string, audience: string, offers: string[] = []) =>
+    ({ quote, authorName: "", audience, offers }) as never;
+
+  const orgSansOffre = item("org", "organisation");
+  const b2cSansOffre = item("b2c", "particulier");
+  const epingleAudit = item("audit", "organisation", ["audit-rh"]);
+  const epingleDeux = item("deux", "organisation", ["audit-rh", "managers-equipes"]);
+  const items = [orgSansOffre, b2cSansOffre, epingleAudit, epingleDeux];
+
+  it("sans case cochée : le témoignage suit le public de l'offre", () => {
+    expect(testimonialsForOffer([orgSansOffre, b2cSansOffre], "audit-rh", "organisation")).toEqual([
+      orgSansOffre,
+    ]);
+    expect(
+      testimonialsForOffer([orgSansOffre, b2cSansOffre], "clarifier-avancer", "particulier"),
+    ).toEqual([b2cSansOffre]);
+  });
+
+  it("avec des offres cochées : il ne sort que sur celles-là", () => {
+    expect(testimonialsForOffer(items, "audit-rh", "organisation")).toEqual([
+      orgSansOffre,
+      epingleAudit,
+      epingleDeux,
+    ]);
+    // Épinglé ailleurs → absent de cette offre, même si le public correspond.
+    expect(testimonialsForOffer(items, "competences-parcours", "organisation")).toEqual([
+      orgSansOffre,
+    ]);
+    expect(testimonialsForOffer(items, "managers-equipes", "organisation")).toEqual([
+      orgSansOffre,
+      epingleDeux,
+    ]);
+  });
+
+  it("offre sans public : seuls les témoignages épinglés sortent", () => {
+    expect(testimonialsForOffer(items, "audit-rh", null)).toEqual([epingleAudit, epingleDeux]);
   });
 });
 

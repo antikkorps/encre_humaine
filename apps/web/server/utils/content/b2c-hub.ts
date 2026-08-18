@@ -221,7 +221,7 @@ export function mapB2cHubContent(
     formatTitle: str(hub.format_title) || null,
     formatItems: mapStringList(hub.format_items),
     formatBody: str(hub.format_body) || null,
-    testimonials: mapTestimonials(testimonialsRaw),
+    testimonials: mapTestimonials(testimonialsRaw, assetBase),
     faq: mapFaqItems(faq, sanitize),
     ctaTitle: str(hub.cta_title) || null,
     ctaBody: str(hub.cta_body) || null,

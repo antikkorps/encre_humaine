@@ -100,27 +100,54 @@ export const tags = (field: string, o?: Opt): Spec =>
     o,
   );
 
+/** Choix d'une liste : libellé affiché + valeur stockée (texte ou entier). */
+export type Choice<V extends string | number = string> = { text: string; value: V };
+
 /**
- * Liste déroulante. `display: "labels"` est indispensable : sans lui, la vue LISTE
- * de l'admin affiche la valeur brute stockée (`b2c`, `general`…) alors que le
- * formulaire affiche le libellé — deux vocabulaires pour un même champ, source de
- * confusion pour l'éditrice (retour Éléonore 2026-08-06).
+ * Meta commun à toutes les listes de choix. `display: "labels"` est indispensable :
+ * sans lui, la vue LISTE de l'admin affiche la valeur brute stockée (`b2c`,
+ * `general`…) alors que le formulaire affiche le libellé — deux vocabulaires pour
+ * un même champ, source de confusion pour l'éditrice (retour Éléonore 2026-08-06).
+ * `reconcile.ts` resynchronise ce meta sur les champs DÉJÀ créés (bootstrap additif).
  */
-export const select = (
-  field: string,
-  choices: { text: string; value: string }[],
-  o?: Opt & { default?: string },
-): Spec =>
+const choiceMeta = <V extends string | number>(iface: string, choices: Choice<V>[]): Json => ({
+  interface: iface,
+  options: { choices },
+  display: "labels",
+  display_options: { choices, showAsDot: false },
+});
+
+/** Liste déroulante (une valeur texte). */
+export const select = (field: string, choices: Choice[], o?: Opt & { default?: string }): Spec =>
   base(
     field,
     "string",
-    {
-      interface: "select-dropdown",
-      options: { choices },
-      display: "labels",
-      display_options: { choices, showAsDot: false },
-    },
+    choiceMeta("select-dropdown", choices),
     { is_nullable: !o?.required, default_value: o?.default ?? null },
+    o,
+  );
+
+/** Liste déroulante à valeurs entières (ex. une note de 1 à 5). */
+export const selectInt = (field: string, choices: Choice<number>[], o?: Opt): Spec =>
+  base(
+    field,
+    "integer",
+    choiceMeta("select-dropdown", choices),
+    { is_nullable: true, default_value: null },
+    o,
+  );
+
+/**
+ * Choix MULTIPLES (cases à cocher) → colonne JSON (tableau de valeurs).
+ * Pensé pour « en plus de X, aussi sur Y et Z » : une case cochée = une surface
+ * d'affichage supplémentaire, aucune case = le comportement par défaut du champ.
+ */
+export const selectMulti = (field: string, choices: Choice[], o?: Opt): Spec =>
+  base(
+    field,
+    "json",
+    { ...choiceMeta("select-multiple-checkbox", choices), special: ["cast-json"] },
+    { is_nullable: true },
     o,
   );
 

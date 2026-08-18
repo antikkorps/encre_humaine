@@ -120,8 +120,9 @@ useSeoMeta({
               :key="i"
               class="w-full rounded-3xl border border-ink/5 bg-white p-7 shadow-soft sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]"
             >
+              <!-- Pastille centrée dans la carte (retour Éléonore 2026-08-18). -->
               <span
-                class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
+                class="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
               >
                 <Icon :name="`material-symbols:${outcome.icon || 'check-circle'}`" class="h-6 w-6" />
               </span>

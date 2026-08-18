@@ -103,6 +103,9 @@ export default defineNuxtConfig({
         "material-symbols:casino",
         "material-symbols:edit-note",
         "material-symbols:hourglass-top",
+        // Étoiles de satisfaction des témoignages (run 13) — rendues par le code seul.
+        "material-symbols:star",
+        "material-symbols:star-outline",
       ],
     },
   },

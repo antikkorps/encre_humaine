@@ -211,7 +211,7 @@ describe("mapOfferContent", () => {
 
   it("assainit la FAQ (rich text) et mappe les témoignages centralisés (liste)", () => {
     const c = mapOfferContent(
-      {},
+      { slug: "audit-rh", audience: "organisation" },
       [{ question: "Combien de temps ?", answer: "<p>4 semaines.</p>" }],
       [{ quote: "Décisif.", author_name: "Marie", audience: "organisation" }, { quote: "" }],
       {},
@@ -221,13 +221,30 @@ describe("mapOfferContent", () => {
     expect(c.faq).toEqual([
       { question: "Combien de temps ?", answer: "clean(<p>4 semaines.</p>)" },
     ]);
-    // liste filtrée par audience en amont ; entrées sans citation exclues
+    // liste complète en entrée, filtrée par le mapper ; entrées sans citation exclues
     expect(c.testimonials).toHaveLength(1);
     expect(c.testimonials[0]).toMatchObject({
       quote: "Décisif.",
       authorName: "Marie",
       audience: "organisation",
     });
+  });
+
+  it("choisit les témoignages de l'offre : public par défaut, offres cochées sinon", () => {
+    const raws = [
+      { quote: "Public org", audience: "organisation" },
+      { quote: "Public b2c", audience: "particulier" },
+      { quote: "Épinglé audit", audience: "organisation", offer_scopes: ["audit-rh"] },
+      { quote: "Épinglé managers", audience: "organisation", offer_scopes: ["managers-equipes"] },
+    ];
+    const quotes = (slug: string, audience: string) =>
+      mapOfferContent({ slug, audience }, [], raws, {}, BASE, wrap).testimonials.map(
+        (t) => t.quote,
+      );
+
+    expect(quotes("audit-rh", "organisation")).toEqual(["Public org", "Épinglé audit"]);
+    expect(quotes("competences-parcours", "organisation")).toEqual(["Public org"]);
+    expect(quotes("clarifier-avancer", "particulier")).toEqual(["Public b2c"]);
   });
 
   it("mappe accroche, CTA, prix/durée et le SEO (fallback site_settings)", () => {

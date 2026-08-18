@@ -117,6 +117,22 @@ UMAMI_APP_SECRET=...
 
 ---
 
+## 5bis. Porte de lancement (« bientôt disponible »)
+Avant l'ouverture publique, `server/middleware/coming-soon.ts` sert la page d'attente en
+**503 + noindex** pour toute route non allow-listée (newsletter, healthcheck et assets
+restent ouverts ; une session Directus valide donne accès au vrai site).
+
+Deux bascules, dans cet ordre :
+1. `COMING_SOON` (env) — garde-fou d'infra. À `false`, la porte n'existe plus (aucune
+   lecture Directus, coût nul). Nécessite un redémarrage du conteneur.
+2. `site_settings.site_open` (Directus) — **l'interrupteur de l'éditrice** : à `true`,
+   le site s'ouvre au public en moins d'une minute (mémoïsation 60 s), sans
+   redéploiement. Défaut : fermé ; si Directus ne répond pas, la dernière valeur connue
+   est conservée (une panne CMS ne referme pas un site déjà ouvert).
+
+Après ouverture confirmée : passer `COMING_SOON=false` dans `infra/env/.env` et
+redémarrer `web` — la porte et sa lecture Directus disparaissent.
+
 ## 6. Stockage & sauvegardes
 
 - **Assets Directus** : adaptateur S3 → **R2** (`R2_BUCKET_ASSETS`). App stateless côté fichiers.

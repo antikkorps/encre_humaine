@@ -215,7 +215,7 @@ export function mapOrgHubContent(
         : null,
     faq: mapFaqItems(faq, sanitize),
     testimonialsTitle: str(hub.testimonials_title) || "Ils m'ont fait confiance",
-    testimonials: mapTestimonials(testimonials),
+    testimonials: mapTestimonials(testimonials, assetBase),
     cta: {
       title: str(hub.cta_title) || "Travaillons ensemble",
       body: str(hub.cta_body) || null,

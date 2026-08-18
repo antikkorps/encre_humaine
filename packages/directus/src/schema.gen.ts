@@ -122,6 +122,18 @@ export interface B2cHubPage {
   cta_subtext: string | null;
 }
 
+export interface ContactLeads {
+  created_at: string;
+  first_name: string;
+  email: string;
+  audience: string;
+  source_page: string | null;
+  status: string;
+  notification_sent: boolean;
+  message: string;
+  updated_at: string;
+}
+
 export interface ContactPage {
   id: string;
   accroche_title: string | null;
@@ -463,6 +475,8 @@ export interface SiteSettings {
   host_info: string | null;
   default_og_image: string | DirectusFile | null;
   default_meta_description: string | null;
+  site_open: boolean;
+  show_cgv: boolean;
 }
 
 export interface Testimonials {
@@ -480,6 +494,9 @@ export interface Testimonials {
   date_updated: string | null;
   user_created: string | null;
   user_updated: string | null;
+  offer_scopes: unknown | null;
+  photo: string | DirectusFile | null;
+  rating: number | null;
 }
 
 /** Schéma consommé par le SDK Directus (createDirectus<Schema>). */
@@ -488,6 +505,7 @@ export interface Schema {
   article_categories: ArticleCategories[];
   articles: Articles[];
   b2c_hub_page: B2cHubPage;
+  contact_leads: ContactLeads[];
   contact_page: ContactPage;
   faq_items: FaqItems[];
   home_page: HomePage;

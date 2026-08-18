@@ -47,6 +47,28 @@ export const FAQ_SCOPE = [
   { text: "Offre Booster sa recherche", value: "booster" },
   { text: "Toutes les offres (transverse)", value: "general" },
 ];
+/**
+ * Offres où un témoignage peut être épinglé (2e menu déroulant, retour Éléonore
+ * 2026-08-18 : « particulier / organisation, puis aussi sur l'offre 1, 2 ou 3 »).
+ * Les valeurs sont les **slugs d'offre** : aucune table de correspondance à tenir,
+ * la page d'offre se reconnaît directement. Aucune case cochée = le témoignage
+ * sort sur toutes les offres de son public (comportement d'avant ce champ).
+ */
+export const TESTIMONIAL_OFFER_SCOPE = [
+  { text: "Offre Audit RH (organisations)", value: "audit-rh" },
+  { text: "Offre Compétences & parcours (organisations)", value: "competences-parcours" },
+  { text: "Offre Managers & équipes (organisations)", value: "managers-equipes" },
+  { text: "Offre Clarifier & avancer (particuliers)", value: "clarifier-avancer" },
+  { text: "Offre Booster sa recherche (particuliers)", value: "booster-recherche" },
+];
+/** Satisfaction globale — 5 en tête (le cas courant), vide = aucune étoile affichée. */
+const RATING_CHOICES = [
+  { text: "★★★★★ — 5/5", value: 5 },
+  { text: "★★★★☆ — 4/5", value: 4 },
+  { text: "★★★☆☆ — 3/5", value: 3 },
+  { text: "★★☆☆☆ — 2/5", value: 2 },
+  { text: "★☆☆☆☆ — 1/5", value: 1 },
+];
 const ARTICLE_GROUP = [
   { text: "Organisations", value: "organisations" },
   { text: "Particuliers", value: "particuliers" },
@@ -63,8 +85,18 @@ const singletons: CollectionDef[] = [
     collection: "site_settings",
     singleton: true,
     icon: "settings",
-    note: "Identité, contacts, infos légales, SEO par défaut",
+    note: "Identité, contacts, infos légales, SEO par défaut + ouverture du site",
     fields: [
+      // — Ouverture du site (en tête : c'est l'interrupteur du jour J) —
+      f.divider("launch_divider", "Ouverture du site"),
+      f.bool("site_open", false, {
+        note: "Coché = le site est ouvert au public. Décoché = seule la page « bientôt disponible » s'affiche (vous, connectée à l'admin, voyez le vrai site). Prise en compte en moins d'une minute.",
+      }),
+      f.bool("show_cgv", false, {
+        half: true,
+        note: "Coché = les CGV s'affichent (lien en pied de page + page /cgv). À cocher le jour où la vente en ligne ouvre.",
+      }),
+      f.divider("identity_divider", "Identité & contacts"),
       f.input("brand_name", { note: "L'Encre Humaine" }),
       f.input("tagline"),
       f.input("contact_email"),
@@ -682,13 +714,26 @@ const collections: CollectionDef[] = [
   {
     collection: "testimonials",
     icon: "format_quote",
-    note: "Réutilisables. Toute section témoignage se masque proprement si vide.",
+    note: "Réutilisables. Toute section témoignage se masque proprement si vide. Public (1er menu) = les pages /organisations ou /particuliers ; offres (cases à cocher) = les pages d'offre.",
     fields: [
       f.textarea("quote", { required: true }),
       f.input("author_name", { half: true }),
       f.input("author_title", { half: true }),
       f.input("company", { half: true }),
-      f.select("audience", AUDIENCE, { half: true }),
+      f.select("audience", AUDIENCE, {
+        half: true,
+        note: "Public : page de hub où le témoignage s'affiche (/organisations ou /particuliers).",
+      }),
+      f.selectMulti("offer_scopes", TESTIMONIAL_OFFER_SCOPE, {
+        note: "Cochez une ou plusieurs offres : le témoignage n'apparaîtra que sur celles-ci (en plus du hub de son public). Aucune case cochée = il apparaît sur TOUTES les offres de son public.",
+      }),
+      f.imageFile("photo", {
+        note: "Photo de la personne, affichée en bulle ronde. Sans photo (ou si la personne ne le souhaite pas), le petit poulpe s'affiche à la place.",
+      }),
+      f.selectInt("rating", RATING_CHOICES, {
+        half: true,
+        note: "Satisfaction globale. Vide = aucune étoile affichée.",
+      }),
       f.input("context", { note: "Secteur / enjeu (optionnel)" }),
       f.bool("featured", false, { half: true }),
       ...publishable(),

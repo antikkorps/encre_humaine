@@ -15,6 +15,7 @@ import {
   records,
   safeHref,
   str,
+  TESTIMONIAL_FIELDS,
   type TitledItem,
 } from "./_shared";
 
@@ -40,6 +41,9 @@ export interface RawTestimonial {
   company?: string | null;
   context?: string | null;
   audience?: string | null;
+  offer_scopes?: unknown;
+  photo?: FileField;
+  rating?: number | null;
 }
 
 export interface RawArticle {
@@ -221,8 +225,11 @@ export function mapB2c(home: RawHome): HomeContent["b2c"] {
 }
 
 /** Témoignage vedette : requiert une citation, sinon section masquée (docs/01 §5). */
-export function mapTestimonial(raw: RawHome["featured_testimonial"]): TestimonialItem | null {
-  return mapTestimonialItem(raw);
+export function mapTestimonial(
+  raw: RawHome["featured_testimonial"],
+  assetBase = "",
+): TestimonialItem | null {
+  return mapTestimonialItem(raw, assetBase);
 }
 
 export function mapArticle(raw: RawArticle, assetBase: string): ArticleSummary {
@@ -286,7 +293,7 @@ export function mapHomeContent(
     why: mapWhy(home),
     intro: mapIntro(home, assetBase),
     b2c: mapB2c(home),
-    featuredTestimonial: mapTestimonial(home.featured_testimonial),
+    featuredTestimonial: mapTestimonial(home.featured_testimonial, assetBase),
     articles: mapArticles(articles, assetBase),
     resources: {
       title: str(home.resources_title) || "Réflexions, outils et retours de terrain.",
@@ -345,16 +352,7 @@ export async function loadHomeContent(): Promise<HomeContent> {
           "b2c_section_text",
           "b2c_cards",
           "b2c_cta_label",
-          {
-            featured_testimonial: [
-              "quote",
-              "author_name",
-              "author_title",
-              "company",
-              "context",
-              "audience",
-            ],
-          },
+          { featured_testimonial: [...TESTIMONIAL_FIELDS] },
           "resources_title",
           "resources_subtitle",
           "resources_cta_label",

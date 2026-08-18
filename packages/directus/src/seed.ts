@@ -68,6 +68,10 @@ async function main(): Promise<void> {
     audience: "organisation",
     context: "Structuration RH",
     featured: true,
+    // Démo des ajouts du run 13 : note de satisfaction + épinglage sur une offre.
+    // (La photo reste vide : le poulpe prend la bulle, c'est le cas par défaut.)
+    rating: 5,
+    offer_scopes: ["audit-rh"],
     ...PUB,
   });
   // Témoignage démo B2C — seedé pour l'admin ; non rattaché à une offre tant
@@ -79,6 +83,7 @@ async function main(): Promise<void> {
     audience: "particulier",
     context: "Bilan de parcours",
     featured: false,
+    rating: 5,
     ...PUB,
   });
   await upsert("testimonials", "author_name", "Karim Benali", {
