@@ -419,7 +419,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         </div>
       </section>
 
-      <!-- 7. Derrière l'Encre Humaine — portrait ovale cadre doré -->
+      <!-- 7. Derrière l'Encre Humaine — portrait encadré doré -->
       <section v-if="content.intro" v-reveal class="relative isolate overflow-hidden bg-paper">
         <TentacleAccent
           side="left"
@@ -427,7 +427,8 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           class="absolute -left-16 bottom-0 -z-10 hidden w-[32rem] rotate-6 text-teal-700/[0.06] lg:block"
         />
         <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 md:grid-cols-[0.85fr_1.15fr]">
-          <!-- Portrait ovale, cadre doré, désaturé (style maquette). -->
+          <!-- Portrait rectangulaire, cadre doré, couleurs d'origine : l'ovale
+               désaturé faisait « photo souvenir » (retour Éléonore). -->
           <div v-if="content.intro.photo" class="flex flex-col items-center">
             <div class="relative w-full max-w-xs">
               <NuxtImg
@@ -440,7 +441,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                 sizes="100vw md:340px"
                 loading="lazy"
                 decoding="async"
-                class="aspect-[4/5] w-full rounded-[48%] object-cover shadow-lift ring-4 ring-sand-400/60 ring-offset-4 ring-offset-paper [filter:grayscale(0.85)]"
+                class="aspect-[4/5] w-full rounded-2xl object-cover shadow-lift ring-4 ring-sand-400/60 ring-offset-4 ring-offset-paper"
               />
             </div>
             <NuxtLink
