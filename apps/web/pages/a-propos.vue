@@ -179,7 +179,7 @@ useSchemaOrg([
           class="absolute -right-20 top-8 -z-10 hidden w-[26rem] rotate-6 text-orange-400/[0.10] lg:block"
         />
         <div class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-20 md:grid-cols-[auto_1fr]">
-          <OctopusLogo class="mx-auto h-32 w-32 text-teal-600 md:h-40 md:w-40" />
+          <OctopusBrand class="mx-auto h-40 w-40 md:h-48 md:w-48" />
           <div>
             <SectionHeading :title="content.octopus.subtitle || 'Et pourquoi un poulpe ?'" />
             <RichText :html="content.octopus.bodyHtml" class="mt-5" />

@@ -30,11 +30,14 @@ const appError = useError();
       <div class="grid gap-12 lg:grid-cols-[16rem_1fr] lg:gap-16">
         <!-- 1. Marque + CTA -->
         <div class="text-center lg:text-left">
-          <OctopusLogoFull
+          <!-- Marque déposée (INPI) : tracé bleu sur fond transparent, donc posée
+               sur une pastille claire — sur le fond encre elle disparaîtrait. -->
+          <div
             v-if="!appError"
-            class="mx-auto h-36 select-none lg:mx-0"
-            aria-hidden="true"
-          />
+            class="mx-auto inline-flex w-36 items-center justify-center rounded-2xl bg-paper p-4 lg:mx-0"
+          >
+            <OctopusBrand class="h-24 w-full" />
+          </div>
           <p class="mt-4 font-display text-xl font-semibold text-paper">L'Encre Humaine</p>
           <p class="mt-2 text-sm leading-relaxed text-paper/60">
             Bouches-du-Rhône<br />
