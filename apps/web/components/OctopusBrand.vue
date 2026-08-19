@@ -4,32 +4,25 @@
 // « pourquoi un poulpe ? ») ; les tracés SVG maison (OctopusLogo/OctopusMark)
 // restent pour le décoratif (filigranes, pastilles, vignettes d'articles).
 //
-// Deux fichiers livrés, d'où `with-text` : le dessin surmonté du mot-symbole
-// « L'Encre Humaine », ou le poulpe seul quand le nom est déjà écrit à côté.
+// C'est la version SANS le mot-symbole : le dessin s'y voit mieux, et partout
+// où on l'affiche le nom « L'Encre Humaine » est déjà écrit juste à côté.
+// Le fichier surmonté du mot-symbole reste dans assets/marque/marque.webp.
+//
+// Le tracé est bleu marine sur fond transparent : sur un fond sombre, le poser
+// sur une pastille claire (cf. AppFooter), sinon il se noie.
+import marque from "~/assets/marque/Logo-marque.webp";
 
-import marqueSeule from "~/assets/marque/Logo-marque.webp";
-import marqueAvecTexte from "~/assets/marque/marque.webp";
-
-const props = withDefaults(defineProps<{ withText?: boolean; title?: string }>(), {
-  withText: false,
-  title: "",
-});
-
-// Dimensions intrinsèques des fichiers : elles réservent la place avant
-// chargement (pas de saut de mise en page).
-const visual = computed(() =>
-  props.withText
-    ? { src: marqueAvecTexte, width: 663, height: 658 }
-    : { src: marqueSeule, width: 663, height: 577 },
-);
+defineProps<{ title?: string }>();
 </script>
 
 <template>
+  <!-- Dimensions intrinsèques du fichier : elles réservent la place avant
+       chargement (pas de saut de mise en page). -->
   <img
-    :src="visual.src"
-    :width="visual.width"
-    :height="visual.height"
-    :alt="title"
+    :src="marque"
+    width="663"
+    height="577"
+    :alt="title ?? ''"
     :aria-hidden="title ? undefined : true"
     loading="lazy"
     decoding="async"
