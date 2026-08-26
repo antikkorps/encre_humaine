@@ -266,7 +266,14 @@ export default defineNuxtConfig({
 
   // Sitemap : routes statiques auto-découvertes + source dynamique pour les
   // pages CMS (articles, offres, produits) — sinon absentes du sitemap.
-  sitemap: { sources: ["/api/__sitemap__/urls"] },
+  // `exclude` : les pages en `noindex` (page d'attente + confirmations de tunnel)
+  // sont auto-découvertes comme les autres, mais les lister ici tout en les
+  // interdisant au crawl est un signal contradictoire, remonté en erreur par la
+  // Search Console. Une page ajoutée en `robots: "noindex"` doit l'être ici aussi.
+  sitemap: {
+    sources: ["/api/__sitemap__/urls"],
+    exclude: ["/coming-soon", "/newsletter/confirmation", "/laboratoire/confirmation"],
+  },
 
   // Identité schema.org globale (Organization + WebSite + WebPage auto-injectés
   // sur chaque page). Person (Eléonore) ajoutée sur /a-propos.
