@@ -34,7 +34,9 @@ WITH entree AS (
          e.session_id,
          e.created_at                                        AS debut,
          COALESCE(NULLIF(e.referrer_domain, ''), '(direct)') AS source,
-         e.url_path                                          AS page_entree
+         e.url_path                                          AS page_entree,
+         e.utm_source, e.utm_medium, e.utm_campaign,
+         e.li_fat_id
   FROM website_event e
   WHERE e.event_type = 1                       -- 1 = page vue (2 = évènement custom)
     AND e.created_at > now() - (:'jours' || ' days')::interval
@@ -100,7 +102,18 @@ FROM v WHERE source ILIKE '%linkedin%' OR source ILIKE '%lnkd%'
 GROUP BY 1,2 ORDER BY 1,2;
 
 \echo ''
-\echo '=== 6. Pages d entree par source ==============================='
+\echo '=== 6. Campagnes (UTM) ========================================='
+\echo '(vide = aucun lien taggue ; li_fat_id non nul = clic sur une pub'
+\echo ' LinkedIn Ads, decoupe par Umami 2.18 dans sa propre colonne)'
+SELECT COALESCE(utm_source, '(aucun)')   AS utm_source,
+       COALESCE(utm_medium, '(aucun)')   AS utm_medium,
+       COALESCE(utm_campaign, '(aucun)') AS utm_campaign,
+       count(*)                          AS visites,
+       count(*) FILTER (WHERE li_fat_id IS NOT NULL) AS dont_linkedin_ads
+FROM v GROUP BY 1,2,3 ORDER BY visites DESC LIMIT 20;
+
+\echo ''
+\echo '=== 7. Pages d entree par source ==============================='
 \echo '(des URL profondes ou inexistantes en entree = scan automatise)'
 SELECT source, page_entree, count(*) AS visites
 FROM v GROUP BY 1,2 ORDER BY visites DESC LIMIT 30;
