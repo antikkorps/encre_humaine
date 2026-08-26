@@ -18,7 +18,8 @@ export HOST_DIRECTUS_PORT
 .PHONY: help env db-up db-down db-migrate psql psql-app query ps logs db-reset down clean \
         cms-up cms-down cms-logs cms-bootstrap cms-snapshot cms-apply cms-types cms-seed \
         backup-build backup-run restore \
-        prod-deploy prod-up prod-cms-recreate prod-ps prod-logs prod-umami-reset prod-backup prod-backup-logs
+        prod-deploy prod-up prod-cms-recreate prod-ps prod-logs prod-umami-reset prod-umami-audit \
+        prod-backup prod-backup-logs
 
 help: ## Liste les cibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -115,6 +116,8 @@ clean: ## DANGER : stoppe la stack ET supprime les volumes (perte de données)
 # La prod n'utilise QUE docker-compose.yml (pas l'overlay dev). Ces cibles évitent
 # de taper la longue commande compose à la main (terminaux qui coupent les lignes).
 PROD_COMPOSE := docker compose --env-file $(ENV_FILE) -f infra/docker-compose.yml
+# Fenêtre (en jours) de `prod-umami-audit`.
+J ?= 14
 
 prod-deploy: ## PROD : git pull (user deploy) + rebuild + attente healthchecks
 	sudo -u deploy -H git -C $(CURDIR) fetch --all --prune
@@ -142,6 +145,11 @@ prod-umami-reset: ## PROD : repart d'un schéma umami vierge (corrige l'état pr
 	  'psql -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" \
 	   -c "DROP SCHEMA IF EXISTS umami CASCADE; CREATE SCHEMA umami AUTHORIZATION umami_user; CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA umami;"'
 	$(PROD_COMPOSE) up -d --wait umami || $(PROD_COMPOSE) ps
+
+prod-umami-audit: ## PROD : audit du trafic Umami (sources + engagement) — ex: make prod-umami-audit J=30
+	$(PROD_COMPOSE) exec -T postgres sh -c \
+	  'psql -q -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -v jours=$(J)' \
+	  < infra/postgres/umami-audit.sql
 
 prod-backup: ## PROD : sauvegarde immédiate (pg_dump chiffré → R2) — vérifie la chaîne
 	$(PROD_COMPOSE) run --rm --entrypoint /usr/local/bin/backup.sh backup
