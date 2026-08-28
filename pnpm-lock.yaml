@@ -25,8 +25,8 @@ importers:
   apps/web:
     dependencies:
       '@directus/sdk':
-        specifier: 22.0.0
-        version: 22.0.0
+        specifier: 24.0.0
+        version: 24.0.0
       '@encre/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -426,8 +426,8 @@ packages:
     peerDependencies:
       devframe: 0.5.4
 
-  '@directus/sdk@22.0.0':
-    resolution: {integrity: sha512-1D3cgjg2jnA7S1LXwKoYSw7yyJCs/DyKUOUDMLbvLtljafWJ5KOef7O8bVDPuQkVw6Bvoo6GUCbAMYI6Ff8Igg==}
+  '@directus/sdk@24.0.0':
+    resolution: {integrity: sha512-8sibVOa1OZAgDg9d3NwIX51mhXrvUmobChYe4QvaVCyq/rECD57yHYzKfjfjmbFMogkVxI8tnqyoA+TIJVcAoQ==}
     engines: {node: '>=22'}
 
   '@drizzle-team/brocli@0.10.2':
@@ -7031,7 +7031,7 @@ snapshots:
       - vite
       - webpack
 
-  '@directus/sdk@22.0.0': {}
+  '@directus/sdk@24.0.0': {}
 
   '@drizzle-team/brocli@0.10.2': {}
 
