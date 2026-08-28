@@ -35,7 +35,7 @@ services:
     networks: [internal]
 
   directus:
-    image: directus/directus:11.17.4
+    image: directus/directus:12.2.0
     restart: unless-stopped
     depends_on:
       postgres:
