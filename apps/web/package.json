@@ -11,7 +11,8 @@
     "postinstall": "nuxi prepare",
     "typecheck": "nuxi typecheck",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "og:card": "node scripts/og-card.mjs"
   },
   "dependencies": {
     "@directus/sdk": "22.0.0",

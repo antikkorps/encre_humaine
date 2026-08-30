@@ -197,6 +197,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: "fr-FR" },
+      // Le titre de la page est servi TEL QUEL. Sans ça, nuxt-seo-utils applique
+      // son gabarit par défaut « %s %separator %siteName » et le nom du site se
+      // retrouve DEUX fois, puisque les pages posent déjà leur propre suffixe
+      // (« Contact - L'Encre Humaine | L'Encre Humaine »). Le gabarit du module
+      // est posé en `tagPriority: "low"`, donc cette valeur-ci l'emporte.
+      titleTemplate: "%s",
       meta: [
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "theme-color", content: "#f5f2eb" },
