@@ -16,6 +16,7 @@ import {
   safeHref,
   testimonialsForOffer,
 } from "../server/utils/content/_shared";
+import { DEFAULT_OG_IMAGE } from "../utils/seo";
 
 const BASE = "https://cms.example.fr";
 // Sanitizer factice : marque le passage (et "" sur entrée vide, comme le vrai).
@@ -101,7 +102,12 @@ describe("mapSeo", () => {
   it("dernier fallback de titre = nom du site en dur", () => {
     expect(mapSeo({}, {}, BASE).title).toBe("L'Encre Humaine");
     expect(mapSeo({}, {}, BASE).description).toBeNull();
-    expect(mapSeo({}, {}, BASE).ogImage).toBeNull();
+  });
+
+  // Sans image, un lien partagé sur LinkedIn s'affiche en carte grise : l'OG
+  // image ne retombe JAMAIS à `null`, même page et `site_settings` vides.
+  it("dernier fallback d'OG image = carte de partage embarquée", () => {
+    expect(mapSeo({}, {}, BASE).ogImage).toBe(DEFAULT_OG_IMAGE);
   });
 });
 

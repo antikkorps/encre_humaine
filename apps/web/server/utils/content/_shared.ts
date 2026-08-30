@@ -6,6 +6,9 @@
  */
 import type { Audience } from "@encre/shared/validation";
 import type { ContentPhoto, FaqItem, OfferSummary, TestimonialItem } from "~/types/content";
+// Import EXPLICITE (pas d'auto-import `utils/` côté Nitro) : la carte de partage
+// par défaut doit être la même valeur ici et dans `app.vue`.
+import { DEFAULT_OG_IMAGE } from "~/utils/seo";
 
 // Ré-exporté : les loaders importent toutes leurs formes depuis `_shared`, mais la
 // définition vit dans `~/types/content` (partagée avec les composants). DRY.
@@ -131,14 +134,16 @@ export function mapStringList(raw: unknown): string[] {
 
 /**
  * Résout le SEO d'une page : champs de la page, fallback `site_settings`,
- * OG image → URL d'asset (docs/00-global §SEO).
+ * puis carte embarquée ; OG image → URL d'asset (docs/00-global §SEO).
  */
 export function mapSeo(page: RawSeo, defaults: RawSiteDefaults, assetBase: string): ContentSeo {
   return {
     title: str(page.meta_title) || str(defaults.brand_name) || "L'Encre Humaine",
     description: str(page.meta_description) || str(defaults.default_meta_description) || null,
     ogImage:
-      fileUrl(page.og_image, assetBase) ?? fileUrl(defaults.default_og_image, assetBase) ?? null,
+      fileUrl(page.og_image, assetBase) ??
+      fileUrl(defaults.default_og_image, assetBase) ??
+      DEFAULT_OG_IMAGE,
     noIndex: page.no_index === true,
   };
 }
