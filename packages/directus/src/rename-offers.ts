@@ -18,6 +18,7 @@
 
 import { get, patch } from "./api.ts";
 import { OFFER_RENAMES as RENAMES } from "./content-run15.ts";
+import { allCollections } from "./schema.ts";
 
 /** Renommages de titre seuls (le slug était déjà bon). */
 const TITLE_ONLY: Record<string, string> = { "audit-rh": "Audit RH" };
@@ -85,10 +86,19 @@ async function migrateTestimonialScopes(): Promise<void> {
   }
 }
 
-/** Liens de CTA saisis sur les hubs (« situation A/B/C ») pointant une offre. */
+/**
+ * Liens de CTA saisis sur les hubs (« situation A/B/C ») pointant une offre.
+ * Le nombre de situations diffère d'un hub à l'autre — trois côté organisations,
+ * deux côté particuliers — donc on lit la liste dans `schema.ts` plutôt que de la
+ * répéter ici : demander un champ inexistant vaut un 403 à Directus.
+ */
 async function migrateHubLinks(): Promise<void> {
   for (const collection of ["org_hub_page", "b2c_hub_page"]) {
-    const fields = ["situation_a_cta_link", "situation_b_cta_link", "situation_c_cta_link"];
+    const def = allCollections.find((c) => c.collection === collection);
+    const fields = (def?.fields ?? [])
+      .map((f) => f.field)
+      .filter((f) => /^situation_[a-z]_cta_link$/.test(f));
+    if (!fields.length) continue;
     const hub = await get<Hub>(`/items/${collection}?fields=${fields.join(",")}`);
     const body: Record<string, string> = {};
     for (const f of fields) {
