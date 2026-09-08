@@ -98,6 +98,33 @@ collections:
       versioning: false
     schema:
       name: b2c_hub_page
+  - collection: case_studies
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: status
+      archive_value: archived
+      collapse: open
+      collection: case_studies
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: workspace_premium
+      item_duplication_fields: null
+      note: >-
+        Preuve par l'exemple (accueil) — un cas = situation / ce qui a été mis
+        en place / résultat. Une image possible par cas (portfolio, travaux
+        d'étude…).
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: sort
+      translations: null
+      unarchive_value: draft
+      versioning: false
+    schema:
+      name: case_studies
   - collection: contact_leads
     meta:
       accountability: all
@@ -522,7 +549,7 @@ fields:
       group: null
       hidden: false
       interface: file-image
-      note: null
+      note: Photo du 1er bloc, affichée à DROITE (optionnelle, non rognée)
       options: null
       readonly: false
       required: false
@@ -563,7 +590,7 @@ fields:
       group: null
       hidden: false
       interface: input-rich-text-html
-      note: Mon histoire
+      note: Mon parcours — 1er bloc (texte à gauche)
       options: null
       readonly: false
       required: false
@@ -643,7 +670,7 @@ fields:
       group: null
       hidden: false
       interface: input-rich-text-html
-      note: null
+      note: L'encre
       options: null
       readonly: false
       required: false
@@ -683,7 +710,7 @@ fields:
       group: null
       hidden: false
       interface: input-rich-text-html
-      note: Le poulpe — avec humour
+      note: Le poulpe
       options: null
       readonly: false
       required: false
@@ -723,7 +750,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Ce en quoi je crois
+      note: Convictions professionnelles (titre + corps)
       options:
         fields:
           - field: title
@@ -779,12 +806,12 @@ fields:
       group: null
       hidden: false
       interface: file-image
-      note: null
+      note: Portrait (optionnel, section citation)
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 25
       special:
         - file
       translations: null
@@ -825,7 +852,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -865,7 +892,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -906,7 +933,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 30
       special:
         - alias
         - no-data
@@ -931,7 +958,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -971,7 +998,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -1011,7 +1038,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 33
       special:
         - file
       translations: null
@@ -1052,7 +1079,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 34
       special:
         - cast-boolean
       translations: null
@@ -1293,7 +1320,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -1333,7 +1360,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -1388,7 +1415,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 21
       special:
         - cast-json
       translations: null
@@ -1429,7 +1456,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -1469,7 +1496,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -1517,7 +1544,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 24
       special:
         - cast-json
       translations: null
@@ -1558,7 +1585,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 27
       special: null
       translations: null
       validation: null
@@ -1598,7 +1625,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -1687,6 +1714,298 @@ fields:
       width: full
     schema:
       name: story_body_2
+      table: about_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: expertises_divider
+    type: alias
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: expertises_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Trois expertises
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: about_page
+    field: expertises_title
+    type: string
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: expertises_title
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « Une approche à la croisée de trois expertises. »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: expertises_title
+      table: about_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: expertises_intro
+    type: text
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: expertises_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: expertises_intro
+      table: about_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: expertises_items
+    type: json
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: expertises_items
+      group: null
+      hidden: false
+      interface: list
+      note: Piliers (double expertise)
+      options:
+        fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: Icône
+            type: string
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: Expertise
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: Texte
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: expertises_items
+      table: about_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: about_page
+    field: expertises_conclusion
+    type: text
+    meta:
+      collection: about_page
+      conditions: null
+      display: null
+      display_options: null
+      field: expertises_conclusion
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: expertises_conclusion
       table: about_page
       data_type: text
       default_value: null
@@ -2825,7 +3144,7 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: Texte d'accroche (multi-paragraphes)
       options: null
       readonly: false
       required: false
@@ -2972,7 +3291,7 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: Chapô optionnel sous le titre de la carte
       options: null
       readonly: false
       required: false
@@ -3158,7 +3477,7 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: Chapô optionnel sous le titre de la carte
       options: null
       readonly: false
       required: false
@@ -3813,7 +4132,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Bénéfices (titre + corps)
+      note: Bénéfices (icône Material Symbols + titre + corps)
       options:
         fields:
           - field: icon
@@ -3904,7 +4223,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -4824,6 +5143,629 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: case_studies
+    field: id
+    type: uuid
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: case_studies
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: title
+    type: string
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: Titre du cas. Ex. « Structurer les compétences d'une PME de conseil »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: case_studies
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: summary
+    type: text
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: summary
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: >-
+        Le contexte en une phrase. Ex. « Une entreprise de conseil et formation,
+        60 collaborateurs, deux ans de transformation RH. »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: summary
+      table: case_studies
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: situation
+    type: text
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: situation
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: La situation de départ
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation
+      table: case_studies
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: actions
+    type: text
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: actions
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Ce qui a été mis en place
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: actions
+      table: case_studies
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: result
+    type: text
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Le résultat, chiffré si possible
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: result
+      table: case_studies
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: image
+    type: uuid
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: image
+      group: null
+      hidden: false
+      interface: file-image
+      note: Illustration du cas (optionnelle)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: image
+      table: case_studies
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: case_studies
+    field: sector
+    type: string
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: sector
+      group: null
+      hidden: false
+      interface: input
+      note: Secteur (optionnel, affiché en pastille)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: sector
+      table: case_studies
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: period_label
+    type: string
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: period_label
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « 2 ans » (optionnel)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: period_label
+      table: case_studies
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: status
+    type: string
+    meta:
+      collection: case_studies
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: $t:published
+            value: published
+          - text: $t:draft
+            value: draft
+          - text: $t:archived
+            value: archived
+        showAsDot: true
+      field: status
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: $t:published
+            value: published
+          - text: $t:draft
+            value: draft
+          - text: $t:archived
+            value: archived
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: case_studies
+      data_type: character varying
+      default_value: draft
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: sort
+    type: integer
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: case_studies
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: date_created
+    type: timestamp
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: case_studies
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 12
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: case_studies
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: user_created
+    type: uuid
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 13
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: case_studies
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: user_updated
+    type: uuid
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: case_studies
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contact_leads
     field: created_at
     type: timestamp
@@ -5295,7 +6237,7 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: Encadré « Certaines situations… » à droite du hero
       options: null
       readonly: false
       required: false
@@ -5335,7 +6277,7 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: Texte au-dessus de l'embed RDV
+      note: Texte de la carte « Réserver un échange »
       options: null
       readonly: false
       required: false
@@ -5706,7 +6648,7 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: Texte au-dessus du formulaire message
+      note: Texte de la carte « M'envoyer un message »
       options: null
       readonly: false
       required: false
@@ -6422,13 +7364,13 @@ fields:
             value: b2c_hub
           - text: Offre Audit RH
             value: audit
-          - text: Offre Compétences & parcours
+          - text: Offre Carte des Talents
             value: competences
-          - text: Offre Managers & équipes
+          - text: Offre De l'Expert au Manager
             value: managers
-          - text: Offre Clarifier & avancer
+          - text: Offre Clarifier son projet
             value: b2c
-          - text: Offre Booster sa recherche
+          - text: Offre Se (re)positionner
             value: booster
           - text: Toutes les offres (transverse)
             value: general
@@ -6448,13 +7390,13 @@ fields:
             value: b2c_hub
           - text: Offre Audit RH
             value: audit
-          - text: Offre Compétences & parcours
+          - text: Offre Carte des Talents
             value: competences
-          - text: Offre Managers & équipes
+          - text: Offre De l'Expert au Manager
             value: managers
-          - text: Offre Clarifier & avancer
+          - text: Offre Clarifier son projet
             value: b2c
-          - text: Offre Booster sa recherche
+          - text: Offre Se (re)positionner
             value: booster
           - text: Toutes les offres (transverse)
             value: general
@@ -6801,7 +7743,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 1
+      sort: 2
       special: null
       translations: null
       validation: null
@@ -6841,7 +7783,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 2
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -6896,7 +7838,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 9
       special:
         - cast-json
       translations: null
@@ -6938,7 +7880,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 39
       special:
         - alias
         - no-data
@@ -6963,7 +7905,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 40
       special: null
       translations: null
       validation: null
@@ -7003,7 +7945,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 30
+      sort: 41
       special: null
       translations: null
       validation: null
@@ -7043,7 +7985,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 31
+      sort: 42
       special:
         - file
       translations: null
@@ -7084,7 +8026,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 50
       special:
         - m2o
       translations: null
@@ -7126,7 +8068,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 55
       special:
         - alias
         - no-data
@@ -7151,7 +8093,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 56
       special: null
       translations: null
       validation: null
@@ -7191,7 +8133,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 58
       special: null
       translations: null
       validation: null
@@ -7232,7 +8174,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 48
+      sort: 59
       special:
         - alias
         - no-data
@@ -7257,7 +8199,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 49
+      sort: 60
       special: null
       translations: null
       validation: null
@@ -7297,7 +8239,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 50
+      sort: 61
       special: null
       translations: null
       validation: null
@@ -7337,7 +8279,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 51
+      sort: 62
       special:
         - file
       translations: null
@@ -7378,7 +8320,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 52
+      sort: 63
       special:
         - cast-boolean
       translations: null
@@ -7420,7 +8362,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 5
       special:
         - cast-json
       translations: null
@@ -7461,7 +8403,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 6
       special: null
       translations: null
       validation: null
@@ -7501,7 +8443,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 7
       special: null
       translations: null
       validation: null
@@ -7542,7 +8484,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 8
       special:
         - cast-json
       translations: null
@@ -7584,7 +8526,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special:
         - alias
         - no-data
@@ -7609,7 +8551,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -7649,7 +8591,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -7684,7 +8626,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Problématiques (5–6, une par entrée)
+      note: Problématiques (5–6, une par entrée) — icône éditable par item
       options:
         fields:
           - field: icon
@@ -7775,7 +8717,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: text
             meta:
@@ -7787,7 +8729,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special:
         - cast-json
       translations: null
@@ -7828,7 +8770,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -7869,7 +8811,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special:
         - alias
         - no-data
@@ -7894,7 +8836,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -7929,117 +8871,45 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Blocs services (titre + texte)
+      note: >-
+        Blocs services (numérotés 1, 2, 3 à l'affichage) + lien vers la page
+        d'offre
       options:
         fields:
-          - field: icon
-            meta:
-              field: icon
-              interface: select-dropdown
-              options:
-                allowNone: true
-                choices:
-                  - text: Lisibilité / œil (visibility)
-                    value: visibility
-                  - text: Cap / drapeau (flag)
-                    value: flag
-                  - text: Priorités / liste numérotée (format-list-numbered)
-                    value: format-list-numbered
-                  - text: Base / couches (layers)
-                    value: layers
-                  - text: Document / compétences (description)
-                    value: description
-                  - text: Équipe / managers (group)
-                    value: group
-                  - text: Outils / réglages (settings)
-                    value: settings
-                  - text: Croissance (trending-up)
-                    value: trending-up
-                  - text: Temps / court terme (schedule)
-                    value: schedule
-                  - text: Analyse (analytics)
-                    value: analytics
-                  - text: Entretien / échange (forum)
-                    value: forum
-                  - text: Écarts / comparaison (difference)
-                    value: difference
-                  - text: Parcours / feuille de route (route)
-                    value: route
-                  - text: Restitution / prise de parole (record-voice-over)
-                    value: record-voice-over
-                  - text: Format / calendrier (event)
-                    value: event
-                  - text: Investissement / tarif (payments)
-                    value: payments
-                  - text: Constat / idée (lightbulb)
-                    value: lightbulb
-                  - text: Observation / insight (insights)
-                    value: insights
-                  - text: Validation / coche (check-circle)
-                    value: check-circle
-                  - text: Confiance / partenariat (handshake)
-                    value: handshake
-                  - text: Collectif / équipes (groups)
-                    value: groups
-                  - text: Posture / psychologie (psychology)
-                    value: psychology
-                  - text: Diversité / collaboration (diversity-3)
-                    value: diversity-3
-                  - text: Équilibre / cadre (balance)
-                    value: balance
-                  - text: Élan / lancement (rocket-launch)
-                    value: rocket-launch
-                  - text: Exigence / qualité (workspace-premium)
-                    value: workspace-premium
-                  - text: Cohérence / liens (hub)
-                    value: hub
-                  - text: Exploration / boussole (explore)
-                    value: explore
-                  - text: Apprentissage / lecture (menu-book)
-                    value: menu-book
-                  - text: Formation (school)
-                    value: school
-                  - text: Développement personnel (self-improvement)
-                    value: self-improvement
-                  - text: Recherche d'emploi (person-search)
-                    value: person-search
-                  - text: Plan d'action / checklist (checklist)
-                    value: checklist
-                  - text: Chronologie / étapes (timeline)
-                    value: timeline
-                  - text: Objectif / cible (target)
-                    value: target
-                  - text: Levier / clé (key)
-                    value: key
-                  - text: Inspiration / idée (emoji-objects)
-                    value: emoji-objects
-                  - text: Laboratoire / expérimentation (science)
-                    value: science
-                  - text: Jeu pédagogique / dés (casino)
-                    value: casino
-                  - text: Carnet / prise de notes (edit-note)
-                    value: edit-note
-              width: half
-            name: icon
-            type: string
           - field: title
             meta:
               field: title
               interface: input
               width: full
-            name: title
+            name: Titre
             type: string
           - field: body
             meta:
               field: body
               interface: input-multiline
               width: full
-            name: body
+            name: Texte
+            type: string
+          - field: url
+            meta:
+              field: url
+              interface: input
+              note: Ex. /organisations/audit-rh — vide = aucun lien affiché
+              width: half
+            name: Lien vers l'offre
+            type: string
+          - field: link_label
+            meta:
+              field: link_label
+              interface: input
+              note: 'Défaut : « Découvrir cette offre »'
+              width: half
+            name: Libellé du lien
             type: string
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special:
         - cast-json
       translations: null
@@ -8080,7 +8950,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -8120,7 +8990,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -8161,7 +9031,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 20
       special:
         - alias
         - no-data
@@ -8186,7 +9056,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -8226,7 +9096,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -8281,7 +9151,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special:
         - cast-json
       translations: null
@@ -8323,7 +9193,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 33
       special:
         - alias
         - no-data
@@ -8341,14 +9211,14 @@ fields:
       display_options: null
       field: why_title
       group: null
-      hidden: false
+      hidden: true
       interface: input
-      note: null
+      note: Non affiché — déplacé sur À propos
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 37
       special: null
       translations: null
       validation: null
@@ -8383,12 +9253,12 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: Phrase de transition, juste au-dessus de la citation
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 35
       special: null
       translations: null
       validation: null
@@ -8421,9 +9291,9 @@ fields:
       display_options: null
       field: why_items
       group: null
-      hidden: false
+      hidden: true
       interface: list
-      note: Piliers (double expertise)
+      note: Non affiché — déplacé sur À propos (« Trois expertises »)
       options:
         fields:
           - field: title
@@ -8443,7 +9313,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 38
       special:
         - cast-json
       translations: null
@@ -8479,12 +9349,12 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: La citation-manifeste (elle EST le titre)
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 36
       special: null
       translations: null
       validation: null
@@ -8524,7 +9394,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 32
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -8565,7 +9435,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 33
+      sort: 44
       special:
         - alias
         - no-data
@@ -8590,7 +9460,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 34
+      sort: 45
       special: null
       translations: null
       validation: null
@@ -8630,7 +9500,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 35
+      sort: 46
       special: null
       translations: null
       validation: null
@@ -8665,7 +9535,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Cartes accompagnement particuliers
+      note: Cartes accompagnement particuliers (icône éditable + titre + texte)
       options:
         fields:
           - field: icon
@@ -8756,7 +9626,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -8775,7 +9645,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 36
+      sort: 47
       special:
         - cast-json
       translations: null
@@ -8816,7 +9686,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 37
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -8857,7 +9727,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 49
       special:
         - alias
         - no-data
@@ -8883,7 +9753,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 51
       special:
         - alias
         - no-data
@@ -8908,7 +9778,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 41
+      sort: 52
       special: null
       translations: null
       validation: null
@@ -8948,7 +9818,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 42
+      sort: 53
       special: null
       translations: null
       validation: null
@@ -8988,7 +9858,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 43
+      sort: 54
       special: null
       translations: null
       validation: null
@@ -9028,7 +9898,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 57
       special: null
       translations: null
       validation: null
@@ -9070,7 +9940,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 4
       special: null
       translations: null
       validation: null
@@ -9082,6 +9952,528 @@ fields:
       data_type: text
       default_value: null
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: hero_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: hero_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Pastille au-dessus du titre (positionnement). Ex. « Conseil RH pour
+        dirigeants de PME et ETI »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hero_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: proof_divider
+    type: alias
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Preuve par l'exemple (cas concrets)
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: home_page
+    field: proof_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « Preuve par l''exemple »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: proof_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: proof_title
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_title
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « Ce que ça donne, concrètement. »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: proof_title
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: proof_intro
+    type: text
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapeau de section (optionnel). Les cas se gèrent dans « Cas concrets ».
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: proof_intro
+      table: home_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: sectors_divider
+    type: alias
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: sectors_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Secteurs d'intervention
+      readonly: false
+      required: false
+      searchable: true
+      sort: 28
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: home_page
+    field: sectors_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: sectors_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « Secteurs d''intervention »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 29
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: sectors_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: sectors_title
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: sectors_title
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « J'ai travaillé avec… »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 30
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: sectors_title
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: sectors_intro
+    type: text
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: sectors_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: 'Chapeau (optionnel) : la liste parle d''elle-même'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sectors_intro
+      table: home_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: sectors_items
+    type: json
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: sectors_items
+      group: null
+      hidden: false
+      interface: list
+      note: >-
+        Secteurs d'intervention (ex. « Le conseil et la formation
+        professionnelle »)
+      options:
+        fields:
+          - field: icon
+            meta:
+              field: icon
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Lisibilité / œil (visibility)
+                    value: visibility
+                  - text: Cap / drapeau (flag)
+                    value: flag
+                  - text: Priorités / liste numérotée (format-list-numbered)
+                    value: format-list-numbered
+                  - text: Base / couches (layers)
+                    value: layers
+                  - text: Document / compétences (description)
+                    value: description
+                  - text: Équipe / managers (group)
+                    value: group
+                  - text: Outils / réglages (settings)
+                    value: settings
+                  - text: Croissance (trending-up)
+                    value: trending-up
+                  - text: Temps / court terme (schedule)
+                    value: schedule
+                  - text: Analyse (analytics)
+                    value: analytics
+                  - text: Entretien / échange (forum)
+                    value: forum
+                  - text: Écarts / comparaison (difference)
+                    value: difference
+                  - text: Parcours / feuille de route (route)
+                    value: route
+                  - text: Restitution / prise de parole (record-voice-over)
+                    value: record-voice-over
+                  - text: Format / calendrier (event)
+                    value: event
+                  - text: Investissement / tarif (payments)
+                    value: payments
+                  - text: Constat / idée (lightbulb)
+                    value: lightbulb
+                  - text: Observation / insight (insights)
+                    value: insights
+                  - text: Validation / coche (check-circle)
+                    value: check-circle
+                  - text: Confiance / partenariat (handshake)
+                    value: handshake
+                  - text: Collectif / équipes (groups)
+                    value: groups
+                  - text: Posture / psychologie (psychology)
+                    value: psychology
+                  - text: Diversité / collaboration (diversity-3)
+                    value: diversity-3
+                  - text: Équilibre / cadre (balance)
+                    value: balance
+                  - text: Élan / lancement (rocket-launch)
+                    value: rocket-launch
+                  - text: Exigence / qualité (workspace-premium)
+                    value: workspace-premium
+                  - text: Cohérence / liens (hub)
+                    value: hub
+                  - text: Exploration / boussole (explore)
+                    value: explore
+                  - text: Apprentissage / lecture (menu-book)
+                    value: menu-book
+                  - text: Formation (school)
+                    value: school
+                  - text: Développement personnel (self-improvement)
+                    value: self-improvement
+                  - text: Recherche d'emploi (person-search)
+                    value: person-search
+                  - text: Plan d'action / checklist (checklist)
+                    value: checklist
+                  - text: Chronologie / étapes (timeline)
+                    value: timeline
+                  - text: Objectif / cible (target)
+                    value: target
+                  - text: Levier / clé (key)
+                    value: key
+                  - text: Inspiration / idée (emoji-objects)
+                    value: emoji-objects
+                  - text: Laboratoire / expérimentation (science)
+                    value: science
+                  - text: Jeu pédagogique / dés (casino)
+                    value: casino
+                  - text: Carnet / prise de notes (edit-note)
+                    value: edit-note
+              width: half
+            name: Icône
+            type: string
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: Secteur
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: Précisions
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 32
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sectors_items
+      table: home_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: why_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: why_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Petit intitulé discret. Défaut : « Ma conviction »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: why_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -9568,7 +10960,7 @@ fields:
       group: null
       hidden: false
       interface: input
-      note: Ex. « Le Fil »
+      note: Ex. « Les Tentacules de L'Encre Humaine »
       options: null
       readonly: false
       required: false
@@ -9648,7 +11040,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: null
+      note: « Contenu d'une édition »
       options:
         fields:
           - field: text
@@ -9697,7 +11089,7 @@ fields:
       group: null
       hidden: false
       interface: select-dropdown-m2o
-      note: Cadeau de bienvenue (optionnel)
+      note: Cadeau de bienvenue (lead magnet)
       options: null
       readonly: false
       required: false
@@ -9778,7 +11170,7 @@ fields:
       group: null
       hidden: false
       interface: input
-      note: 'Ex. « Extrait du Fil #07 »'
+      note: 'Ex. « Extrait #07 »'
       options: null
       readonly: false
       required: false
@@ -10303,14 +11695,177 @@ fields:
     meta:
       collection: offers
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Lisibilité / œil (visibility)
+            value: visibility
+          - text: Cap / drapeau (flag)
+            value: flag
+          - text: Priorités / liste numérotée (format-list-numbered)
+            value: format-list-numbered
+          - text: Base / couches (layers)
+            value: layers
+          - text: Document / compétences (description)
+            value: description
+          - text: Équipe / managers (group)
+            value: group
+          - text: Outils / réglages (settings)
+            value: settings
+          - text: Croissance (trending-up)
+            value: trending-up
+          - text: Temps / court terme (schedule)
+            value: schedule
+          - text: Analyse (analytics)
+            value: analytics
+          - text: Entretien / échange (forum)
+            value: forum
+          - text: Écarts / comparaison (difference)
+            value: difference
+          - text: Parcours / feuille de route (route)
+            value: route
+          - text: Restitution / prise de parole (record-voice-over)
+            value: record-voice-over
+          - text: Format / calendrier (event)
+            value: event
+          - text: Investissement / tarif (payments)
+            value: payments
+          - text: Constat / idée (lightbulb)
+            value: lightbulb
+          - text: Observation / insight (insights)
+            value: insights
+          - text: Validation / coche (check-circle)
+            value: check-circle
+          - text: Confiance / partenariat (handshake)
+            value: handshake
+          - text: Collectif / équipes (groups)
+            value: groups
+          - text: Posture / psychologie (psychology)
+            value: psychology
+          - text: Diversité / collaboration (diversity-3)
+            value: diversity-3
+          - text: Équilibre / cadre (balance)
+            value: balance
+          - text: Élan / lancement (rocket-launch)
+            value: rocket-launch
+          - text: Exigence / qualité (workspace-premium)
+            value: workspace-premium
+          - text: Cohérence / liens (hub)
+            value: hub
+          - text: Exploration / boussole (explore)
+            value: explore
+          - text: Apprentissage / lecture (menu-book)
+            value: menu-book
+          - text: Formation (school)
+            value: school
+          - text: Développement personnel (self-improvement)
+            value: self-improvement
+          - text: Recherche d'emploi (person-search)
+            value: person-search
+          - text: Plan d'action / checklist (checklist)
+            value: checklist
+          - text: Chronologie / étapes (timeline)
+            value: timeline
+          - text: Objectif / cible (target)
+            value: target
+          - text: Levier / clé (key)
+            value: key
+          - text: Inspiration / idée (emoji-objects)
+            value: emoji-objects
+          - text: Laboratoire / expérimentation (science)
+            value: science
+          - text: Jeu pédagogique / dés (casino)
+            value: casino
+          - text: Carnet / prise de notes (edit-note)
+            value: edit-note
+        showAsDot: false
       field: icon
       group: null
       hidden: false
-      interface: input
-      note: Clé d'icône
-      options: null
+      interface: select-dropdown
+      note: Icône de l'offre (menu déroulant de la navigation)
+      options:
+        choices:
+          - text: Lisibilité / œil (visibility)
+            value: visibility
+          - text: Cap / drapeau (flag)
+            value: flag
+          - text: Priorités / liste numérotée (format-list-numbered)
+            value: format-list-numbered
+          - text: Base / couches (layers)
+            value: layers
+          - text: Document / compétences (description)
+            value: description
+          - text: Équipe / managers (group)
+            value: group
+          - text: Outils / réglages (settings)
+            value: settings
+          - text: Croissance (trending-up)
+            value: trending-up
+          - text: Temps / court terme (schedule)
+            value: schedule
+          - text: Analyse (analytics)
+            value: analytics
+          - text: Entretien / échange (forum)
+            value: forum
+          - text: Écarts / comparaison (difference)
+            value: difference
+          - text: Parcours / feuille de route (route)
+            value: route
+          - text: Restitution / prise de parole (record-voice-over)
+            value: record-voice-over
+          - text: Format / calendrier (event)
+            value: event
+          - text: Investissement / tarif (payments)
+            value: payments
+          - text: Constat / idée (lightbulb)
+            value: lightbulb
+          - text: Observation / insight (insights)
+            value: insights
+          - text: Validation / coche (check-circle)
+            value: check-circle
+          - text: Confiance / partenariat (handshake)
+            value: handshake
+          - text: Collectif / équipes (groups)
+            value: groups
+          - text: Posture / psychologie (psychology)
+            value: psychology
+          - text: Diversité / collaboration (diversity-3)
+            value: diversity-3
+          - text: Équilibre / cadre (balance)
+            value: balance
+          - text: Élan / lancement (rocket-launch)
+            value: rocket-launch
+          - text: Exigence / qualité (workspace-premium)
+            value: workspace-premium
+          - text: Cohérence / liens (hub)
+            value: hub
+          - text: Exploration / boussole (explore)
+            value: explore
+          - text: Apprentissage / lecture (menu-book)
+            value: menu-book
+          - text: Formation (school)
+            value: school
+          - text: Développement personnel (self-improvement)
+            value: self-improvement
+          - text: Recherche d'emploi (person-search)
+            value: person-search
+          - text: Plan d'action / checklist (checklist)
+            value: checklist
+          - text: Chronologie / étapes (timeline)
+            value: timeline
+          - text: Objectif / cible (target)
+            value: target
+          - text: Levier / clé (key)
+            value: key
+          - text: Inspiration / idée (emoji-objects)
+            value: emoji-objects
+          - text: Laboratoire / expérimentation (science)
+            value: science
+          - text: Jeu pédagogique / dés (casino)
+            value: casino
+          - text: Carnet / prise de notes (edit-note)
+            value: edit-note
       readonly: false
       required: false
       searchable: true
@@ -10589,7 +12144,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Résultats
+      note: Bénéfices (icône Material Symbols + titre + corps)
       options:
         fields:
           - field: icon
@@ -10680,7 +12235,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -10735,7 +12290,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Pour qui
+      note: Pour qui (✓)
       options:
         fields:
           - field: text
@@ -10784,7 +12339,7 @@ fields:
       group: null
       hidden: false
       interface: input-rich-text-html
-      note: null
+      note: Comment ça se passe (optionnel)
       options: null
       readonly: false
       required: false
@@ -11552,7 +13107,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Situations récurrentes (titre + corps)
+      note: Situations récurrentes (icône + titre + corps)
       options:
         fields:
           - field: icon
@@ -11643,7 +13198,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -11778,7 +13333,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: La mission inclut (titre + corps)
+      note: La mission inclut (icône + titre + corps)
       options:
         fields:
           - field: icon
@@ -11869,7 +13424,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -12744,7 +14299,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Cadrage / Diagnostic / Construction / Restitution
+      note: Comprendre / Clarifier / Construire / Ancrer
       options:
         fields:
           - field: number
@@ -12807,7 +14362,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Pour qui
+      note: Pour qui (✓)
       options:
         fields:
           - field: text
@@ -13284,7 +14839,7 @@ fields:
       group: null
       hidden: false
       interface: list
-      note: Constats (titre + corps)
+      note: Constats (icône Material Symbols + titre + corps)
       options:
         fields:
           - field: icon
@@ -13375,7 +14930,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -16893,7 +18448,9 @@ fields:
       group: null
       hidden: false
       interface: select-dropdown-m2o
-      note: null
+      note: >-
+        Ancien lead magnet vedette — déprécié (le lead magnet vit dans
+        newsletter_page)
       options: null
       readonly: false
       required: false
@@ -17396,6 +18953,22 @@ fields:
         valeurs par défaut.
       options:
         fields:
+          - field: group
+            meta:
+              field: group
+              interface: select-dropdown
+              options:
+                allowNone: true
+                choices:
+                  - text: Organisations
+                    value: organisations
+                  - text: Particuliers
+                    value: particuliers
+                  - text: Terrain
+                    value: terrain
+              width: half
+            name: group
+            type: string
           - field: icon
             meta:
               field: icon
@@ -17484,23 +19057,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
-            type: string
-          - field: group
-            meta:
-              field: group
-              interface: select-dropdown
-              options:
-                allowNone: true
-                choices:
-                  - text: Organisations
-                    value: organisations
-                  - text: Particuliers
-                    value: particuliers
-                  - text: Terrain
-                    value: terrain
-              width: half
-            name: group
+            name: Icône
             type: string
           - field: label
             meta:
@@ -17596,7 +19153,9 @@ fields:
       group: null
       hidden: false
       interface: boolean
-      note: 'Active la boutique : lien de navigation + accès aux pages /boutique'
+      note: >-
+        Ouvre la VENTE : catalogue produits + paiement. La page vitrine, elle,
+        est toujours visible
       options: null
       readonly: false
       required: false
@@ -17637,7 +19196,7 @@ fields:
       group: null
       hidden: false
       interface: input
-      note: Titre de la page (ex. « La boutique »)
+      note: Titre de la page (ex. « Le Laboratoire »)
       options: null
       readonly: false
       required: false
@@ -17677,7 +19236,9 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: Chapeau sous le titre
+      note: >-
+        Sous-titre sous le titre (ex. « Des outils conçus à partir du terrain.
+        »)
       options: null
       readonly: false
       required: false
@@ -17717,7 +19278,9 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: Affiché quand la boutique est ouverte mais sans produit disponible
+      note: >-
+        Affiché quand la vente est ouverte mais qu'aucun produit n'est
+        disponible
       options: null
       readonly: false
       required: false
@@ -18185,7 +19748,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: status
             meta:
@@ -18858,7 +20421,7 @@ fields:
                   - text: Carnet / prise de notes (edit-note)
                     value: edit-note
               width: half
-            name: icon
+            name: Icône
             type: string
           - field: title
             meta:
@@ -20075,7 +21638,9 @@ fields:
       group: null
       hidden: false
       interface: select-dropdown
-      note: null
+      note: >-
+        Public : page de hub où le témoignage s'affiche (/organisations ou
+        /particuliers).
       options:
         choices:
           - text: Organisation
@@ -20459,14 +22024,14 @@ fields:
         choices:
           - text: Offre Audit RH (organisations)
             value: audit-rh
-          - text: Offre Compétences & parcours (organisations)
-            value: competences-parcours
-          - text: Offre Managers & équipes (organisations)
-            value: managers-equipes
-          - text: Offre Clarifier & avancer (particuliers)
-            value: clarifier-avancer
-          - text: Offre Booster sa recherche (particuliers)
-            value: booster-recherche
+          - text: Offre Carte des Talents (organisations)
+            value: carte-des-talents
+          - text: Offre De l'Expert au Manager (organisations)
+            value: de-l-expert-au-manager
+          - text: Offre Clarifier son projet (particuliers)
+            value: clarifier-son-projet
+          - text: Offre Se (re)positionner (particuliers)
+            value: se-repositionner
         showAsDot: false
       field: offer_scopes
       group: null
@@ -20480,14 +22045,14 @@ fields:
         choices:
           - text: Offre Audit RH (organisations)
             value: audit-rh
-          - text: Offre Compétences & parcours (organisations)
-            value: competences-parcours
-          - text: Offre Managers & équipes (organisations)
-            value: managers-equipes
-          - text: Offre Clarifier & avancer (particuliers)
-            value: clarifier-avancer
-          - text: Offre Booster sa recherche (particuliers)
-            value: booster-recherche
+          - text: Offre Carte des Talents (organisations)
+            value: carte-des-talents
+          - text: Offre De l'Expert au Manager (organisations)
+            value: de-l-expert-au-manager
+          - text: Offre Clarifier son projet (particuliers)
+            value: clarifier-son-projet
+          - text: Offre Se (re)positionner (particuliers)
+            value: se-repositionner
       readonly: false
       required: false
       searchable: true
@@ -20843,6 +22408,27 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: b2c_hub_page_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: case_studies
+    field: image
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: case_studies
+      many_field: image
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: case_studies
+      column: image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: case_studies_image_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: contact_page

@@ -154,6 +154,34 @@ pnpm --filter @encre/directus bootstrap
 
 ---
 
+## Phase 7bis — Mettre à jour une instance DÉJÀ en service
+
+Le `bootstrap` est **additif** : il crée ce qui manque, il ne repatche jamais un
+champ existant, et il n'écrit aucun contenu. À chaque lot qui touche au schéma,
+l'ordre est donc :
+
+```sh
+export DIRECTUS_URL=https://cms.encrehumaine.fr
+export DIRECTUS_ADMIN_EMAIL=admin@encrehumaine.fr
+export DIRECTUS_ADMIN_PASSWORD='<prod>'
+
+pnpm --filter @encre/directus bootstrap   # 1. nouvelles collections / nouveaux champs
+pnpm --filter @encre/directus reconcile   # 2. listes de choix, sous-champs de répéteurs, notes, visibilité
+```
+
+- `reconcile` est **indispensable dès qu'un répéteur gagne un sous-champ**, qu'une
+  liste de choix change ou qu'un champ doit être masqué : le bootstrap ne peut rien
+  y faire. Il n'écrit que des `meta`, jamais du contenu, et il est idempotent.
+- ⚠️ **Ne JAMAIS rejouer `seed` sur la prod.** Il porte du contenu de démo et
+  écraserait le texte d'Éléonore (cf. l'incident `booking_url`). Un lot qui doit
+  pousser du contenu le fait par un script ciblé, qui n'écrit que les champs
+  **vides** — ex. `seed:run15`, à lancer d'abord **sans** `--apply` pour lire
+  l'aperçu.
+- Après un changement de schéma, si l'admin ne voit pas les nouveaux champs :
+  `make prod-cms-recreate` (le conteneur Directus met son cache de schéma en cache).
+
+---
+
 ## Phase 8 — Stripe LIVE & Umami
 
 **Stripe (mode LIVE)** :

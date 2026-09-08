@@ -28,6 +28,7 @@ useSeoMeta({
 const hero = computed(
   () =>
     content.value?.hero ?? {
+      eyebrow: null,
       title: siteName,
       subtitle: null,
       signature: null,
@@ -61,11 +62,8 @@ const challengeIcons = [
   "material-symbols:schedule",
   "material-symbols:balance",
 ];
-const buildIcons = [
-  "material-symbols:visibility",
-  "material-symbols:self-improvement",
-  "material-symbols:timeline",
-];
+// Icônes par défaut des secteurs d'intervention (sous-champ `icon` éditable).
+const sectorIcons = ["school", "handshake", "person-search"];
 // Icônes par défaut des axes « particuliers » (éditables dans Directus au run 9,
 // sous-champ `icon` de `b2c_cards`) ; à défaut, cyclage pour un rendu qui parle.
 const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
@@ -88,10 +86,11 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           <!-- Colonne texte (gauche) -->
           <div class="max-w-2xl">
             <p
+              v-if="hero.eyebrow"
               class="inline-flex items-center gap-2 rounded-full border border-paper/20 bg-paper/5 px-4 py-1.5 text-sm font-medium text-paper/80"
             >
               <OctopusMark class="h-4 w-4 text-teal-300" />
-              Conseil RH &amp; accompagnement
+              {{ hero.eyebrow }}
             </p>
             <h1
               class="mt-6 font-display text-4xl font-bold leading-[1.08] text-paper sm:text-5xl lg:text-[3.35rem]"
@@ -286,20 +285,16 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
             <article
               v-for="(block, i) in content.build.blocks"
               :key="i"
-              class="flex flex-col items-center rounded-3xl border border-ink/5 bg-white p-8 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
+              class="group relative flex flex-col items-center rounded-3xl border border-ink/5 bg-white p-8 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
             >
+              <!-- Numéro plutôt qu'icône : ce n'est pas une suite logique, mais le
+                   chiffre dit d'un coup d'œil qu'il y a TROIS offres (Éléonore,
+                   audit du 2026-09-08). -->
               <span
                 aria-hidden="true"
-                class="grid h-12 w-12 place-items-center rounded-full bg-teal-800 text-sand-300"
+                class="grid h-12 w-12 place-items-center rounded-full bg-teal-800 font-display text-xl font-bold text-sand-300"
               >
-                <Icon
-                  :name="
-                    block.icon
-                      ? `material-symbols:${block.icon}`
-                      : buildIcons[i % buildIcons.length]!
-                  "
-                  class="h-6 w-6"
-                />
+                {{ i + 1 }}
               </span>
               <!-- Titres des 3 cartes en doré (Éléonore) ; le doré antique
                    `orange-500` reste AA sur blanc, le doré vif non. -->
@@ -309,6 +304,18 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
               <p v-if="block.body" class="mt-3 flex-1 leading-relaxed text-ink/65">
                 <AccentText :text="block.body" />
               </p>
+              <!-- Lien direct vers la page dédiée. `after:absolute inset-0` rend
+                   toute la carte cliquable sans imbriquer de lien. -->
+              <NuxtLink
+                v-if="block.url"
+                :to="block.url"
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 after:absolute after:inset-0 group-hover:text-teal-800"
+              >
+                {{ block.linkLabel || "Découvrir cette offre" }}
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              </NuxtLink>
             </article>
           </div>
           <div v-if="content.build.ctaLabel" class="mt-12 flex justify-center">
@@ -370,7 +377,86 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         </div>
       </section>
 
-      <!-- 6. L'Encre Humaine (signature / positionnement) -->
+      <!-- 6. Preuve par l'exemple — cas concrets (`case_studies`) -->
+      <!-- Le manque n°1 relevé par l'audit : aucun exemple complet et concret.
+           Un seul cas → pleine largeur ; dès le deuxième → carrousel, prêt pour
+           les cas suivants et le portfolio d'Éléonore, sans retoucher le code. -->
+      <section v-if="content.proof" v-reveal class="relative isolate overflow-hidden bg-paper-2">
+        <TentacleAccent
+          side="right"
+          name="tentacule-2-plein"
+          class="absolute -right-24 top-8 -z-10 hidden w-[26rem] rotate-3 text-teal-700/[0.05] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.proof.title"
+            :subtitle="content.proof.intro ?? undefined"
+            :eyebrow="content.proof.eyebrow"
+            wide
+          />
+          <div class="mt-12">
+            <CaseStudyCard
+              v-if="content.proof.cases.length === 1"
+              :case-study="content.proof.cases[0]!"
+              full
+            />
+            <SnapCarousel
+              v-else
+              label="Cas concrets"
+              prev-label="Cas précédent"
+              next-label="Cas suivant"
+              tone="light"
+            >
+              <li
+                v-for="(item, i) in content.proof.cases"
+                :key="i"
+                class="w-[88%] shrink-0 snap-start sm:w-[28rem] lg:w-[32rem]"
+              >
+                <CaseStudyCard :case-study="item" />
+              </li>
+            </SnapCarousel>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Secteurs d'intervention -->
+      <section v-if="content.sectors" v-reveal class="bg-paper">
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.sectors.title"
+            :subtitle="content.sectors.intro ?? undefined"
+            :eyebrow="content.sectors.eyebrow"
+            wide
+          />
+          <ul class="mt-10 grid gap-5 md:grid-cols-3">
+            <li
+              v-for="(item, i) in content.sectors.items"
+              :key="i"
+              class="rounded-2xl border border-ink/5 bg-white p-6 shadow-soft"
+            >
+              <span
+                aria-hidden="true"
+                class="grid h-11 w-11 place-items-center rounded-full bg-orange-50 text-orange-600 ring-1 ring-inset ring-orange-300/50"
+              >
+                <Icon
+                  :name="`material-symbols:${item.icon || sectorIcons[i % sectorIcons.length]}`"
+                  class="h-6 w-6"
+                />
+              </span>
+              <h3 class="mt-4 font-display text-lg font-bold text-ink">
+                <AccentText :text="item.title" />
+              </h3>
+              <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
+                <AccentText :text="item.body" />
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 8. Ma conviction — respiration : la citation EST le titre -->
+      <!-- Volontairement pas une section comme les autres (pas de SectionHeading) :
+           une phrase de transition, puis la citation seule, au calme. -->
       <section v-if="content.why" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <InkBlob class="absolute -right-24 -top-16 -z-10 h-80 w-80 text-teal-500/[0.08]" />
         <TentacleAccent
@@ -378,48 +464,30 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           name="tentacule-1-plein"
           class="absolute -left-24 bottom-4 -z-10 hidden w-[26rem] -rotate-3 text-teal-600/[0.05] lg:block"
         />
-        <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading
-            :title="content.why.title"
-            :subtitle="content.why.subtitle ?? undefined"
-            eyebrow="L'Encre Humaine"
-            wide
-          />
-          <div class="mt-12 grid gap-10 lg:grid-cols-[1.55fr_0.85fr] lg:items-center">
-            <div class="grid gap-6 sm:grid-cols-3">
-              <article v-for="(item, i) in content.why.items" :key="i">
-                <span
-                  aria-hidden="true"
-                  class="block h-1.5 w-10 rounded-full bg-sand-400"
-                ></span>
-                <h3 class="mt-4 font-display text-lg font-bold text-ink">
-                  <AccentText :text="item.title" />
-                </h3>
-                <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
-                  <AccentText :text="item.body" />
-                </p>
-              </article>
-            </div>
-            <blockquote
-              v-if="content.why.conclusion"
-              class="relative rounded-3xl border border-sand-400/30 bg-white/70 p-8 shadow-soft backdrop-blur"
+        <div class="mx-auto max-w-3xl px-4 py-20 text-center lg:py-24">
+          <p
+            v-if="content.why.bridge"
+            class="mx-auto max-w-2xl leading-relaxed text-ink/65"
+          >
+            <AccentText :text="content.why.bridge" />
+          </p>
+          <blockquote v-if="content.why.quote" :class="content.why.bridge ? 'mt-10' : ''">
+            <p
+              class="mb-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-orange-600"
             >
-              <span
-                aria-hidden="true"
-                class="absolute -top-4 left-6 font-display text-6xl leading-none text-sand-400/70"
-                >“</span
-              >
-              <p
-                class="relative whitespace-pre-line font-display text-lg italic leading-relaxed text-teal-800"
-              >
-                <AccentText :text="content.why.conclusion" />
-              </p>
-            </blockquote>
-          </div>
+              <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-sand-400"></span>
+              {{ content.why.eyebrow }}
+            </p>
+            <p
+              class="whitespace-pre-line font-display text-2xl leading-relaxed text-teal-800 sm:text-3xl"
+            >
+              <AccentText :text="content.why.quote" />
+            </p>
+          </blockquote>
         </div>
       </section>
 
-      <!-- 7. Derrière l'Encre Humaine — portrait encadré doré -->
+      <!-- 9. Derrière l'Encre Humaine — portrait encadré doré -->
       <section v-if="content.intro" v-reveal class="relative isolate overflow-hidden bg-paper">
         <TentacleAccent
           side="left"
@@ -472,7 +540,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         </div>
       </section>
 
-      <!-- 8. Pour les particuliers — 2 axes d'accompagnement (registre chaud) -->
+      <!-- 10. Pour les particuliers — 2 axes d'accompagnement (registre chaud) -->
       <section v-if="content.b2c" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <InkBlob class="absolute -left-16 -bottom-10 -z-10 h-64 w-64 text-orange-400/10" />
         <!-- Tentacule retournée (-scale-x) pour qu'elle « sorte » du bord droit. -->
@@ -538,7 +606,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         </div>
       </section>
 
-      <!-- 9. Témoignage vedette — gardé mais masqué tant qu'aucun avis (Éléonore). -->
+      <!-- 11. Témoignage vedette — gardé mais masqué tant qu'aucun avis (Éléonore). -->
       <section
         v-if="content.featuredTestimonial"
         class="mx-auto max-w-3xl px-4 py-20"
@@ -553,7 +621,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         <TestimonialCard :testimonial="content.featuredTestimonial" />
       </section>
 
-      <!-- 10. Les Tentacules — derniers articles en carrousel sur fond sombre -->
+      <!-- 12. Les Tentacules — derniers articles en carrousel sur fond sombre -->
       <section
         v-if="content.articles.length"
         v-reveal
@@ -591,7 +659,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         </div>
       </section>
 
-      <!-- 11. CTA final -->
+      <!-- 13. CTA final -->
       <section
         v-if="content.finalCta"
         v-reveal

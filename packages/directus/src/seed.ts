@@ -11,6 +11,7 @@
 
 import { get, patch, post } from "./api.ts";
 import { homePageContent } from "./content-home.ts";
+import { OFFER_RENAMES, run15CaseStudy } from "./content-run15.ts";
 import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
@@ -302,11 +303,11 @@ async function main(): Promise<void> {
       scope: "booster",
     },
     {
-      q: "Quelle est la différence avec « Clarifier & Avancer » ?",
+      q: "Quelle est la différence avec « Clarifier son projet » ?",
       a: P(
-        "Clarifier & Avancer sert à comprendre votre direction professionnelle, explorer vos options et construire un projet.",
-        "Booster sa recherche sert à structurer une recherche déjà définie, rendre votre profil visible et lisible, et optimiser vos candidatures.",
-        "En résumé : Clarifier = comprendre où aller ; Booster = savoir comment y arriver.",
+        "Clarifier son projet sert à comprendre votre direction professionnelle, explorer vos options et construire un projet.",
+        "Se (re)positionner sert à structurer une recherche déjà définie, rendre votre profil visible et lisible, et optimiser vos candidatures.",
+        "En résumé : Clarifier son projet = comprendre où aller ; Se (re)positionner = savoir comment y arriver.",
       ),
       scope: "booster",
     },
@@ -330,7 +331,7 @@ async function main(): Promise<void> {
       q: "Est-ce que cet accompagnement est adapté à une reconversion ?",
       a: P(
         "Oui, si votre projet est déjà clarifié.",
-        "Sinon, il est préférable de commencer par « Clarifier & Avancer », pour éviter de « booster » une direction qui n'est pas encore stable.",
+        "Sinon, il est préférable de commencer par « Clarifier son projet », pour éviter de « booster » une direction qui n'est pas encore stable.",
       ),
       scope: "booster",
     },
@@ -411,8 +412,8 @@ async function main(): Promise<void> {
     {
       slug: "audit-rh",
       audience: "organisation",
-      title: "Audit RH & feuille de route",
-      icon: "search",
+      title: "Audit RH",
+      icon: "visibility",
       short_description:
         "Retrouver de la visibilité : faire le point sur vos pratiques RH et identifier les priorités les plus utiles.",
       duration_label: "à partir de 4 semaines",
@@ -528,9 +529,9 @@ async function main(): Promise<void> {
       featured_testimonial: tMarie,
     },
     {
-      slug: "competences-parcours",
+      slug: "carte-des-talents",
       audience: "organisation",
-      title: "Compétences & parcours",
+      title: "Carte des Talents",
       icon: "route",
       short_description:
         "Rendre les compétences visibles et donner de la perspective aux parcours, pour de meilleures décisions RH.",
@@ -673,9 +674,9 @@ async function main(): Promise<void> {
       featured_testimonial: null,
     },
     {
-      slug: "managers-equipes",
+      slug: "de-l-expert-au-manager",
       audience: "organisation",
-      title: "Management & cohésion d'équipe",
+      title: "De l'Expert au Manager",
       icon: "groups",
       short_description:
         "Donner des repères aux managers pour accompagner leurs équipes avec clarté et sérénité.",
@@ -822,9 +823,9 @@ async function main(): Promise<void> {
       featured_testimonial: null,
     },
     {
-      slug: "clarifier-avancer",
+      slug: "clarifier-son-projet",
       audience: "particulier",
-      title: "Clarifier & avancer",
+      title: "Clarifier son projet",
       icon: "explore",
       short_description: "Retrouver un cap professionnel clair et un plan d'action réaliste.",
       // S7 — Format
@@ -982,10 +983,10 @@ async function main(): Promise<void> {
       featured_testimonial: null,
     },
     {
-      slug: "booster-recherche",
+      slug: "se-repositionner",
       audience: "particulier",
-      title: "Booster sa recherche",
-      icon: "rocket_launch",
+      title: "Se (re)positionner",
+      icon: "rocket-launch",
       short_description: "CV, posture et stratégie pour une recherche d'emploi efficace.",
       // S6 — Format
       duration_label: "4 séances d'1h",
@@ -1044,15 +1045,16 @@ async function main(): Promise<void> {
       context_title: "Avant d'optimiser une recherche d'emploi, il faut savoir où on en est.",
       context_items: [
         {
-          title: "Clarifier & Avancer",
+          title: "Clarifier son projet",
           body: "Si vous êtes encore en questionnement. Vous avez besoin de comprendre votre direction, vos envies, vos options.",
         },
         {
-          title: "Booster sa recherche",
+          title: "Se (re)positionner",
           body: "Si votre cap est déjà posé. Vous savez ce que vous cherchez, mais vous avez besoin de le rendre visible, lisible et convaincant pour les recruteurs.",
         },
       ],
-      context_conclusion: "Clarifier construit la direction. Booster construit la visibilité.",
+      context_conclusion:
+        "Clarifier son projet construit la direction. Se (re)positionner construit la visibilité.",
       // S4 — Ce qu'on fait ensemble
       mission_title: "Transformer votre recherche d'emploi en stratégie lisible.",
       mission_includes: [
@@ -1107,7 +1109,7 @@ async function main(): Promise<void> {
         { text: "Vous reprenez une recherche après une période d'arrêt" },
       ],
       audience_fit_exclude: [
-        { text: "Vous n'avez pas encore clarifié votre projet (voir « Clarifier & Avancer »)" },
+        { text: "Vous n'avez pas encore clarifié votre projet (voir « Clarifier son projet »)" },
         { text: "Vous cherchez uniquement un avis ponctuel sur un CV" },
       ],
       // S7 — Vous repartez avec
@@ -1132,6 +1134,27 @@ async function main(): Promise<void> {
       featured_testimonial: null,
     },
   ];
+  // Une offre renommée au run 15 doit être MISE À JOUR, pas doublée : on repointe
+  // d'abord son ancien slug vers le nouveau (idempotent — sans ancienne ligne,
+  // il ne se passe rien). Cf. OFFER_RENAMES et `rename:offers` pour la prod.
+  for (const [from, to] of Object.entries(OFFER_RENAMES)) {
+    const legacy = await get<{ id: string }[]>(
+      `/items/offers?filter[slug][_eq]=${from}&limit=1&fields=id`,
+    );
+    if (!legacy[0]) continue;
+    // Le nouveau slug est unique en base : s'il existe déjà (instance seedée à
+    // cheval sur le renommage), le renommage échouerait. On laisse la ligne
+    // obsolète en place plutôt que de planter, et on le signale.
+    const target = await get<{ id: string }[]>(
+      `/items/offers?filter[slug][_eq]=${to.slug}&limit=1&fields=id`,
+    );
+    if (target[0]) {
+      console.log(`  ! offre ${from} : « ${to.slug} » existe déjà — doublon à supprimer à la main`);
+      continue;
+    }
+    await patch(`/items/offers/${legacy[0].id}`, { slug: to.slug, title: to.title });
+    console.log(`  ~ offre ${from} → ${to.slug}`);
+  }
   let sort = 1;
   for (const o of offers) {
     await upsert("offers", "slug", o.slug, {
@@ -1285,6 +1308,27 @@ async function main(): Promise<void> {
       "Le poulpe évolue dans des environnements complexes. Il observe avant d'agir. Il s'adapte sans perdre sa direction. Il mobilise plusieurs ressources en même temps. Et surtout, il sait naviguer dans des situations où tout n'est pas parfaitement prévisible.",
       "Après plusieurs années passées entre insertion professionnelle, formation, développement des compétences et conseil RH, cette capacité d'adaptation est devenue l'une de mes forces.",
     ),
+    // §4bis Trois expertises — rapatriées de l'accueil au run 15
+    expertises_title: "Une approche à la croisée de trois expertises.",
+    expertises_items: [
+      {
+        icon: "handshake",
+        title: "Insertion professionnelle",
+        body: "Comprendre les parcours, les transitions et les dynamiques humaines.",
+      },
+      {
+        icon: "school",
+        title: "Formation",
+        body: "Concevoir des dispositifs qui développent réellement les compétences.",
+      },
+      {
+        icon: "settings",
+        title: "Conseil RH",
+        body: "Structurer les organisations avec des outils adaptés au terrain.",
+      },
+    ],
+    expertises_conclusion:
+      "Cette double vision des organisations et des parcours me permet d'agir à la fois sur les systèmes et sur les personnes qui les font vivre.",
     // §4 Mes convictions
     convictions_title: "Mes convictions professionnelles.",
     convictions: [
@@ -1493,7 +1537,7 @@ async function main(): Promise<void> {
     situations_title: "Chaque transition professionnelle est différente.",
     situations_intro:
       "Certaines personnes cherchent d'abord à comprendre. D'autres savent déjà où elles veulent aller. L'accompagnement s'adapte à votre situation.",
-    situation_a_title: "Clarifier & Avancer",
+    situation_a_title: "Clarifier son projet",
     situation_a_body: "",
     situation_a_audience:
       "Vous traversez une période de questionnement professionnel, de reconversion, d'évolution de carrière ou de perte de sens.",
@@ -1508,7 +1552,7 @@ async function main(): Promise<void> {
       "Vous repartez avec une vision plus lisible de votre parcours et des prochaines étapes à engager.",
     situation_a_cta_label: "Découvrir l'accompagnement",
     situation_a_cta_link: "/particuliers/clarifier-avancer",
-    situation_b_title: "Booster sa recherche",
+    situation_b_title: "Se (re)positionner",
     situation_b_body: "",
     situation_b_audience:
       "Vous avez déjà un objectif professionnel mais vous avez besoin d'aide pour le concrétiser.",
@@ -1764,6 +1808,12 @@ async function main(): Promise<void> {
     // Médiateur conso : obligatoire dès l'ouverture de la boutique (B2C).
     mediatorSentence: "un médiateur de la consommation sera désigné à l'ouverture de la boutique",
   };
+  // ── case_studies (preuve par l'exemple, run 15) ────────────────────────────
+  await upsert("case_studies", "title", run15CaseStudy.title, {
+    ...run15CaseStudy,
+    ...PUB,
+  });
+
   const legalDocs: { slug: string; title: string; body: string }[] = [
     {
       slug: "mentions-legales",

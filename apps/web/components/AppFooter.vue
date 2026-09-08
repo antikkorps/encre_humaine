@@ -10,6 +10,13 @@ const { data: flags } = await useFetch("/api/site-flags", {
   key: "site-flags",
   default: () => ({ siteOpen: false, showCgv: false }),
 });
+// Offres listées en colonnes : mêmes titres que le menu déroulant de l'en-tête,
+// et même requête (clé `nav-offers` partagée avec AppHeader). Avant le run 15, les
+// trois surfaces portaient trois libellés différents pour une même offre.
+const { data: offers } = await useFetch("/api/content/nav-offers", {
+  key: "nav-offers",
+  default: () => ({ organisations: [], particuliers: [] }),
+});
 // Sur une page d'erreur (404/5xx), le bandeau porte déjà un grand filigrane poulpe :
 // on masque celui du footer pour éviter deux poulpes empilés. Ailleurs, useError() est nul.
 const appError = useError();
@@ -70,19 +77,12 @@ const appError = useError();
                 Organisations
               </p>
               <ul class="mt-4 space-y-2.5 text-sm text-paper/70">
-                <li>
-                  <NuxtLink to="/organisations/audit-rh" class="hover:text-teal-300">
-                    Audit RH &amp; feuille de route
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="/organisations/competences-parcours" class="hover:text-teal-300">
-                    Compétences &amp; parcours professionnels
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="/organisations/managers-equipes" class="hover:text-teal-300">
-                    Management &amp; équipes
+                <li v-for="offer in offers.organisations" :key="offer.slug">
+                  <NuxtLink
+                    :to="`/organisations/${offer.slug}`"
+                    class="hover:text-teal-300"
+                  >
+                    {{ offer.title }}
                   </NuxtLink>
                 </li>
                 <li class="pt-1">
@@ -104,14 +104,9 @@ const appError = useError();
                 Particuliers
               </p>
               <ul class="mt-4 space-y-2.5 text-sm text-paper/70">
-                <li>
-                  <NuxtLink to="/particuliers/clarifier-avancer" class="hover:text-teal-300">
-                    Clarifier &amp; avancer
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="/particuliers/booster-recherche" class="hover:text-teal-300">
-                    Booster sa recherche
+                <li v-for="offer in offers.particuliers" :key="offer.slug">
+                  <NuxtLink :to="`/particuliers/${offer.slug}`" class="hover:text-teal-300">
+                    {{ offer.title }}
                   </NuxtLink>
                 </li>
                 <li class="pt-1">

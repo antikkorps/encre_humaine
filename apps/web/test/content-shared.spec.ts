@@ -182,7 +182,7 @@ describe("testimonialsForOffer", () => {
   const orgSansOffre = item("org", "organisation");
   const b2cSansOffre = item("b2c", "particulier");
   const epingleAudit = item("audit", "organisation", ["audit-rh"]);
-  const epingleDeux = item("deux", "organisation", ["audit-rh", "managers-equipes"]);
+  const epingleDeux = item("deux", "organisation", ["audit-rh", "de-l-expert-au-manager"]);
   const items = [orgSansOffre, b2cSansOffre, epingleAudit, epingleDeux];
 
   it("sans case cochée : le témoignage suit le public de l'offre", () => {
@@ -190,7 +190,7 @@ describe("testimonialsForOffer", () => {
       orgSansOffre,
     ]);
     expect(
-      testimonialsForOffer([orgSansOffre, b2cSansOffre], "clarifier-avancer", "particulier"),
+      testimonialsForOffer([orgSansOffre, b2cSansOffre], "clarifier-son-projet", "particulier"),
     ).toEqual([b2cSansOffre]);
   });
 
@@ -201,10 +201,10 @@ describe("testimonialsForOffer", () => {
       epingleDeux,
     ]);
     // Épinglé ailleurs → absent de cette offre, même si le public correspond.
-    expect(testimonialsForOffer(items, "competences-parcours", "organisation")).toEqual([
+    expect(testimonialsForOffer(items, "carte-des-talents", "organisation")).toEqual([
       orgSansOffre,
     ]);
-    expect(testimonialsForOffer(items, "managers-equipes", "organisation")).toEqual([
+    expect(testimonialsForOffer(items, "de-l-expert-au-manager", "organisation")).toEqual([
       orgSansOffre,
       epingleDeux,
     ]);

@@ -52,7 +52,10 @@ watch(
           </DialogClose>
         </div>
 
-        <nav aria-label="Navigation principale" class="mt-10 flex-1">
+        <!-- Pas d'accordéon ici : le panneau occupe tout l'écran, les offres
+             tiennent donc en sous-liste dépliée sous leur hub. Un niveau de plus à
+             ouvrir serait un clic de plus vers la page qui vend (run 15). -->
+        <nav aria-label="Navigation principale" class="mt-10 flex-1 overflow-y-auto">
           <ul class="space-y-1">
             <li v-for="item in items" :key="item.to">
               <NuxtLink
@@ -61,6 +64,24 @@ watch(
               >
                 {{ item.label }}
               </NuxtLink>
+              <ul
+                v-if="item.children?.length"
+                class="mb-2 ml-3 space-y-0.5 border-l-2 border-sand-400/50 pl-3"
+              >
+                <li v-for="child in item.children" :key="child.to">
+                  <NuxtLink
+                    :to="child.to"
+                    class="flex items-center gap-2.5 rounded-lg px-2 py-2 text-base text-ink/70 transition-colors hover:bg-teal-50 hover:text-teal-700 aria-[current=page]:font-semibold aria-[current=page]:text-teal-700"
+                  >
+                    <Icon
+                      v-if="child.icon"
+                      :name="`material-symbols:${child.icon}`"
+                      class="h-5 w-5 shrink-0 text-teal-700"
+                    />
+                    {{ child.label }}
+                  </NuxtLink>
+                </li>
+              </ul>
             </li>
           </ul>
         </nav>

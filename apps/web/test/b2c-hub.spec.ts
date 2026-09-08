@@ -108,10 +108,10 @@ describe("mapB2cHubContent", () => {
       items: ["Comprendre"],
       result: "Un cap.",
       ctaLabel: "Découvrir",
-      ctaLink: "/particuliers/clarifier-avancer",
+      ctaLink: "/particuliers/clarifier-son-projet",
     });
     // bloc B sans cta_link → lien d'offre par défaut
-    expect(c.situations[1]?.ctaLink).toBe("/particuliers/booster-recherche");
+    expect(c.situations[1]?.ctaLink).toBe("/particuliers/se-repositionner");
     // deux rich text distincts assainis
     expect(c.howIWorkHtml).toBe("clean(<p>En visio.</p>)");
     expect(c.howIWorkSignature).toBe("Structurer sans déshumaniser.");

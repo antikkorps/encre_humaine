@@ -168,11 +168,38 @@ export const divider = (field: string, label: string): Spec => ({
 
 type Sub = {
   field: string;
+  /**
+   * Libellé affiché dans l'admin. À défaut, Directus dérive un titre du nom
+   * technique — lisible en anglais (`title` → « Title »), beaucoup moins pour
+   * l'éditrice sur des champs métier (`actions`, `result`). Le renseigner dès
+   * qu'un sous-champ ne se comprend pas de lui-même en français.
+   */
+  name?: string;
   type?: string;
   interface?: string;
   options?: Json;
   width?: "half" | "full";
+  note?: string;
 };
+
+/**
+ * Sous-champ d'un répéteur au format attendu par Directus. Extrait de `repeater`
+ * pour que `reconcile.ts` produise EXACTEMENT la même forme quand il resynchronise
+ * un répéteur déjà créé (le bootstrap étant additif-only) — une seule définition,
+ * donc aucune dérive possible entre création et réconciliation.
+ */
+export const subField = (s: Sub): Json => ({
+  field: s.field,
+  name: s.name ?? s.field,
+  type: s.type ?? "string",
+  meta: {
+    field: s.field,
+    interface: s.interface ?? "input",
+    width: s.width ?? "full",
+    ...(s.note ? { note: s.note } : {}),
+    ...(s.options ? { options: s.options } : {}),
+  },
+});
 
 export const repeater = (field: string, subfields: Sub[], o?: Opt): Spec =>
   base(
@@ -182,17 +209,7 @@ export const repeater = (field: string, subfields: Sub[], o?: Opt): Spec =>
       interface: "list",
       special: ["cast-json"],
       options: {
-        fields: subfields.map((s) => ({
-          field: s.field,
-          name: s.field,
-          type: s.type ?? "string",
-          meta: {
-            field: s.field,
-            interface: s.interface ?? "input",
-            width: s.width ?? "full",
-            ...(s.options ? { options: s.options } : {}),
-          },
-        })),
+        fields: subfields.map(subField),
       },
     },
     { is_nullable: true },

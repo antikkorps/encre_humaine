@@ -9,10 +9,13 @@ import {
   mapArticles,
   mapB2c,
   mapBuild,
+  mapCaseStudies,
   mapHomeContent,
   mapIntro,
   mapMethod,
+  mapProof,
   mapRecognition,
+  mapSectors,
   mapStats,
   mapTestimonial,
   mapWhy,
@@ -111,18 +114,72 @@ describe("mapMethod / mapWhy", () => {
     });
   });
 
-  it("signature : piliers + conclusion", () => {
+  it("conviction : phrase de transition + citation, intitulé par défaut", () => {
     expect(
-      mapWhy({
-        why_title: "Trois expertises",
-        why_items: [{ title: "Formation", body: "Concevoir." }],
-        why_conclusion: "Double vision.",
-      }),
-    ).toEqual({
-      title: "Trois expertises",
-      subtitle: null,
-      items: [{ title: "Formation", body: "Concevoir." }],
-      conclusion: "Double vision.",
+      mapWhy({ why_subtitle: "Double vision.", why_conclusion: "Les organisations…" }),
+    ).toEqual({ eyebrow: "Ma conviction", bridge: "Double vision.", quote: "Les organisations…" });
+  });
+
+  it("conviction : masquée sans citation ni transition", () => {
+    expect(mapWhy({ why_eyebrow: "Ma conviction" })).toBeNull();
+  });
+});
+
+describe("mapProof / mapCaseStudies / mapSectors", () => {
+  it("preuve : masquée tant qu'aucun cas n'est publié", () => {
+    expect(mapProof({ proof_title: "Concrètement." }, [])).toBeNull();
+  });
+
+  it("preuve : intitulés par défaut si l'habillage n'est pas renseigné", () => {
+    const cases = mapCaseStudies([{ title: "Un cas", situation: "Une PME." }], BASE);
+    expect(mapProof({}, cases)).toEqual({
+      eyebrow: "Preuve par l'exemple",
+      title: "Ce que ça donne, concrètement.",
+      intro: null,
+      cases,
+    });
+  });
+
+  it("cas : image résolue en URL d'asset, lignes vides ignorées", () => {
+    expect(
+      mapCaseStudies(
+        [
+          {
+            title: "Un cas",
+            summary: "60 collaborateurs.",
+            situation: "Compétences mal identifiées.",
+            actions: "Cartographie.",
+            result: "NPS +42.",
+            image: "file-1",
+            sector: "Conseil",
+            period_label: "2 ans",
+          },
+          { title: "", situation: "" },
+        ],
+        BASE,
+      ),
+    ).toEqual([
+      {
+        title: "Un cas",
+        summary: "60 collaborateurs.",
+        situation: "Compétences mal identifiées.",
+        actions: "Cartographie.",
+        result: "NPS +42.",
+        image: `${BASE}/assets/file-1`,
+        imageAlt: undefined,
+        sector: "Conseil",
+        periodLabel: "2 ans",
+      },
+    ]);
+  });
+
+  it("secteurs : masqués si vides, intitulé par défaut sinon", () => {
+    expect(mapSectors({})).toBeNull();
+    expect(mapSectors({ sectors_title: "J'ai travaillé avec…" })).toEqual({
+      eyebrow: "Secteurs d'intervention",
+      title: "J'ai travaillé avec…",
+      intro: null,
+      items: [],
     });
   });
 });
@@ -223,6 +280,7 @@ describe("mapHomeContent", () => {
   it("page vide : sections dynamiques masquées, hero/ressources repliés sur leurs fallbacks", () => {
     const content = mapHomeContent({}, [], {}, BASE);
     expect(content.hero).toEqual({
+      eyebrow: null,
       title: "L'Encre Humaine",
       subtitle: null,
       signature: null,
@@ -257,7 +315,7 @@ describe("mapHomeContent", () => {
       recognition_title: "Par où commencer ?",
       build_title: "Ce que je construis",
       method_title: "Ma méthode",
-      why_title: "Trois expertises",
+      why_conclusion: "Les organisations ont besoin de processus.",
       intro_title: "Je suis Eléonore Morée.",
       b2c_section_title: "Une transition ?",
       final_cta_title: "On en parle ?",
@@ -277,7 +335,7 @@ describe("mapHomeContent", () => {
     expect(content.recognition?.title).toBe("Par où commencer ?");
     expect(content.build?.title).toBe("Ce que je construis");
     expect(content.method?.title).toBe("Ma méthode");
-    expect(content.why?.title).toBe("Trois expertises");
+    expect(content.why?.quote).toBe("Les organisations ont besoin de processus.");
     expect(content.intro?.title).toBe("Je suis Eléonore Morée.");
     expect(content.b2c?.title).toBe("Une transition ?");
     expect(content.finalCta).toEqual({
