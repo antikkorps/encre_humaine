@@ -5,7 +5,6 @@
 // Idempotent : ne patche que ce qui diffère, relançable sans risque. N'écrit AUCUN
 // contenu (uniquement des `meta` de champs → visibilité/édition dans l'admin).
 import { get, patch } from "./api.ts";
-import { ICON_SUBFIELD } from "./icons.ts";
 import { allCollections } from "./schema.ts";
 
 // 1) Listes de choix (`select-dropdown` et cases à cocher multiples) : choix + rendu
@@ -14,41 +13,18 @@ import { allCollections } from "./schema.ts";
 //    additif-only, un select déjà créé conserve indéfiniment ses anciens libellés :
 //    c'est donc ici que les renommages (ex. périmètres de FAQ) atterrissent en prod.
 
-// 2) Sous-champ `icon` (1re position, demi-largeur) des répéteurs éditoriaux, en
-//    select-dropdown fermé (choix = ICON_CHOICES, miroir du clientBundle). Le
-//    patch remet aussi la liste de choix à jour quand ICON_CHOICES s'enrichit.
-const ICON_SUB_DIRECTUS = {
-  field: "icon",
-  name: "icon",
-  type: "string",
-  meta: {
-    field: "icon",
-    interface: ICON_SUBFIELD.interface,
-    width: ICON_SUBFIELD.width,
-    options: ICON_SUBFIELD.options,
-  },
-};
-const ICON_CHOICE_COUNT = ICON_SUBFIELD.options.choices.length;
-// [collection, champ répéteur] — les hubs affichent l'icône depuis le run 7 ;
-// l'accueil (défis + « ce que je vous aide à construire ») s'y ajoute au run 8.
-const ICON_REPEATERS: [string, string][] = [
-  ["offers", "outcomes"],
-  ["offers", "context_items"],
-  ["offers", "mission_includes"],
-  ["org_hub_page", "observe_items"],
-  ["b2c_hub_page", "outcomes"],
-  ["home_page", "recognition_items"],
-  ["home_page", "build_blocks"],
-  ["home_page", "b2c_cards"],
-  ["resources_page", "explore_cards"],
-  ["shop_page", "catalog_items"],
-  ["shop_page", "why_items"],
-];
+// 2) Sous-champs des RÉPÉTEURS, resynchronisés depuis schema.ts. Un répéteur est
+//    un champ JSON dont la liste de sous-champs vit dans son `meta` : ajouter une
+//    colonne à un répéteur déjà créé (ex. le lien par bloc d'offre, run 15) ou
+//    enrichir la liste d'icônes ne passe donc QUE par ici. schema.ts fait foi —
+//    `fields.subField` produit la même forme à la création et à la réconciliation.
 
-type SubField = {
-  field: string;
-  meta?: { interface?: string; options?: { choices?: unknown[] } };
-};
+// 3) `note` et `hidden` des champs : ce sont les seules explications que l'éditrice
+//    lit dans l'admin, et un champ retiré d'une page doit disparaître de son
+//    formulaire. Le bootstrap les fige à la création, on les rattrape ici.
+
+type Json = Record<string, unknown>;
+type SubField = { field: string };
 type Choice = { text?: string; value?: string | number };
 type FieldMeta = {
   meta: {
@@ -75,6 +51,7 @@ const choiceKey = (choices: Choice[] | undefined): string =>
 
 /** Vrai si l'instance porte déjà exactement les choix + le rendu voulus. */
 function selectUpToDate(cur: FieldMeta["meta"], want: SelectSpec): boolean {
+  if ((cur.interface ?? null) !== (want.interface ?? null)) return false;
   if (choiceKey(cur.options?.choices) !== choiceKey(want.options?.choices)) return false;
   if ((cur.display ?? null) !== (want.display ?? null)) return false;
   const curOpts = cur.display_options ?? {};
@@ -95,6 +72,9 @@ async function reconcileSelects(): Promise<void> {
       if (selectUpToDate(cur.meta, want)) continue;
       await patch(path, {
         meta: {
+          // L'interface est poussée : un champ né en saisie libre (ex. `offers.icon`
+          // avant le run 15) doit pouvoir devenir une liste fermée.
+          interface: want.interface,
           // Les autres options éventuelles de l'instance sont préservées.
           options: { ...(cur.meta.options ?? {}), choices: want.options.choices },
           display: want.display ?? null,
@@ -111,34 +91,99 @@ async function reconcileSelects(): Promise<void> {
   if (!changed) console.log("= listes de choix : déjà alignées sur schema.ts");
 }
 
-async function reconcileIconSubfields(): Promise<void> {
-  for (const [collection, field] of ICON_REPEATERS) {
-    const cur = await get<FieldMeta>(`/fields/${collection}/${field}`);
-    const fields = cur.meta.options?.fields ?? [];
-    const existing = fields.find((f) => f.field === "icon");
-    const upToDate =
-      existing?.meta?.interface === "select-dropdown" &&
-      (existing.meta.options?.choices?.length ?? 0) === ICON_CHOICE_COUNT;
-    if (upToDate) {
-      console.log(`= ${collection}.${field} : sous-champ « icon » déjà à jour`);
-      continue;
+/**
+ * Empreinte comparable de la liste de sous-champs d'un répéteur (ordre significatif).
+ * Projection sur les seules clés que `fields.subField` produit : Directus en ajoute
+ * d'autres de son côté (tri interne, `note: null`…) et comparer le brut ferait
+ * repatcher à chaque exécution.
+ */
+const subFieldsKey = (fields: unknown): string =>
+  JSON.stringify(
+    (Array.isArray(fields) ? fields : []).map((raw) => {
+      const f = (raw ?? {}) as { field?: string; name?: string; type?: string; meta?: Json };
+      const meta = (f.meta ?? {}) as {
+        interface?: string;
+        width?: string;
+        note?: string;
+        options?: Json;
+      };
+      return [
+        f.field ?? "",
+        f.name ?? "",
+        f.type ?? "",
+        meta.interface ?? "",
+        meta.width ?? "",
+        meta.note ?? "",
+        meta.options ?? null,
+      ];
+    }),
+  );
+
+async function reconcileRepeaters(): Promise<void> {
+  let changed = 0;
+  for (const def of allCollections) {
+    for (const spec of def.fields) {
+      const want = spec.meta as { interface?: string; options?: { fields?: SubField[] } };
+      if (want.interface !== "list" || !want.options?.fields) continue;
+      const path = `/fields/${def.collection}/${spec.field}`;
+      const cur = await get<FieldMeta>(path);
+      if (subFieldsKey(cur.meta.options?.fields) === subFieldsKey(want.options.fields)) continue;
+      const before = (cur.meta.options?.fields ?? []).map((f) => f.field);
+      const after = want.options.fields.map((f) => f.field);
+      await patch(path, {
+        // Les autres options du répéteur (template, tri…) sont préservées.
+        meta: { options: { ...(cur.meta.options ?? {}), fields: want.options.fields } },
+      });
+      const added = after.filter((f) => !before.includes(f));
+      const removed = before.filter((f) => !after.includes(f));
+      const detail = [
+        added.length ? `+${added.join(", +")}` : "",
+        removed.length ? `-${removed.join(", -")}` : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+      console.log(
+        `~ ${def.collection}.${spec.field} : sous-champs resynchronisés${detail ? ` (${detail})` : ""}`,
+      );
+      changed++;
     }
-    const others = fields.filter((f) => f.field !== "icon");
-    await patch(`/fields/${collection}/${field}`, {
-      meta: { options: { ...(cur.meta.options ?? {}), fields: [ICON_SUB_DIRECTUS, ...others] } },
-    });
-    console.log(
-      existing
-        ? `~ ${collection}.${field} : sous-champ « icon » mis à jour (liste déroulante)`
-        : `+ ${collection}.${field} : sous-champ « icon » ajouté (liste déroulante)`,
-    );
   }
+  if (!changed) console.log("= répéteurs : sous-champs déjà alignés sur schema.ts");
+}
+
+async function reconcileNotes(): Promise<void> {
+  let changed = 0;
+  for (const def of allCollections) {
+    for (const spec of def.fields) {
+      const want = spec.meta as { note?: string; hidden?: boolean };
+      // On ne pousse QUE ce que schema.ts déclare : un `note` posé à la main dans
+      // l'admin sur un champ non documenté ici n'est jamais effacé.
+      if (want.note === undefined && want.hidden === undefined) continue;
+      const path = `/fields/${def.collection}/${spec.field}`;
+      const cur = await get<{ meta: { note?: string | null; hidden?: boolean | null } }>(path);
+      const patchMeta: Record<string, unknown> = {};
+      if (want.note !== undefined && (cur.meta.note ?? null) !== want.note) {
+        patchMeta.note = want.note;
+      }
+      if (want.hidden !== undefined && (cur.meta.hidden ?? false) !== want.hidden) {
+        patchMeta.hidden = want.hidden;
+      }
+      if (!Object.keys(patchMeta).length) continue;
+      await patch(path, { meta: patchMeta });
+      console.log(
+        `~ ${def.collection}.${spec.field} : ${Object.keys(patchMeta).join(" + ")} à jour`,
+      );
+      changed++;
+    }
+  }
+  if (!changed) console.log("= notes & visibilité : déjà alignées sur schema.ts");
 }
 
 async function main(): Promise<void> {
   console.log("→ Réconciliation admin (meta de champs existants)…");
   await reconcileSelects();
-  await reconcileIconSubfields();
+  await reconcileRepeaters();
+  await reconcileNotes();
   console.log("✓ Réconciliation terminée.");
 }
 
