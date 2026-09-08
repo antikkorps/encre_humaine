@@ -44,6 +44,10 @@ export interface AboutPage {
   cta_body: string | null;
   story_photo_2: string | DirectusFile | null;
   story_body_2: string | null;
+  expertises_title: string | null;
+  expertises_intro: string | null;
+  expertises_items: unknown | null;
+  expertises_conclusion: string | null;
 }
 
 export interface ArticleCategories {
@@ -120,6 +124,24 @@ export interface B2cHubPage {
   cta_title: string | null;
   cta_body: string | null;
   cta_subtext: string | null;
+}
+
+export interface CaseStudies {
+  id: string;
+  title: string | null;
+  summary: string | null;
+  situation: string | null;
+  actions: string | null;
+  result: string | null;
+  image: string | DirectusFile | null;
+  sector: string | null;
+  period_label: string | null;
+  status: string;
+  sort: number | null;
+  date_created: string | null;
+  date_updated: string | null;
+  user_created: string | null;
+  user_updated: string | null;
 }
 
 export interface ContactLeads {
@@ -218,6 +240,15 @@ export interface HomePage {
   resources_cta_label: string | null;
   final_cta_description: string | null;
   hero_signature: string | null;
+  hero_eyebrow: string | null;
+  proof_eyebrow: string | null;
+  proof_title: string | null;
+  proof_intro: string | null;
+  sectors_eyebrow: string | null;
+  sectors_title: string | null;
+  sectors_intro: string | null;
+  sectors_items: unknown | null;
+  why_eyebrow: string | null;
 }
 
 export interface LegalDocuments {
@@ -505,6 +536,7 @@ export interface Schema {
   article_categories: ArticleCategories[];
   articles: Articles[];
   b2c_hub_page: B2cHubPage;
+  case_studies: CaseStudies[];
   contact_leads: ContactLeads[];
   contact_page: ContactPage;
   faq_items: FaqItems[];

@@ -187,6 +187,48 @@ useSchemaOrg([
         </div>
       </section>
 
+      <!-- 3bis. Trois expertises — bloc rapatrié de l'accueil au run 15 (il y
+           faisait doublon avec « Secteurs d'intervention »). Sa place est ici :
+           c'est du parcours, pas de la promesse commerciale. -->
+      <section v-if="content.expertises" v-reveal class="bg-paper">
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.expertises.title"
+            :subtitle="content.expertises.intro ?? undefined"
+            eyebrow="Une double expertise"
+            wide
+          />
+          <div v-if="content.expertises.items.length" class="mt-10 grid gap-6 sm:grid-cols-3">
+            <article v-for="(item, i) in content.expertises.items" :key="i">
+              <span
+                v-if="item.icon"
+                aria-hidden="true"
+                class="grid h-11 w-11 place-items-center rounded-full bg-teal-800 text-sand-300"
+              >
+                <Icon :name="`material-symbols:${item.icon}`" class="h-6 w-6" />
+              </span>
+              <span
+                v-else
+                aria-hidden="true"
+                class="block h-1.5 w-10 rounded-full bg-sand-400"
+              ></span>
+              <h3 class="mt-4 font-display text-lg font-bold text-ink">
+                <AccentText :text="item.title" />
+              </h3>
+              <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
+                <AccentText :text="item.body" />
+              </p>
+            </article>
+          </div>
+          <p
+            v-if="content.expertises.conclusion"
+            class="mt-10 max-w-3xl whitespace-pre-line text-lg leading-relaxed text-teal-800"
+          >
+            <AccentText :text="content.expertises.conclusion" />
+          </p>
+        </div>
+      </section>
+
       <!-- 4. Mes convictions -->
       <section v-if="content.convictions" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent

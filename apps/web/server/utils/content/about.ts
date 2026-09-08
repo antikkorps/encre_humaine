@@ -34,6 +34,10 @@ export interface RawAbout {
   why_body?: string | null; // rich text
   octopus_subtitle?: string | null;
   octopus_body?: string | null; // rich text
+  expertises_title?: string | null;
+  expertises_intro?: string | null;
+  expertises_items?: unknown; // répéteur { icon?, title, body }
+  expertises_conclusion?: string | null;
   convictions_title?: string | null;
   convictions?: unknown; // répéteur { title, body }
   work_title?: string | null;
@@ -72,6 +76,17 @@ export interface AboutContent {
   } | null;
   why: { title: string; bodyHtml: string } | null;
   octopus: { subtitle: string; bodyHtml: string } | null;
+  /**
+   * « Trois expertises » — bloc rapatrié de l'accueil au run 15 : il y faisait
+   * doublon avec « Secteurs d'intervention », et sa place est ici (c'est du
+   * parcours, pas de la promesse commerciale).
+   */
+  expertises: {
+    title: string;
+    intro: string | null;
+    items: TitledItem[];
+    conclusion: string | null;
+  } | null;
   convictions: { title: string; items: AboutConviction[] } | null;
   work: {
     title: string;
@@ -115,6 +130,9 @@ export function mapAboutContent(
   const whyHtml = sanitize(raw.why_body);
   const octoSubtitle = str(raw.octopus_subtitle);
   const octoHtml = sanitize(raw.octopus_body);
+  const expertisesTitle = str(raw.expertises_title);
+  const expertisesItems = mapTitledItems(raw.expertises_items);
+  const expertisesConclusion = str(raw.expertises_conclusion);
   const convictions = mapConvictions(raw.convictions);
   const principles = mapTitledItems(raw.how_i_work);
   const workTitle = str(raw.work_title);
@@ -139,6 +157,15 @@ export function mapAboutContent(
         : null,
     why: whyTitle || whyHtml ? { title: whyTitle, bodyHtml: whyHtml } : null,
     octopus: octoSubtitle || octoHtml ? { subtitle: octoSubtitle, bodyHtml: octoHtml } : null,
+    expertises:
+      expertisesTitle || expertisesItems.length || expertisesConclusion
+        ? {
+            title: expertisesTitle,
+            intro: str(raw.expertises_intro) || null,
+            items: expertisesItems,
+            conclusion: expertisesConclusion || null,
+          }
+        : null,
     convictions: convictions.length
       ? { title: str(raw.convictions_title), items: convictions }
       : null,
@@ -183,6 +210,10 @@ export async function loadAboutContent(): Promise<AboutContent> {
           "why_body",
           "octopus_subtitle",
           "octopus_body",
+          "expertises_title",
+          "expertises_intro",
+          "expertises_items",
+          "expertises_conclusion",
           "convictions_title",
           "convictions",
           "work_title",
