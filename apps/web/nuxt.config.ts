@@ -203,10 +203,8 @@ export default defineNuxtConfig({
       // (« Contact - L'Encre Humaine | L'Encre Humaine »). Le gabarit du module
       // est posé en `tagPriority: "low"`, donc cette valeur-ci l'emporte.
       titleTemplate: "%s",
-      meta: [
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { name: "theme-color", content: "#f5f2eb" },
-      ],
+      // Pas de `viewport` ici : Nuxt pose déjà exactement cette valeur par défaut.
+      meta: [{ name: "theme-color", content: "#f5f2eb" }],
       // Favicons générés depuis OctopusMark (public/, cf. assets). SVG scalable
       // d'abord, .ico en repli legacy, apple-touch + manifest pour iOS/PWA.
       link: [
@@ -284,7 +282,10 @@ export default defineNuxtConfig({
   // @nuxtjs/seo : robots/sitemap/canonical/OG. `site.url` est lu au BUILD ; en
   // prod (build Docker sans .env) il est vide → l'URL réelle est injectée au
   // RUNTIME via `NUXT_PUBLIC_SITE_URL` (mappé depuis BASE_URL dans le compose).
-  site: { url: process.env.BASE_URL, name: "L'Encre Humaine" },
+  // `defaultLocale` : sans lui, `htmlAttrs.lang` ne suffit pas — le module retombe
+  // sur « en » pour og:locale, la casse des canoniques et Schema.org. Le site est
+  // FR uniquement (docs/00 §SEO), l'incohérence n'avait aucune raison d'être.
+  site: { url: process.env.BASE_URL, name: "L'Encre Humaine", defaultLocale: "fr-FR" },
 
   // Sitemap : routes statiques auto-découvertes + source dynamique pour les
   // pages CMS (articles, offres, produits) — sinon absentes du sitemap.
