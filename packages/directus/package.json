@@ -22,8 +22,8 @@
     "seed:run15": "tsx src/seed-run15.ts"
   },
   "devDependencies": {
-    "@types/node": "25.9.4",
-    "tsx": "4.23.0",
+    "@types/node": "25.9.5",
+    "tsx": "4.23.11",
     "typescript": "6.0.3",
     "yaml": "2.9.0"
   }

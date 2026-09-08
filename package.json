@@ -4,7 +4,7 @@
   "private": true,
   "description": "Site L'Encre Humaine — conseil RH & accompagnement + boutique serious games",
   "type": "module",
-  "packageManager": "pnpm@10.34.4",
+  "packageManager": "pnpm@10.34.5",
   "engines": {
     "node": ">=22",
     "pnpm": ">=10"
@@ -25,9 +25,9 @@
     "directus:types": "pnpm --filter @encre/directus types"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.2",
+    "@biomejs/biome": "2.5.7",
     "typescript": "6.0.3",
-    "vitest": "4.1.9"
+    "vitest": "4.1.10"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -37,8 +37,8 @@
       "vue-demi"
     ],
     "overrides": {
-      "@types/node": "25.9.4",
-      "postcss": "8.5.25"
+      "@types/node": "25.9.5",
+      "postcss": "8.5.26"
     }
   }
 }
