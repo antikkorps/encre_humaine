@@ -22,7 +22,7 @@ import {
  * Contenu du hub Particuliers (B2C) — docs/04-particuliers-hub.md.
  * Source : `b2c_hub_page` + `faq_items` (scope=b2c_hub — périmètre PROPRE au hub
  * depuis le 2026-08-14, symétrique de `org` ; `b2c` est resté sur l'offre
- * Clarifier & avancer) + `testimonials` (b2c, M2O
+ * Clarifier son projet) + `testimonials` (b2c, M2O
  * unique `testimonial`) + `site_settings`. Ton empathique (9 sections, gabarit
  * riche calqué sur `offers`) : accroche, bénéfices, deux cartes situation
  * détaillées, façon d'accompagner, « pourquoi c'est différent », format, FAQ,
@@ -184,7 +184,7 @@ export function mapB2cHubContent(
         ctaLabel: hub.situation_a_cta_label,
         ctaLink: hub.situation_a_cta_link,
       },
-      "/particuliers/clarifier-avancer",
+      "/particuliers/clarifier-son-projet",
     ),
     mapSituation(
       {
@@ -196,7 +196,7 @@ export function mapB2cHubContent(
         ctaLabel: hub.situation_b_cta_label,
         ctaLink: hub.situation_b_cta_link,
       },
-      "/particuliers/booster-recherche",
+      "/particuliers/se-repositionner",
     ),
   ].filter((s): s is B2cSituation => s !== null);
 

@@ -11,6 +11,7 @@
 /** Champs `home_page` (hors `featured_testimonial` + SEO géré à part). */
 export const homePageContent = {
   // Hero
+  hero_eyebrow: "Conseil RH pour dirigeants de PME et ETI",
   hero_title: "Quand votre organisation grandit, vos pratiques RH doivent suivre.",
   hero_subtitle:
     "J'aide les PME à structurer leurs compétences, leurs parcours et leurs pratiques RH pour accompagner durablement leur développement.",
@@ -40,16 +41,19 @@ export const homePageContent = {
   build_title: "Des RH plus claires. Des managers mieux équipés. **Des équipes qui avancent.**",
   build_blocks: [
     {
-      title: "Audit & feuille de route RH",
+      title: "Audit RH",
       body: "Faire le point sur vos pratiques actuelles et identifier les priorités les plus utiles pour votre organisation.",
+      url: "/organisations/audit-rh",
     },
     {
-      title: "Compétences & parcours",
+      title: "Carte des Talents",
       body: "Cartographier les compétences, structurer votre GEPP et construire un plan de développement cohérent.",
+      url: "/organisations/carte-des-talents",
     },
     {
-      title: "Managers & équipes",
+      title: "De l'Expert au Manager",
       body: "Donner à vos managers les outils, les repères et la posture nécessaires pour accompagner leurs équipes.",
+      url: "/organisations/de-l-expert-au-manager",
     },
   ],
   build_cta_label: "Explorer",
@@ -71,24 +75,35 @@ export const homePageContent = {
       body: "Je reste disponible pour m'assurer que les changements prennent réellement vie.",
     },
   ],
-  // Signature / Positionnement
-  why_title: "Une approche à la croisée de trois expertises.",
-  why_items: [
+  // Preuve par l'exemple (habillage ; les cas vivent dans `case_studies`)
+  proof_eyebrow: "Preuve par l'exemple",
+  proof_title: "Ce que ça donne, **concrètement**.",
+  // Secteurs d'intervention
+  sectors_eyebrow: "Secteurs d'intervention",
+  sectors_title: "J'ai travaillé avec…",
+  sectors_items: [
     {
-      title: "Insertion professionnelle",
-      body: "Comprendre les parcours, les transitions et les dynamiques humaines.",
+      icon: "school",
+      title: "Le conseil et la formation professionnelle",
+      body: "Pilotage RH, qualité Qualiopi, développement des compétences.",
     },
     {
-      title: "Formation",
-      body: "Concevoir des dispositifs qui développent réellement les compétences.",
+      icon: "handshake",
+      title: "L'insertion et l'accompagnement professionnel",
+      body: "France Travail, Mission Locale, structures d'insertion.",
     },
     {
-      title: "Conseil RH",
-      body: "Structurer les organisations avec des outils adaptés au terrain.",
+      icon: "person-search",
+      title: "Le recrutement et la relation client",
+      body: "Évaluation de compétences, structuration de process.",
     },
   ],
-  why_conclusion:
+  // Ma conviction (respiration) — les « trois expertises » sont passées sur /a-propos
+  why_eyebrow: "Ma conviction",
+  why_subtitle:
     "Cette double vision des organisations et des parcours me permet d'agir à la fois sur les systèmes et sur les personnes qui les font vivre.",
+  why_conclusion:
+    "Les organisations ont besoin de processus. Les personnes ont besoin de repères.\n\nMon métier : **faire en sorte que les deux avancent dans la même direction.**",
   // À propos
   intro_title: "Je suis **Eléonore Morée**.",
   intro_text:
@@ -100,10 +115,10 @@ export const homePageContent = {
     "Questionnement, reconversion, perte de sens, recherche d'emploi : je vous accompagne pour clarifier votre direction et avancer avec confiance.",
   b2c_cards: [
     {
-      title: "Clarifier & avancer",
+      title: "Clarifier son projet",
       body: "Faire le point et construire un projet professionnel réaliste.",
     },
-    { title: "Booster sa recherche", body: "CV, LinkedIn, entretiens et stratégie de recherche." },
+    { title: "Se (re)positionner", body: "CV, LinkedIn, entretiens et stratégie de recherche." },
   ],
   b2c_cta_label: "Découvrir les accompagnements",
   // Ressources

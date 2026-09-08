@@ -257,6 +257,22 @@ export default defineNuxtConfig({
     "/newsletter": { redirect: { to: "/ressources", statusCode: 301 } },
     "/boutique": { redirect: { to: "/laboratoire", statusCode: 301 } },
     "/boutique/**": { redirect: { to: "/laboratoire/**", statusCode: 301 } },
+    // Run 15 : les offres ont été renommées (« Carte des Talents », « De l'Expert
+    // au Manager »…) et leurs slugs suivent. Ces redirections rattrapent les liens
+    // déjà partagés sur LinkedIn et l'index Google en cours de construction —
+    // elles sont à conserver indéfiniment, le coût est nul.
+    "/organisations/competences-parcours": {
+      redirect: { to: "/organisations/carte-des-talents", statusCode: 301 },
+    },
+    "/organisations/managers-equipes": {
+      redirect: { to: "/organisations/de-l-expert-au-manager", statusCode: 301 },
+    },
+    "/particuliers/clarifier-avancer": {
+      redirect: { to: "/particuliers/clarifier-son-projet", statusCode: 301 },
+    },
+    "/particuliers/booster-recherche": {
+      redirect: { to: "/particuliers/se-repositionner", statusCode: 301 },
+    },
   },
 
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.

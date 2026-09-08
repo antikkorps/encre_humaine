@@ -1,6 +1,6 @@
 # 04 / 05 — Gabarit page Offre (B2B & B2C)
 
-**Routes** : `/organisations/{slug}` (audit-rh, competences-parcours, managers-equipes) · `/particuliers/{slug}` (clarifier-avancer, booster-recherche)
+**Routes** : `/organisations/{slug}` (audit-rh, carte-des-talents, de-l-expert-au-manager) · `/particuliers/{slug}` (clarifier-son-projet, se-repositionner)
 **Source** : `offers` (par `slug`) + `faq_items` + `testimonials` · **Rendu** : SSG/ISR (génération par slug).
 
 > **Gabarit unique** pour les 5 pages (DRY). Schéma posé en phase 1 ; contenu détaillé rédigé en phase 2. Les routes et le gabarit existent dès la phase 1 pour ne pas refondre la nav.
@@ -33,10 +33,10 @@ ex. `trending-up`), avec repli par section.
 > ⚠️ `@nuxt/icon` **épinglé en 1.15.0** : la 2.x tire `h3@2` (rc) incompatible avec Nuxt 4.4.8 (h3 v1).
 
 ## Renvois croisés (bonne pratique du brief)
-- `booster-recherche` → section « Clarifier vs Booster » (via `context`) + liste ✗ « pas encore clarifié votre projet → *Clarifier & Avancer* ».
+- `se-repositionner` → section « Clarifier vs Booster » (via `context`) + liste ✗ « pas encore clarifié votre projet → *Clarifier & Avancer* ».
 
 ## FAQ par scope (`faq_items`)
-Chaque offre tire ses FAQ par `scope` (+ `general`), cf. `FAQ_SCOPE_BY_SLUG` : `audit-rh`→audit, `competences-parcours`→competences, `managers-equipes`→managers, `clarifier-avancer`→b2c (partagé avec le hub Particuliers), `booster-recherche`→**booster** (FAQ dédiée, ne fuit pas sur le hub/clarifier).
+Chaque offre tire ses FAQ par `scope` (+ `general`), cf. `FAQ_SCOPE_BY_SLUG` : `audit-rh`→audit, `carte-des-talents`→competences, `de-l-expert-au-manager`→managers, `clarifier-son-projet`→b2c (partagé avec le hub Particuliers), `se-repositionner`→**booster** (FAQ dédiée, ne fuit pas sur le hub/clarifier).
 
 ## A11y / SEO
 - `h1` = `accroche_title`. SEO par offre (`meta_*`, `og_image`). Breadcrumb (hub → offre).

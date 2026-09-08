@@ -1,5 +1,5 @@
 import { readItems, readSingleton } from "@directus/sdk";
-import type { ArticleSummary, Stat, TestimonialItem } from "~/types/content";
+import type { ArticleSummary, CaseStudyItem, Stat, TestimonialItem } from "~/types/content";
 import {
   type ContentPhoto,
   type ContentSeo,
@@ -56,7 +56,19 @@ export interface RawArticle {
   category?: { name?: string | null; slug?: string | null; group?: string | null } | string | null;
 }
 
+export interface RawCaseStudy {
+  title?: string | null;
+  summary?: string | null;
+  situation?: string | null;
+  actions?: string | null;
+  result?: string | null;
+  image?: FileField;
+  sector?: string | null;
+  period_label?: string | null;
+}
+
 export interface RawHome {
+  hero_eyebrow?: string | null;
   hero_title?: string | null;
   hero_subtitle?: string | null;
   hero_signature?: string | null;
@@ -76,9 +88,15 @@ export interface RawHome {
   method_title?: string | null;
   method_subtitle?: string | null;
   method_steps?: unknown;
-  why_title?: string | null;
+  proof_eyebrow?: string | null;
+  proof_title?: string | null;
+  proof_intro?: string | null;
+  sectors_eyebrow?: string | null;
+  sectors_title?: string | null;
+  sectors_intro?: string | null;
+  sectors_items?: unknown;
+  why_eyebrow?: string | null;
   why_subtitle?: string | null;
-  why_items?: unknown;
   why_conclusion?: string | null;
   intro_title?: string | null;
   intro_text?: string | null;
@@ -105,6 +123,8 @@ export interface RawHome {
 
 export interface HomeContent {
   hero: {
+    /** Pastille de positionnement au-dessus du h1. */
+    eyebrow: string | null;
     title: string;
     subtitle: string | null;
     /** Phrase signature (italique, sous le sous-titre) — masquée si vide. */
@@ -128,18 +148,27 @@ export interface HomeContent {
   } | null;
   build: {
     title: string;
-    blocks: TitledItem[];
+    blocks: BuildBlock[];
     /** CTA de section (« Explorer »), `null` si non renseigné. */
     ctaLabel: string | null;
     ctaUrl: string;
   } | null;
   method: { title: string; subtitle: string | null; steps: TitledItem[] } | null;
-  why: {
+  /** Preuve par l'exemple : habillage (home_page) + cas (collection `case_studies`). */
+  proof: {
+    eyebrow: string;
     title: string;
-    subtitle: string | null;
-    items: TitledItem[];
-    conclusion: string | null;
+    intro: string | null;
+    cases: CaseStudyItem[];
   } | null;
+  sectors: {
+    eyebrow: string;
+    title: string;
+    intro: string | null;
+    items: TitledItem[];
+  } | null;
+  /** Respiration « Ma conviction » : une phrase de transition + la citation. */
+  why: { eyebrow: string; bridge: string | null; quote: string } | null;
   intro: {
     title: string;
     text: string | null;
@@ -178,10 +207,27 @@ export function mapRecognition(home: RawHome): HomeContent["recognition"] {
   return { title, subtitle: subtitle || null, items, conclusion: conclusion || null };
 }
 
+/**
+ * Bloc de la section « ce que je vous aide à construire ». Numéroté à l'affichage
+ * (1, 2, 3) et non illustré depuis le run 15 : le chiffre dit d'un coup d'œil
+ * qu'il y a trois offres. Chaque bloc renvoie vers sa page d'offre.
+ */
+export interface BuildBlock extends TitledItem {
+  url?: string;
+  linkLabel?: string;
+}
+
 /** Promesse / Offre : 3 blocs services + CTA de section (docs/01 §3). */
 export function mapBuild(home: RawHome): HomeContent["build"] {
   const title = str(home.build_title);
-  const blocks = mapTitledItems(home.build_blocks);
+  const blocks = records(home.build_blocks)
+    .map((b) => ({
+      title: str(b.title),
+      body: str(b.body),
+      url: safeHref(b.url) || undefined,
+      linkLabel: str(b.link_label) || undefined,
+    }))
+    .filter((b) => b.title !== "" || b.body !== "");
   if (!title && !blocks.length) return null;
   return {
     title,
@@ -200,14 +246,66 @@ export function mapMethod(home: RawHome): HomeContent["method"] {
   return { title, subtitle: subtitle || null, steps };
 }
 
-/** Signature / Positionnement : piliers de la double expertise (docs/01 §5). */
+/**
+ * Preuve par l'exemple : l'habillage vient de `home_page`, les cas de la collection
+ * `case_studies`. Sans aucun cas publié, la section n'a rien à prouver → masquée.
+ */
+export function mapProof(home: RawHome, cases: CaseStudyItem[]): HomeContent["proof"] {
+  if (!cases.length) return null;
+  return {
+    eyebrow: str(home.proof_eyebrow) || "Preuve par l'exemple",
+    title: str(home.proof_title) || "Ce que ça donne, concrètement.",
+    intro: str(home.proof_intro) || null,
+    cases,
+  };
+}
+
+export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[] {
+  return (
+    (Array.isArray(raws) ? (raws as RawCaseStudy[]) : [])
+      .map((raw) => ({
+        title: str(raw.title),
+        summary: str(raw.summary),
+        situation: str(raw.situation),
+        actions: str(raw.actions),
+        result: str(raw.result),
+        image: fileUrl(raw.image, assetBase) ?? undefined,
+        imageAlt: fileAlt(raw.image) || undefined,
+        sector: str(raw.sector) || undefined,
+        periodLabel: str(raw.period_label) || undefined,
+      }))
+      // Un cas sans titre ni situation n'est qu'une ligne vide dans l'admin.
+      .filter((c) => c.title !== "" || c.situation !== "")
+  );
+}
+
+/** Secteurs d'intervention : réponse au « dans quels secteurs as-tu travaillé ? ». */
+export function mapSectors(home: RawHome): HomeContent["sectors"] {
+  const title = str(home.sectors_title);
+  const items = mapTitledItems(home.sectors_items);
+  if (!title && !items.length) return null;
+  return {
+    eyebrow: str(home.sectors_eyebrow) || "Secteurs d'intervention",
+    title,
+    intro: str(home.sectors_intro) || null,
+    items,
+  };
+}
+
+/**
+ * Ma conviction : une respiration, pas une section. La citation EST le titre ; la
+ * phrase de transition (`why_subtitle`) fait le pont depuis les secteurs. Les
+ * « trois expertises » qui vivaient ici sont passées sur /a-propos au run 15.
+ */
 export function mapWhy(home: RawHome): HomeContent["why"] {
-  const title = str(home.why_title);
-  const subtitle = str(home.why_subtitle);
-  const items = mapTitledItems(home.why_items);
-  const conclusion = str(home.why_conclusion);
-  if (!title && !subtitle && !items.length && !conclusion) return null;
-  return { title, subtitle: subtitle || null, items, conclusion: conclusion || null };
+  const quote = str(home.why_conclusion);
+  const bridge = str(home.why_subtitle);
+  if (!quote && !bridge) return null;
+  return {
+    eyebrow: str(home.why_eyebrow) || "Ma conviction",
+    bridge: bridge || null,
+    quote,
+  };
 }
 
 /** Particuliers : 2 axes d'accompagnement (docs/01 §7). */
@@ -274,10 +372,12 @@ export function mapHomeContent(
   articles: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
+  caseStudies: unknown = [],
 ): HomeContent {
   const finalTitle = str(home.final_cta_title);
   return {
     hero: {
+      eyebrow: str(home.hero_eyebrow) || null,
       title: str(home.hero_title) || "L'Encre Humaine",
       subtitle: str(home.hero_subtitle) || null,
       signature: str(home.hero_signature) || null,
@@ -290,6 +390,8 @@ export function mapHomeContent(
     recognition: mapRecognition(home),
     build: mapBuild(home),
     method: mapMethod(home),
+    proof: mapProof(home, mapCaseStudies(caseStudies, assetBase)),
+    sectors: mapSectors(home),
     why: mapWhy(home),
     intro: mapIntro(home, assetBase),
     b2c: mapB2c(home),
@@ -316,10 +418,11 @@ export async function loadHomeContent(): Promise<HomeContent> {
   const client = directusServer();
   const assetBase = useRuntimeConfig().public.directusPublicUrl;
 
-  const [home, articles, settings] = await Promise.all([
+  const [home, articles, settings, caseStudies] = await Promise.all([
     client.request(
       readSingleton("home_page", {
         fields: [
+          "hero_eyebrow",
           "hero_title",
           "hero_subtitle",
           "hero_signature",
@@ -339,9 +442,15 @@ export async function loadHomeContent(): Promise<HomeContent> {
           "method_title",
           "method_subtitle",
           "method_steps",
-          "why_title",
+          "proof_eyebrow",
+          "proof_title",
+          "proof_intro",
+          "sectors_eyebrow",
+          "sectors_title",
+          "sectors_intro",
+          "sectors_items",
+          "why_eyebrow",
           "why_subtitle",
-          "why_items",
           "why_conclusion",
           "intro_title",
           "intro_text",
@@ -391,6 +500,24 @@ export async function loadHomeContent(): Promise<HomeContent> {
         fields: ["brand_name", "default_meta_description", "default_og_image"],
       }),
     ),
+    // Preuve par l'exemple — collection dédiée (une image par cas, donc une vraie
+    // relation fichier : impossible dans un répéteur JSON de `home_page`).
+    client.request(
+      readItems("case_studies", {
+        filter: { status: { _eq: "published" } },
+        sort: ["sort"],
+        fields: [
+          "title",
+          "summary",
+          "situation",
+          "actions",
+          "result",
+          "image",
+          "sector",
+          "period_label",
+        ],
+      }),
+    ),
   ]);
 
   return mapHomeContent(
@@ -398,5 +525,6 @@ export async function loadHomeContent(): Promise<HomeContent> {
     articles,
     settings as unknown as RawSiteDefaults,
     assetBase,
+    caseStudies,
   );
 }

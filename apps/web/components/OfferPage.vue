@@ -55,12 +55,12 @@ const EYEBROWS: Record<string, OfferEyebrows> = {
     outcomes: "Ce que cet audit change concrètement",
     context: "Ce que je vois très souvent en entreprise",
   },
-  "competences-parcours": {
+  "carte-des-talents": {
     outcomes: "Ce que cet accompagnement change concrètement",
     context: "Ce que j'observe le plus souvent",
     approche: "Une approche qui relie compétences et parcours",
   },
-  "managers-equipes": {
+  "de-l-expert-au-manager": {
     outcomes: "Ce que cet accompagnement change concrètement",
     context: "Ce que j'observe le plus souvent",
     approche: "Une approche qui relie management, RH et réalité du terrain",
@@ -68,7 +68,7 @@ const EYEBROWS: Record<string, OfferEyebrows> = {
     mission: "Les thématiques d'accompagnement",
     format: "Le format",
   },
-  "clarifier-avancer": {
+  "clarifier-son-projet": {
     outcomes: "Ce que cet accompagnement peut changer",
     approche: "Derrière le flou, il y a souvent déjà des réponses",
     mission: "Ce que nous travaillons ensemble",
@@ -76,7 +76,7 @@ const EYEBROWS: Record<string, OfferEyebrows> = {
     format: "Le format",
     takeaways: "Ce que vous emportez avec vous",
   },
-  "booster-recherche": {
+  "se-repositionner": {
     outcomes: "Ce qui se joue vraiment dans une recherche d'emploi",
     context: "Clarifier vs booster : deux moments différents",
     mission: "Ce que nous travaillons ensemble",

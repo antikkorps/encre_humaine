@@ -137,7 +137,7 @@ describe("mapOrgHubContent", () => {
     // Slot C minimal : CTA link retombe sur l'offre managers.
     expect(c.situations[1]).toMatchObject({
       title: "Managers & équipes",
-      ctaLink: "/organisations/managers-equipes",
+      ctaLink: "/organisations/de-l-expert-au-manager",
     });
   });
 });

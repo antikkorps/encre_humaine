@@ -65,6 +65,22 @@ export interface OfferSummary {
   priceLabel?: string;
 }
 
+/**
+ * Cas concret « preuve par l'exemple » (accueil) — collection `case_studies`.
+ * Une image possible par cas : c'est ce qui permettra d'y verser le portfolio.
+ */
+export interface CaseStudyItem {
+  title: string;
+  summary: string;
+  situation: string;
+  actions: string;
+  result: string;
+  image?: string;
+  imageAlt?: string;
+  sector?: string;
+  periodLabel?: string;
+}
+
 /** Carte d'article de blog — sous-ensemble de `articles` (docs/02 §5). */
 export interface ArticleSummary {
   title: string;
@@ -110,4 +126,9 @@ export interface FaqItem {
 export interface NavItem {
   label: string;
   to: string;
+  /**
+   * Sous-liens (menu déroulant desktop / sous-liste mobile). Alimentés par les
+   * offres publiées dans Directus — jamais écrits en dur, cf. `nav-offers`.
+   */
+  children?: { label: string; to: string; description?: string; icon?: string }[];
 }

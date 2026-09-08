@@ -2,7 +2,7 @@
 // Source d'intention (diffable en review). Le moteur bootstrap.ts l'applique ;
 // le snapshot YAML en est l'artefact reproductible. DRY : un concept = une ligne.
 import * as f from "./fields.ts";
-import { ICON_SUBFIELD } from "./icons.ts";
+import { ICON_CHOICES, ICON_SUBFIELD } from "./icons.ts";
 
 export type CollectionDef = {
   collection: string;
@@ -29,7 +29,7 @@ const AUDIENCE_BOTH = [...AUDIENCE, { text: "Les deux", value: "both" }];
  * Les valeurs stockées ne changent jamais (contenu existant préservé) ; seuls les
  * libellés évoluent. Consommé par le bootstrap ET par `reconcile.ts` (source unique).
  *
- * ⚠️ `b2c` désigne l'**offre Clarifier & avancer**, pas le hub. Ce périmètre était
+ * ⚠️ `b2c` désigne l'**offre Clarifier son projet**, pas le hub. Ce périmètre était
  * partagé entre les deux jusqu'au 2026-08-14 ; Éléonore a tranché que ses questions
  * étaient justes pour l'offre, et a demandé une FAQ propre à chaque hub. La valeur
  * est restée `b2c` pour que ses 5 questions publiées ne bougent pas de page — la
@@ -41,10 +41,10 @@ export const FAQ_SCOPE = [
   { text: "Page /organisations", value: "org" },
   { text: "Page /particuliers", value: "b2c_hub" },
   { text: "Offre Audit RH", value: "audit" },
-  { text: "Offre Compétences & parcours", value: "competences" },
-  { text: "Offre Managers & équipes", value: "managers" },
-  { text: "Offre Clarifier & avancer", value: "b2c" },
-  { text: "Offre Booster sa recherche", value: "booster" },
+  { text: "Offre Carte des Talents", value: "competences" },
+  { text: "Offre De l'Expert au Manager", value: "managers" },
+  { text: "Offre Clarifier son projet", value: "b2c" },
+  { text: "Offre Se (re)positionner", value: "booster" },
   { text: "Toutes les offres (transverse)", value: "general" },
 ];
 /**
@@ -56,10 +56,10 @@ export const FAQ_SCOPE = [
  */
 export const TESTIMONIAL_OFFER_SCOPE = [
   { text: "Offre Audit RH (organisations)", value: "audit-rh" },
-  { text: "Offre Compétences & parcours (organisations)", value: "competences-parcours" },
-  { text: "Offre Managers & équipes (organisations)", value: "managers-equipes" },
-  { text: "Offre Clarifier & avancer (particuliers)", value: "clarifier-avancer" },
-  { text: "Offre Booster sa recherche (particuliers)", value: "booster-recherche" },
+  { text: "Offre Carte des Talents (organisations)", value: "carte-des-talents" },
+  { text: "Offre De l'Expert au Manager (organisations)", value: "de-l-expert-au-manager" },
+  { text: "Offre Clarifier son projet (particuliers)", value: "clarifier-son-projet" },
+  { text: "Offre Se (re)positionner (particuliers)", value: "se-repositionner" },
 ];
 /** Satisfaction globale — 5 en tête (le cas courant), vide = aucune étoile affichée. */
 const RATING_CHOICES = [
@@ -126,6 +126,9 @@ const singletons: CollectionDef[] = [
     icon: "home",
     fields: [
       // — Hero (nommage CTA agnostique : principal = RDV, secondaire = ancre offres) —
+      f.input("hero_eyebrow", {
+        note: "Pastille au-dessus du titre (positionnement). Ex. « Conseil RH pour dirigeants de PME et ETI »",
+      }),
       f.input("hero_title"),
       f.textarea("hero_subtitle"),
       f.textarea("hero_signature", {
@@ -154,10 +157,29 @@ const singletons: CollectionDef[] = [
       // — Promesse / Offre : ce que je vous aide à construire (ancre #offres) —
       f.divider("build_divider", "Promesse / Offre (#offres)"),
       f.input("build_title"),
+      // Les blocs sont NUMÉROTÉS à l'affichage (1, 2, 3) plutôt qu'illustrés :
+      // ce n'est pas une suite logique, mais le chiffre dit d'un coup d'œil qu'il
+      // y a trois offres (retour Éléonore, audit du 2026-09-08). L'icône disparaît
+      // donc du répéteur, et chaque bloc renvoie vers sa page d'offre.
       f.repeater(
         "build_blocks",
-        [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Blocs services (icône éditable + titre + texte)" },
+        [
+          { field: "title", name: "Titre" },
+          { field: "body", name: "Texte", interface: "input-multiline" },
+          {
+            field: "url",
+            name: "Lien vers l'offre",
+            width: "half",
+            note: "Ex. /organisations/audit-rh — vide = aucun lien affiché",
+          },
+          {
+            field: "link_label",
+            name: "Libellé du lien",
+            width: "half",
+            note: "Défaut : « Découvrir cette offre »",
+          },
+        ],
+        { note: "Blocs services (numérotés 1, 2, 3 à l'affichage) + lien vers la page d'offre" },
       ),
       f.input("build_cta_label", { half: true, note: "CTA section (ex. « Explorer »)" }),
       f.input("build_cta_url", { half: true, note: "Cible du CTA (défaut /organisations)" }),
@@ -170,16 +192,50 @@ const singletons: CollectionDef[] = [
         [{ field: "title" }, { field: "body", interface: "input-multiline" }],
         { note: "Étapes (numérotées à l'affichage)" },
       ),
-      // — Signature / Positionnement (double expertise) —
-      f.divider("why_divider", "Signature / Positionnement"),
-      f.input("why_title"),
-      f.textarea("why_subtitle"),
+      // — Preuve par l'exemple (cas concrets) —
+      // Le reproche n°1 de l'audit : le site ne montre aucun « j'ai fait ça, comme
+      // ça, et voilà ce que ça a donné ». Les cas eux-mêmes vivent dans la
+      // collection `case_studies` (une image par cas → il faut une vraie relation
+      // fichier, impossible dans un répéteur JSON). Ici : l'habillage de la section.
+      f.divider("proof_divider", "Preuve par l'exemple (cas concrets)"),
+      f.input("proof_eyebrow", { half: true, note: "Défaut : « Preuve par l'exemple »" }),
+      f.input("proof_title", { half: true, note: "Ex. « Ce que ça donne, concrètement. »" }),
+      f.textarea("proof_intro", {
+        note: "Chapeau de section (optionnel). Les cas se gèrent dans « Cas concrets ».",
+      }),
+      // — Secteurs d'intervention —
+      f.divider("sectors_divider", "Secteurs d'intervention"),
+      f.input("sectors_eyebrow", { half: true, note: "Défaut : « Secteurs d'intervention »" }),
+      f.input("sectors_title", { half: true, note: "Ex. « J'ai travaillé avec… »" }),
+      f.textarea("sectors_intro", { note: "Chapeau (optionnel) : la liste parle d'elle-même" }),
+      f.repeater(
+        "sectors_items",
+        [
+          ICON_SUBFIELD,
+          { field: "title", name: "Secteur" },
+          { field: "body", name: "Précisions", interface: "input-multiline" },
+        ],
+        { note: "Secteurs d'intervention (ex. « Le conseil et la formation professionnelle »)" },
+      ),
+      // — Ma conviction (respiration) —
+      // Ce bloc portait les « trois expertises » jusqu'au run 15 : elles faisaient
+      // doublon avec les secteurs ci-dessus et sont parties sur /a-propos
+      // (`about_page.expertises_*`). Il ne reste ici qu'une phrase de transition et
+      // la citation-manifeste, affichée seule — volontairement pas une section
+      // comme les autres. `why_title` / `why_items` sont donc masqués (le bootstrap
+      // ne supprime jamais un champ ; `reconcile` porte le `hidden` en prod).
+      f.divider("why_divider", "Ma conviction (respiration)"),
+      f.input("why_eyebrow", { note: "Petit intitulé discret. Défaut : « Ma conviction »" }),
+      f.textarea("why_subtitle", {
+        note: "Phrase de transition, juste au-dessus de la citation",
+      }),
+      f.textarea("why_conclusion", { note: "La citation-manifeste (elle EST le titre)" }),
+      f.input("why_title", { hidden: true, note: "Non affiché — déplacé sur À propos" }),
       f.repeater(
         "why_items",
         [{ field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Piliers (double expertise)" },
+        { hidden: true, note: "Non affiché — déplacé sur À propos (« Trois expertises »)" },
       ),
-      f.textarea("why_conclusion"),
       // — À propos —
       f.divider("intro_divider", "À propos"),
       f.input("intro_title"),
@@ -246,6 +302,24 @@ const singletons: CollectionDef[] = [
         [{ field: "title" }, { field: "body", interface: "input-multiline" }],
         { note: "Convictions professionnelles (titre + corps)" },
       ),
+      // §4bis Trois expertises — bloc rapatrié de l'accueil au run 15 (il y faisait
+      // doublon avec « Secteurs d'intervention »). Sa place est ici : c'est du
+      // parcours, pas de la promesse commerciale.
+      f.divider("expertises_divider", "Trois expertises"),
+      f.input("expertises_title", {
+        note: "Ex. « Une approche à la croisée de trois expertises. »",
+      }),
+      f.textarea("expertises_intro"),
+      f.repeater(
+        "expertises_items",
+        [
+          ICON_SUBFIELD,
+          { field: "title", name: "Expertise" },
+          { field: "body", name: "Texte", interface: "input-multiline" },
+        ],
+        { note: "Piliers (double expertise)" },
+      ),
+      f.textarea("expertises_conclusion"),
       // §5 Ma manière d'accompagner
       f.input("work_title"),
       f.textarea("work_intro"),
@@ -611,6 +685,26 @@ const collections: CollectionDef[] = [
     fields: [f.input("title"), f.slug(), f.richtext("body"), ...publishable()],
   },
   {
+    collection: "case_studies",
+    icon: "workspace_premium",
+    note: "Preuve par l'exemple (accueil) — un cas = situation / ce qui a été mis en place / résultat. Une image possible par cas (portfolio, travaux d'étude…).",
+    fields: [
+      f.input("title", {
+        note: "Titre du cas. Ex. « Structurer les compétences d'une PME de conseil »",
+      }),
+      f.textarea("summary", {
+        note: "Le contexte en une phrase. Ex. « Une entreprise de conseil et formation, 60 collaborateurs, deux ans de transformation RH. »",
+      }),
+      f.textarea("situation", { note: "La situation de départ" }),
+      f.textarea("actions", { note: "Ce qui a été mis en place" }),
+      f.textarea("result", { note: "Le résultat, chiffré si possible" }),
+      f.imageFile("image", { note: "Illustration du cas (optionnelle)" }),
+      f.input("sector", { half: true, note: "Secteur (optionnel, affiché en pastille)" }),
+      f.input("period_label", { half: true, note: "Ex. « 2 ans » (optionnel)" }),
+      ...publishable(),
+    ],
+  },
+  {
     collection: "offers",
     icon: "work",
     note: "Offres B2B + B2C — schéma phase 1, contenu détaillé phase 2",
@@ -618,7 +712,10 @@ const collections: CollectionDef[] = [
       f.input("title"),
       f.slug(),
       f.select("audience", AUDIENCE, { required: true, half: true }),
-      f.input("icon", { note: "Clé d'icône", half: true }),
+      f.select("icon", [...ICON_CHOICES], {
+        half: true,
+        note: "Icône de l'offre (menu déroulant de la navigation)",
+      }),
       f.textarea("short_description", { note: "Pour la carte du hub" }),
       f.input("duration_label", { half: true }),
       f.input("price_label", { note: "Texte libre — ex. « 1 500 – 2 500 € HT »", half: true }),

@@ -56,6 +56,7 @@ export const ICON_CHOICES = [
 // (patch du meta d'un répéteur déjà existant).
 export const ICON_SUBFIELD = {
   field: "icon",
+  name: "Icône",
   width: "half" as const,
   interface: "select-dropdown",
   options: { choices: [...ICON_CHOICES], allowNone: true },

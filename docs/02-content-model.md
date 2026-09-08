@@ -30,6 +30,7 @@ Deux familles de contenu, deux traitements :
 | `legal_documents` | collection | mentions, CGV, CGU, confidentialité | 1 |
 | `offers` | collection | 3 offres B2B + 2 B2C | schéma 1 / contenu détaillé 2 |
 | `testimonials` | collection | témoignages réutilisables | 1 (peut être vide) |
+| `case_studies` | collection | cas concrets « preuve par l'exemple » (accueil) | 3 (run 15) |
 | `faq_items` | collection | FAQ réutilisables par périmètre | 1 |
 | `products` | collection | **contenu éditorial** des serious games | 1 |
 | `articles` | collection | blog | schéma 1 / contenu 2-3 |
@@ -131,7 +132,9 @@ Deux familles de contenu, deux traitements :
 
 ### `offers`
 - `title`, `slug`, `audience` (`organisation`|`particulier`)
-- `icon` (clé d'icône), `short_description` (pour le hub), `sort`
+- `icon` (liste fermée `ICON_CHOICES`), `short_description` (carte de hub **et** menu déroulant de la nav), `sort`
+
+> **Le slug est une clé**, pas seulement une URL : il sert aussi de valeur à `testimonials.offer_scopes` et de clé de `FAQ_SCOPE_BY_SLUG` / des intitulés de `OfferPage`. Le renommer se fait avec `pnpm --filter @encre/directus rename:offers` (met à jour offres, périmètres de témoignage et liens de CTA des hubs) + une redirection 301 dans `routeRules`. Le titre, lui, se change librement depuis l'admin : nav, pied de page et pages suivent.
 - `duration_label`, `price_label` (texte libre — ex. « 1 500 – 2 500 € HT »), `price_note`
 - `accroche_title`, `accroche_body`
 - `mission_includes` (répéteur : `text`)
@@ -144,6 +147,14 @@ Deux familles de contenu, deux traitements :
 - bloc SEO + statut
 
 > Schéma créé en phase 1, hubs branchés dessus pour les cartes. Contenu détaillé des pages offres rédigé en phase 2 (cf. `00` § phases).
+
+### `case_studies` (preuve par l'exemple)
+- `title`, `summary` (le contexte en une phrase)
+- `situation`, `actions` (« ce qui a été mis en place »), `result` (chiffré si possible)
+- `image` (illustration optionnelle — c'est ce qui permet d'y verser le portfolio), `sector`, `period_label`
+- statut + `sort`
+
+> Une **collection** et non un répéteur de `home_page` : un répéteur Directus est du JSON pur, il ne peut pas porter de relation fichier. Un cas doit pouvoir porter une image. Affichage : 1 cas → pleine largeur, 2+ → carrousel (cf. `04-pages/01-accueil`).
 
 ### `products` (contenu éditorial des serious games)
 - `stripe_product_id` ← **lien vers Stripe** (source des prix/stock/paiement)
@@ -181,10 +192,10 @@ des offres cochées → le témoignage ne sort **que** sur celles-là ; aucune c
 | `org` | Page /organisations | hub `/organisations` |
 | `b2c_hub` | Page /particuliers | hub `/particuliers` |
 | `audit` | Offre Audit RH | `/organisations/audit-rh` |
-| `competences` | Offre Compétences & parcours | `/organisations/competences-parcours` |
-| `managers` | Offre Managers & équipes | `/organisations/managers-equipes` |
-| `b2c` | Offre Clarifier & avancer | `/particuliers/clarifier-avancer` |
-| `booster` | Offre Booster sa recherche | `/particuliers/booster-recherche` |
+| `competences` | Offre Compétences & parcours | `/organisations/carte-des-talents` |
+| `managers` | Offre Managers & équipes | `/organisations/de-l-expert-au-manager` |
+| `b2c` | Offre Clarifier & avancer | `/particuliers/clarifier-son-projet` |
+| `booster` | Offre Booster sa recherche | `/particuliers/se-repositionner` |
 | `general` | Toutes les offres (transverse) | les **5 pages d'offre** uniquement — ni hubs, ni `/contact` |
 
 > **Un périmètre = une page** depuis le 2026-08-14. `b2c` était partagé entre le hub `/particuliers` et l'offre Clarifier & avancer ; Éléonore a tranché que ses questions étaient justes **pour l'offre**, et a demandé une FAQ propre à chaque hub. La valeur `b2c` est donc restée sur l'offre (ses 5 questions publiées n'ont pas bougé de page — la renommer aurait exigé une migration de données sur la prod pour un gain cosmétique) et le hub a pris `b2c_hub`. ⚠️ **Le nom de la valeur `b2c` ment : c'est le libellé qui fait foi.**
@@ -258,7 +269,7 @@ Règles :
 
 | Page | Singleton/collection |
 |------|----------------------|
-| `/` | `home_page` + `articles` (3 derniers) + `testimonials` (vedette) |
+| `/` | `home_page` + `articles` (3 derniers) + `testimonials` (vedette) + `case_studies` (publiés) |
 | `/a-propos` | `about_page` |
 | `/organisations` | `org_hub_page` + `offers` (b2b) + `faq_items` (org) + `testimonials` (b2b) |
 | `/particuliers` | `b2c_hub_page` + `faq_items` (b2c) + `testimonials` (b2c) |
