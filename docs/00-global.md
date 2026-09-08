@@ -5,8 +5,9 @@
 ## Layout
 
 - **En-tête** (sticky léger) : logo (poulpe + « L'Encre Humaine »), nav principale, CTA « Prendre RDV ».
-- **Nav principale** : Accueil · À propos · Pour les organisations · Pour les particuliers · Ressources · Travaillons ensemble.
-- **Menu mobile** : composant accessible (primitive headless), fermeture clavier/Escape, focus trap.
+- **Nav principale** : Accueil · À propos · Organisations · Particuliers · Ressources · Le Laboratoire.
+- **Menus déroulants** : « Organisations » et « Particuliers » ouvrent un panneau listant les **offres publiées** (`NavigationMenu` headless : clavier + ARIA natifs). Les libellés viennent de `/api/content/nav-offers`, **jamais d'une liste en dur** — le pied de page lit la même clé `useFetch`, donc la même requête. Le déclencheur ouvre le menu ; la page du hub est atteinte par la dernière ligne du panneau. Si l'appel échoue, l'entrée redevient un simple lien vers le hub.
+- **Menu mobile** : composant accessible (primitive headless), fermeture clavier/Escape, focus trap ; les offres apparaissent en sous-liste dépliée sous leur hub (pas d'accordéon : le panneau est plein écran).
 - **Pied de page** : pitch court, colonnes (Organisations / Particuliers / Liens), contact (email, LinkedIn, localisation), mentions légales + CGV + confidentialité, mention `TVA non applicable, art. 293 B du CGI` (depuis `site_settings`).
 - **Bandeau de consentement** : présent globalement, gate les embeds tiers (cf. `06-security`).
 
@@ -39,7 +40,7 @@
 
 ## Composants réutilisables (inventaire)
 
-`AppHeader`, `AppFooter`, `NavMobile`, `ConsentBanner`, `CtaBlock`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `FaqAccordion`, `StatRow`, `SectionHeading`, `ContactForm`, `NewsletterForm`, `BookingEmbed` (prise de RDV, chargé au consentement), `RichText` (rendu sûr du WYSIWYG Directus), `AccentText` (mise en avant `**…**`, ci-dessous).
+`AppHeader`, `AppFooter`, `NavMobile`, `ConsentBanner`, `CtaBlock`, `TestimonialCard`, `OfferCard`, `ArticleCard`, `ProductCard`, `CaseStudyCard` (cas concret : situation / actions / résultat), `FaqAccordion`, `StatRow`, `SectionHeading`, `SnapCarousel` (piste défilante scroll-snap, partagée par `ArticleCarousel` et la « preuve par l'exemple »), `ContactForm`, `NewsletterForm`, `BookingEmbed` (prise de RDV, chargé au consentement), `RichText` (rendu sûr du WYSIWYG Directus), `AccentText` (mise en avant `**…**`, ci-dessous).
 
 ## Typographie éditoriale
 
