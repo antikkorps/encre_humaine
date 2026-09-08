@@ -134,7 +134,7 @@ type Sanitize = (html?: string | null) => string;
  * — chacune a le sien ; `general` (transverse) est toujours ajouté. Slug inconnu →
  * seulement `general`.
  *
- * `b2c` est le périmètre de l'offre Clarifier & avancer (et non du hub, malgré son
+ * `b2c` est le périmètre de l'offre Clarifier son projet (et non du hub, malgré son
  * nom) : il était partagé avec /particuliers jusqu'au 2026-08-14, où Éléonore a
  * demandé une FAQ propre à chaque hub. Les questions déjà publiées sous `b2c`
  * étaient écrites pour l'offre : elles y sont restées, valeur inchangée. Le hub a
@@ -142,11 +142,11 @@ type Sanitize = (html?: string | null) => string;
  */
 export const FAQ_SCOPE_BY_SLUG: Record<string, string> = {
   "audit-rh": "audit",
-  "competences-parcours": "competences",
-  "managers-equipes": "managers",
-  "clarifier-avancer": "b2c",
+  "carte-des-talents": "competences",
+  "de-l-expert-au-manager": "managers",
+  "clarifier-son-projet": "b2c",
   // booster a sa propre FAQ (S11) : scope dédié pour ne pas fuiter sur le hub b2c / clarifier.
-  "booster-recherche": "booster",
+  "se-repositionner": "booster",
 };
 
 /** Scopes de FAQ à charger pour une offre (spécifique + transverse). */

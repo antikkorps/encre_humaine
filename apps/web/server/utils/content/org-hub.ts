@@ -168,7 +168,7 @@ export function mapOrgHubContent(
         ctaLabel: hub.situation_b_cta_label,
         ctaLink: hub.situation_b_cta_link,
       },
-      "/organisations/competences-parcours",
+      "/organisations/carte-des-talents",
     ),
     mapSituation(
       {
@@ -180,7 +180,7 @@ export function mapOrgHubContent(
         ctaLabel: hub.situation_c_cta_label,
         ctaLink: hub.situation_c_cta_link,
       },
-      "/organisations/managers-equipes",
+      "/organisations/de-l-expert-au-manager",
     ),
   ].filter((s): s is B2cSituation => s !== null);
 

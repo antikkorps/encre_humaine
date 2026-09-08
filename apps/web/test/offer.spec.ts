@@ -19,9 +19,9 @@ const wrap = (h?: string | null) => (h ? `clean(${h})` : "");
 describe("faqScopesForSlug", () => {
   it("ajoute toujours « general » au scope spécifique de l'offre", () => {
     expect(faqScopesForSlug("audit-rh")).toEqual(["audit", "general"]);
-    expect(faqScopesForSlug("clarifier-avancer")).toEqual(["b2c", "general"]);
+    expect(faqScopesForSlug("clarifier-son-projet")).toEqual(["b2c", "general"]);
     // booster a sa FAQ dédiée (ne partage pas le scope b2c du hub / de clarifier)
-    expect(faqScopesForSlug("booster-recherche")).toEqual(["booster", "general"]);
+    expect(faqScopesForSlug("se-repositionner")).toEqual(["booster", "general"]);
   });
 
   it("slug inconnu → seulement « general »", () => {
@@ -235,7 +235,11 @@ describe("mapOfferContent", () => {
       { quote: "Public org", audience: "organisation" },
       { quote: "Public b2c", audience: "particulier" },
       { quote: "Épinglé audit", audience: "organisation", offer_scopes: ["audit-rh"] },
-      { quote: "Épinglé managers", audience: "organisation", offer_scopes: ["managers-equipes"] },
+      {
+        quote: "Épinglé managers",
+        audience: "organisation",
+        offer_scopes: ["de-l-expert-au-manager"],
+      },
     ];
     const quotes = (slug: string, audience: string) =>
       mapOfferContent({ slug, audience }, [], raws, {}, BASE, wrap).testimonials.map(
@@ -243,8 +247,8 @@ describe("mapOfferContent", () => {
       );
 
     expect(quotes("audit-rh", "organisation")).toEqual(["Public org", "Épinglé audit"]);
-    expect(quotes("competences-parcours", "organisation")).toEqual(["Public org"]);
-    expect(quotes("clarifier-avancer", "particulier")).toEqual(["Public b2c"]);
+    expect(quotes("carte-des-talents", "organisation")).toEqual(["Public org"]);
+    expect(quotes("clarifier-son-projet", "particulier")).toEqual(["Public b2c"]);
   });
 
   it("mappe accroche, CTA, prix/durée et le SEO (fallback site_settings)", () => {

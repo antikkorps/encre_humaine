@@ -17,7 +17,9 @@
     "seed:home": "tsx src/seed-home.ts",
     "seed:run9": "tsx src/seed-run9.ts",
     "mark:accents": "tsx src/mark-accents.ts",
-    "reconcile": "tsx src/reconcile.ts"
+    "reconcile": "tsx src/reconcile.ts",
+    "rename:offers": "tsx src/rename-offers.ts",
+    "seed:run15": "tsx src/seed-run15.ts"
   },
   "devDependencies": {
     "@types/node": "25.9.4",
