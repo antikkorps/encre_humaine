@@ -48,13 +48,18 @@ export const FAQ_SCOPE = [
   { text: "Toutes les offres (transverse)", value: "general" },
 ];
 /**
- * Offres où un témoignage peut être épinglé (2e menu déroulant, retour Éléonore
- * 2026-08-18 : « particulier / organisation, puis aussi sur l'offre 1, 2 ou 3 »).
- * Les valeurs sont les **slugs d'offre** : aucune table de correspondance à tenir,
- * la page d'offre se reconnaît directement. Aucune case cochée = le témoignage
- * sort sur toutes les offres de son public (comportement d'avant ce champ).
+ * Offres où un contenu réutilisable peut être épinglé (2e menu déroulant, retour
+ * Éléonore 2026-08-18 : « particulier / organisation, puis aussi sur l'offre 1, 2
+ * ou 3 »). Les valeurs sont les **slugs d'offre** : aucune table de correspondance
+ * à tenir, la page d'offre se reconnaît directement. Partagé par `testimonials`
+ * et par `case_studies` (run 16) — une seule liste à maintenir.
+ *
+ * ⚠️ La règle du « aucune case cochée » n'est PAS la même des deux côtés, parce
+ * que le défaut utile n'est pas le même : un témoignage sans case sort sur toutes
+ * les offres de son public, un cas concret sans case reste sur l'accueil (il
+ * raconte une mission précise, il n'a pas à s'inviter sur les 5 offres).
  */
-export const TESTIMONIAL_OFFER_SCOPE = [
+export const OFFER_SCOPE = [
   { text: "Offre Audit RH (organisations)", value: "audit-rh" },
   { text: "Offre Carte des Talents (organisations)", value: "carte-des-talents" },
   { text: "Offre De l'Expert au Manager (organisations)", value: "de-l-expert-au-manager" },
@@ -74,6 +79,14 @@ const ARTICLE_GROUP = [
   { text: "Particuliers", value: "particuliers" },
   { text: "Terrain", value: "terrain" },
 ];
+
+/**
+ * Note portée par les champs d'un bloc retiré d'une page : le champ survit (le
+ * bootstrap ne supprime rien, et le texte d'Éléonore ne doit pas disparaître),
+ * mais il ne doit plus se présenter comme éditable dans le formulaire.
+ */
+const OBSOLETE_OBSERVE =
+  "Bloc « Ce que j'observe » retiré de la page le 2026-09-11. Texte conservé ici, plus affiché sur le site.";
 
 /** Tail commun « contenu publiable » : statut + tri + audit. */
 const publishable = (): f.Spec[] => [f.status(), f.sort(), ...f.auditFields()];
@@ -355,15 +368,19 @@ const singletons: CollectionDef[] = [
       f.textarea("accroche_body"),
       f.input("accroche_signature", { note: "Phrase signature" }),
       f.imageFile("accroche_photo"),
-      // §2 Ce que j'observe
-      f.input("observe_title"),
-      f.textarea("observe_intro"),
+      // §2 Ce que j'observe — bloc RETIRÉ de la page le 2026-09-11 (run 16 : il
+      // faisait doublon avec les cartes d'offre, Éléonore en réinjecte les
+      // éléments ailleurs). Les champs restent : le bootstrap ne supprime jamais
+      // un champ, et son texte ne doit pas disparaître. `reconcile` porte le
+      // `hidden` en prod pour que le formulaire reste lisible.
+      f.input("observe_title", { hidden: true, note: OBSOLETE_OBSERVE }),
+      f.textarea("observe_intro", { hidden: true, note: OBSOLETE_OBSERVE }),
       f.repeater(
         "observe_items",
         [ICON_SUBFIELD, { field: "title" }, { field: "body", interface: "input-multiline" }],
-        { note: "Constats (icône Material Symbols + titre + corps)" },
+        { hidden: true, note: OBSOLETE_OBSERVE },
       ),
-      f.textarea("observe_conclusion"),
+      f.textarea("observe_conclusion", { hidden: true, note: OBSOLETE_OBSERVE }),
       // §3 Offres (cartes dynamiques depuis `offers`) — titre de section
       f.input("offers_title"),
       // §3bis Trois enjeux, trois accompagnements (cartes détaillées, calquées
@@ -379,6 +396,21 @@ const singletons: CollectionDef[] = [
         note: "« Ce que nous travaillons » (liste)",
       }),
       f.textarea("situation_a_result", { note: "« Résultat »" }),
+      f.input("situation_a_takeaway_label", {
+        half: true,
+        note: "Intitulé du 2e encadré, ex. « Ce que ça vous évite »",
+      }),
+      f.textarea("situation_a_takeaway_body", {
+        note: "Texte du 2e encadré. Vide = encadré masqué",
+      }),
+      f.input("situation_a_price", {
+        half: true,
+        note: "Ligne « Investissement : … » au-dessus du bouton. Vide = reprend l'investissement de la fiche d'offre liée",
+      }),
+      f.input("situation_a_duration", {
+        half: true,
+        note: "Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la fiche d'offre liée",
+      }),
       f.input("situation_a_cta_label", { half: true }),
       f.input("situation_a_cta_link", { half: true }),
       f.divider("enjeu_b_divider", "Enjeu B"),
@@ -389,6 +421,21 @@ const singletons: CollectionDef[] = [
         note: "« Ce que nous travaillons » (liste)",
       }),
       f.textarea("situation_b_result", { note: "« Résultat »" }),
+      f.input("situation_b_takeaway_label", {
+        half: true,
+        note: "Intitulé du 2e encadré, ex. « Pourquoi ça compte »",
+      }),
+      f.textarea("situation_b_takeaway_body", {
+        note: "Texte du 2e encadré. Vide = encadré masqué",
+      }),
+      f.input("situation_b_price", {
+        half: true,
+        note: "Ligne « Investissement : … » au-dessus du bouton. Vide = reprend l'investissement de la fiche d'offre liée",
+      }),
+      f.input("situation_b_duration", {
+        half: true,
+        note: "Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la fiche d'offre liée",
+      }),
       f.input("situation_b_cta_label", { half: true }),
       f.input("situation_b_cta_link", { half: true }),
       f.divider("enjeu_c_divider", "Enjeu C"),
@@ -399,6 +446,21 @@ const singletons: CollectionDef[] = [
         note: "« Ce que nous travaillons » (liste)",
       }),
       f.textarea("situation_c_result", { note: "« Résultat »" }),
+      f.input("situation_c_takeaway_label", {
+        half: true,
+        note: "Intitulé du 2e encadré, ex. « Ce que vous y gagnez »",
+      }),
+      f.textarea("situation_c_takeaway_body", {
+        note: "Texte du 2e encadré. Vide = encadré masqué",
+      }),
+      f.input("situation_c_price", {
+        half: true,
+        note: "Ligne « Investissement : … » au-dessus du bouton. Vide = reprend l'investissement de la fiche d'offre liée",
+      }),
+      f.input("situation_c_duration", {
+        half: true,
+        note: "Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la fiche d'offre liée",
+      }),
       f.input("situation_c_cta_label", { half: true }),
       f.input("situation_c_cta_link", { half: true }),
       // §4 Ma façon de travailler
@@ -416,10 +478,18 @@ const singletons: CollectionDef[] = [
       // §5 Ce qui différencie l'approche
       f.input("differentiator_title"),
       f.richtext("differentiator_body"),
-      // §6 Fait pour vous si…
-      f.input("audience_title"),
-      f.repeater("audience_items", [{ field: "text" }], { note: "Pour qui (✓)" }),
-      f.textarea("audience_conclusion"),
+      // §6 « Vous êtes RH ou dirigeant ? » (ex-« Cet accompagnement est fait pour
+      // vous si… » : la liste de situations est tombée au run 16, remplacée par un
+      // paragraphe — Éléonore, 2026-09-11).
+      f.input("audience_title", {
+        note: "Titre du bloc. Entourez-le de ** pour l'afficher en doré (ex. « **Vous êtes RH ou dirigeant ?** »)",
+      }),
+      f.textarea("audience_body", { note: "Paragraphe principal du bloc" }),
+      f.repeater("audience_items", [{ field: "text" }], {
+        hidden: true,
+        note: "Non affiché depuis le 2026-09-11 — la liste a été remplacée par le paragraphe ci-dessus. Texte conservé.",
+      }),
+      f.textarea("audience_conclusion", { note: "Phrase de clôture, affichée en encadré" }),
       // §7 Témoignages (dynamiques) — titre de section
       f.input("testimonials_title"),
       // §8 CTA final
@@ -687,7 +757,7 @@ const collections: CollectionDef[] = [
   {
     collection: "case_studies",
     icon: "workspace_premium",
-    note: "Preuve par l'exemple (accueil) — un cas = situation / ce qui a été mis en place / résultat. Une image possible par cas (portfolio, travaux d'étude…).",
+    note: "Preuve par l'exemple — un cas = situation / ce qui a été mis en place / résultat. Tous les cas publiés s'affichent sur l'accueil ; cocher une offre les ajoute sur sa page. Une image possible par cas (portfolio, travaux d'étude…).",
     fields: [
       f.input("title", {
         note: "Titre du cas. Ex. « Structurer les compétences d'une PME de conseil »",
@@ -701,6 +771,9 @@ const collections: CollectionDef[] = [
       f.imageFile("image", { note: "Illustration du cas (optionnelle)" }),
       f.input("sector", { half: true, note: "Secteur (optionnel, affiché en pastille)" }),
       f.input("period_label", { half: true, note: "Ex. « 2 ans » (optionnel)" }),
+      f.selectMulti("offer_scopes", OFFER_SCOPE, {
+        note: "Cochez les offres où ce cas doit aussi apparaître (section « Preuve par l'exemple » de la page d'offre). Aucune case = le cas reste sur l'accueil.",
+      }),
       ...publishable(),
     ],
   },
@@ -741,6 +814,17 @@ const collections: CollectionDef[] = [
         { note: "Situations récurrentes (icône + titre + corps)" },
       ),
       f.textarea("context_conclusion"),
+      // Preuve par l'exemple (run 16) — l'habillage vit ici, les cas dans la
+      // collection `case_studies` (cochez l'offre dans « Périmètre »). Même bloc
+      // que l'accueil : la section se masque tant qu'aucun cas ne pointe l'offre.
+      f.input("proof_eyebrow", { half: true, note: "Défaut : « Preuve par l'exemple »" }),
+      f.input("proof_title", {
+        half: true,
+        note: "Défaut : « Ce que ça donne, concrètement. » — les ** passent le fragment en doré",
+      }),
+      f.textarea("proof_intro", {
+        note: "Chapeau de section (optionnel). Les cas se gèrent dans « Cas concrets ».",
+      }),
       // Une approche qui relie compétences et parcours (optionnel)
       f.input("approche_title"),
       f.richtext("approche_body", { note: "Texte narratif (puces possibles)" }),
@@ -821,7 +905,7 @@ const collections: CollectionDef[] = [
         half: true,
         note: "Public : page de hub où le témoignage s'affiche (/organisations ou /particuliers).",
       }),
-      f.selectMulti("offer_scopes", TESTIMONIAL_OFFER_SCOPE, {
+      f.selectMulti("offer_scopes", OFFER_SCOPE, {
         note: "Cochez une ou plusieurs offres : le témoignage n'apparaîtra que sur celles-ci (en plus du hub de son public). Aucune case cochée = il apparaît sur TOUTES les offres de son public.",
       }),
       f.imageFile("photo", {

@@ -142,6 +142,7 @@ export interface CaseStudies {
   date_updated: string | null;
   user_created: string | null;
   user_updated: string | null;
+  offer_scopes: unknown | null;
 }
 
 export interface ContactLeads {
@@ -333,6 +334,9 @@ export interface Offers {
   takeaways_title: string | null;
   takeaways_intro: string | null;
   takeaways: unknown | null;
+  proof_eyebrow: string | null;
+  proof_title: string | null;
+  proof_intro: string | null;
 }
 
 export interface OrgHubPage {
@@ -387,6 +391,19 @@ export interface OrgHubPage {
   situation_c_result: string | null;
   situation_c_cta_label: string | null;
   situation_c_cta_link: string | null;
+  situation_a_takeaway_label: string | null;
+  situation_a_takeaway_body: string | null;
+  situation_a_price: string | null;
+  situation_a_duration: string | null;
+  situation_b_takeaway_label: string | null;
+  situation_b_takeaway_body: string | null;
+  situation_b_price: string | null;
+  situation_b_duration: string | null;
+  situation_c_takeaway_label: string | null;
+  situation_c_takeaway_body: string | null;
+  situation_c_price: string | null;
+  situation_c_duration: string | null;
+  audience_body: string | null;
 }
 
 export interface Products {

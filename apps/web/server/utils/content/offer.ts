@@ -3,13 +3,18 @@ import type { Audience } from "@encre/shared/validation";
 import type { FaqItem, TestimonialItem } from "~/types/content";
 import {
   asAudience,
+  CASE_STUDY_FIELDS,
   type ContentSeo,
+  caseStudiesForOffer,
   type FileField,
+  mapCaseStudies,
   mapFaqItems,
+  mapProofSection,
   mapSeo,
   mapStringList,
   mapTestimonials,
   mapTitledItems,
+  type ProofSection,
   type RawSiteDefaults,
   str,
   TESTIMONIAL_FIELDS,
@@ -49,6 +54,9 @@ export interface RawOfferFull {
   context_title?: string | null;
   context_items?: unknown; // répéteur { title, body }
   context_conclusion?: string | null;
+  proof_eyebrow?: string | null;
+  proof_title?: string | null;
+  proof_intro?: string | null;
   approche_title?: string | null;
   approche_body?: string | null; // rich text
   approche_signature?: string | null;
@@ -92,6 +100,8 @@ export interface OfferContent {
   outcomes: TitledItem[];
   /** « Ce que je vois souvent » (contexte récurrent). */
   context: { title: string; items: TitledItem[]; conclusion: string | null } | null;
+  /** « Preuve par l'exemple » : habillage de l'offre + cas qui la cochent ; masqué si aucun. */
+  proof: ProofSection | null;
   /** « Une approche qui relie » (optionnel) — corps rich text assaini + encadré signature. */
   approche: { title: string | null; bodyHtml: string; signature: string | null } | null;
   /** « Ce que comprend la mission » (titre + intro + items titre/corps). */
@@ -160,6 +170,7 @@ export function mapOfferContent(
   raw: RawOfferFull,
   faqRaw: unknown,
   testimonialsRaw: unknown,
+  caseStudiesRaw: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
   sanitize: Sanitize,
@@ -189,6 +200,12 @@ export function mapOfferContent(
       contextTitle || contextItems.length || contextConclusion
         ? { title: contextTitle, items: contextItems, conclusion: contextConclusion || null }
         : null,
+    // Seuls les cas qui cochent CETTE offre (`offer_scopes`) : un cas ne s'invite
+    // pas sur les cinq pages faute de case cochée (cf. `caseStudiesForOffer`).
+    proof: mapProofSection(
+      raw,
+      caseStudiesForOffer(mapCaseStudies(caseStudiesRaw, assetBase), str(raw.slug)),
+    ),
     approche:
       approcheTitle || approcheBodyHtml || approcheSignature
         ? {
@@ -260,6 +277,9 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "context_title",
         "context_items",
         "context_conclusion",
+        "proof_eyebrow",
+        "proof_title",
+        "proof_intro",
         "approche_title",
         "approche_body",
         "approche_signature",
@@ -295,7 +315,7 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
   // Témoignages centralisés : tous les publiés sont chargés (volume anecdotique),
   // le tri Directus (vedettes d'abord) est conservé et le choix de ceux qui sortent
   // sur CETTE offre est fait dans le mapper pur (`testimonialsForOffer`, testable).
-  const [faq, testimonials, settings] = await Promise.all([
+  const [faq, testimonials, caseStudies, settings] = await Promise.all([
     client.request(
       readItems("faq_items", {
         filter: { status: { _eq: "published" }, scope: { _in: faqScopesForSlug(slug) } },
@@ -312,6 +332,17 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         fields: [...TESTIMONIAL_FIELDS],
       }),
     ),
+    // Preuve par l'exemple : tous les cas publiés (volume anecdotique), le tri
+    // manuel de l'admin conservé, et le choix de ceux qui sortent sur CETTE offre
+    // fait dans le mapper pur (`caseStudiesForOffer`, testable).
+    client.request(
+      readItems("case_studies", {
+        filter: { status: { _eq: "published" } },
+        sort: ["sort"],
+        limit: -1,
+        fields: [...CASE_STUDY_FIELDS],
+      }),
+    ),
     client.request(
       readSingleton("site_settings", {
         fields: ["brand_name", "default_meta_description", "default_og_image"],
@@ -323,6 +354,7 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
     offer as unknown as RawOfferFull,
     faq,
     testimonials,
+    caseStudies,
     settings as unknown as RawSiteDefaults,
     assetBase,
     sanitizeRichText,

@@ -286,7 +286,49 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 3bis. Une approche qui relie (optionnel) — narratif + encadré citation -->
+    <!-- 4. Preuve par l'exemple — cas concrets de la collection `case_studies`
+         qui cochent cette offre (run 16). Même carte et même carrousel que
+         l'accueil : un seul cas → pleine largeur, dès le deuxième → piste
+         défilante. Masqué tant qu'aucun cas ne pointe l'offre. -->
+    <section v-if="content.proof" v-reveal class="relative isolate overflow-hidden bg-paper-2">
+      <TentacleAccent
+        side="right"
+        name="tentacule-2-plein"
+        class="absolute -right-24 top-8 -z-10 hidden w-[26rem] rotate-3 text-teal-700/[0.05] lg:block"
+      />
+      <div class="mx-auto max-w-6xl px-4 py-20">
+        <SectionHeading
+          :title="content.proof.title"
+          :subtitle="content.proof.intro ?? undefined"
+          :eyebrow="content.proof.eyebrow"
+          wide
+        />
+        <div class="mt-12">
+          <CaseStudyCard
+            v-if="content.proof.cases.length === 1"
+            :case-study="content.proof.cases[0]!"
+            full
+          />
+          <SnapCarousel
+            v-else
+            label="Cas concrets"
+            prev-label="Cas précédent"
+            next-label="Cas suivant"
+            tone="light"
+          >
+            <li
+              v-for="(item, i) in content.proof.cases"
+              :key="i"
+              class="w-[88%] shrink-0 snap-start sm:w-[28rem] lg:w-[32rem]"
+            >
+              <CaseStudyCard :case-study="item" />
+            </li>
+          </SnapCarousel>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Une approche qui relie (optionnel) — narratif + encadré citation -->
     <section v-if="content.approche" v-reveal class="relative isolate overflow-hidden">
       <TentacleAccent
         side="right"
@@ -323,7 +365,7 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 4bis. Un regard / une expérience (optionnel) -->
+    <!-- 6. Un regard / une expérience (optionnel) -->
     <section v-if="content.background" v-reveal class="relative isolate overflow-hidden">
       <TentacleAccent
         side="left"
@@ -339,7 +381,7 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 4 + 6. Ce que comprend la mission (panneau marine) + Pour qui (clair) -->
+    <!-- 7. Ce que comprend la mission (panneau marine) + Pour qui (clair) -->
     <section
       v-if="content.missionIncludes.length || content.audienceFit.length || content.audienceFitExclude.length || content.audienceFitConclusion"
       v-reveal
@@ -429,47 +471,12 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 5. Comment ça se passe / Le format (optionnel) -->
-    <section v-if="content.formatBodyHtml" v-reveal class="relative isolate overflow-hidden">
-      <TentacleAccent
-        side="left"
-        name="tentacule-4-trait"
-        class="absolute -left-20 top-8 -z-10 hidden w-[26rem] rotate-6 text-teal-700/[0.06] lg:block"
-      />
-      <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading
-          :title="content.formatTitle || formatHeading"
-          :eyebrow="eyebrows.format ?? 'Déroulé'"
-        />
-        <RichText :html="content.formatBodyHtml" class="mt-5" />
-      </div>
-    </section>
-
-    <!-- 6bis. Ce que vous emportez (livrables ✓) — masqué si vide -->
-    <section v-if="content.takeaways" v-reveal class="relative isolate overflow-hidden" :class="theme.soft">
-      <TentacleAccent
-        side="right"
-        name="tentacule-1-plein"
-        class="absolute -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
-      />
-      <div class="mx-auto max-w-3xl px-4 py-20">
-        <SectionHeading
-          :title="content.takeaways.title || 'Ce que vous emportez'"
-          :subtitle="content.takeaways.intro ?? undefined"
-          :eyebrow="eyebrows.takeaways ?? 'Livrables'"
-        />
-        <ul class="mt-8 space-y-3">
-          <li v-for="(item, i) in content.takeaways.items" :key="i" class="flex items-start gap-3 text-ink/80">
-            <Icon name="material-symbols:check-circle-rounded" class="mt-0.5 h-5 w-5 flex-none text-orange-500" />
-            <span><AccentText :text="item" /></span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 7. Investissement — panneau marine : le montant *est* le titre, format et
+    <!-- 8. Investissement — panneau marine : le montant *est* le titre, format et
          conditions en soutien (les deux cartes blanches côte à côte diluaient le
-         prix dans une étiquette « Tarif » grise). -->
+         prix dans une étiquette « Tarif » grise). Remonté juste sous « ce que
+         comprend la mission » / « pour qui » au run 16 : le prix se lit dans la
+         foulée de ce qu'il achète, au lieu d'arriver après le format et les
+         livrables (demande Éléonore, capture du 2026-09-11). -->
     <section
       v-if="content.priceLabel || content.priceNote || content.durationLabel"
       v-reveal
@@ -503,7 +510,45 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 8. FAQ (faq_items par scope) -->
+    <!-- 9. Comment ça se passe / Le format (optionnel) -->
+    <section v-if="content.formatBodyHtml" v-reveal class="relative isolate overflow-hidden">
+      <TentacleAccent
+        side="left"
+        name="tentacule-4-trait"
+        class="absolute -left-20 top-8 -z-10 hidden w-[26rem] rotate-6 text-teal-700/[0.06] lg:block"
+      />
+      <div class="mx-auto max-w-3xl px-4 py-20">
+        <SectionHeading
+          :title="content.formatTitle || formatHeading"
+          :eyebrow="eyebrows.format ?? 'Déroulé'"
+        />
+        <RichText :html="content.formatBodyHtml" class="mt-5" />
+      </div>
+    </section>
+
+    <!-- 10. Ce que vous emportez (livrables ✓) — masqué si vide -->
+    <section v-if="content.takeaways" v-reveal class="relative isolate overflow-hidden" :class="theme.soft">
+      <TentacleAccent
+        side="right"
+        name="tentacule-1-plein"
+        class="absolute -right-24 bottom-4 -z-10 hidden w-[26rem] rotate-3 text-teal-600/[0.05] lg:block"
+      />
+      <div class="mx-auto max-w-3xl px-4 py-20">
+        <SectionHeading
+          :title="content.takeaways.title || 'Ce que vous emportez'"
+          :subtitle="content.takeaways.intro ?? undefined"
+          :eyebrow="eyebrows.takeaways ?? 'Livrables'"
+        />
+        <ul class="mt-8 space-y-3">
+          <li v-for="(item, i) in content.takeaways.items" :key="i" class="flex items-start gap-3 text-ink/80">
+            <Icon name="material-symbols:check-circle-rounded" class="mt-0.5 h-5 w-5 flex-none text-orange-500" />
+            <span><AccentText :text="item" /></span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 11. FAQ (faq_items par scope) -->
     <section v-if="content.faq.length" v-reveal class="relative isolate overflow-hidden" :class="theme.band">
       <TentacleAccent
         side="left"
@@ -518,7 +563,7 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 9. Témoignages (centralisés par audience de l'offre) — masqué si vide -->
+    <!-- 12. Témoignages (centralisés par audience de l'offre) — masqué si vide -->
     <section
       v-if="content.testimonials.length"
       v-reveal
@@ -542,7 +587,7 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 10. CTA final → contact. Même bloc que l'accueil (dégradé marine + les
+    <!-- 13. CTA final → contact. Même bloc que l'accueil (dégradé marine + les
          deux bulles, bouton doré) que sur les hubs : le bandeau marine sombre
          détonnait d'une page à l'autre. -->
     <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">

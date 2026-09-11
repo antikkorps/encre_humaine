@@ -66,8 +66,8 @@ export interface OfferSummary {
 }
 
 /**
- * Cas concret « preuve par l'exemple » (accueil) — collection `case_studies`.
- * Une image possible par cas : c'est ce qui permettra d'y verser le portfolio.
+ * Cas concret « preuve par l'exemple » — collection `case_studies`. Une image
+ * possible par cas : c'est ce qui permettra d'y verser le portfolio.
  */
 export interface CaseStudyItem {
   title: string;
@@ -79,6 +79,8 @@ export interface CaseStudyItem {
   imageAlt?: string;
   sector?: string;
   periodLabel?: string;
+  /** Slugs d'offre où le cas est épinglé ; vide = accueil seulement. */
+  offers: string[];
 }
 
 /** Carte d'article de blog — sous-ensemble de `articles` (docs/02 §5). */

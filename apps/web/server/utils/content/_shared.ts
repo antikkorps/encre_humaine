@@ -5,7 +5,13 @@
  * Tout est **pur** (testable sans réseau).
  */
 import type { Audience } from "@encre/shared/validation";
-import type { ContentPhoto, FaqItem, OfferSummary, TestimonialItem } from "~/types/content";
+import type {
+  CaseStudyItem,
+  ContentPhoto,
+  FaqItem,
+  OfferSummary,
+  TestimonialItem,
+} from "~/types/content";
 // Import EXPLICITE (pas d'auto-import `utils/` côté Nitro) : la carte de partage
 // par défaut doit être la même valeur ici et dans `app.vue`.
 import { DEFAULT_OG_IMAGE } from "~/utils/seo";
@@ -226,6 +232,85 @@ export function testimonialsForOffer(
   return items.filter((t) =>
     t.offers.length ? t.offers.includes(slug) : Boolean(audience) && t.audience === audience,
   );
+}
+
+/**
+ * Champs `case_studies` consommés à l'affichage. Même `*` et même raison que
+ * `TESTIMONIAL_FIELDS` : la collection est minuscule, 100 % publique, et demander
+ * nommément un champ que l'instance n'a pas encore (image web déployée avant le
+ * `bootstrap`) ferait échouer la requête — donc un 500 sur l'accueil ET sur les
+ * pages d'offre pendant toute la fenêtre.
+ */
+export const CASE_STUDY_FIELDS = ["*"] as const;
+
+/** Sous-ensemble `case_studies` consommé à l'affichage (docs/01 §Preuve). */
+export interface RawCaseStudy {
+  title?: string | null;
+  summary?: string | null;
+  situation?: string | null;
+  actions?: string | null;
+  result?: string | null;
+  image?: FileField;
+  sector?: string | null;
+  period_label?: string | null;
+  offer_scopes?: unknown;
+}
+
+/** Cas concrets publiés ; une ligne sans titre ni situation est une ligne vide de l'admin. */
+export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[] {
+  return (Array.isArray(raws) ? (raws as RawCaseStudy[]) : [])
+    .map((raw) => ({
+      title: str(raw.title),
+      summary: str(raw.summary),
+      situation: str(raw.situation),
+      actions: str(raw.actions),
+      result: str(raw.result),
+      image: fileUrl(raw.image, assetBase) ?? undefined,
+      imageAlt: fileAlt(raw.image) || undefined,
+      sector: str(raw.sector) || undefined,
+      periodLabel: str(raw.period_label) || undefined,
+      offers: mapStringList(raw.offer_scopes),
+    }))
+    .filter((c) => c.title !== "" || c.situation !== "");
+}
+
+/**
+ * Cas concrets d'une PAGE D'OFFRE : uniquement ceux qui cochent cette offre
+ * (`offer_scopes`). Volontairement l'inverse du défaut des témoignages : un cas
+ * raconte une mission précise, il ne s'invite pas sur les cinq offres parce que
+ * personne n'a coché de case. L'accueil, lui, les montre tous.
+ */
+export function caseStudiesForOffer(items: CaseStudyItem[], slug: string): CaseStudyItem[] {
+  return slug ? items.filter((c) => c.offers.includes(slug)) : [];
+}
+
+/** Section « Preuve par l'exemple » : habillage de la page + cas à afficher. */
+export interface ProofSection {
+  eyebrow: string;
+  title: string;
+  intro: string | null;
+  cases: CaseStudyItem[];
+}
+
+/** Habillage `proof_*` d'une page (accueil ou offre). */
+export interface RawProof {
+  proof_eyebrow?: string | null;
+  proof_title?: string | null;
+  proof_intro?: string | null;
+}
+
+/**
+ * Compose la section : sans aucun cas, elle n'a rien à prouver → masquée. Les
+ * défauts sont les mêmes partout (l'accueil et les offres montrent le même bloc).
+ */
+export function mapProofSection(raw: RawProof, cases: CaseStudyItem[]): ProofSection | null {
+  if (!cases.length) return null;
+  return {
+    eyebrow: str(raw.proof_eyebrow) || "Preuve par l'exemple",
+    title: str(raw.proof_title) || "Ce que ça donne, **concrètement**.",
+    intro: str(raw.proof_intro) || null,
+    cases,
+  };
 }
 
 /** Sous-ensemble `offers` consommé en carte de hub (docs/02 §5). */

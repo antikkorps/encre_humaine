@@ -30,7 +30,7 @@ Deux familles de contenu, deux traitements :
 | `legal_documents` | collection | mentions, CGV, CGU, confidentialité | 1 |
 | `offers` | collection | 3 offres B2B + 2 B2C | schéma 1 / contenu détaillé 2 |
 | `testimonials` | collection | témoignages réutilisables | 1 (peut être vide) |
-| `case_studies` | collection | cas concrets « preuve par l'exemple » (accueil) | 3 (run 15) |
+| `case_studies` | collection | cas concrets « preuve par l'exemple » (accueil + pages d'offre cochées) | 3 (run 15) |
 | `faq_items` | collection | FAQ réutilisables par périmètre | 1 |
 | `products` | collection | **contenu éditorial** des serious games | 1 |
 | `articles` | collection | blog | schéma 1 / contenu 2-3 |
@@ -93,8 +93,10 @@ Deux familles de contenu, deux traitements :
 ### `org_hub_page`
 - `accroche_title`, `accroche_body`
 - Offres : **dynamique** (collection `offers` filtrée `audience=organisation`)
+- Trois enjeux : `situation_{a,b,c}_*` — titre, chapô, « pour qui », liste, `result`, **`takeaway_label` + `takeaway_body`** (2e encadré au libellé libre) et **`price` / `duration`** (ligne « Investissement · Format », qui retombe sur la fiche de l'offre liée si elle est vide)
 - Méthode : `method_steps` (répéteur : `number` + `title` + `description`) — Cadrage / Diagnostic / Construction / Restitution
-- « Pour qui » : `audience_items` (répéteur : `text`)
+- « Vous êtes RH ou dirigeant ? » : `audience_title` + `audience_body` + `audience_conclusion` (run 16 ; `audience_items`, l'ancienne liste, est masquée — texte conservé)
+- Retirés de la page au run 16, champs conservés & masqués : `observe_*`
 - Témoignages : M2M ou filtre dynamique `testimonials` `audience=organisation`
 - FAQ : filtre `faq_items` `scope=org`
 - CTA : `cta_title`, `cta_label`
@@ -152,6 +154,7 @@ Deux familles de contenu, deux traitements :
 - `title`, `summary` (le contexte en une phrase)
 - `situation`, `actions` (« ce qui a été mis en place »), `result` (chiffré si possible)
 - `image` (illustration optionnelle — c'est ce qui permet d'y verser le portfolio), `sector`, `period_label`
+- `offer_scopes` (cases à cocher, slugs d'offre) : le cas s'affiche **en plus** sur ces pages d'offre. Aucune case = accueil uniquement (l'inverse du défaut des témoignages, cf. `OFFER_SCOPE`)
 - statut + `sort`
 
 > Une **collection** et non un répéteur de `home_page` : un répéteur Directus est du JSON pur, il ne peut pas porter de relation fichier. Un cas doit pouvoir porter une image. Affichage : 1 cas → pleine largeur, 2+ → carrousel (cf. `04-pages/01-accueil`).
@@ -273,8 +276,8 @@ Règles :
 | `/a-propos` | `about_page` |
 | `/organisations` | `org_hub_page` + `offers` (b2b) + `faq_items` (org) + `testimonials` (b2b) |
 | `/particuliers` | `b2c_hub_page` + `faq_items` (b2c) + `testimonials` (b2c) |
-| `/organisations/*` (offres) | `offers` (par slug) + `faq_items` + `testimonials` |
-| `/particuliers/*` (offres) | `offers` (par slug) + `faq_items` |
+| `/organisations/*` (offres) | `offers` (par slug) + `faq_items` + `testimonials` + `case_studies` (cochés) |
+| `/particuliers/*` (offres) | `offers` (par slug) + `faq_items` + `case_studies` (cochés) |
 | `/ressources` | `resources_page` + `articles` + `article_categories` + `resources` |
 | `/ressources/[slug]` | `articles` (par slug) |
 | `/newsletter` | `newsletter_page` |

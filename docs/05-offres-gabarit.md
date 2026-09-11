@@ -10,13 +10,13 @@ Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en r
 1. **Accroche** — `accroche_title` + `accroche_subtitle` (hero) + `accroche_body` + `accroche_signature` + CTA (`cta_label`).
 2. **Ce que ça change (bénéfices)** — `outcomes_title` / `_intro` / `outcomes` (répéteur title/body).
 3. **Ce que je vois souvent (contexte)** — `context_title` / `context_items` / `context_conclusion`.
-4. **Une approche qui relie** — `approche_title` / `approche_body` (rich text) / `approche_signature` (encadré).
-5. **Ce que comprend la mission / Ce qu'on fait ensemble** — `mission_title` / `mission_intro` / `mission_includes`.
+4. **Preuve par l'exemple** (run 16) — habillage `proof_eyebrow` / `proof_title` / `proof_intro` + cas de `case_studies` qui cochent l'offre dans `offer_scopes`. Même carte et même carrousel que l'accueil (1 cas → pleine largeur, 2+ → piste défilante) ; **masquée si aucun cas ne pointe l'offre**.
+5. **Une approche qui relie** — `approche_title` / `approche_body` (rich text) / `approche_signature` (encadré).
 6. **Un regard / une expérience** (optionnel) — `background_title` / `background_body` (rich text, listes possibles). *Récit terrain, surtout B2C.*
-7. **Comment ça se passe / Le format** — `format_title` / `format_body` (rich text).
-8. **Pour qui (✓) et pas pour vous (✗)** — `audience_fit` (✓) + `audience_fit_exclude` (✗, optionnel) + `audience_fit_conclusion`.
-9. **Ce que vous emportez** (optionnel) — `takeaways_title` / `_intro` / `takeaways` (répéteur, ✓).
-10. **Investissement** — `price_label` + `price_note` (ex. paiement 2-3×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base).
+7. **Ce que comprend la mission / Ce qu'on fait ensemble** + **Pour qui (✓) et pas pour vous (✗)** (2 colonnes) — `mission_*` d'un côté, `audience_fit` (✓) + `audience_fit_exclude` (✗) + `audience_fit_conclusion` de l'autre.
+8. **Investissement** — `price_label` + `price_note` (ex. paiement 2-3×, séance découverte offerte). **Mention `TVA non applicable, art. 293 B du CGI`** affichée près du prix (franchise en base). Remonté ici au run 16 : le prix se lit dans la foulée de ce qu'il achète.
+9. **Comment ça se passe / Le format** — `format_title` / `format_body` (rich text).
+10. **Ce que vous emportez** (optionnel) — `takeaways_title` / `_intro` / `takeaways` (répéteur, ✓).
 11. **FAQ** — `faq_items` filtrés par scope (`FAQ_SCOPE_BY_SLUG` + `general`).
 12. **Témoignages** — **centralisés** : liste `testimonials` filtrée par `audience` de l'offre (B2B → organisation, B2C → particulier), vedettes d'abord (`-featured, sort`) ; masqué si vide. (Plus de pin M2O par offre — voir `04` §Centralisation.)
 13. **CTA final** — `cta_title` / `cta_body` / `cta_label` → `/contact`.
@@ -42,4 +42,5 @@ Chaque offre tire ses FAQ par `scope` (+ `general`), cf. `FAQ_SCOPE_BY_SLUG` : `
 - `h1` = `accroche_title`. SEO par offre (`meta_*`, `og_image`). Breadcrumb (hub → offre).
 
 ## Critères d'acceptation
+- Un cas concret ne sort sur une page d'offre que si elle est **cochée** dans `case_studies.offer_scopes` (règle inverse du défaut des témoignages : un cas raconte une mission précise).
 - Une seule implémentation de gabarit sert les 5 offres. Ajout/édition d'une offre en back-office → page complète sans dev. Mention 293 B présente. Prix affichés sans ligne de TVA (franchise en base).

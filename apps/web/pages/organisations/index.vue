@@ -99,49 +99,7 @@ useSeoMeta({
         />
       </section>
 
-      <!-- 2. Ce que j'observe — tentacule à droite (alternance sur la page) -->
-      <section v-if="content.observe" v-reveal class="relative isolate overflow-hidden bg-paper-2">
-        <TentacleAccent
-          side="right"
-          name="tentacule-1-trait"
-          class="absolute -right-16 -top-10 -z-10 hidden w-[26rem] rotate-12 text-teal-700/[0.06] lg:block"
-        />
-        <div class="mx-auto max-w-6xl px-4 py-20">
-          <SectionHeading
-            :title="content.observe.title || 'Ce que j\'observe'"
-            :subtitle="content.observe.intro ?? undefined"
-            eyebrow="Ce que j'observe le plus souvent"
-          />
-          <div v-if="content.observe.items.length" class="mt-10 grid gap-6 sm:grid-cols-2">
-            <article
-              v-for="(item, i) in content.observe.items"
-              :key="i"
-              class="rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
-            >
-              <!-- Pastille centrée dans la carte (retour Éléonore 2026-08-18). -->
-              <span
-                class="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-orange-100 text-orange-700 ring-1 ring-orange-200"
-              >
-                <Icon :name="`material-symbols:${item.icon || 'insights'}`" class="h-6 w-6" />
-              </span>
-              <h3 v-if="item.title" class="mt-4 font-display text-lg font-semibold text-ink">
-                <AccentText :text="item.title" />
-              </h3>
-              <p v-if="item.body" class="mt-2 leading-relaxed text-ink/65">
-                <AccentText :text="item.body" />
-              </p>
-            </article>
-          </div>
-          <p
-            v-if="content.observe.conclusion"
-            class="mt-10 max-w-2xl whitespace-pre-line text-lg leading-relaxed text-ink/80"
-          >
-            <AccentText :text="content.observe.conclusion" />
-          </p>
-        </div>
-      </section>
-
-      <!-- 3. Les offres B2B. Si les « trois enjeux » sont renseignés (cartes
+      <!-- 2. Les offres B2B. Si les « trois enjeux » sont renseignés (cartes
            détaillées, même trame que les particuliers), ils priment ; sinon on
            retombe sur les cartes compactes dynamiques (`offers`). -->
       <section
@@ -200,8 +158,12 @@ useSeoMeta({
                   </li>
                 </ul>
               </div>
-              <!-- Pied de carte (résultat + CTA) poussé en bas → aligné entre les cartes -->
-              <div v-if="situation.result || situation.ctaLabel" class="mt-auto pt-6">
+              <!-- Pied de carte (résultat + à-retenir + investissement + CTA) poussé
+                   en bas → aligné entre les cartes -->
+              <div
+                v-if="situation.result || situation.takeaway || situation.price || situation.duration || situation.ctaLabel"
+                class="mt-auto pt-6"
+              >
                 <p
                   v-if="situation.result"
                   class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
@@ -209,11 +171,41 @@ useSeoMeta({
                   <span class="font-semibold text-teal-700">Résultat : </span
                   ><AccentText :text="situation.result" />
                 </p>
+                <!-- 2e encadré au libellé libre (« Ce que ça vous évite », « Pourquoi
+                     ça compte », « Ce que vous y gagnez » — run 16) : doré, pour ne pas
+                     se confondre avec le résultat juste au-dessus. -->
+                <p
+                  v-if="situation.takeaway"
+                  class="rounded-2xl bg-orange-50 p-4 text-sm leading-relaxed text-ink/75"
+                  :class="situation.result ? 'mt-3' : ''"
+                >
+                  <span class="font-semibold text-orange-600"
+                    >{{ situation.takeaway.label }} : </span
+                  ><AccentText :text="situation.takeaway.body" />
+                </p>
+                <!-- Investissement & format annoncés AVANT le bouton : la lecture
+                     « ce qu'on travaille → ce que ça donne → combien » se termine par
+                     le prix, sans aller le chercher sur la page d'offre. Deux lignes
+                     plutôt qu'une séparée par un point médian : dans une carte au
+                     tiers de la largeur, la ligne unique se coupait toujours en
+                     laissant le séparateur en bout de ligne. -->
+                <dl
+                  v-if="situation.price || situation.duration"
+                  class="mt-5 space-y-1 text-sm text-ink/70"
+                >
+                  <div v-if="situation.price" class="flex flex-wrap gap-x-1.5">
+                    <dt class="font-semibold text-ink">Investissement :</dt>
+                    <dd>{{ situation.price }}</dd>
+                  </div>
+                  <div v-if="situation.duration" class="flex flex-wrap gap-x-1.5">
+                    <dt class="font-semibold text-ink">Format :</dt>
+                    <dd>{{ situation.duration }}</dd>
+                  </div>
+                </dl>
                 <NuxtLink
                   v-if="situation.ctaLabel"
                   :to="situation.ctaLink"
-                  class="inline-flex w-fit items-center gap-1.5 rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-700"
-                  :class="situation.result ? 'mt-5' : ''"
+                  class="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-teal-700"
                 >
                   {{ situation.ctaLabel }}
                   <span aria-hidden="true">→</span>
@@ -241,7 +233,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 4. Ma façon de travailler — même traitement que « Ma méthode » sur
+      <!-- 3. Ma façon de travailler — même traitement que « Ma méthode » sur
            l'accueil (demande Éléonore) : fond marine, titre clair et frise
            numérotée CENTRÉE reliée par un filet doré. -->
       <section
@@ -288,7 +280,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 5. Ce qui différencie mon approche -->
+      <!-- 4. Ce qui différencie mon approche -->
       <section v-if="content.differentiator" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
           side="left"
@@ -303,7 +295,9 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 6. Cet accompagnement est fait pour vous si… — beige soutenu -->
+      <!-- 5. Vous êtes RH ou dirigeant ? — beige soutenu. Remplace la liste
+           « cet accompagnement est fait pour vous si… » (run 16, Éléonore) : un
+           paragraphe qui parle aux RH internes, puis la phrase de clôture. -->
       <section v-if="content.audience" v-reveal class="relative isolate overflow-hidden bg-paper-3">
         <TentacleAccent
           side="right"
@@ -312,23 +306,18 @@ useSeoMeta({
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.audience.title || 'Pour qui ?'" eyebrow="Cet accompagnement est fait pour vous si…" />
-            <ul v-if="content.audience.items.length" class="mt-8 space-y-3">
-              <li
-                v-for="(item, i) in content.audience.items"
-                :key="i"
-                class="flex items-start gap-3 text-ink/80"
-              >
-                <Icon
-                  name="material-symbols:check-circle-rounded"
-                  class="mt-0.5 h-5 w-5 flex-none text-orange-500"
-                />
-                <span><AccentText :text="item" /></span>
-              </li>
-            </ul>
+            <!-- Titre doré via la convention `**…**` (Éléonore : « titre jaune ») :
+                 elle garde la main dessus depuis l'admin. -->
+            <SectionHeading v-if="content.audience.title" :title="content.audience.title" />
+            <p
+              v-if="content.audience.body"
+              class="mt-5 whitespace-pre-line text-lg leading-relaxed text-ink/75"
+            >
+              <AccentText :text="content.audience.body" />
+            </p>
             <p
               v-if="content.audience.conclusion"
-              class="mt-8 whitespace-pre-line leading-relaxed text-ink/80"
+              class="mt-8 whitespace-pre-line rounded-2xl bg-white/70 p-5 leading-relaxed text-ink/80 shadow-soft"
             >
               <AccentText :text="content.audience.conclusion" />
             </p>
@@ -336,7 +325,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 7. FAQ (faq_items scope=org) — même traitement que le hub Particuliers :
+      <!-- 6. FAQ (faq_items scope=org) — même traitement que le hub Particuliers :
            colonne centrée, masquée tant qu'aucune question n'est rangée dans ce périmètre. -->
       <section v-if="content.faq.length" v-reveal class="relative isolate overflow-hidden bg-orange-50">
         <TentacleAccent
@@ -354,7 +343,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 8. Témoignages B2B — masqués si vides -->
+      <!-- 7. Témoignages B2B — masqués si vides -->
       <section
         v-if="content.testimonials.length"
         v-reveal
@@ -378,7 +367,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 9. CTA final — même bloc que l'accueil (marine dégradé + 2 bulles,
+      <!-- 8. CTA final — même bloc que l'accueil (marine dégradé + 2 bulles,
            bouton doré) plutôt que le bandeau marine sombre (demande Éléonore). -->
       <section v-reveal class="relative isolate mx-auto max-w-6xl overflow-hidden px-4 py-20">
         <TentacleAccent

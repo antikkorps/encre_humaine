@@ -9,15 +9,12 @@ import {
   mapOffers,
   mapPhoto,
   mapSeo,
-  mapStringList,
   mapTestimonials,
-  mapTitledItems,
   type NumberedStep,
   type RawSiteDefaults,
   str,
   TESTIMONIAL_FIELDS,
   TESTIMONIAL_SORT,
-  type TitledItem,
 } from "./_shared";
 import { type B2cSituation, mapSituation } from "./b2c-hub";
 
@@ -39,10 +36,6 @@ export interface RawOrgHub {
   accroche_body?: string | null;
   accroche_signature?: string | null;
   accroche_photo?: FileField;
-  observe_title?: string | null;
-  observe_intro?: string | null;
-  observe_items?: unknown; // répéteur { title, body }
-  observe_conclusion?: string | null;
   offers_title?: string | null;
   situations_title?: string | null;
   situations_intro?: string | null;
@@ -51,6 +44,10 @@ export interface RawOrgHub {
   situation_a_audience?: string | null;
   situation_a_items?: unknown; // répéteur { text }
   situation_a_result?: string | null;
+  situation_a_takeaway_label?: string | null;
+  situation_a_takeaway_body?: string | null;
+  situation_a_price?: string | null;
+  situation_a_duration?: string | null;
   situation_a_cta_label?: string | null;
   situation_a_cta_link?: string | null;
   situation_b_title?: string | null;
@@ -58,6 +55,10 @@ export interface RawOrgHub {
   situation_b_audience?: string | null;
   situation_b_items?: unknown;
   situation_b_result?: string | null;
+  situation_b_takeaway_label?: string | null;
+  situation_b_takeaway_body?: string | null;
+  situation_b_price?: string | null;
+  situation_b_duration?: string | null;
   situation_b_cta_label?: string | null;
   situation_b_cta_link?: string | null;
   situation_c_title?: string | null;
@@ -65,6 +66,10 @@ export interface RawOrgHub {
   situation_c_audience?: string | null;
   situation_c_items?: unknown;
   situation_c_result?: string | null;
+  situation_c_takeaway_label?: string | null;
+  situation_c_takeaway_body?: string | null;
+  situation_c_price?: string | null;
+  situation_c_duration?: string | null;
   situation_c_cta_label?: string | null;
   situation_c_cta_link?: string | null;
   method_title?: string | null;
@@ -73,7 +78,7 @@ export interface RawOrgHub {
   differentiator_title?: string | null;
   differentiator_body?: string | null; // rich text
   audience_title?: string | null;
-  audience_items?: unknown; // répéteur text
+  audience_body?: string | null;
   audience_conclusion?: string | null;
   testimonials_title?: string | null;
   cta_title?: string | null;
@@ -86,6 +91,20 @@ export interface RawOrgHub {
   no_index?: boolean | null;
 }
 
+/**
+ * Carte « enjeu » du hub B2B : la carte B2C commune, plus ce que le run 16 y a
+ * ajouté — un 2e encadré au libellé libre (« Ce que ça vous évite », « Pourquoi ça
+ * compte »…) et la ligne investissement/format juste au-dessus du bouton.
+ */
+export interface OrgSituation extends B2cSituation {
+  /** 2e encadré (masqué si son texte est vide) ; le libellé change d'une offre à l'autre. */
+  takeaway: { label: string; body: string } | null;
+  /** « Investissement : … » — saisi sur la carte, sinon repris de la fiche d'offre liée. */
+  price: string | null;
+  /** « Format : … » — même règle de repli. */
+  duration: string | null;
+}
+
 export interface OrgHubContent {
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
@@ -94,12 +113,6 @@ export interface OrgHubContent {
   accrocheSignature: string | null;
   /** Illustration d'accroche optionnelle (Directus) — masquée si absente. */
   accrochePhoto: ContentPhoto | null;
-  observe: {
-    title: string;
-    intro: string | null;
-    items: TitledItem[];
-    conclusion: string | null;
-  } | null;
   /** Titre de la section offres (cartes dynamiques). */
   offersTitle: string;
   offers: OfferSummary[];
@@ -107,10 +120,11 @@ export interface OrgHubContent {
    * Renseignées en back-office → remplacent les cartes offres compactes. */
   situationsTitle: string | null;
   situationsIntro: string | null;
-  situations: B2cSituation[];
+  situations: OrgSituation[];
   method: { title: string; intro: string | null; steps: NumberedStep[] } | null;
   differentiator: { title: string; bodyHtml: string } | null;
-  audience: { title: string; items: string[]; conclusion: string | null } | null;
+  /** « Vous êtes RH ou dirigeant ? » — titre + paragraphe + phrase de clôture. */
+  audience: { title: string; body: string | null; conclusion: string | null } | null;
   /** FAQ du hub (scope=org) ; section masquée tant qu'aucune question n'y est rangée. */
   faq: FaqItem[];
   testimonialsTitle: string;
@@ -123,6 +137,30 @@ export interface OrgHubContent {
 /** Signature du sanitizer injecté (cf. `sanitizeRichText`). */
 type Sanitize = (html?: string | null) => string;
 
+/**
+ * Ajoute à une carte B2C les éléments propres au hub B2B. Investissement et format
+ * **retombent sur la fiche de l'offre liée** quand ils ne sont pas saisis sur la
+ * carte : un prix se change alors à un seul endroit, et le hub ne peut pas
+ * annoncer autre chose que la page d'offre (retour Éléonore 2026-09-11).
+ */
+export function mapOrgSituation(
+  base: B2cSituation | null,
+  raw: { takeawayLabel?: unknown; takeawayBody?: unknown; price?: unknown; duration?: unknown },
+  offers: OfferSummary[],
+): OrgSituation | null {
+  if (!base) return null;
+  const linked = offers.find((o) => base.ctaLink === `/organisations/${o.slug}`);
+  const takeawayBody = str(raw.takeawayBody);
+  return {
+    ...base,
+    takeaway: takeawayBody
+      ? { label: str(raw.takeawayLabel) || "À retenir", body: takeawayBody }
+      : null,
+    price: str(raw.price) || linked?.priceLabel || null,
+    duration: str(raw.duration) || linked?.durationLabel || null,
+  };
+}
+
 /** Compose le payload du hub (pur ; `sanitize` injecté pour le rich text). */
 export function mapOrgHubContent(
   hub: RawOrgHub,
@@ -133,56 +171,80 @@ export function mapOrgHubContent(
   assetBase: string,
   sanitize: Sanitize,
 ): OrgHubContent {
-  const observeItems = mapTitledItems(hub.observe_items);
-  const observeTitle = str(hub.observe_title);
-  const observeIntro = str(hub.observe_intro);
-  const observeConclusion = str(hub.observe_conclusion);
   const steps = mapNumberedSteps(hub.method_steps);
   const methodTitle = str(hub.method_title);
   const methodIntro = str(hub.method_intro);
   const diffTitle = str(hub.differentiator_title);
   const diffHtml = sanitize(hub.differentiator_body);
-  const audienceItems = mapStringList(hub.audience_items);
   const audienceTitle = str(hub.audience_title);
+  const audienceBody = str(hub.audience_body);
   const audienceConclusion = str(hub.audience_conclusion);
+  const offerSummaries = mapOffers(offers, "organisation");
   const situations = [
-    mapSituation(
+    mapOrgSituation(
+      mapSituation(
+        {
+          title: hub.situation_a_title,
+          body: hub.situation_a_body,
+          audience: hub.situation_a_audience,
+          items: hub.situation_a_items,
+          result: hub.situation_a_result,
+          ctaLabel: hub.situation_a_cta_label,
+          ctaLink: hub.situation_a_cta_link,
+        },
+        "/organisations/audit-rh",
+      ),
       {
-        title: hub.situation_a_title,
-        body: hub.situation_a_body,
-        audience: hub.situation_a_audience,
-        items: hub.situation_a_items,
-        result: hub.situation_a_result,
-        ctaLabel: hub.situation_a_cta_label,
-        ctaLink: hub.situation_a_cta_link,
+        takeawayLabel: hub.situation_a_takeaway_label,
+        takeawayBody: hub.situation_a_takeaway_body,
+        price: hub.situation_a_price,
+        duration: hub.situation_a_duration,
       },
-      "/organisations/audit-rh",
+      offerSummaries,
     ),
-    mapSituation(
+    mapOrgSituation(
+      mapSituation(
+        {
+          title: hub.situation_b_title,
+          body: hub.situation_b_body,
+          audience: hub.situation_b_audience,
+          items: hub.situation_b_items,
+          result: hub.situation_b_result,
+          ctaLabel: hub.situation_b_cta_label,
+          ctaLink: hub.situation_b_cta_link,
+        },
+        "/organisations/carte-des-talents",
+      ),
       {
-        title: hub.situation_b_title,
-        body: hub.situation_b_body,
-        audience: hub.situation_b_audience,
-        items: hub.situation_b_items,
-        result: hub.situation_b_result,
-        ctaLabel: hub.situation_b_cta_label,
-        ctaLink: hub.situation_b_cta_link,
+        takeawayLabel: hub.situation_b_takeaway_label,
+        takeawayBody: hub.situation_b_takeaway_body,
+        price: hub.situation_b_price,
+        duration: hub.situation_b_duration,
       },
-      "/organisations/carte-des-talents",
+      offerSummaries,
     ),
-    mapSituation(
+    mapOrgSituation(
+      mapSituation(
+        {
+          title: hub.situation_c_title,
+          body: hub.situation_c_body,
+          audience: hub.situation_c_audience,
+          items: hub.situation_c_items,
+          result: hub.situation_c_result,
+          ctaLabel: hub.situation_c_cta_label,
+          ctaLink: hub.situation_c_cta_link,
+        },
+        "/organisations/de-l-expert-au-manager",
+      ),
       {
-        title: hub.situation_c_title,
-        body: hub.situation_c_body,
-        audience: hub.situation_c_audience,
-        items: hub.situation_c_items,
-        result: hub.situation_c_result,
-        ctaLabel: hub.situation_c_cta_label,
-        ctaLink: hub.situation_c_cta_link,
+        takeawayLabel: hub.situation_c_takeaway_label,
+        takeawayBody: hub.situation_c_takeaway_body,
+        price: hub.situation_c_price,
+        duration: hub.situation_c_duration,
       },
-      "/organisations/de-l-expert-au-manager",
+      offerSummaries,
     ),
-  ].filter((s): s is B2cSituation => s !== null);
+  ].filter((s): s is OrgSituation => s !== null);
 
   return {
     accrocheTitle: str(hub.accroche_title) || null,
@@ -190,17 +252,8 @@ export function mapOrgHubContent(
     accrocheBody: str(hub.accroche_body) || null,
     accrocheSignature: str(hub.accroche_signature) || null,
     accrochePhoto: mapPhoto(hub.accroche_photo, assetBase),
-    observe:
-      observeTitle || observeIntro || observeItems.length || observeConclusion
-        ? {
-            title: observeTitle,
-            intro: observeIntro || null,
-            items: observeItems,
-            conclusion: observeConclusion || null,
-          }
-        : null,
     offersTitle: str(hub.offers_title) || "Mes offres pour les organisations",
-    offers: mapOffers(offers, "organisation"),
+    offers: offerSummaries,
     situationsTitle: str(hub.situations_title) || null,
     situationsIntro: str(hub.situations_intro) || null,
     situations,
@@ -210,8 +263,12 @@ export function mapOrgHubContent(
         : null,
     differentiator: diffTitle || diffHtml ? { title: diffTitle, bodyHtml: diffHtml } : null,
     audience:
-      audienceTitle || audienceItems.length || audienceConclusion
-        ? { title: audienceTitle, items: audienceItems, conclusion: audienceConclusion || null }
+      audienceTitle || audienceBody || audienceConclusion
+        ? {
+            title: audienceTitle,
+            body: audienceBody || null,
+            conclusion: audienceConclusion || null,
+          }
         : null,
     faq: mapFaqItems(faq, sanitize),
     testimonialsTitle: str(hub.testimonials_title) || "Ils m'ont fait confiance",
@@ -240,10 +297,6 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
           "accroche_body",
           "accroche_signature",
           "accroche_photo",
-          "observe_title",
-          "observe_intro",
-          "observe_items",
-          "observe_conclusion",
           "offers_title",
           "situations_title",
           "situations_intro",
@@ -252,6 +305,10 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
           "situation_a_audience",
           "situation_a_items",
           "situation_a_result",
+          "situation_a_takeaway_label",
+          "situation_a_takeaway_body",
+          "situation_a_price",
+          "situation_a_duration",
           "situation_a_cta_label",
           "situation_a_cta_link",
           "situation_b_title",
@@ -259,6 +316,10 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
           "situation_b_audience",
           "situation_b_items",
           "situation_b_result",
+          "situation_b_takeaway_label",
+          "situation_b_takeaway_body",
+          "situation_b_price",
+          "situation_b_duration",
           "situation_b_cta_label",
           "situation_b_cta_link",
           "situation_c_title",
@@ -266,6 +327,10 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
           "situation_c_audience",
           "situation_c_items",
           "situation_c_result",
+          "situation_c_takeaway_label",
+          "situation_c_takeaway_body",
+          "situation_c_price",
+          "situation_c_duration",
           "situation_c_cta_label",
           "situation_c_cta_link",
           "method_title",
@@ -274,7 +339,7 @@ export async function loadOrgHubContent(): Promise<OrgHubContent> {
           "differentiator_title",
           "differentiator_body",
           "audience_title",
-          "audience_items",
+          "audience_body",
           "audience_conclusion",
           "testimonials_title",
           "cta_title",

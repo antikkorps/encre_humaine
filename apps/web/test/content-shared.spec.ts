@@ -1,13 +1,17 @@
 // @vitest-environment node
 //
 // Helpers partagés des loaders de contenu — server/utils/content/_shared.ts.
-// Coercion fichier → URL d'asset + alt, listes de répéteurs, résolution SEO.
+// Coercion fichier → URL d'asset + alt, listes de répéteurs, résolution SEO,
+// et la « preuve par l'exemple » partagée par l'accueil et les pages d'offre.
 import { describe, expect, it } from "vitest";
 import {
+  caseStudiesForOffer,
+  mapCaseStudies,
   mapFaqItems,
   mapNumberedSteps,
   mapOffers,
   mapPhoto,
+  mapProofSection,
   mapSeo,
   mapStringList,
   mapTestimonialItem,
@@ -355,5 +359,72 @@ describe("safeHref", () => {
     expect(safeHref("   ")).toBe("");
     expect(safeHref(null)).toBe("");
     expect(safeHref(42)).toBe("");
+  });
+});
+
+describe("mapCaseStudies / caseStudiesForOffer / mapProofSection", () => {
+  it("cas : image résolue en URL d'asset, périmètres lus, lignes vides ignorées", () => {
+    expect(
+      mapCaseStudies(
+        [
+          {
+            title: "Un cas",
+            summary: "60 collaborateurs.",
+            situation: "Compétences mal identifiées.",
+            actions: "Cartographie.",
+            result: "NPS +42.",
+            image: "file-1",
+            sector: "Conseil",
+            period_label: "2 ans",
+            offer_scopes: ["carte-des-talents"],
+          },
+          { title: "", situation: "" },
+        ],
+        BASE,
+      ),
+    ).toEqual([
+      {
+        title: "Un cas",
+        summary: "60 collaborateurs.",
+        situation: "Compétences mal identifiées.",
+        actions: "Cartographie.",
+        result: "NPS +42.",
+        image: `${BASE}/assets/file-1`,
+        imageAlt: undefined,
+        sector: "Conseil",
+        periodLabel: "2 ans",
+        offers: ["carte-des-talents"],
+      },
+    ]);
+  });
+
+  it("cas : entrée non tableau → liste vide", () => {
+    expect(mapCaseStudies(null, BASE)).toEqual([]);
+  });
+
+  it("périmètre : une page d'offre ne prend QUE les cas qui la cochent", () => {
+    const cases = mapCaseStudies(
+      [
+        { title: "Épinglé", situation: "…", offer_scopes: ["carte-des-talents"] },
+        { title: "Sans périmètre", situation: "…" },
+      ],
+      BASE,
+    );
+    expect(caseStudiesForOffer(cases, "carte-des-talents").map((c) => c.title)).toEqual([
+      "Épinglé",
+    ]);
+    expect(caseStudiesForOffer(cases, "audit-rh")).toEqual([]);
+    expect(caseStudiesForOffer(cases, "")).toEqual([]);
+  });
+
+  it("section : masquée sans cas, intitulés par défaut sinon", () => {
+    expect(mapProofSection({ proof_title: "Concrètement." }, [])).toBeNull();
+    const cases = mapCaseStudies([{ title: "Un cas", situation: "Une PME." }], BASE);
+    expect(mapProofSection({}, cases)).toEqual({
+      eyebrow: "Preuve par l'exemple",
+      title: "Ce que ça donne, **concrètement**.",
+      intro: null,
+      cases,
+    });
   });
 });
