@@ -12,6 +12,7 @@
 import { get, patch, post } from "./api.ts";
 import { homePageContent } from "./content-home.ts";
 import { OFFER_RENAMES, run15CaseStudy } from "./content-run15.ts";
+import { run16CaseStudies, run16ExistingCaseScopes } from "./content-run16.ts";
 import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
@@ -1808,11 +1809,21 @@ async function main(): Promise<void> {
     // Médiateur conso : obligatoire dès l'ouverture de la boutique (B2C).
     mediatorSentence: "un médiateur de la consommation sera désigné à l'ouverture de la boutique",
   };
-  // ── case_studies (preuve par l'exemple, run 15) ────────────────────────────
+  // ── case_studies (preuve par l'exemple, runs 15 & 16) ──────────────────────
+  // Les trois cas racontent la même mission sous trois angles : ils sortent sur
+  // l'accueil ET sur la page Carte des Talents (`offer_scopes`).
   await upsert("case_studies", "title", run15CaseStudy.title, {
     ...run15CaseStudy,
+    offer_scopes: [...run16ExistingCaseScopes.offer_scopes],
     ...PUB,
   });
+  for (const study of run16CaseStudies) {
+    await upsert("case_studies", "title", study.title, {
+      ...study,
+      offer_scopes: [...study.offer_scopes],
+      ...PUB,
+    });
+  }
 
   const legalDocs: { slug: string; title: string; body: string }[] = [
     {

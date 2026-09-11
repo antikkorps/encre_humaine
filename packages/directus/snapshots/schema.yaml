@@ -5539,7 +5539,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -5579,7 +5579,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -5619,7 +5619,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special:
         - date-created
       translations: null
@@ -5660,7 +5660,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special:
         - date-updated
       translations: null
@@ -5701,7 +5701,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special:
         - user-created
       translations: null
@@ -5742,7 +5742,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special:
         - user-updated
       translations: null
@@ -5753,6 +5753,73 @@ fields:
       name: user_updated
       table: case_studies
       data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: offer_scopes
+    type: json
+    meta:
+      collection: case_studies
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: Offre Audit RH (organisations)
+            value: audit-rh
+          - text: Offre Carte des Talents (organisations)
+            value: carte-des-talents
+          - text: Offre De l'Expert au Manager (organisations)
+            value: de-l-expert-au-manager
+          - text: Offre Clarifier son projet (particuliers)
+            value: clarifier-son-projet
+          - text: Offre Se (re)positionner (particuliers)
+            value: se-repositionner
+        showAsDot: false
+      field: offer_scopes
+      group: null
+      hidden: false
+      interface: select-multiple-checkbox
+      note: >-
+        Cochez les offres où ce cas doit aussi apparaître (section « Preuve par
+        l'exemple » de la page d'offre). Aucune case = le cas reste sur
+        l'accueil.
+      options:
+        choices:
+          - text: Offre Audit RH (organisations)
+            value: audit-rh
+          - text: Offre Carte des Talents (organisations)
+            value: carte-des-talents
+          - text: Offre De l'Expert au Manager (organisations)
+            value: de-l-expert-au-manager
+          - text: Offre Clarifier son projet (particuliers)
+            value: clarifier-son-projet
+          - text: Offre Se (re)positionner (particuliers)
+            value: se-repositionner
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: offer_scopes
+      table: case_studies
+      data_type: json
       default_value: null
       max_length: null
       numeric_precision: null
@@ -12303,7 +12370,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 30
+      sort: 33
       special:
         - cast-json
       translations: null
@@ -12344,7 +12411,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -12384,7 +12451,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 36
+      sort: 39
       special:
         - m2o
       translations: null
@@ -12425,7 +12492,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 42
       special: null
       translations: null
       validation: null
@@ -12466,7 +12533,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 41
+      sort: 44
       special:
         - alias
         - no-data
@@ -12491,7 +12558,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 42
+      sort: 45
       special: null
       translations: null
       validation: null
@@ -12531,7 +12598,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 43
+      sort: 46
       special: null
       translations: null
       validation: null
@@ -12571,7 +12638,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 47
       special:
         - file
       translations: null
@@ -12612,7 +12679,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 48
       special:
         - cast-boolean
       translations: null
@@ -12668,7 +12735,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -12708,7 +12775,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 50
       special: null
       translations: null
       validation: null
@@ -12748,7 +12815,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 48
+      sort: 51
       special:
         - date-created
       translations: null
@@ -12789,7 +12856,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 49
+      sort: 52
       special:
         - date-updated
       translations: null
@@ -12830,7 +12897,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 50
+      sort: 53
       special:
         - user-created
       translations: null
@@ -12871,7 +12938,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 51
+      sort: 54
       special:
         - user-updated
       translations: null
@@ -13298,7 +13365,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 25
       special: null
       translations: null
       validation: null
@@ -13443,7 +13510,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 27
       special:
         - cast-json
       translations: null
@@ -13484,7 +13551,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -13524,7 +13591,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 32
+      sort: 35
       special: null
       translations: null
       validation: null
@@ -13564,7 +13631,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 37
+      sort: 40
       special: null
       translations: null
       validation: null
@@ -13604,7 +13671,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 41
       special: null
       translations: null
       validation: null
@@ -13644,7 +13711,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -13684,7 +13751,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -13724,7 +13791,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -13764,7 +13831,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -13804,7 +13871,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -13844,7 +13911,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 30
       special: null
       translations: null
       validation: null
@@ -13884,7 +13951,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -13924,7 +13991,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -13972,7 +14039,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 31
+      sort: 34
       special:
         - cast-json
       translations: null
@@ -14013,7 +14080,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 33
+      sort: 36
       special: null
       translations: null
       validation: null
@@ -14053,7 +14120,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 34
+      sort: 37
       special: null
       translations: null
       validation: null
@@ -14101,7 +14168,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 35
+      sort: 38
       special:
         - cast-json
       translations: null
@@ -14112,6 +14179,128 @@ fields:
       name: takeaways
       table: offers
       data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: proof_eyebrow
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « Preuve par l''exemple »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: proof_eyebrow
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: proof_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_title
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Défaut : « Ce que ça donne, concrètement. » — les ** passent le fragment
+        en doré
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: proof_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: proof_intro
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: proof_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapeau de section (optionnel). Les cas se gèrent dans « Cas concrets ».
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: proof_intro
+      table: offers
+      data_type: text
       default_value: null
       max_length: null
       numeric_precision: null
@@ -14326,7 +14515,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 52
       special:
         - cast-json
       translations: null
@@ -14360,9 +14549,11 @@ fields:
       display_options: null
       field: audience_items
       group: null
-      hidden: false
+      hidden: true
       interface: list
-      note: Pour qui (✓)
+      note: >-
+        Non affiché depuis le 2026-09-11 — la liste a été remplacée par le
+        paragraphe ci-dessus. Texte conservé.
       options:
         fields:
           - field: text
@@ -14375,7 +14566,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 57
       special:
         - cast-json
       translations: null
@@ -14416,7 +14607,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 60
       special: null
       translations: null
       validation: null
@@ -14456,7 +14647,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 49
+      sort: 62
       special: null
       translations: null
       validation: null
@@ -14497,7 +14688,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 51
+      sort: 64
       special:
         - alias
         - no-data
@@ -14522,7 +14713,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 52
+      sort: 65
       special: null
       translations: null
       validation: null
@@ -14562,7 +14753,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 53
+      sort: 66
       special: null
       translations: null
       validation: null
@@ -14602,7 +14793,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 54
+      sort: 67
       special:
         - file
       translations: null
@@ -14643,7 +14834,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 55
+      sort: 68
       special:
         - cast-boolean
       translations: null
@@ -14757,9 +14948,11 @@ fields:
       display_options: null
       field: observe_title
       group: null
-      hidden: false
+      hidden: true
       interface: input
-      note: null
+      note: >-
+        Bloc « Ce que j'observe » retiré de la page le 2026-09-11. Texte
+        conservé ici, plus affiché sur le site.
       options: null
       readonly: false
       required: false
@@ -14797,9 +14990,11 @@ fields:
       display_options: null
       field: observe_intro
       group: null
-      hidden: false
+      hidden: true
       interface: input-multiline
-      note: null
+      note: >-
+        Bloc « Ce que j'observe » retiré de la page le 2026-09-11. Texte
+        conservé ici, plus affiché sur le site.
       options: null
       readonly: false
       required: false
@@ -14837,9 +15032,11 @@ fields:
       display_options: null
       field: observe_items
       group: null
-      hidden: false
+      hidden: true
       interface: list
-      note: Constats (icône Material Symbols + titre + corps)
+      note: >-
+        Bloc « Ce que j'observe » retiré de la page le 2026-09-11. Texte
+        conservé ici, plus affiché sur le site.
       options:
         fields:
           - field: icon
@@ -14983,9 +15180,11 @@ fields:
       display_options: null
       field: observe_conclusion
       group: null
-      hidden: false
+      hidden: true
       interface: input-multiline
-      note: null
+      note: >-
+        Bloc « Ce que j'observe » retiré de la page le 2026-09-11. Texte
+        conservé ici, plus affiché sur le site.
       options: null
       readonly: false
       required: false
@@ -15070,7 +15269,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 50
       special: null
       translations: null
       validation: null
@@ -15110,7 +15309,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 51
       special: null
       translations: null
       validation: null
@@ -15150,7 +15349,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 41
+      sort: 53
       special: null
       translations: null
       validation: null
@@ -15190,7 +15389,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 42
+      sort: 54
       special: null
       translations: null
       validation: null
@@ -15225,12 +15424,14 @@ fields:
       group: null
       hidden: false
       interface: input
-      note: null
+      note: >-
+        Titre du bloc. Entourez-le de ** pour l'afficher en doré (ex. « **Vous
+        êtes RH ou dirigeant ?** »)
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 43
+      sort: 55
       special: null
       translations: null
       validation: null
@@ -15265,12 +15466,12 @@ fields:
       group: null
       hidden: false
       interface: input-multiline
-      note: null
+      note: Phrase de clôture, affichée en encadré
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 58
       special: null
       translations: null
       validation: null
@@ -15310,7 +15511,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 59
       special: null
       translations: null
       validation: null
@@ -15350,7 +15551,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 48
+      sort: 61
       special: null
       translations: null
       validation: null
@@ -15390,7 +15591,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 50
+      sort: 63
       special: null
       translations: null
       validation: null
@@ -15771,7 +15972,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -15811,7 +16012,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 25
       special: null
       translations: null
       validation: null
@@ -15852,7 +16053,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 26
       special:
         - alias
         - no-data
@@ -15877,7 +16078,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 27
       special: null
       translations: null
       validation: null
@@ -15917,7 +16118,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -15957,7 +16158,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -16005,7 +16206,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 30
       special:
         - cast-json
       translations: null
@@ -16046,7 +16247,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -16086,7 +16287,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 36
       special: null
       translations: null
       validation: null
@@ -16126,7 +16327,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 37
       special: null
       translations: null
       validation: null
@@ -16167,7 +16368,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 30
+      sort: 38
       special:
         - alias
         - no-data
@@ -16192,7 +16393,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 31
+      sort: 39
       special: null
       translations: null
       validation: null
@@ -16232,7 +16433,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 32
+      sort: 40
       special: null
       translations: null
       validation: null
@@ -16272,7 +16473,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 33
+      sort: 41
       special: null
       translations: null
       validation: null
@@ -16320,7 +16521,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 34
+      sort: 42
       special:
         - cast-json
       translations: null
@@ -16361,7 +16562,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 35
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -16401,7 +16602,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 36
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -16441,7 +16642,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 37
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -16453,6 +16654,538 @@ fields:
       data_type: character varying
       default_value: null
       max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_takeaway_label
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_takeaway_label
+      group: null
+      hidden: false
+      interface: input
+      note: Intitulé du 2e encadré, ex. « Ce que ça vous évite »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_a_takeaway_label
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_takeaway_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_takeaway_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Texte du 2e encadré. Vide = encadré masqué
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_a_takeaway_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_price
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_price
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Ligne « Investissement : … » au-dessus du bouton. Vide = reprend
+        l'investissement de la fiche d'offre liée
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_a_price
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_a_duration
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_a_duration
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la
+        fiche d'offre liée
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_a_duration
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_takeaway_label
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_takeaway_label
+      group: null
+      hidden: false
+      interface: input
+      note: Intitulé du 2e encadré, ex. « Pourquoi ça compte »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 32
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_b_takeaway_label
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_takeaway_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_takeaway_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Texte du 2e encadré. Vide = encadré masqué
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_b_takeaway_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_price
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_price
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Ligne « Investissement : … » au-dessus du bouton. Vide = reprend
+        l'investissement de la fiche d'offre liée
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_b_price
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_b_duration
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_b_duration
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la
+        fiche d'offre liée
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 35
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_b_duration
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_takeaway_label
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_takeaway_label
+      group: null
+      hidden: false
+      interface: input
+      note: Intitulé du 2e encadré, ex. « Ce que vous y gagnez »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 44
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_c_takeaway_label
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_takeaway_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_takeaway_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Texte du 2e encadré. Vide = encadré masqué
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 45
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: situation_c_takeaway_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_price
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_price
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Ligne « Investissement : … » au-dessus du bouton. Vide = reprend
+        l'investissement de la fiche d'offre liée
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 46
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_c_price
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: situation_c_duration
+    type: string
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: situation_c_duration
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la
+        fiche d'offre liée
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 47
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: situation_c_duration
+      table: org_hub_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: org_hub_page
+    field: audience_body
+    type: text
+    meta:
+      collection: org_hub_page
+      conditions: null
+      display: null
+      display_options: null
+      field: audience_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Paragraphe principal du bloc
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 56
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: audience_body
+      table: org_hub_page
+      data_type: text
+      default_value: null
+      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: true

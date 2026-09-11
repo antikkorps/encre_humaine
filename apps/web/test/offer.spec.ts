@@ -2,6 +2,7 @@
 //
 // Composition du gabarit Offre — docs/05-offres-gabarit.md.
 // Vérifie : audience bornée, répéteurs mission/outcomes/contexte (titre/corps),
+// preuve par l'exemple épinglée par offre (`offer_scopes`),
 // audience_fit (liste), passage du rich-text `format_body` par l'assainisseur
 // (injecté), FAQ assainie, témoignage masqué si vide, CTA (titre/texte/sous-texte)
 // avec fallbacks, SEO, et le mapping slug → scope(s) de FAQ.
@@ -35,7 +36,7 @@ describe("faqScopesForSlug", () => {
 
 describe("mapOfferContent", () => {
   it("offre minimale : sections vides masquées, audience nulle, CTA replié", () => {
-    const c = mapOfferContent({}, [], [], {}, BASE, wrap);
+    const c = mapOfferContent({}, [], [], [], {}, BASE, wrap);
     expect(c.audience).toBeNull();
     expect(c.title).toBeNull();
     expect(c.accrocheTitle).toBeNull();
@@ -70,13 +71,13 @@ describe("mapOfferContent", () => {
   });
 
   it("borne l'audience (valide conservée, invalide → null)", () => {
-    expect(mapOfferContent({ audience: "organisation" }, [], [], {}, BASE, wrap).audience).toBe(
+    expect(mapOfferContent({ audience: "organisation" }, [], [], [], {}, BASE, wrap).audience).toBe(
       "organisation",
     );
-    expect(mapOfferContent({ audience: "particulier" }, [], [], {}, BASE, wrap).audience).toBe(
+    expect(mapOfferContent({ audience: "particulier" }, [], [], [], {}, BASE, wrap).audience).toBe(
       "particulier",
     );
-    expect(mapOfferContent({ audience: "autre" }, [], [], {}, BASE, wrap).audience).toBeNull();
+    expect(mapOfferContent({ audience: "autre" }, [], [], [], {}, BASE, wrap).audience).toBeNull();
   });
 
   it("assainit format_body via le sanitizer injecté ; titre format & intro mission surchargeables", () => {
@@ -86,6 +87,7 @@ describe("mapOfferContent", () => {
         format_title: "Le déroulé",
         mission_intro: "Sur mesure.",
       },
+      [],
       [],
       [],
       {},
@@ -115,6 +117,7 @@ describe("mapOfferContent", () => {
       },
       [],
       [],
+      [],
       {},
       BASE,
       wrap,
@@ -140,6 +143,7 @@ describe("mapOfferContent", () => {
       },
       [],
       [],
+      [],
       {},
       BASE,
       wrap,
@@ -150,7 +154,9 @@ describe("mapOfferContent", () => {
       signature: "Structurer sans déshumaniser.",
     });
     // Signature seule suffit à afficher la section (titre/corps facultatifs).
-    expect(mapOfferContent({ approche_signature: "x" }, [], [], {}, BASE, wrap).approche).toEqual({
+    expect(
+      mapOfferContent({ approche_signature: "x" }, [], [], [], {}, BASE, wrap).approche,
+    ).toEqual({
       title: null,
       bodyHtml: "",
       signature: "x",
@@ -165,6 +171,7 @@ describe("mapOfferContent", () => {
       },
       [],
       [],
+      [],
       {},
       BASE,
       wrap,
@@ -175,12 +182,14 @@ describe("mapOfferContent", () => {
     });
     // Corps seul suffit (titre facultatif) ; tout vide → null.
     expect(
-      mapOfferContent({ background_body: "<p>x</p>" }, [], [], {}, BASE, wrap).background,
+      mapOfferContent({ background_body: "<p>x</p>" }, [], [], [], {}, BASE, wrap).background,
     ).toEqual({
       title: null,
       bodyHtml: "clean(<p>x</p>)",
     });
-    expect(mapOfferContent({ background_title: "" }, [], [], {}, BASE, wrap).background).toBeNull();
+    expect(
+      mapOfferContent({ background_title: "" }, [], [], [], {}, BASE, wrap).background,
+    ).toBeNull();
   });
 
   it("mappe la liste ✗ « pas pour vous » et les livrables « ce que vous emportez »", () => {
@@ -191,6 +200,7 @@ describe("mapOfferContent", () => {
         takeaways_intro: "Vous repartez avec :",
         takeaways: [{ text: "Un plan d'action concret" }, { text: "" }],
       },
+      [],
       [],
       [],
       {},
@@ -205,7 +215,8 @@ describe("mapOfferContent", () => {
     });
     // Livrables masqués si la liste est vide (titre/intro seuls ne suffisent pas).
     expect(
-      mapOfferContent({ takeaways_title: "T", takeaways: [] }, [], [], {}, BASE, wrap).takeaways,
+      mapOfferContent({ takeaways_title: "T", takeaways: [] }, [], [], [], {}, BASE, wrap)
+        .takeaways,
     ).toBeNull();
   });
 
@@ -214,6 +225,7 @@ describe("mapOfferContent", () => {
       { slug: "audit-rh", audience: "organisation" },
       [{ question: "Combien de temps ?", answer: "<p>4 semaines.</p>" }],
       [{ quote: "Décisif.", author_name: "Marie", audience: "organisation" }, { quote: "" }],
+      [],
       {},
       BASE,
       wrap,
@@ -242,13 +254,36 @@ describe("mapOfferContent", () => {
       },
     ];
     const quotes = (slug: string, audience: string) =>
-      mapOfferContent({ slug, audience }, [], raws, {}, BASE, wrap).testimonials.map(
+      mapOfferContent({ slug, audience }, [], raws, [], {}, BASE, wrap).testimonials.map(
         (t) => t.quote,
       );
 
     expect(quotes("audit-rh", "organisation")).toEqual(["Public org", "Épinglé audit"]);
     expect(quotes("carte-des-talents", "organisation")).toEqual(["Public org"]);
     expect(quotes("clarifier-son-projet", "particulier")).toEqual(["Public b2c"]);
+  });
+
+  it("preuve par l'exemple : seuls les cas qui cochent l'offre, masquée sinon", () => {
+    const cases = [
+      { title: "Plan de formation", situation: "Catalogue.", offer_scopes: ["carte-des-talents"] },
+      { title: "Entretiens", situation: "Trames.", offer_scopes: ["carte-des-talents"] },
+      // Aucun périmètre : reste sur l'accueil, ne s'invite pas sur les offres.
+      { title: "Cas sans périmètre", situation: "…" },
+    ];
+    const c = mapOfferContent(
+      { slug: "carte-des-talents", audience: "organisation", proof_title: "Concrètement." },
+      [],
+      [],
+      cases,
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.proof?.eyebrow).toBe("Preuve par l'exemple");
+    expect(c.proof?.title).toBe("Concrètement.");
+    expect(c.proof?.cases.map((x) => x.title)).toEqual(["Plan de formation", "Entretiens"]);
+    // Une autre offre ne récupère rien → section masquée.
+    expect(mapOfferContent({ slug: "audit-rh" }, [], [], cases, {}, BASE, wrap).proof).toBeNull();
   });
 
   it("mappe accroche, CTA, prix/durée et le SEO (fallback site_settings)", () => {
@@ -269,6 +304,7 @@ describe("mapOfferContent", () => {
         cta_subtext: "30 min sans engagement.",
         meta_title: "",
       },
+      [],
       [],
       [],
       { brand_name: "L'Encre Humaine", default_meta_description: "Conseil RH." },

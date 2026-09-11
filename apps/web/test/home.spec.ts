@@ -9,11 +9,9 @@ import {
   mapArticles,
   mapB2c,
   mapBuild,
-  mapCaseStudies,
   mapHomeContent,
   mapIntro,
   mapMethod,
-  mapProof,
   mapRecognition,
   mapSectors,
   mapStats,
@@ -125,54 +123,7 @@ describe("mapMethod / mapWhy", () => {
   });
 });
 
-describe("mapProof / mapCaseStudies / mapSectors", () => {
-  it("preuve : masquée tant qu'aucun cas n'est publié", () => {
-    expect(mapProof({ proof_title: "Concrètement." }, [])).toBeNull();
-  });
-
-  it("preuve : intitulés par défaut si l'habillage n'est pas renseigné", () => {
-    const cases = mapCaseStudies([{ title: "Un cas", situation: "Une PME." }], BASE);
-    expect(mapProof({}, cases)).toEqual({
-      eyebrow: "Preuve par l'exemple",
-      title: "Ce que ça donne, concrètement.",
-      intro: null,
-      cases,
-    });
-  });
-
-  it("cas : image résolue en URL d'asset, lignes vides ignorées", () => {
-    expect(
-      mapCaseStudies(
-        [
-          {
-            title: "Un cas",
-            summary: "60 collaborateurs.",
-            situation: "Compétences mal identifiées.",
-            actions: "Cartographie.",
-            result: "NPS +42.",
-            image: "file-1",
-            sector: "Conseil",
-            period_label: "2 ans",
-          },
-          { title: "", situation: "" },
-        ],
-        BASE,
-      ),
-    ).toEqual([
-      {
-        title: "Un cas",
-        summary: "60 collaborateurs.",
-        situation: "Compétences mal identifiées.",
-        actions: "Cartographie.",
-        result: "NPS +42.",
-        image: `${BASE}/assets/file-1`,
-        imageAlt: undefined,
-        sector: "Conseil",
-        periodLabel: "2 ans",
-      },
-    ]);
-  });
-
+describe("mapSectors", () => {
   it("secteurs : masqués si vides, intitulé par défaut sinon", () => {
     expect(mapSectors({})).toBeNull();
     expect(mapSectors({ sectors_title: "J'ai travaillé avec…" })).toEqual({

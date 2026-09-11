@@ -1,16 +1,20 @@
 import { readItems, readSingleton } from "@directus/sdk";
-import type { ArticleSummary, CaseStudyItem, Stat, TestimonialItem } from "~/types/content";
+import type { ArticleSummary, Stat, TestimonialItem } from "~/types/content";
 import {
+  CASE_STUDY_FIELDS,
   type ContentPhoto,
   type ContentSeo,
   type FileField,
   fileAlt,
   fileUrl,
+  mapCaseStudies,
   mapPhoto,
+  mapProofSection,
   mapSeo,
   mapStringList,
   mapTestimonialItem,
   mapTitledItems,
+  type ProofSection,
   type RawSiteDefaults,
   records,
   safeHref,
@@ -54,17 +58,6 @@ export interface RawArticle {
   published_at?: string | null;
   cover_image?: FileField;
   category?: { name?: string | null; slug?: string | null; group?: string | null } | string | null;
-}
-
-export interface RawCaseStudy {
-  title?: string | null;
-  summary?: string | null;
-  situation?: string | null;
-  actions?: string | null;
-  result?: string | null;
-  image?: FileField;
-  sector?: string | null;
-  period_label?: string | null;
 }
 
 export interface RawHome {
@@ -155,12 +148,7 @@ export interface HomeContent {
   } | null;
   method: { title: string; subtitle: string | null; steps: TitledItem[] } | null;
   /** Preuve par l'exemple : habillage (home_page) + cas (collection `case_studies`). */
-  proof: {
-    eyebrow: string;
-    title: string;
-    intro: string | null;
-    cases: CaseStudyItem[];
-  } | null;
+  proof: ProofSection | null;
   sectors: {
     eyebrow: string;
     title: string;
@@ -244,39 +232,6 @@ export function mapMethod(home: RawHome): HomeContent["method"] {
   const steps = mapTitledItems(home.method_steps);
   if (!title && !subtitle && !steps.length) return null;
   return { title, subtitle: subtitle || null, steps };
-}
-
-/**
- * Preuve par l'exemple : l'habillage vient de `home_page`, les cas de la collection
- * `case_studies`. Sans aucun cas publié, la section n'a rien à prouver → masquée.
- */
-export function mapProof(home: RawHome, cases: CaseStudyItem[]): HomeContent["proof"] {
-  if (!cases.length) return null;
-  return {
-    eyebrow: str(home.proof_eyebrow) || "Preuve par l'exemple",
-    title: str(home.proof_title) || "Ce que ça donne, concrètement.",
-    intro: str(home.proof_intro) || null,
-    cases,
-  };
-}
-
-export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[] {
-  return (
-    (Array.isArray(raws) ? (raws as RawCaseStudy[]) : [])
-      .map((raw) => ({
-        title: str(raw.title),
-        summary: str(raw.summary),
-        situation: str(raw.situation),
-        actions: str(raw.actions),
-        result: str(raw.result),
-        image: fileUrl(raw.image, assetBase) ?? undefined,
-        imageAlt: fileAlt(raw.image) || undefined,
-        sector: str(raw.sector) || undefined,
-        periodLabel: str(raw.period_label) || undefined,
-      }))
-      // Un cas sans titre ni situation n'est qu'une ligne vide dans l'admin.
-      .filter((c) => c.title !== "" || c.situation !== "")
-  );
 }
 
 /** Secteurs d'intervention : réponse au « dans quels secteurs as-tu travaillé ? ». */
@@ -390,7 +345,7 @@ export function mapHomeContent(
     recognition: mapRecognition(home),
     build: mapBuild(home),
     method: mapMethod(home),
-    proof: mapProof(home, mapCaseStudies(caseStudies, assetBase)),
+    proof: mapProofSection(home, mapCaseStudies(caseStudies, assetBase)),
     sectors: mapSectors(home),
     why: mapWhy(home),
     intro: mapIntro(home, assetBase),
@@ -506,16 +461,7 @@ export async function loadHomeContent(): Promise<HomeContent> {
       readItems("case_studies", {
         filter: { status: { _eq: "published" } },
         sort: ["sort"],
-        fields: [
-          "title",
-          "summary",
-          "situation",
-          "actions",
-          "result",
-          "image",
-          "sector",
-          "period_label",
-        ],
+        fields: [...CASE_STUDY_FIELDS],
       }),
     ),
   ]);
