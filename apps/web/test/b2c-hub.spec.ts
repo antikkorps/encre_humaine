@@ -34,9 +34,52 @@ describe("mapSituation", () => {
       audience: "Vous hésitez.",
       items: ["Comprendre", "Explorer"],
       result: "Un cap clair.",
+      takeaway: null,
+      price: null,
+      duration: null,
       ctaLabel: "Découvrir",
       ctaLink: "/particuliers/clarifier",
     });
+  });
+
+  it("2e encadré masqué sans texte, intitulé par défaut sinon", () => {
+    expect(
+      mapSituation({ title: "A", takeawayLabel: "Ce que ça vous évite" }, "/x")?.takeaway,
+    ).toBeNull();
+    expect(
+      mapSituation({ title: "A", takeawayBody: "De tourner en rond." }, "/x")?.takeaway,
+    ).toEqual({ label: "À retenir", body: "De tourner en rond." });
+  });
+
+  it("investissement/format : la carte prime, sinon la fiche de l'offre liée", () => {
+    const offers = [
+      {
+        title: "Clarifier son projet",
+        slug: "clarifier-son-projet",
+        audience: "particulier" as const,
+        shortDescription: "",
+        priceLabel: "Sur demande",
+        durationLabel: "6 séances d'une heure",
+      },
+    ];
+    const fallback = mapSituation({ title: "A" }, "/particuliers/clarifier-son-projet", offers);
+    expect(fallback).toMatchObject({ price: "Sur demande", duration: "6 séances d'une heure" });
+
+    const saisi = mapSituation(
+      { title: "A", price: "900 €", duration: "6 séances d'1h" },
+      "/particuliers/clarifier-son-projet",
+      offers,
+    );
+    expect(saisi).toMatchObject({ price: "900 €", duration: "6 séances d'1h" });
+
+    // Carte qui pointe ailleurs que sur une fiche d'offre : rien à reprendre.
+    expect(
+      mapSituation(
+        { title: "A", ctaLink: "/contact" },
+        "/particuliers/clarifier-son-projet",
+        offers,
+      ),
+    ).toMatchObject({ price: null, duration: null });
   });
 
   it("visible avec la seule liste ; préfère le lien fourni, ctaLabel null si absent", () => {

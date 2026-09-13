@@ -13,6 +13,7 @@ import { get, patch, post } from "./api.ts";
 import { homePageContent } from "./content-home.ts";
 import { OFFER_RENAMES, run15CaseStudy } from "./content-run15.ts";
 import { run16CaseStudies, run16ExistingCaseScopes } from "./content-run16.ts";
+import { run17B2cHub, run17CaseStudies } from "./content-run17.ts";
 import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
@@ -451,35 +452,9 @@ async function main(): Promise<void> {
           body: "Que vous poursuiviez ensuite seul ou accompagné, vous repartez avec une vision claire et exploitable.",
         },
       ],
-      context_title: "Derrière chaque audit RH, on retrouve des situations très similaires.",
-      context_items: [
-        {
-          icon: "description",
-          title: "Compétences peu lisibles",
-          body: "Les savoir-faire existent, mais ils ne sont pas formalisés ni partagés.",
-        },
-        {
-          icon: "group",
-          title: "Managers en sur-sollicitation",
-          body: "Ils portent beaucoup de responsabilités sans cadre commun ni outils stabilisés.",
-        },
-        {
-          icon: "settings",
-          title: "Outils RH sous-exploités",
-          body: "Entretiens, formation, procédures… présents, mais peu structurants dans le quotidien.",
-        },
-        {
-          icon: "trending-up",
-          title: "Organisation en croissance rapide",
-          body: "L'entreprise évolue plus vite que ses pratiques internes.",
-        },
-        {
-          icon: "schedule",
-          title: "Pilotage à court terme",
-          body: "Le quotidien prend le dessus sur la structuration.",
-        },
-      ],
-      context_conclusion: "L'audit permet justement de remettre de la lecture dans cet ensemble.",
+      // Bloc « constat » retiré des pages Audit RH (run 17), Carte des Talents
+      // (run 16) et De l'Expert au Manager (run 17) : la preuve par l'exemple a pris
+      // sa place. Les champs `context_*` restent disponibles pour une autre offre.
       mission_title: "Un audit RH complet, structuré et directement exploitable.",
       mission_includes: [
         {
@@ -575,33 +550,6 @@ async function main(): Promise<void> {
           body: "Le développement des compétences répond à des enjeux concrets plutôt qu'à une logique de catalogue.",
         },
       ],
-      // S3 — Ce que j'observe le plus souvent (situations sans titre → carte à corps seul)
-      context_title: "Les compétences sont rarement absentes. Elles sont surtout peu visibles.",
-      context_items: [
-        {
-          title: "",
-          body: "Certaines compétences clés reposent sur quelques personnes sans être suffisamment formalisées ou transmises.",
-        },
-        {
-          title: "",
-          body: "Les managers connaissent leurs équipes mais manquent d'outils pour objectiver les besoins de développement.",
-        },
-        {
-          title: "",
-          body: "Les entretiens professionnels existent mais débouchent rarement sur des actions concrètes.",
-        },
-        {
-          title: "",
-          body: "Les besoins de recrutement et de formation sont traités séparément alors qu'ils répondent aux mêmes enjeux.",
-        },
-        {
-          title: "",
-          body: "Les collaborateurs peinent à comprendre comment évoluer au sein de l'organisation.",
-        },
-      ],
-      context_conclusion:
-        "La question n'est généralement pas de créer davantage d'outils RH.\n\nLa question est de rendre les compétences plus lisibles pour permettre de meilleures décisions.",
-      // S4 — Une approche qui relie compétences et parcours
       approche_title: "Parce qu'une compétence n'existe jamais seule.",
       approche_body:
         "<p>Derrière chaque compétence, il y a une personne.</p>" +
@@ -721,34 +669,6 @@ async function main(): Promise<void> {
           body: "Les référentiels, les parcours et les dispositifs RH prennent réellement vie dans le quotidien des équipes.",
         },
       ],
-      // S3 — Ce que j'observe le plus souvent
-      context_title:
-        "Les managers ne manquent généralement pas d'engagement. Ils manquent de repères.",
-      context_items: [
-        {
-          title: "Une expertise métier qui ne suffit plus",
-          body: "Être un excellent professionnel ne prépare pas automatiquement à accompagner une équipe.",
-        },
-        {
-          title: "Des responsabilités qui augmentent rapidement",
-          body: "Les attentes grandissent plus vite que les moyens ou l'accompagnement disponibles.",
-        },
-        {
-          title: "Des situations humaines complexes",
-          body: "Conflits, démotivation, tensions, changements, départs, réorganisations… Les managers doivent souvent gérer ces situations sans cadre clair.",
-        },
-        {
-          title: "Des entretiens qui deviennent administratifs",
-          body: "Les entretiens professionnels et annuels sont réalisés mais produisent peu d'effets concrets.",
-        },
-        {
-          title: "Des pratiques très différentes selon les managers",
-          body: "Chaque personne fait de son mieux, mais sans langage commun ni repères partagés.",
-        },
-      ],
-      context_conclusion:
-        "Former les managers ne consiste pas seulement à transmettre des méthodes.\n\nIl s'agit de leur donner suffisamment de clarté pour agir avec confiance dans leur propre contexte.",
-      // S4 — Une approche qui relie management, RH et réalité du terrain
       approche_title: "Le management ne se résume pas à une boîte à outils.",
       approche_body:
         "<p>Mon approche s'appuie sur une conviction simple : les difficultés managériales sont rarement uniquement managériales.</p>" +
@@ -1569,6 +1489,8 @@ async function main(): Promise<void> {
       "Vous gagnez en cohérence, en visibilité et en efficacité dans vos démarches.",
     situation_b_cta_label: "Découvrir l'accompagnement",
     situation_b_cta_link: "/particuliers/booster-recherche",
+    // 2e encadré + investissement/format des deux cartes (run 17).
+    ...run17B2cHub,
     // 4. Ma façon d'accompagner
     how_i_work_title: "Ni recettes toutes faites. Ni injonctions à changer de vie.",
     how_i_work_body: P(
@@ -1809,15 +1731,17 @@ async function main(): Promise<void> {
     // Médiateur conso : obligatoire dès l'ouverture de la boutique (B2C).
     mediatorSentence: "un médiateur de la consommation sera désigné à l'ouverture de la boutique",
   };
-  // ── case_studies (preuve par l'exemple, runs 15 & 16) ──────────────────────
-  // Les trois cas racontent la même mission sous trois angles : ils sortent sur
-  // l'accueil ET sur la page Carte des Talents (`offer_scopes`).
+  // ── case_studies (preuve par l'exemple, runs 15 à 17) ──────────────────────
+  // Les trois premiers cas racontent la même mission sous trois angles : ils
+  // sortent sur l'accueil ET sur la page Carte des Talents (`offer_scopes`). Les
+  // sept du run 17 sont écrits pour les pages Audit RH et De l'Expert au Manager,
+  // et ne remontent pas sur l'accueil (`show_on_home: false`).
   await upsert("case_studies", "title", run15CaseStudy.title, {
     ...run15CaseStudy,
     offer_scopes: [...run16ExistingCaseScopes.offer_scopes],
     ...PUB,
   });
-  for (const study of run16CaseStudies) {
+  for (const study of [...run16CaseStudies, ...run17CaseStudies]) {
     await upsert("case_studies", "title", study.title, {
       ...study,
       offer_scopes: [...study.offer_scopes],

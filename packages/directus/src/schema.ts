@@ -534,6 +534,21 @@ const singletons: CollectionDef[] = [
         note: "« Ce que nous travaillons » (liste)",
       }),
       f.textarea("situation_a_result", { note: "« Résultat »" }),
+      f.input("situation_a_takeaway_label", {
+        half: true,
+        note: "Intitulé du 2e encadré, ex. « Ce que ça vous évite »",
+      }),
+      f.textarea("situation_a_takeaway_body", {
+        note: "Texte du 2e encadré. Vide = encadré masqué",
+      }),
+      f.input("situation_a_price", {
+        half: true,
+        note: "Ligne « Investissement : … » au-dessus du bouton. Vide = reprend l'investissement de la fiche d'offre liée",
+      }),
+      f.input("situation_a_duration", {
+        half: true,
+        note: "Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la fiche d'offre liée",
+      }),
       f.input("situation_a_cta_label", { half: true }),
       f.input("situation_a_cta_link", { half: true }),
       f.divider("sit_b_divider", "Situation B"),
@@ -544,6 +559,21 @@ const singletons: CollectionDef[] = [
         note: "« Ce que nous travaillons » (liste)",
       }),
       f.textarea("situation_b_result", { note: "« Résultat »" }),
+      f.input("situation_b_takeaway_label", {
+        half: true,
+        note: "Intitulé du 2e encadré, ex. « Ce que ça vous évite »",
+      }),
+      f.textarea("situation_b_takeaway_body", {
+        note: "Texte du 2e encadré. Vide = encadré masqué",
+      }),
+      f.input("situation_b_price", {
+        half: true,
+        note: "Ligne « Investissement : … » au-dessus du bouton. Vide = reprend l'investissement de la fiche d'offre liée",
+      }),
+      f.input("situation_b_duration", {
+        half: true,
+        note: "Ligne « Format : … » au-dessus du bouton. Vide = reprend le format de la fiche d'offre liée",
+      }),
       f.input("situation_b_cta_label", { half: true }),
       f.input("situation_b_cta_link", { half: true }),
       // 4. Ma façon d'accompagner
@@ -757,7 +787,7 @@ const collections: CollectionDef[] = [
   {
     collection: "case_studies",
     icon: "workspace_premium",
-    note: "Preuve par l'exemple — un cas = situation / ce qui a été mis en place / résultat. Tous les cas publiés s'affichent sur l'accueil ; cocher une offre les ajoute sur sa page. Une image possible par cas (portfolio, travaux d'étude…).",
+    note: "Preuve par l'exemple — un cas = situation / ce qui a été mis en place / résultat. Cocher une offre ajoute le cas sur sa page ; la case « accueil » décide s'il figure aussi sur la page d'accueil. Une image possible par cas (portfolio, travaux d'étude…).",
     fields: [
       f.input("title", {
         note: "Titre du cas. Ex. « Structurer les compétences d'une PME de conseil »",
@@ -772,7 +802,14 @@ const collections: CollectionDef[] = [
       f.input("sector", { half: true, note: "Secteur (optionnel, affiché en pastille)" }),
       f.input("period_label", { half: true, note: "Ex. « 2 ans » (optionnel)" }),
       f.selectMulti("offer_scopes", OFFER_SCOPE, {
-        note: "Cochez les offres où ce cas doit aussi apparaître (section « Preuve par l'exemple » de la page d'offre). Aucune case = le cas reste sur l'accueil.",
+        note: "Cochez les offres où ce cas doit apparaître (section « Preuve par l'exemple » de la page d'offre).",
+      }),
+      // Sans ce garde-fou, chaque cas ajouté pour une offre s'empilait aussi dans
+      // le carrousel de l'accueil (run 17). Coché par défaut : un cas créé sans y
+      // penser reste visible, comme avant.
+      f.bool("show_on_home", true, {
+        half: true,
+        note: "Afficher aussi ce cas sur l'accueil. Décochez-le pour le réserver aux pages d'offre cochées ci-dessus.",
       }),
       ...publishable(),
     ],

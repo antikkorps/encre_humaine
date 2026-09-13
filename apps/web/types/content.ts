@@ -79,8 +79,10 @@ export interface CaseStudyItem {
   imageAlt?: string;
   sector?: string;
   periodLabel?: string;
-  /** Slugs d'offre où le cas est épinglé ; vide = accueil seulement. */
+  /** Slugs d'offre où le cas est épinglé ; vide = il ne vit que sur l'accueil. */
   offers: string[];
+  /** Le cas figure aussi dans le carrousel de l'accueil (case cochée par défaut). */
+  showOnHome: boolean;
 }
 
 /** Carte d'article de blog — sous-ensemble de `articles` (docs/02 §5). */

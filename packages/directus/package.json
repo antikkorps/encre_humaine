@@ -20,7 +20,8 @@
     "reconcile": "tsx src/reconcile.ts",
     "rename:offers": "tsx src/rename-offers.ts",
     "seed:run15": "tsx src/seed-run15.ts",
-    "seed:run16": "tsx src/seed-run16.ts"
+    "seed:run16": "tsx src/seed-run16.ts",
+    "seed:run17": "tsx src/seed-run17.ts"
   },
   "devDependencies": {
     "@types/node": "25.9.5",

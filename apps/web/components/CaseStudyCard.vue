@@ -34,8 +34,13 @@ const steps = computed(() =>
         v-if="caseStudy.sector || caseStudy.periodLabel"
         class="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-orange-600"
       >
-        <span v-if="caseStudy.sector">{{ caseStudy.sector }}</span>
-        <span v-if="caseStudy.sector && caseStudy.periodLabel" aria-hidden="true">•</span>
+        <!-- Le séparateur reste collé au secteur : sur un secteur long (« Secteur
+             client : banque • Formatrice coach experte »), l'étiquette passe à la
+             ligne et un « • » orphelin ouvrait la seconde. -->
+        <span v-if="caseStudy.sector">
+          {{ caseStudy.sector }}
+          <span v-if="caseStudy.periodLabel" aria-hidden="true">•</span>
+        </span>
         <span v-if="caseStudy.periodLabel">{{ caseStudy.periodLabel }}</span>
       </p>
       <h3 class="mt-3 font-display text-2xl font-bold text-ink">

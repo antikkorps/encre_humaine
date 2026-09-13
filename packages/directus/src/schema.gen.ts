@@ -124,6 +124,14 @@ export interface B2cHubPage {
   cta_title: string | null;
   cta_body: string | null;
   cta_subtext: string | null;
+  situation_a_takeaway_label: string | null;
+  situation_a_takeaway_body: string | null;
+  situation_a_price: string | null;
+  situation_a_duration: string | null;
+  situation_b_takeaway_label: string | null;
+  situation_b_takeaway_body: string | null;
+  situation_b_price: string | null;
+  situation_b_duration: string | null;
 }
 
 export interface CaseStudies {
@@ -143,6 +151,7 @@ export interface CaseStudies {
   user_created: string | null;
   user_updated: string | null;
   offer_scopes: unknown | null;
+  show_on_home: boolean;
 }
 
 export interface ContactLeads {

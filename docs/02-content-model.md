@@ -30,7 +30,7 @@ Deux familles de contenu, deux traitements :
 | `legal_documents` | collection | mentions, CGV, CGU, confidentialité | 1 |
 | `offers` | collection | 3 offres B2B + 2 B2C | schéma 1 / contenu détaillé 2 |
 | `testimonials` | collection | témoignages réutilisables | 1 (peut être vide) |
-| `case_studies` | collection | cas concrets « preuve par l'exemple » (accueil + pages d'offre cochées) | 3 (run 15) |
+| `case_studies` | collection | cas concrets « preuve par l'exemple » (pages d'offre cochées + accueil si la case est cochée) | 10 (runs 15 à 17) |
 | `faq_items` | collection | FAQ réutilisables par périmètre | 1 |
 | `products` | collection | **contenu éditorial** des serious games | 1 |
 | `articles` | collection | blog | schéma 1 / contenu 2-3 |
@@ -154,7 +154,8 @@ Deux familles de contenu, deux traitements :
 - `title`, `summary` (le contexte en une phrase)
 - `situation`, `actions` (« ce qui a été mis en place »), `result` (chiffré si possible)
 - `image` (illustration optionnelle — c'est ce qui permet d'y verser le portfolio), `sector`, `period_label`
-- `offer_scopes` (cases à cocher, slugs d'offre) : le cas s'affiche **en plus** sur ces pages d'offre. Aucune case = accueil uniquement (l'inverse du défaut des témoignages, cf. `OFFER_SCOPE`)
+- `offer_scopes` (cases à cocher, slugs d'offre) : le cas s'affiche sur ces pages d'offre. Aucune case cochée = le cas ne vit que sur l'accueil (l'inverse du défaut des témoignages, cf. `OFFER_SCOPE`)
+- `show_on_home` (booléen, **coché par défaut**) : le cas remonte aussi dans le carrousel de l'accueil. Décoché, il est réservé aux pages d'offre — sans quoi chaque cas écrit pour une offre s'empile sur l'accueil (run 17 : 7 cas d'un coup)
 - statut + `sort`
 
 > Une **collection** et non un répéteur de `home_page` : un répéteur Directus est du JSON pur, il ne peut pas porter de relation fichier. Un cas doit pouvoir porter une image. Affichage : 1 cas → pleine largeur, 2+ → carrousel (cf. `04-pages/01-accueil`).
@@ -272,7 +273,7 @@ Règles :
 
 | Page | Singleton/collection |
 |------|----------------------|
-| `/` | `home_page` + `articles` (3 derniers) + `testimonials` (vedette) + `case_studies` (publiés) |
+| `/` | `home_page` + `articles` (3 derniers) + `testimonials` (vedette) + `case_studies` (publiés, `show_on_home`) |
 | `/a-propos` | `about_page` |
 | `/organisations` | `org_hub_page` + `offers` (b2b) + `faq_items` (org) + `testimonials` (b2b) |
 | `/particuliers` | `b2c_hub_page` + `faq_items` (b2c) + `testimonials` (b2c) |

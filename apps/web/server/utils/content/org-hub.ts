@@ -16,7 +16,7 @@ import {
   TESTIMONIAL_FIELDS,
   TESTIMONIAL_SORT,
 } from "./_shared";
-import { type B2cSituation, mapSituation } from "./b2c-hub";
+import { type HubSituation, mapSituation } from "./b2c-hub";
 
 /**
  * Contenu du hub Organisations (B2B) — docs/03-organisations-hub.md.
@@ -91,20 +91,6 @@ export interface RawOrgHub {
   no_index?: boolean | null;
 }
 
-/**
- * Carte « enjeu » du hub B2B : la carte B2C commune, plus ce que le run 16 y a
- * ajouté — un 2e encadré au libellé libre (« Ce que ça vous évite », « Pourquoi ça
- * compte »…) et la ligne investissement/format juste au-dessus du bouton.
- */
-export interface OrgSituation extends B2cSituation {
-  /** 2e encadré (masqué si son texte est vide) ; le libellé change d'une offre à l'autre. */
-  takeaway: { label: string; body: string } | null;
-  /** « Investissement : … » — saisi sur la carte, sinon repris de la fiche d'offre liée. */
-  price: string | null;
-  /** « Format : … » — même règle de repli. */
-  duration: string | null;
-}
-
 export interface OrgHubContent {
   /** Source du `h1` (null = fallback d'affichage). */
   accrocheTitle: string | null;
@@ -120,7 +106,7 @@ export interface OrgHubContent {
    * Renseignées en back-office → remplacent les cartes offres compactes. */
   situationsTitle: string | null;
   situationsIntro: string | null;
-  situations: OrgSituation[];
+  situations: HubSituation[];
   method: { title: string; intro: string | null; steps: NumberedStep[] } | null;
   differentiator: { title: string; bodyHtml: string } | null;
   /** « Vous êtes RH ou dirigeant ? » — titre + paragraphe + phrase de clôture. */
@@ -136,30 +122,6 @@ export interface OrgHubContent {
 
 /** Signature du sanitizer injecté (cf. `sanitizeRichText`). */
 type Sanitize = (html?: string | null) => string;
-
-/**
- * Ajoute à une carte B2C les éléments propres au hub B2B. Investissement et format
- * **retombent sur la fiche de l'offre liée** quand ils ne sont pas saisis sur la
- * carte : un prix se change alors à un seul endroit, et le hub ne peut pas
- * annoncer autre chose que la page d'offre (retour Éléonore 2026-09-11).
- */
-export function mapOrgSituation(
-  base: B2cSituation | null,
-  raw: { takeawayLabel?: unknown; takeawayBody?: unknown; price?: unknown; duration?: unknown },
-  offers: OfferSummary[],
-): OrgSituation | null {
-  if (!base) return null;
-  const linked = offers.find((o) => base.ctaLink === `/organisations/${o.slug}`);
-  const takeawayBody = str(raw.takeawayBody);
-  return {
-    ...base,
-    takeaway: takeawayBody
-      ? { label: str(raw.takeawayLabel) || "À retenir", body: takeawayBody }
-      : null,
-    price: str(raw.price) || linked?.priceLabel || null,
-    duration: str(raw.duration) || linked?.durationLabel || null,
-  };
-}
 
 /** Compose le payload du hub (pur ; `sanitize` injecté pour le rich text). */
 export function mapOrgHubContent(
@@ -181,70 +143,58 @@ export function mapOrgHubContent(
   const audienceConclusion = str(hub.audience_conclusion);
   const offerSummaries = mapOffers(offers, "organisation");
   const situations = [
-    mapOrgSituation(
-      mapSituation(
-        {
-          title: hub.situation_a_title,
-          body: hub.situation_a_body,
-          audience: hub.situation_a_audience,
-          items: hub.situation_a_items,
-          result: hub.situation_a_result,
-          ctaLabel: hub.situation_a_cta_label,
-          ctaLink: hub.situation_a_cta_link,
-        },
-        "/organisations/audit-rh",
-      ),
+    mapSituation(
       {
+        title: hub.situation_a_title,
+        body: hub.situation_a_body,
+        audience: hub.situation_a_audience,
+        items: hub.situation_a_items,
+        result: hub.situation_a_result,
         takeawayLabel: hub.situation_a_takeaway_label,
         takeawayBody: hub.situation_a_takeaway_body,
         price: hub.situation_a_price,
         duration: hub.situation_a_duration,
+        ctaLabel: hub.situation_a_cta_label,
+        ctaLink: hub.situation_a_cta_link,
       },
+      "/organisations/audit-rh",
       offerSummaries,
     ),
-    mapOrgSituation(
-      mapSituation(
-        {
-          title: hub.situation_b_title,
-          body: hub.situation_b_body,
-          audience: hub.situation_b_audience,
-          items: hub.situation_b_items,
-          result: hub.situation_b_result,
-          ctaLabel: hub.situation_b_cta_label,
-          ctaLink: hub.situation_b_cta_link,
-        },
-        "/organisations/carte-des-talents",
-      ),
+    mapSituation(
       {
+        title: hub.situation_b_title,
+        body: hub.situation_b_body,
+        audience: hub.situation_b_audience,
+        items: hub.situation_b_items,
+        result: hub.situation_b_result,
         takeawayLabel: hub.situation_b_takeaway_label,
         takeawayBody: hub.situation_b_takeaway_body,
         price: hub.situation_b_price,
         duration: hub.situation_b_duration,
+        ctaLabel: hub.situation_b_cta_label,
+        ctaLink: hub.situation_b_cta_link,
       },
+      "/organisations/carte-des-talents",
       offerSummaries,
     ),
-    mapOrgSituation(
-      mapSituation(
-        {
-          title: hub.situation_c_title,
-          body: hub.situation_c_body,
-          audience: hub.situation_c_audience,
-          items: hub.situation_c_items,
-          result: hub.situation_c_result,
-          ctaLabel: hub.situation_c_cta_label,
-          ctaLink: hub.situation_c_cta_link,
-        },
-        "/organisations/de-l-expert-au-manager",
-      ),
+    mapSituation(
       {
+        title: hub.situation_c_title,
+        body: hub.situation_c_body,
+        audience: hub.situation_c_audience,
+        items: hub.situation_c_items,
+        result: hub.situation_c_result,
         takeawayLabel: hub.situation_c_takeaway_label,
         takeawayBody: hub.situation_c_takeaway_body,
         price: hub.situation_c_price,
         duration: hub.situation_c_duration,
+        ctaLabel: hub.situation_c_cta_label,
+        ctaLink: hub.situation_c_cta_link,
       },
+      "/organisations/de-l-expert-au-manager",
       offerSummaries,
     ),
-  ].filter((s): s is OrgSituation => s !== null);
+  ].filter((s): s is HubSituation => s !== null);
 
   return {
     accrocheTitle: str(hub.accroche_title) || null,
