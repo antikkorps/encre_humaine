@@ -9,7 +9,7 @@
 Toutes les sections **se masquent si leurs champs sont vides** (une offre n'en remplit qu'une partie).
 1. **Accroche** — `accroche_title` + `accroche_subtitle` (hero) + `accroche_body` + `accroche_signature` + CTA (`cta_label`).
 2. **Ce que ça change (bénéfices)** — `outcomes_title` / `_intro` / `outcomes` (répéteur title/body).
-3. **Ce que je vois souvent (contexte)** — `context_title` / `context_items` / `context_conclusion`.
+3. **Ce que je vois souvent (contexte)** — `context_title` / `context_items` / `context_conclusion`. *Vidé sur Carte des Talents (run 16), Audit RH et De l'Expert au Manager (run 17) : la preuve par l'exemple a pris sa place. Section masquée tant que les champs sont vides.*
 4. **Preuve par l'exemple** (run 16) — habillage `proof_eyebrow` / `proof_title` / `proof_intro` + cas de `case_studies` qui cochent l'offre dans `offer_scopes`. Même carte et même carrousel que l'accueil (1 cas → pleine largeur, 2+ → piste défilante) ; **masquée si aucun cas ne pointe l'offre**.
 5. **Une approche qui relie** — `approche_title` / `approche_body` (rich text) / `approche_signature` (encadré).
 6. **Un regard / une expérience** (optionnel) — `background_title` / `background_body` (rich text, listes possibles). *Récit terrain, surtout B2C.*

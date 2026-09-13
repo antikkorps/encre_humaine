@@ -112,7 +112,7 @@ useSeoMeta({
           <SectionHeading
             :title="content.outcomesTitle || 'Ce que vous venez chercher'"
             :subtitle="content.outcomesIntro ?? undefined"
-            eyebrow="Ce que vous venez chercher (et ce que vous trouvez)"
+            eyebrow="Ce que vous allez y gagner"
           />
           <ul class="mt-10 flex flex-wrap justify-center gap-6">
             <li
@@ -190,8 +190,12 @@ useSeoMeta({
                   </li>
                 </ul>
               </div>
-              <!-- Pied de carte (résultat + CTA) poussé en bas → aligné entre les cartes -->
-              <div v-if="situation.result || situation.ctaLabel" class="mt-auto pt-6">
+              <!-- Pied de carte (résultat + à-retenir + investissement + CTA) poussé
+                   en bas → aligné entre les cartes -->
+              <div
+                v-if="situation.result || situation.takeaway || situation.price || situation.duration || situation.ctaLabel"
+                class="mt-auto pt-6"
+              >
                 <p
                   v-if="situation.result"
                   class="rounded-2xl bg-orange-50 p-4 text-sm leading-relaxed text-ink/75"
@@ -199,11 +203,38 @@ useSeoMeta({
                   <span class="font-semibold text-orange-700">Résultat : </span
                   ><AccentText :text="situation.result" />
                 </p>
+                <!-- 2e encadré au libellé libre (« Ce que ça vous évite » — run 17),
+                     comme sur le hub organisations. En marine ici : le doré est déjà
+                     pris par le résultat, juste au-dessus, côté particuliers. -->
+                <p
+                  v-if="situation.takeaway"
+                  class="rounded-2xl bg-teal-50 p-4 text-sm leading-relaxed text-ink/75"
+                  :class="situation.result ? 'mt-3' : ''"
+                >
+                  <span class="font-semibold text-teal-700"
+                    >{{ situation.takeaway.label }} : </span
+                  ><AccentText :text="situation.takeaway.body" />
+                </p>
+                <!-- Investissement & format annoncés AVANT le bouton : la lecture
+                     « ce qu'on travaille → ce que ça donne → combien » se termine par
+                     le prix, sans aller le chercher sur la page d'offre. -->
+                <dl
+                  v-if="situation.price || situation.duration"
+                  class="mt-5 space-y-1 text-sm text-ink/70"
+                >
+                  <div v-if="situation.price" class="flex flex-wrap gap-x-1.5">
+                    <dt class="font-semibold text-ink">Investissement :</dt>
+                    <dd>{{ situation.price }}</dd>
+                  </div>
+                  <div v-if="situation.duration" class="flex flex-wrap gap-x-1.5">
+                    <dt class="font-semibold text-ink">Format :</dt>
+                    <dd>{{ situation.duration }}</dd>
+                  </div>
+                </dl>
                 <NuxtLink
                   v-if="situation.ctaLabel"
                   :to="situation.ctaLink"
-                  class="inline-flex w-fit items-center gap-1.5 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-orange-600"
-                  :class="situation.result ? 'mt-5' : ''"
+                  class="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-orange-600"
                 >
                   {{ situation.ctaLabel }}
                   <span aria-hidden="true">→</span>
@@ -268,7 +299,7 @@ useSeoMeta({
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" eyebrow="Pourquoi cet accompagnement est différent ?" />
+            <SectionHeading :title="content.whyDifferentTitle || 'Pourquoi c\'est différent'" eyebrow="Pourquoi cet accompagnement, et pas un autre" />
             <RichText :html="content.whyDifferentHtml" class="mt-5" />
           </div>
         </div>
@@ -287,7 +318,7 @@ useSeoMeta({
         />
         <div class="mx-auto max-w-6xl px-4 py-20">
           <div class="max-w-3xl">
-            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" eyebrow="Comment se déroule l'accompagnement ?" />
+            <SectionHeading :title="content.formatTitle || 'Comment se déroule l\'accompagnement'" eyebrow="Comment se déroule l'accompagnement, concrètement" />
             <ul v-if="content.formatItems.length" class="mt-8 space-y-3">
               <li
                 v-for="(item, i) in content.formatItems"
