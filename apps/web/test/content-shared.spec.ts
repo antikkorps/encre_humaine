@@ -5,6 +5,7 @@
 // et la « preuve par l'exemple » partagée par l'accueil et les pages d'offre.
 import { describe, expect, it } from "vitest";
 import {
+  caseStudiesForHome,
   caseStudiesForOffer,
   mapCaseStudies,
   mapFaqItems,
@@ -362,7 +363,7 @@ describe("safeHref", () => {
   });
 });
 
-describe("mapCaseStudies / caseStudiesForOffer / mapProofSection", () => {
+describe("mapCaseStudies / caseStudiesForOffer / caseStudiesForHome / mapProofSection", () => {
   it("cas : image résolue en URL d'asset, périmètres lus, lignes vides ignorées", () => {
     expect(
       mapCaseStudies(
@@ -394,6 +395,7 @@ describe("mapCaseStudies / caseStudiesForOffer / mapProofSection", () => {
         sector: "Conseil",
         periodLabel: "2 ans",
         offers: ["carte-des-talents"],
+        showOnHome: true,
       },
     ]);
   });
@@ -415,6 +417,18 @@ describe("mapCaseStudies / caseStudiesForOffer / mapProofSection", () => {
     ]);
     expect(caseStudiesForOffer(cases, "audit-rh")).toEqual([]);
     expect(caseStudiesForOffer(cases, "")).toEqual([]);
+  });
+
+  it("accueil : seuls les cas dont la case « afficher sur l'accueil » est cochée", () => {
+    const cases = mapCaseStudies(
+      [
+        { title: "Ancien cas", situation: "…" }, // champ absent → reste sur l'accueil
+        { title: "Coché", situation: "…", show_on_home: true },
+        { title: "Réservé à une offre", situation: "…", show_on_home: false },
+      ],
+      BASE,
+    );
+    expect(caseStudiesForHome(cases).map((c) => c.title)).toEqual(["Ancien cas", "Coché"]);
   });
 
   it("section : masquée sans cas, intitulés par défaut sinon", () => {

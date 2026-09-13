@@ -254,6 +254,7 @@ export interface RawCaseStudy {
   sector?: string | null;
   period_label?: string | null;
   offer_scopes?: unknown;
+  show_on_home?: boolean | null;
 }
 
 /** Cas concrets publiés ; une ligne sans titre ni situation est une ligne vide de l'admin. */
@@ -270,6 +271,9 @@ export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[
       sector: str(raw.sector) || undefined,
       periodLabel: str(raw.period_label) || undefined,
       offers: mapStringList(raw.offer_scopes),
+      // Faux seulement si la case a été décochée : un cas créé avant le champ (ou
+      // lu par un web déployé avant le `bootstrap`) reste sur l'accueil.
+      showOnHome: raw.show_on_home !== false,
     }))
     .filter((c) => c.title !== "" || c.situation !== "");
 }
@@ -278,10 +282,19 @@ export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[
  * Cas concrets d'une PAGE D'OFFRE : uniquement ceux qui cochent cette offre
  * (`offer_scopes`). Volontairement l'inverse du défaut des témoignages : un cas
  * raconte une mission précise, il ne s'invite pas sur les cinq offres parce que
- * personne n'a coché de case. L'accueil, lui, les montre tous.
+ * personne n'a coché de case.
  */
 export function caseStudiesForOffer(items: CaseStudyItem[], slug: string): CaseStudyItem[] {
   return slug ? items.filter((c) => c.offers.includes(slug)) : [];
+}
+
+/**
+ * Cas concrets de l'ACCUEIL : ceux dont la case « afficher sur l'accueil » est
+ * cochée. Sans ce filtre, chaque cas écrit pour une page d'offre s'empilait aussi
+ * dans le carrousel de l'accueil (run 17 : 4 + 3 nouveaux cas d'un coup).
+ */
+export function caseStudiesForHome(items: CaseStudyItem[]): CaseStudyItem[] {
+  return items.filter((c) => c.showOnHome);
 }
 
 /** Section « Preuve par l'exemple » : habillage de la page + cas à afficher. */

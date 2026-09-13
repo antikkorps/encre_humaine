@@ -1,10 +1,11 @@
 import { readItems, readSingleton } from "@directus/sdk";
-import type { FaqItem, TestimonialItem } from "~/types/content";
+import type { FaqItem, OfferSummary, TestimonialItem } from "~/types/content";
 import {
   type ContentPhoto,
   type ContentSeo,
   type FileField,
   mapFaqItems,
+  mapOffers,
   mapPhoto,
   mapSeo,
   mapStringList,
@@ -48,6 +49,10 @@ export interface RawB2cHub {
   situation_a_audience?: string | null;
   situation_a_items?: unknown; // répéteur { text }
   situation_a_result?: string | null;
+  situation_a_takeaway_label?: string | null;
+  situation_a_takeaway_body?: string | null;
+  situation_a_price?: string | null;
+  situation_a_duration?: string | null;
   situation_a_cta_label?: string | null;
   situation_a_cta_link?: string | null;
   situation_b_title?: string | null;
@@ -55,6 +60,10 @@ export interface RawB2cHub {
   situation_b_audience?: string | null;
   situation_b_items?: unknown; // répéteur { text }
   situation_b_result?: string | null;
+  situation_b_takeaway_label?: string | null;
+  situation_b_takeaway_body?: string | null;
+  situation_b_price?: string | null;
+  situation_b_duration?: string | null;
   situation_b_cta_label?: string | null;
   situation_b_cta_link?: string | null;
   how_i_work_title?: string | null;
@@ -75,7 +84,11 @@ export interface RawB2cHub {
   no_index?: boolean | null;
 }
 
-export interface B2cSituation {
+/**
+ * Carte « situation » d'un hub — la même des deux côtés : trois enjeux côté
+ * organisations, deux situations côté particuliers.
+ */
+export interface HubSituation {
   title: string;
   /** Chapô optionnel sous le titre de la carte. */
   body: string | null;
@@ -85,6 +98,12 @@ export interface B2cSituation {
   items: string[];
   /** « Résultat ». */
   result: string | null;
+  /** 2e encadré (masqué si son texte est vide) ; le libellé change d'une carte à l'autre. */
+  takeaway: { label: string; body: string } | null;
+  /** « Investissement : … » — saisi sur la carte, sinon repris de la fiche d'offre liée. */
+  price: string | null;
+  /** « Format : … » — même règle de repli. */
+  duration: string | null;
   ctaLabel: string | null;
   ctaLink: string;
 }
@@ -106,7 +125,7 @@ export interface B2cHubContent {
   /** « Deux situations, deux accompagnements » (cartes détaillées). */
   situationsTitle: string | null;
   situationsIntro: string | null;
-  situations: B2cSituation[];
+  situations: HubSituation[];
   /** « Ma façon d'accompagner » — corps rich text assaini + encadré signature. */
   howIWorkTitle: string | null;
   howIWorkHtml: string | null;
@@ -134,6 +153,12 @@ type Sanitize = (html?: string | null) => string;
 /**
  * Carte « situation » détaillée : masquée si entièrement vide. `ctaLink` retombe
  * sur l'offre cible.
+ *
+ * Investissement et format **retombent sur la fiche de l'offre liée** quand ils ne
+ * sont pas saisis sur la carte : un prix se change alors à un seul endroit, et le
+ * hub ne peut pas annoncer autre chose que la page d'offre (retour Éléonore
+ * 2026-09-11). L'offre liée se cherche dans le hub de la carte — le lien de repli
+ * en porte déjà le chemin (`/organisations/…`, `/particuliers/…`).
  */
 export function mapSituation(
   raw: {
@@ -142,25 +167,39 @@ export function mapSituation(
     audience?: unknown;
     items?: unknown;
     result?: unknown;
+    takeawayLabel?: unknown;
+    takeawayBody?: unknown;
+    price?: unknown;
+    duration?: unknown;
     ctaLabel?: unknown;
     ctaLink?: unknown;
   },
   defaultLink: string,
-): B2cSituation | null {
+  offers: OfferSummary[] = [],
+): HubSituation | null {
   const title = str(raw.title);
   const body = str(raw.body);
   const audience = str(raw.audience);
   const items = mapStringList(raw.items);
   const result = str(raw.result);
   if (!title && !body && !audience && !items.length && !result) return null;
+  const ctaLink = safeHref(raw.ctaLink) || defaultLink;
+  const hubPath = defaultLink.slice(0, defaultLink.lastIndexOf("/"));
+  const linked = offers.find((offer) => ctaLink === `${hubPath}/${offer.slug}`);
+  const takeawayBody = str(raw.takeawayBody);
   return {
     title,
     body: body || null,
     audience: audience || null,
     items,
     result: result || null,
+    takeaway: takeawayBody
+      ? { label: str(raw.takeawayLabel) || "À retenir", body: takeawayBody }
+      : null,
+    price: str(raw.price) || linked?.priceLabel || null,
+    duration: str(raw.duration) || linked?.durationLabel || null,
     ctaLabel: str(raw.ctaLabel) || null,
-    ctaLink: safeHref(raw.ctaLink) || defaultLink,
+    ctaLink,
   };
 }
 
@@ -172,7 +211,9 @@ export function mapB2cHubContent(
   settings: RawSiteDefaults,
   assetBase: string,
   sanitize: Sanitize,
+  offersRaw: unknown = [],
 ): B2cHubContent {
+  const offers = mapOffers(offersRaw, "particulier");
   const situations = [
     mapSituation(
       {
@@ -181,10 +222,15 @@ export function mapB2cHubContent(
         audience: hub.situation_a_audience,
         items: hub.situation_a_items,
         result: hub.situation_a_result,
+        takeawayLabel: hub.situation_a_takeaway_label,
+        takeawayBody: hub.situation_a_takeaway_body,
+        price: hub.situation_a_price,
+        duration: hub.situation_a_duration,
         ctaLabel: hub.situation_a_cta_label,
         ctaLink: hub.situation_a_cta_link,
       },
       "/particuliers/clarifier-son-projet",
+      offers,
     ),
     mapSituation(
       {
@@ -193,12 +239,17 @@ export function mapB2cHubContent(
         audience: hub.situation_b_audience,
         items: hub.situation_b_items,
         result: hub.situation_b_result,
+        takeawayLabel: hub.situation_b_takeaway_label,
+        takeawayBody: hub.situation_b_takeaway_body,
+        price: hub.situation_b_price,
+        duration: hub.situation_b_duration,
         ctaLabel: hub.situation_b_cta_label,
         ctaLink: hub.situation_b_cta_link,
       },
       "/particuliers/se-repositionner",
+      offers,
     ),
-  ].filter((s): s is B2cSituation => s !== null);
+  ].filter((s): s is HubSituation => s !== null);
 
   return {
     accrocheTitle: str(hub.accroche_title) || null,
@@ -236,7 +287,7 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
   const client = directusServer();
   const assetBase = useRuntimeConfig().public.directusPublicUrl;
 
-  const [hub, faq, testimonials, settings] = await Promise.all([
+  const [hub, faq, testimonials, settings, offers] = await Promise.all([
     client.request(
       readSingleton("b2c_hub_page", {
         fields: [
@@ -256,6 +307,10 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
           "situation_a_audience",
           "situation_a_items",
           "situation_a_result",
+          "situation_a_takeaway_label",
+          "situation_a_takeaway_body",
+          "situation_a_price",
+          "situation_a_duration",
           "situation_a_cta_label",
           "situation_a_cta_link",
           "situation_b_title",
@@ -263,6 +318,10 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
           "situation_b_audience",
           "situation_b_items",
           "situation_b_result",
+          "situation_b_takeaway_label",
+          "situation_b_takeaway_body",
+          "situation_b_price",
+          "situation_b_duration",
           "situation_b_cta_label",
           "situation_b_cta_link",
           "how_i_work_title",
@@ -305,6 +364,16 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
         fields: ["brand_name", "default_meta_description", "default_og_image"],
       }),
     ),
+    // Fiches d'offre B2C : seulement pour le repli investissement/format des
+    // cartes situation (le hub n'affiche pas de carte d'offre dynamique).
+    client.request(
+      readItems("offers", {
+        filter: { status: { _eq: "published" }, audience: { _eq: "particulier" } },
+        sort: ["sort"],
+        limit: -1,
+        fields: ["title", "slug", "audience", "duration_label", "price_label"],
+      }),
+    ),
   ]);
 
   return mapB2cHubContent(
@@ -314,5 +383,6 @@ export async function loadB2cHubContent(): Promise<B2cHubContent> {
     settings as unknown as RawSiteDefaults,
     assetBase,
     sanitizeRichText,
+    offers,
   );
 }
