@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.5",
-    "@iconify-json/material-symbols": "1.2.88",
+    "@iconify-json/material-symbols": "1.2.89",
     "@nuxt/fonts": "0.14.0",
     "@nuxt/icon": "2.5.0",
     "@nuxt/image": "2.1.0",
@@ -45,6 +45,6 @@
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
     "vitest": "4.1.10",
-    "vue-tsc": "3.3.9"
+    "vue-tsc": "3.3.10"
   }
 }
