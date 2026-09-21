@@ -50,19 +50,18 @@ export default defineEventHandler(async (): Promise<SitemapEntry[]> => {
       });
     }
 
-    // Produits → /laboratoire/{slug}, uniquement si la boutique est activée.
+    // Produits → /laboratoire/{slug}, uniquement si la boutique est activée, et
+    // seulement ceux que la fiche sait afficher (published + prix Stripe actif,
+    // même règle que le catalogue) : un produit publié sans prix répond 404.
+    // Try isolé : une panne Stripe ne doit pas vider le sitemap des articles/offres.
     const shop = await directus.request(readSingleton("shop_page", { fields: ["shop_enabled"] }));
     if (shop?.shop_enabled === true) {
-      const products = await directus.request(
-        readItems("products", {
-          filter: { status: { _eq: "published" } },
-          fields: ["slug", "date_updated"],
-          limit: -1,
-        }),
-      );
-      for (const p of products) {
-        if (!p.slug) continue;
-        entries.push({ loc: `/laboratoire/${p.slug}`, lastmod: p.date_updated ?? undefined });
+      try {
+        for (const p of await loadCatalog()) {
+          entries.push({ loc: `/laboratoire/${p.slug}` });
+        }
+      } catch (err) {
+        console.error("[sitemap] catalogue boutique indisponible :", err);
       }
     }
 
