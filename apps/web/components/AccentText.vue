@@ -10,6 +10,10 @@
 // Rendu en `<strong>` (mise en avant = importance, pas décoration) et en nœuds
 // Vue — jamais de `v-html` : aucun HTML éditeur n'est injecté ici.
 //
+// Les retours à la ligne saisis dans Directus sont respectés partout
+// (`whitespace-pre-line`) : c'est porté ICI plutôt que par chaque parent, qui
+// l'oubliait sur la moitié des blocs.
+//
 // ⚠️ Le template tient sur une ligne À DESSEIN : un retour à la ligne entre les
 // segments ajouterait une espace parasite au milieu des phrases.
 const props = withDefaults(
@@ -23,4 +27,4 @@ const props = withDefaults(
 const segments = computed(() => parseAccent(props.text ?? ""));
 </script>
 
-<template><template v-for="(segment, i) in segments" :key="i"><strong v-if="segment.accent" class="font-bold" :class="tone === 'dark' ? 'text-sand-300' : 'text-orange-500'">{{ segment.text }}</strong><template v-else>{{ segment.text }}</template></template></template>
+<template><span class="whitespace-pre-line"><template v-for="(segment, i) in segments" :key="i"><strong v-if="segment.accent" class="font-bold" :class="tone === 'dark' ? 'text-sand-300' : 'text-orange-500'">{{ segment.text }}</strong><template v-else>{{ segment.text }}</template></template></span></template>
