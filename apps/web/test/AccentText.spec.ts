@@ -3,10 +3,9 @@
 // lignes insérerait un blanc entre les segments et abîmerait les phrases.
 // On vérifie donc le texte rendu au caractère près, plus le ton doré.
 //
-// ⚠️ On lit `element.textContent` (le DOM réel) et non `wrapper.text()` : la
-// racine du composant est un fragment, et `text()` recolle les nœuds racines
-// APRÈS les avoir élagués — il « mange » les espaces de bord et ferait échouer
-// le test sur un rendu pourtant correct.
+// ⚠️ On lit `element.textContent` (le DOM réel) et non `wrapper.text()` :
+// `text()` élague le texte — il « mange » les espaces de bord et les retours à
+// la ligne, et ferait échouer le test sur un rendu pourtant correct.
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { describe, expect, it } from "vitest";
 import AccentText from "~/components/AccentText.vue";
@@ -37,5 +36,13 @@ describe("AccentText", () => {
 
     const empty = await mountSuspended(AccentText, { props: { text: null } });
     expect(empty.element.textContent).toBe("");
+  });
+
+  it("respecte les retours à la ligne saisis dans Directus", async () => {
+    const wrapper = await mountSuspended(AccentText, {
+      props: { text: "Première ligne.\nSeconde **ligne**." },
+    });
+    expect(wrapper.element.textContent).toBe("Première ligne.\nSeconde ligne.");
+    expect(wrapper.classes()).toContain("whitespace-pre-line");
   });
 });
