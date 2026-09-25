@@ -15,8 +15,9 @@
 // clair avant d'être retiré.
 // Idempotent : une 2e exécution ne trouve plus rien à faire.
 
-import { get, patch, post } from "./api.ts";
+import { get, patch } from "./api.ts";
 import { run17B2cHub, run17CaseStudies, run17RetiredOfferContext } from "./content-run17.ts";
+import { seedCaseStudies } from "./seed-case-studies.ts";
 
 const apply = process.argv.includes("--apply");
 const act = (msg: string) => console.log(`${apply ? "~" : "·"} ${msg}`);
@@ -73,40 +74,6 @@ async function clearOfferContexts(): Promise<void> {
 }
 
 /**
- * Cas concrets du lot : créés s'ils n'existent pas (clé = le titre), puis rangés
- * dans l'ordre des mails. Le tri n'est posé que sur un cas encore non trié : le
- * glisser-déposer d'Éléonore dans l'admin reste souverain.
- */
-async function seedCaseStudies(): Promise<void> {
-  // Les cas déjà en place (runs 15 & 16) occupent le début du carrousel.
-  const existing = await get<{ sort: number | null }[]>("/items/case_studies?limit=-1&fields=sort");
-  const offset = existing.reduce((max, c) => Math.max(max, c.sort ?? 0), 0);
-
-  for (const [i, study] of run17CaseStudies.entries()) {
-    const [found] = await get<{ id: string; sort: number | null }[]>(
-      `/items/case_studies?filter[title][_eq]=${encodeURIComponent(study.title)}&limit=1&fields=id,sort`,
-    );
-    if (!found) {
-      act(`case_studies : création de « ${study.title} » (position ${offset + i + 1})`);
-      if (apply) {
-        await post("/items/case_studies", {
-          ...study,
-          offer_scopes: [...study.offer_scopes],
-          sort: offset + i + 1,
-          status: "published",
-        });
-      }
-      continue;
-    }
-    console.log(`= case_studies : « ${study.title} » existe déjà`);
-    if (found.sort === null || found.sort === undefined) {
-      act(`case_studies : « ${study.title} » → position ${offset + i + 1}`);
-      if (apply) await patch(`/items/case_studies/${found.id}`, { sort: offset + i + 1 });
-    }
-  }
-}
-
-/**
  * Le hub Particuliers annonce désormais un montant par carte. Les fiches d'offre,
  * elles, portent encore le leur : si les deux divergent, le visiteur le voit. On
  * les affiche côte à côte pour qu'Éléonore tranche (l'alignement se fait dans
@@ -146,7 +113,7 @@ async function main(): Promise<void> {
   );
   await fillEmpty("b2c_hub_page", { ...run17B2cHub });
   await clearOfferContexts();
-  await seedCaseStudies();
+  await seedCaseStudies(run17CaseStudies, { apply, act });
   await compareB2cPrices();
   console.log(apply ? "\n✓ Seed run 17 appliqué." : "\n✓ Aperçu terminé.");
 }

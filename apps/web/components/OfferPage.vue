@@ -69,7 +69,7 @@ const EYEBROWS: Record<string, OfferEyebrows> = {
     format: "Le format",
   },
   "clarifier-son-projet": {
-    outcomes: "Ce que cet accompagnement peut changer",
+    outcomes: "Ce que cet accompagnement vous permet (et pourquoi ça compte)",
     approche: "Derrière le flou, il y a souvent déjà des réponses",
     mission: "Ce que nous travaillons ensemble",
     background: "Une approche à la croisée des parcours et des RH",
@@ -245,7 +245,58 @@ useSchemaOrg([
       </div>
     </section>
 
-    <!-- 3. Ce que je vois souvent (contexte, cartes à icônes) -->
+    <!-- 3. Preuve par l'exemple — cas concrets de la collection `case_studies`
+         qui cochent cette offre (run 16). Même carte et même carrousel que
+         l'accueil : un seul cas → pleine largeur, dès le deuxième → piste
+         défilante. Masqué tant qu'aucun cas ne pointe l'offre. Juste après
+         « ce que ça change », AVANT le constat : Éléonore la veut entre les deux
+         sur Se (re)positionner (run 18), seule offre à garder un constat. Le
+         constat portant déjà le fond gris, la preuve cède le sien quand il suit :
+         deux bandes grises accolées se liraient comme un seul bloc. -->
+    <section
+      v-if="content.proof"
+      v-reveal
+      class="relative isolate overflow-hidden"
+      :class="content.context ? undefined : 'bg-paper-2'"
+    >
+      <TentacleAccent
+        side="right"
+        name="tentacule-2-plein"
+        class="absolute -right-24 top-8 -z-10 hidden w-[26rem] rotate-3 text-teal-700/[0.05] lg:block"
+      />
+      <div class="mx-auto max-w-6xl px-4 py-20">
+        <SectionHeading
+          :title="content.proof.title"
+          :subtitle="content.proof.intro ?? undefined"
+          :eyebrow="content.proof.eyebrow"
+          wide
+        />
+        <div class="mt-12">
+          <CaseStudyCard
+            v-if="content.proof.cases.length === 1"
+            :case-study="content.proof.cases[0]!"
+            full
+          />
+          <SnapCarousel
+            v-else
+            label="Cas concrets"
+            prev-label="Cas précédent"
+            next-label="Cas suivant"
+            tone="light"
+          >
+            <li
+              v-for="(item, i) in content.proof.cases"
+              :key="i"
+              class="w-[88%] shrink-0 snap-start sm:w-[28rem] lg:w-[32rem]"
+            >
+              <CaseStudyCard :case-study="item" />
+            </li>
+          </SnapCarousel>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Ce que je vois souvent (contexte, cartes à icônes) -->
     <section v-if="content.context" v-reveal class="relative isolate overflow-hidden" :class="theme.band">
       <TentacleAccent
         side="left"
@@ -283,48 +334,6 @@ useSchemaOrg([
         >
           <AccentText :text="content.context.conclusion" />
         </p>
-      </div>
-    </section>
-
-    <!-- 4. Preuve par l'exemple — cas concrets de la collection `case_studies`
-         qui cochent cette offre (run 16). Même carte et même carrousel que
-         l'accueil : un seul cas → pleine largeur, dès le deuxième → piste
-         défilante. Masqué tant qu'aucun cas ne pointe l'offre. -->
-    <section v-if="content.proof" v-reveal class="relative isolate overflow-hidden bg-paper-2">
-      <TentacleAccent
-        side="right"
-        name="tentacule-2-plein"
-        class="absolute -right-24 top-8 -z-10 hidden w-[26rem] rotate-3 text-teal-700/[0.05] lg:block"
-      />
-      <div class="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading
-          :title="content.proof.title"
-          :subtitle="content.proof.intro ?? undefined"
-          :eyebrow="content.proof.eyebrow"
-          wide
-        />
-        <div class="mt-12">
-          <CaseStudyCard
-            v-if="content.proof.cases.length === 1"
-            :case-study="content.proof.cases[0]!"
-            full
-          />
-          <SnapCarousel
-            v-else
-            label="Cas concrets"
-            prev-label="Cas précédent"
-            next-label="Cas suivant"
-            tone="light"
-          >
-            <li
-              v-for="(item, i) in content.proof.cases"
-              :key="i"
-              class="w-[88%] shrink-0 snap-start sm:w-[28rem] lg:w-[32rem]"
-            >
-              <CaseStudyCard :case-study="item" />
-            </li>
-          </SnapCarousel>
-        </div>
       </div>
     </section>
 
