@@ -64,6 +64,14 @@ services:
       # (child-src 'self', pas de frame-src) bloque le cadrage de tout domaine
       # externe → « contenu bloqué ». On ouvre frame-src à 'self' + le site.
       CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: "array:'self',${BASE_URL}"
+      # robots.txt de cms.* : l'admin reste fermé aux robots, mais les images du
+      # site (/assets/…) doivent être crawlables, sinon Search Console les classe
+      # « Bloquée par le fichier robots.txt » et Google rend les pages sans images.
+      # Google applique la règle la plus spécifique : Allow /assets/ > Disallow /.
+      ROBOTS_TXT: |-
+        User-agent: *
+        Allow: /assets/
+        Disallow: /
       # Assets → R2 (S3-compatible). docs/02 §7, docs/07 §6.
       STORAGE_LOCATIONS: r2
       STORAGE_R2_DRIVER: s3
