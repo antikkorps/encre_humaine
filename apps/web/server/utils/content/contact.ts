@@ -7,10 +7,12 @@ import {
   mapNumberedSteps,
   mapSeo,
   mapStringList,
+  mapTitledItems,
   type NumberedStep,
   type RawSiteDefaults,
   safeHref,
   str,
+  type TitledItem,
 } from "./_shared";
 
 /**
@@ -25,10 +27,17 @@ export interface RawContactPage {
   accroche_title?: string | null;
   accroche_subtitle?: string | null;
   accroche_body?: string | null;
+  accroche_cta_note?: string | null;
+  benefits_title?: string | null;
+  benefits?: unknown; // répéteur { title, body }
+  benefits_org?: string | null;
+  benefits_b2c?: string | null;
+  contact_title?: string | null;
   contact_intro?: string | null;
   booking_intro?: string | null;
   booking_reassurance?: string | null;
-  message_intro?: string | null;
+  callback_intro?: string | null;
+  callback_form_intro?: string | null;
   steps_title?: string | null;
   next_steps?: unknown; // répéteur number/title/description
   steps_conclusion?: string | null;
@@ -60,12 +69,23 @@ export interface ContactContent {
   accrocheTitle: string | null;
   accrocheSubtitle: string | null;
   accrocheBody: string | null;
-  /** Introduction de la section « Premier contact ». */
+  /** Phrase sous les deux boutons du hero. */
+  accrocheCtaNote: string | null;
+  /** « Pourquoi prendre rendez-vous ? » ; `null` si vide (section masquée). */
+  benefits: {
+    title: string | null;
+    items: TitledItem[];
+    org: string | null;
+    b2c: string | null;
+  } | null;
+  /** Titre et introduction de la section « Premier contact ». */
+  contactTitle: string | null;
   contactIntro: string | null;
   /** Prise de RDV : `null` si aucune URL configurée (section masquée). */
   booking: { url: string; intro: string | null; reassurance: string | null } | null;
-  /** Texte au-dessus du formulaire message. */
-  messageIntro: string | null;
+  /** Carte « Être rappelé·e » et phrase au-dessus du formulaire de rappel. */
+  callbackIntro: string | null;
+  callbackFormIntro: string | null;
   stepsTitle: string | null;
   nextSteps: NumberedStep[];
   stepsConclusion: string | null;
@@ -102,10 +122,25 @@ export function mapContactContent(
   const reasonsB2c = mapStringList(page.reasons_b2c);
   const finalCtaTitle = str(page.final_cta_title);
   const finalCtaBody = str(page.final_cta_body);
+  const benefitsTitle = str(page.benefits_title);
+  const benefitsItems = mapTitledItems(page.benefits);
+  const benefitsOrg = str(page.benefits_org);
+  const benefitsB2c = str(page.benefits_b2c);
   return {
     accrocheTitle: str(page.accroche_title) || null,
     accrocheSubtitle: str(page.accroche_subtitle) || null,
     accrocheBody: str(page.accroche_body) || null,
+    accrocheCtaNote: str(page.accroche_cta_note) || null,
+    benefits:
+      benefitsTitle || benefitsItems.length || benefitsOrg || benefitsB2c
+        ? {
+            title: benefitsTitle || null,
+            items: benefitsItems,
+            org: benefitsOrg || null,
+            b2c: benefitsB2c || null,
+          }
+        : null,
+    contactTitle: str(page.contact_title) || null,
     contactIntro: str(page.contact_intro) || null,
     booking: bookingUrl
       ? {
@@ -114,7 +149,8 @@ export function mapContactContent(
           reassurance: str(page.booking_reassurance) || null,
         }
       : null,
-    messageIntro: str(page.message_intro) || null,
+    callbackIntro: str(page.callback_intro) || null,
+    callbackFormIntro: str(page.callback_form_intro) || null,
     stepsTitle: str(page.steps_title) || null,
     nextSteps: mapNumberedSteps(page.next_steps),
     stepsConclusion: str(page.steps_conclusion) || null,
@@ -159,10 +195,17 @@ export async function loadContactContent(): Promise<ContactContent> {
           "accroche_title",
           "accroche_subtitle",
           "accroche_body",
+          "accroche_cta_note",
+          "benefits_title",
+          "benefits",
+          "benefits_org",
+          "benefits_b2c",
+          "contact_title",
           "contact_intro",
           "booking_intro",
           "booking_reassurance",
-          "message_intro",
+          "callback_intro",
+          "callback_form_intro",
           "steps_title",
           "next_steps",
           "steps_conclusion",

@@ -29,8 +29,8 @@ const COLLECTION = "contact_leads";
 /** Meta de collection : libellés FR, tri par défaut, note explicative. */
 const COLLECTION_META = {
   icon: "inbox",
-  note: "Messages reçus via le formulaire de contact. Lecture seule : ils sont enregistrés automatiquement par le site.",
-  display_template: "{{first_name}} — {{audience}}",
+  note: "Demandes reçues via le formulaire de contact (« Être rappelé·e » : téléphone et créneau de rappel). Lecture seule : elles sont enregistrées automatiquement par le site.",
+  display_template: "{{first_name}} — {{phone}} — {{audience}}",
   sort_field: "-created_at",
   hidden: false,
   translations: [
@@ -50,12 +50,15 @@ const COLLECTION_META = {
 const FIELD_META: Record<string, { name: string; width?: "half" | "full"; interface?: string }> = {
   created_at: { name: "Reçu le", width: "half" },
   first_name: { name: "Prénom", width: "half" },
+  phone: { name: "Téléphone", width: "half" },
   email: { name: "E-mail", width: "half" },
+  callback_days: { name: "Jour(s) de rappel", width: "half" },
+  callback_slot: { name: "Moment de la journée", width: "half" },
   audience: { name: "Public", width: "half" },
   source_page: { name: "Page d'origine", width: "half" },
   status: { name: "Statut", width: "half" },
   notification_sent: { name: "Notification envoyée", width: "half" },
-  message: { name: "Message", width: "full", interface: "input-multiline" },
+  message: { name: "Ce qui l'amène", width: "full", interface: "input-multiline" },
   updated_at: { name: "Mis à jour le", width: "half" },
 };
 

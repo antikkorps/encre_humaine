@@ -15,6 +15,13 @@
       "when": 1785770995164,
       "tag": "0001_directus_read_contact_leads",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791816813996,
+      "tag": "0002_contact_callback",
+      "breakpoints": true
     }
   ]
 }

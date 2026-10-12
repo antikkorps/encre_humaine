@@ -122,8 +122,9 @@ Deux familles de contenu, deux traitements :
 - `rgpd_mention`
 
 ### `contact_page`
-- `accroche_title`, `accroche_body`
-- `booking_intro` (texte au-dessus de l'embed RDV)
+- `accroche_title`, `accroche_body`, `accroche_cta_note` (phrase sous les boutons)
+- « Pourquoi prendre rendez-vous ? » : `benefits_title`, `benefits` (répéteur `title` + `body`), `benefits_org`, `benefits_b2c`
+- `contact_title`, `contact_intro` ; `booking_intro` (carte RDV) ; `callback_intro` (carte « Être rappelé·e ») + `callback_form_intro` (au-dessus du formulaire) — `message_intro` masqué depuis le run 19
 - `next_steps` (répéteur : `number` + `title` + `description`)
 - FAQ : filtre `faq_items` `scope=contact`
 - `response_time_note` (« Je réponds sous 48h ouvrées… »)

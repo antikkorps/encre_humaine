@@ -114,7 +114,8 @@ export async function sendNewsletterConfirmation(opts: {
 }
 
 /**
- * Notifie Eléonore d'un nouveau lead de contact (docs/03 §2).
+ * Notifie Eléonore d'une nouvelle demande de rappel (docs/03 §2). Le téléphone
+ * et le créneau viennent en tête : c'est ce dont elle a besoin pour rappeler.
  * `reply_to` = email du visiteur → réponse directe. Best-effort côté appelant.
  */
 export async function sendContactNotification(lead: ContactLead): Promise<void> {
@@ -123,15 +124,19 @@ export async function sendContactNotification(lead: ContactLead): Promise<void> 
     from: config.newsletterFrom,
     to: config.contactNotifyTo,
     replyTo: lead.email,
-    subject: `Nouveau message ${lead.audience} — ${lead.firstName}`,
+    subject: `À rappeler (${lead.audience}) — ${lead.firstName}`,
     text: [
-      `De : ${lead.firstName} <${lead.email}>`,
+      `${lead.firstName} souhaite être rappelé·e.`,
+      "",
+      lead.phone ? `Téléphone : ${lead.phone}` : "",
+      lead.callbackDays ? `Jour(s) : ${lead.callbackDays}` : "",
+      lead.callbackSlot ? `Moment : ${lead.callbackSlot}` : "",
+      `E-mail : ${lead.email}`,
       `Audience : ${lead.audience}`,
       lead.sourcePage ? `Page : ${lead.sourcePage}` : "",
-      "",
-      lead.message,
+      lead.message ? `\nCe qui l'amène :\n${lead.message}` : "",
     ]
-      .filter(Boolean)
+      .filter((line, i) => i < 2 || line !== "")
       .join("\n"),
   });
 }

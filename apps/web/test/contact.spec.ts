@@ -15,7 +15,11 @@ describe("mapContactContent", () => {
     expect(c.accrocheTitle).toBeNull();
     expect(c.accrocheBody).toBeNull();
     expect(c.booking).toBeNull();
-    expect(c.messageIntro).toBeNull();
+    expect(c.callbackIntro).toBeNull();
+    expect(c.callbackFormIntro).toBeNull();
+    expect(c.accrocheCtaNote).toBeNull();
+    expect(c.benefits).toBeNull();
+    expect(c.contactTitle).toBeNull();
     expect(c.nextSteps).toEqual([]);
     expect(c.stepsConclusion).toBeNull();
     expect(c.responseTimeNote).toBeNull();
@@ -47,7 +51,8 @@ describe("mapContactContent", () => {
   it("mappe « me contacter si… » (org/particuliers) et le CTA final ; masqués si vides", () => {
     const c = mapContactContent(
       {
-        message_intro: "Écrivez-moi.",
+        callback_intro: "Je vous rappelle.",
+        callback_form_intro: "Sous 48 heures ouvrées.",
         steps_conclusion: "Pas de vente forcée.",
         reasons_title: "Vous pouvez me contacter si…",
         reasons_org: [{ text: "Structurer vos RH" }, { text: "" }],
@@ -60,7 +65,8 @@ describe("mapContactContent", () => {
       BASE,
       wrap,
     );
-    expect(c.messageIntro).toBe("Écrivez-moi.");
+    expect(c.callbackIntro).toBe("Je vous rappelle.");
+    expect(c.callbackFormIntro).toBe("Sous 48 heures ouvrées.");
     expect(c.stepsConclusion).toBe("Pas de vente forcée.");
     expect(c.reasons).toEqual({
       title: "Vous pouvez me contacter si…",
@@ -73,6 +79,41 @@ describe("mapContactContent", () => {
       title: "Parlons-en",
       body: "30 minutes suffisent.",
       subtext: null,
+    });
+  });
+
+  it("mappe « Pourquoi prendre rendez-vous ? » ; affiché dès qu'un champ est rempli", () => {
+    const c = mapContactContent(
+      {
+        accroche_cta_note: "30 minutes, sans engagement.",
+        contact_title: "Deux façons de commencer",
+        benefits_title: "Ce avec quoi vous repartez",
+        benefits: [
+          { title: "Vous savez nommer ce qui bloque.", body: "Un problème nommé se traite." },
+          { title: "", body: "" },
+        ],
+        benefits_b2c: "Si vous êtes un particulier : un premier éclairage.",
+      },
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.accrocheCtaNote).toBe("30 minutes, sans engagement.");
+    expect(c.contactTitle).toBe("Deux façons de commencer");
+    expect(c.benefits).toEqual({
+      title: "Ce avec quoi vous repartez",
+      items: [{ title: "Vous savez nommer ce qui bloque.", body: "Un problème nommé se traite." }],
+      org: null,
+      b2c: "Si vous êtes un particulier : un premier éclairage.",
+    });
+    expect(
+      mapContactContent({ benefits_org: "Organisation" }, [], {}, BASE, wrap).benefits,
+    ).toEqual({
+      title: null,
+      items: [],
+      org: "Organisation",
+      b2c: null,
     });
   });
 

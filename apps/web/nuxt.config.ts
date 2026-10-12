@@ -70,6 +70,7 @@ export default defineNuxtConfig({
         "material-symbols:flag",
         "material-symbols:format-list-numbered",
         "material-symbols:forum",
+        "material-symbols:phone-callback",
         "material-symbols:group",
         "material-symbols:layers",
         "material-symbols:record-voice-over",
