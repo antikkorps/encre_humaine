@@ -162,8 +162,11 @@ export interface ContactLeads {
   source_page: string | null;
   status: string;
   notification_sent: boolean;
-  message: string;
+  message: string | null;
   updated_at: string;
+  phone: string | null;
+  callback_days: string | null;
+  callback_slot: string | null;
 }
 
 export interface ContactPage {

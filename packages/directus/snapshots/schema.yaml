@@ -134,14 +134,15 @@ collections:
       collapse: open
       collection: contact_leads
       color: null
-      display_template: '{{first_name}} — {{audience}}'
+      display_template: '{{first_name}} — {{phone}} — {{audience}}'
       group: null
       hidden: false
       icon: inbox
       item_duplication_fields: null
       note: >-
-        Messages reçus via le formulaire de contact. Lecture seule : ils sont
-        enregistrés automatiquement par le site.
+        Demandes reçues via le formulaire de contact (« Être rappelé·e » :
+        téléphone et créneau de rappel). Lecture seule : elles sont enregistrées
+        automatiquement par le site.
       preview_url: null
       singleton: false
       sort: null
@@ -6119,9 +6120,8 @@ fields:
       hidden: false
       interface: select-multiple-checkbox
       note: >-
-        Cochez les offres où ce cas doit aussi apparaître (section « Preuve par
-        l'exemple » de la page d'offre). Aucune case = le cas reste sur
-        l'accueil.
+        Cochez les offres où ce cas doit apparaître (section « Preuve par
+        l'exemple » de la page d'offre).
       options:
         choices:
           - text: Offre Audit RH (organisations)
@@ -6519,7 +6519,7 @@ fields:
       special: null
       translations:
         - language: fr-FR
-          translation: Message
+          translation: Ce qui l'amène
       validation: null
       validation_message: null
       width: full
@@ -6531,7 +6531,7 @@ fields:
       max_length: null
       numeric_precision: null
       numeric_scale: null
-      is_nullable: false
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -6574,6 +6574,132 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: phone
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: phone
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Téléphone
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: phone
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: callback_days
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: callback_days
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Jour(s) de rappel
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: callback_days
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_leads
+    field: callback_slot
+    type: text
+    meta:
+      collection: contact_leads
+      conditions: null
+      display: null
+      display_options: null
+      field: callback_slot
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Moment de la journée
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: callback_slot
+      table: contact_leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -6720,7 +6846,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -6782,7 +6908,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 19
       special:
         - cast-json
       translations: null
@@ -6823,7 +6949,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -6864,7 +6990,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 32
       special:
         - alias
         - no-data
@@ -6889,7 +7015,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 33
       special: null
       translations: null
       validation: null
@@ -6929,7 +7055,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 34
       special: null
       translations: null
       validation: null
@@ -6969,7 +7095,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 35
       special:
         - file
       translations: null
@@ -7010,7 +7136,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 36
       special:
         - cast-boolean
       translations: null
@@ -7051,7 +7177,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -7084,14 +7210,16 @@ fields:
       display_options: null
       field: message_intro
       group: null
-      hidden: false
+      hidden: true
       interface: input-multiline
-      note: Texte de la carte « M'envoyer un message »
+      note: >-
+        Non affiché — l'ancien formulaire « M'envoyer un message » est remplacé
+        par « Être rappelé·e »
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -7131,7 +7259,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -7172,7 +7300,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 22
       special:
         - alias
         - no-data
@@ -7197,7 +7325,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -7245,7 +7373,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 25
       special:
         - cast-json
       translations: null
@@ -7294,7 +7422,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 27
       special:
         - cast-json
       translations: null
@@ -7336,7 +7464,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 28
       special:
         - alias
         - no-data
@@ -7361,7 +7489,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -7401,7 +7529,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 30
       special: null
       translations: null
       validation: null
@@ -7481,7 +7609,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -7521,7 +7649,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -7561,7 +7689,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -7601,7 +7729,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -7641,7 +7769,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -7649,6 +7777,398 @@ fields:
       width: full
     schema:
       name: final_cta_subtext
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: accroche_cta_note
+    type: string
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: accroche_cta_note
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Phrase sous les deux boutons du hero (ex. « 30 minutes, sans engagement.
+        Vous repartez avec vos premières priorités. »)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: accroche_cta_note
+      table: contact_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: benefits_divider
+    type: alias
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: benefits_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Pourquoi prendre rendez-vous ?
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contact_page
+    field: benefits_title
+    type: string
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: benefits_title
+      group: null
+      hidden: false
+      interface: input
+      note: Ex. « Ce avec quoi vous repartez, concrètement. »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: benefits_title
+      table: contact_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: benefits
+    type: json
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: benefits
+      group: null
+      hidden: false
+      interface: list
+      note: 'Ce avec quoi on repart : une phrase forte (titre) + son explication'
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: benefits
+      table: contact_page
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: benefits_org
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: benefits_org
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Encadré « Si vous êtes une organisation… »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: benefits_org
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: benefits_b2c
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: benefits_b2c
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Encadré « Si vous êtes un particulier… »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: benefits_b2c
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: contact_ways_divider
+    type: alias
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_ways_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Premier contact
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contact_page
+    field: contact_title
+    type: string
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_title
+      group: null
+      hidden: false
+      interface: input
+      note: Titre de la section (ex. « Deux façons de commencer »)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_title
+      table: contact_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: callback_intro
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: callback_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Texte de la carte « Être rappelé·e »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: callback_intro
+      table: contact_page
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_page
+    field: callback_form_intro
+    type: text
+    meta:
+      collection: contact_page
+      conditions: null
+      display: null
+      display_options: null
+      field: callback_form_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: >-
+        Phrase au-dessus du formulaire de rappel (ex. « Je vous rappelle sous 48
+        heures ouvrées… »)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: callback_form_intro
       table: contact_page
       data_type: text
       default_value: null

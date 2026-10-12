@@ -14,25 +14,40 @@
 // portent encore la formule d'origine. Idempotent : une 2e exécution ne trouve
 // plus rien à faire.
 
-import { get, post } from "./api.ts";
+import { get, patch, post } from "./api.ts";
 import { run19ContactFaq, run19ContactPage, run19ContactRewrites } from "./content-run19.ts";
 import { fillEmpty, rewriteKnown } from "./seed-singleton.ts";
 
 const apply = process.argv.includes("--apply");
 const act = (msg: string) => console.log(`${apply ? "~" : "·"} ${msg}`);
 
-/** Question de FAQ du lot : créée si absente, rangée après les questions Contact. */
+/**
+ * Question de FAQ du lot : créée si absente, en DERNIÈRE position (ordre du mail).
+ * Une question jamais triée (sort NULL) est rangée après les autres par Postgres,
+ * dans un ordre non garanti : la nouvelle s'y intercalerait au hasard. On fige donc
+ * d'abord l'ordre affiché aujourd'hui en numérotant les questions sans tri (seul
+ * `sort` est écrit, jamais leur texte), puis on ajoute la nouvelle à la suite.
+ */
 async function seedFaq(): Promise<void> {
   const { question, scope } = run19ContactFaq;
-  const existing = await get<{ question: string; sort: number | null }[]>(
-    `/items/faq_items?filter[scope][_eq]=${scope}&limit=-1&fields=question,sort`,
+  const existing = await get<{ id: string; question: string; sort: number | null }[]>(
+    `/items/faq_items?filter[scope][_eq]=${scope}&sort=sort&limit=-1&fields=id,question,sort`,
   );
   if (existing.some((f) => f.question.trim() === question)) {
     return console.log(`= faq_items : « ${question} » existe déjà`);
   }
-  const sort = existing.reduce((max, f) => Math.max(max, f.sort ?? 0), 0) + 1;
-  act(`faq_items : création de « ${question} » (${scope}, position ${sort})`);
-  if (apply) await post("/items/faq_items", { ...run19ContactFaq, sort, status: "published" });
+  let next = existing.reduce((max, f) => Math.max(max, f.sort ?? 0), 0) + 1;
+  for (const faq of existing.filter((f) => f.sort === null || f.sort === undefined)) {
+    act(`faq_items : « ${faq.question} » sans tri → position ${next}`);
+    if (apply) await patch(`/items/faq_items/${faq.id}`, { sort: next });
+    next += 1;
+  }
+  act(`faq_items : création de « ${question} » (${scope}, position ${next})`);
+  if (apply) {
+    await post("/items/faq_items", { ...run19ContactFaq, sort: next, status: "published" });
+  }
+  console.log(`\n📋 FAQ Contact, dans l'ordre affiché après le lot :`);
+  for (const faq of [...existing, { question }]) console.log(`  · ${faq.question}`);
 }
 
 async function main(): Promise<void> {
