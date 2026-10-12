@@ -156,7 +156,10 @@ export const contactLeads = app.table("contact_leads", {
   firstName: text("first_name").notNull(),
   email: text("email").notNull(),
   audience: audienceEnum("audience").notNull(),     // organisation | particulier
-  message: text("message").notNull(),
+  message: text("message"),                         // facultatif depuis le formulaire de rappel
+  phone: text("phone"),                             // rappel (NULL sur les anciens messages)
+  callbackDays: text("callback_days"),              // « mardi, jeudi » | « peu importe »
+  callbackSlot: text("callback_slot"),              // matin | midi | après-midi | fin de journée
   sourcePage: text("source_page"),                  // d'où vient la soumission
   status: leadStatusEnum("status").notNull().default("new"),
   notificationSent: boolean("notification_sent").notNull().default(false), // email Resend à Eléonore parti ?

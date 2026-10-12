@@ -58,13 +58,19 @@ Cœur de la boutique. Reçoit les événements Stripe, enregistre la commande, d
 
 ## 2. Contact — `POST /api/contact`
 
+Formulaire « Être rappelé·e » (depuis 2026-10 ; il remplace « M'envoyer un message »).
+
 ### Requête
 ```ts
 {
   firstName: string,        // 1..80, requis
+  phone: string,            // ≤ 30, chiffres/espaces/+().- , ≥ 9 chiffres, requis
   email: string,            // email valide, requis
   audience: "organisation" | "particulier",  // requis
-  message: string,          // 10..2000, requis
+  callbackDays: ("lundi" | "mardi" | "mercredi" | "jeudi" | "vendredi" | "peu importe")[],
+                            // ≥ 1 ; « peu importe » seul
+  callbackSlot: "matin" | "midi" | "après-midi" | "fin de journée",  // requis
+  message?: string,         // ≤ 2000, facultatif (« ce qui vous amène »)
   sourcePage?: string,      // route d'origine
   turnstileToken: string    // requis
 }
@@ -75,7 +81,8 @@ Cœur de la boutique. Reçoit les événements Stripe, enregistre la commande, d
 1. Valider le payload (valibot) → 422 si invalide
 2. Vérifier Turnstile côté serveur (siteverify) → 403 si échec
 3. Rate-limit par IP (06-security) → 429 si dépassé
-4. INSERT contact_leads (status=new, notification_sent=false)
+4. INSERT contact_leads (status=new, notification_sent=false ;
+   callback_days stocké en texte lisible : « mardi, jeudi »)
 5. Envoyer email à Eléonore (Resend) ; si OK → notification_sent=true
 6. (optionnel) email d'accusé de réception au visiteur
 7. 200 { ok: true }

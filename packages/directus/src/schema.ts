@@ -732,7 +732,22 @@ const singletons: CollectionDef[] = [
       f.input("accroche_title"),
       f.textarea("accroche_subtitle", { note: "Chapeau sous le titre (hero)" }),
       f.textarea("accroche_body", { note: "Encadré « Certaines situations… » à droite du hero" }),
-      // Deux voies de contact (carte RDV + carte message)
+      f.input("accroche_cta_note", {
+        note: "Phrase sous les deux boutons du hero (ex. « 30 minutes, sans engagement. Vous repartez avec vos premières priorités. »)",
+      }),
+      // Pourquoi prendre rendez-vous ? (ce avec quoi on repart)
+      f.divider("benefits_divider", "Pourquoi prendre rendez-vous ?"),
+      f.input("benefits_title", { note: "Ex. « Ce avec quoi vous repartez, concrètement. »" }),
+      f.repeater(
+        "benefits",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }],
+        { note: "Ce avec quoi on repart : une phrase forte (titre) + son explication" },
+      ),
+      f.textarea("benefits_org", { note: "Encadré « Si vous êtes une organisation… »" }),
+      f.textarea("benefits_b2c", { note: "Encadré « Si vous êtes un particulier… »" }),
+      // Deux voies de contact (carte RDV + carte rappel)
+      f.divider("contact_ways_divider", "Premier contact"),
+      f.input("contact_title", { note: "Titre de la section (ex. « Deux façons de commencer »)" }),
       f.textarea("contact_intro", {
         note: "Introduction sous le titre de la section « Premier contact »",
       }),
@@ -740,7 +755,14 @@ const singletons: CollectionDef[] = [
       f.textarea("booking_reassurance", {
         note: "Réassurance sous le RDV (ex. « 🐙 Aucun tentacule commercial caché… »)",
       }),
-      f.textarea("message_intro", { note: "Texte de la carte « M'envoyer un message »" }),
+      f.textarea("callback_intro", { note: "Texte de la carte « Être rappelé·e »" }),
+      f.textarea("callback_form_intro", {
+        note: "Phrase au-dessus du formulaire de rappel (ex. « Je vous rappelle sous 48 heures ouvrées… »)",
+      }),
+      f.textarea("message_intro", {
+        hidden: true,
+        note: "Non affiché — l'ancien formulaire « M'envoyer un message » est remplacé par « Être rappelé·e »",
+      }),
       // Comment se déroule le premier échange
       f.input("steps_title", { note: "Ex. « Comment se déroule notre premier échange ? »" }),
       f.repeater("next_steps", [

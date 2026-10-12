@@ -11,8 +11,10 @@ import { drizzle } from "drizzle-orm/pglite";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { CONTACT_LEAD_RETENTION_MS, purgeOldContactLeads } from "../server/utils/contact";
 
-const MIGRATION = fileURLToPath(
-  new URL("../../../packages/db/migrations/0000_messy_yellowjacket.sql", import.meta.url),
+// Migrations qui façonnent `contact_leads` (0001 = GRANT pour Directus, rôle
+// absent de PGlite → ignorée). Rejouer 0002 valide aussi son SQL sur un vrai Postgres.
+const MIGRATIONS = ["0000_messy_yellowjacket.sql", "0002_contact_callback.sql"].map((file) =>
+  fileURLToPath(new URL(`../../../packages/db/migrations/${file}`, import.meta.url)),
 );
 
 describe("purge RGPD des leads de contact (docs/01 §8)", () => {
@@ -21,7 +23,7 @@ describe("purge RGPD des leads de contact (docs/01 §8)", () => {
 
   beforeAll(async () => {
     pg = new PGlite();
-    await pg.exec(readFileSync(MIGRATION, "utf8"));
+    for (const migration of MIGRATIONS) await pg.exec(readFileSync(migration, "utf8"));
     db = drizzle(pg) as unknown as Database;
   });
 

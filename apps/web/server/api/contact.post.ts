@@ -3,7 +3,8 @@ import { ContactPayloadSchema } from "@encre/shared";
 import * as v from "valibot";
 
 /**
- * Contact — `POST /api/contact` (docs/03-api-contracts.md §2).
+ * Contact — `POST /api/contact` (docs/03-api-contracts.md §2). Demande de
+ * rappel : téléphone + jours + moment de la journée, message facultatif.
  * Flux : honeypot → validation valibot (partagée) → Turnstile serveur →
  * rate-limit IP → INSERT lead → email best-effort à Eléonore.
  * Aucune IP persistée (docs/01 §6) ; l'IP ne sert qu'au rate-limit en mémoire.
@@ -37,7 +38,10 @@ export default defineEventHandler(async (event) => {
       firstName: payload.firstName,
       email: payload.email,
       audience: payload.audience,
-      message: payload.message,
+      phone: payload.phone,
+      callbackDays: payload.callbackDays.join(", "),
+      callbackSlot: payload.callbackSlot,
+      message: payload.message || null,
       sourcePage: payload.sourcePage ?? null,
     })
     .returning();

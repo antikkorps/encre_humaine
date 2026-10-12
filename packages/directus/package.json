@@ -22,7 +22,8 @@
     "seed:run15": "tsx src/seed-run15.ts",
     "seed:run16": "tsx src/seed-run16.ts",
     "seed:run17": "tsx src/seed-run17.ts",
-    "seed:run18": "tsx src/seed-run18.ts"
+    "seed:run18": "tsx src/seed-run18.ts",
+    "seed:run19": "tsx src/seed-run19.ts"
   },
   "devDependencies": {
     "@types/node": "25.9.5",

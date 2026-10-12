@@ -15,6 +15,7 @@ import { OFFER_RENAMES, run15CaseStudy } from "./content-run15.ts";
 import { run16CaseStudies, run16ExistingCaseScopes } from "./content-run16.ts";
 import { run17B2cHub, run17CaseStudies } from "./content-run17.ts";
 import { run18CaseStudies } from "./content-run18.ts";
+import { run19ContactFaq, run19ContactPage, run19ContactRewrites } from "./content-run19.ts";
 import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
@@ -175,6 +176,7 @@ async function main(): Promise<void> {
       ),
       scope: "contact",
     },
+    { q: run19ContactFaq.question, a: run19ContactFaq.answer, scope: run19ContactFaq.scope },
     {
       q: "Puis-je utiliser mon CPF ?",
       a: P(
@@ -1599,15 +1601,12 @@ async function main(): Promise<void> {
       "Une transition professionnelle.\n" +
       "Une idée qui tourne en boucle depuis plusieurs mois.\n\n" +
       "Ce premier échange est là pour faire le point et voir ce qui pourrait être utile.",
-    // S2 — Premier contact
-    contact_intro:
-      "Que vous préfériez un échange de vive voix ou un premier message, choisissez simplement la formule qui vous convient.",
-    booking_intro:
-      "Vous préférez en parler directement ?\n\nRéservez un créneau de 30 minutes.\n\nNous faisons le point sur votre situation et voyons ensemble si je suis la bonne personne pour vous accompagner.",
+    // S2 — Pourquoi prendre rendez-vous ? + Premier contact (RDV / rappel) — run 19
+    ...run19ContactPage,
+    contact_intro: run19ContactRewrites.contact_intro.to,
+    booking_intro: run19ContactRewrites.booking_intro.to,
     booking_reassurance:
       "🐙 Aucun tentacule commercial caché. Juste une conversation pour comprendre votre situation.",
-    message_intro:
-      "Vous préférez prendre contact par écrit ?\n\nDécrivez simplement votre situation en quelques lignes.\n\nJe vous répondrai dans les meilleurs délais, généralement sous 48 heures ouvrées.",
     // S3 — À quoi vous attendre
     steps_title: "Comment se déroule notre premier échange ?",
     next_steps: [

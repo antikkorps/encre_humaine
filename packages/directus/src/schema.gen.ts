@@ -162,8 +162,11 @@ export interface ContactLeads {
   source_page: string | null;
   status: string;
   notification_sent: boolean;
-  message: string;
+  message: string | null;
   updated_at: string;
+  phone: string | null;
+  callback_days: string | null;
+  callback_slot: string | null;
 }
 
 export interface ContactPage {
@@ -191,6 +194,14 @@ export interface ContactPage {
   reasons_org_lead: string | null;
   reasons_b2c_lead: string | null;
   final_cta_subtext: string | null;
+  accroche_cta_note: string | null;
+  benefits_title: string | null;
+  benefits: unknown | null;
+  benefits_org: string | null;
+  benefits_b2c: string | null;
+  contact_title: string | null;
+  callback_intro: string | null;
+  callback_form_intro: string | null;
 }
 
 export interface FaqItems {

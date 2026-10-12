@@ -2,7 +2,8 @@
 // Contact — docs/09-contact.md. Contenu depuis `contact_page` + faq_items
 // (scope=contact) + site_settings, via l'endpoint caché `/api/content/contact`.
 // Deux voies : prise de RDV (BookingEmbed, Cal.com, chargé au consentement) et
-// formulaire (ContactForm, validation partagée + Turnstile serveur). Page chaude :
+// demande de rappel (ContactForm « Être rappelé·e », validation partagée +
+// Turnstile serveur — remplace l'ancien formulaire message, 2026-10). Page chaude :
 // simple et rassurante. Sections vides masquées ; échec fetch → message sobre.
 // Illustration signée Éléonore (le poulpe qui répond au courrier) : asset local
 // → import Vite, comme le poulpe stagiaire de la 404. Le provider @nuxt/image
@@ -69,12 +70,15 @@ useSeoMeta({
           Réserver un échange <span aria-hidden="true">→</span>
         </NuxtLink>
         <NuxtLink
-          to="#message"
+          to="#rappel"
           class="inline-flex items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
         >
-          M'envoyer un message
+          Être rappelé·e <span aria-hidden="true">→</span>
         </NuxtLink>
       </div>
+      <p v-if="content?.accrocheCtaNote" class="mt-4 max-w-xl text-sm text-ink/60">
+        <AccentText :text="content.accrocheCtaNote" />
+      </p>
     </PageHero>
 
     <p
@@ -86,8 +90,62 @@ useSeoMeta({
     </p>
 
     <template v-else-if="content">
-      <!-- 2. Premier contact : deux cartes d'orientation, puis les deux blocs
-           (RDV / message) l'un sous l'autre — plus d'onglets, tout est visible. -->
+      <!-- 2. Pourquoi prendre rendez-vous ? Ce avec quoi on repart (phrase forte +
+           explication), puis la lecture propre à chaque public. -->
+      <section v-if="content.benefits" v-reveal class="relative isolate overflow-hidden bg-paper-2">
+        <TentacleAccent
+          side="left"
+          name="tentacule-3-trait"
+          class="absolute -left-20 top-10 -z-10 hidden w-[26rem] text-teal-700/[0.06] lg:block"
+        />
+        <div class="mx-auto max-w-6xl px-4 py-20">
+          <SectionHeading
+            :title="content.benefits.title || 'Ce avec quoi vous repartez, concrètement.'"
+            eyebrow="Pourquoi prendre rendez-vous ?"
+          />
+          <ul v-if="content.benefits.items.length" class="mt-10 grid gap-6 md:grid-cols-2">
+            <li
+              v-for="(item, i) in content.benefits.items"
+              :key="i"
+              class="flex gap-4 rounded-3xl border border-ink/5 bg-white p-7 shadow-soft"
+            >
+              <Icon
+                name="material-symbols:check-circle-rounded"
+                class="mt-0.5 h-6 w-6 flex-none text-orange-500"
+                aria-hidden="true"
+              />
+              <div>
+                <h3 v-if="item.title" class="font-display text-lg font-bold text-ink">
+                  <AccentText :text="item.title" />
+                </h3>
+                <p v-if="item.body" class="mt-2 whitespace-pre-line leading-relaxed text-ink/70">
+                  <AccentText :text="item.body" />
+                </p>
+              </div>
+            </li>
+          </ul>
+          <div
+            v-if="content.benefits.org || content.benefits.b2c"
+            class="mt-8 grid gap-6 md:grid-cols-2"
+          >
+            <p
+              v-if="content.benefits.org"
+              class="whitespace-pre-line rounded-2xl border-l-4 border-teal-700 bg-white/70 p-6 leading-relaxed text-ink/75"
+            >
+              <AccentText :text="content.benefits.org" />
+            </p>
+            <p
+              v-if="content.benefits.b2c"
+              class="whitespace-pre-line rounded-2xl border-l-4 border-orange-400 bg-white/70 p-6 leading-relaxed text-ink/75"
+            >
+              <AccentText :text="content.benefits.b2c" />
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Premier contact : deux cartes d'orientation, puis les deux blocs
+           (RDV / rappel) l'un sous l'autre — plus d'onglets, tout est visible. -->
       <section id="contact" v-reveal class="relative isolate scroll-mt-20 overflow-hidden">
         <TentacleAccent
           side="right"
@@ -96,7 +154,7 @@ useSeoMeta({
         />
         <div class="mx-auto max-w-5xl px-4 py-20">
           <SectionHeading
-            title="Deux façons de commencer la conversation"
+            :title="content.contactTitle || 'Deux façons de commencer'"
             :subtitle="content.contactIntro ?? undefined"
             eyebrow="Premier contact"
             align="center"
@@ -132,20 +190,20 @@ useSeoMeta({
                 class="grid h-12 w-12 place-items-center rounded-full bg-teal-900 text-sand-300"
                 aria-hidden="true"
               >
-                <Icon name="material-symbols:forum" class="h-6 w-6" />
+                <Icon name="material-symbols:phone-callback" class="h-6 w-6" />
               </span>
-              <h3 class="mt-4 font-display text-xl font-semibold text-ink">M'envoyer un message</h3>
+              <h3 class="mt-4 font-display text-xl font-semibold text-ink">Être rappelé·e</h3>
               <p
-                v-if="content.messageIntro"
+                v-if="content.callbackIntro"
                 class="mt-2 whitespace-pre-line text-left leading-relaxed text-ink/65"
               >
-                <AccentText :text="content.messageIntro" />
+                <AccentText :text="content.callbackIntro" />
               </p>
               <NuxtLink
-                to="#message"
+                to="#rappel"
                 class="mt-auto inline-flex w-fit items-center gap-1.5 pt-6 font-semibold text-brand-accent"
               >
-                M'envoyer un message <span aria-hidden="true">→</span>
+                Être rappelé·e <span aria-hidden="true">→</span>
               </NuxtLink>
             </article>
           </div>
@@ -161,20 +219,29 @@ useSeoMeta({
             </p>
           </div>
 
-          <!-- Formulaire message -->
-          <div id="message" class="mx-auto mt-16 max-w-xl scroll-mt-24">
-            <p class="mb-6 text-center text-sm text-ink/55">
+          <!-- Formulaire de rappel -->
+          <div id="rappel" class="mx-auto mt-16 max-w-2xl scroll-mt-24">
+            <div class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
+              <h3 class="font-display text-2xl font-bold text-ink">Être rappelé·e</h3>
+              <p
+                v-if="content.callbackFormIntro"
+                class="mt-2 whitespace-pre-line leading-relaxed text-ink/65"
+              >
+                <AccentText :text="content.callbackFormIntro" />
+              </p>
+              <div class="mt-6">
+                <ContactForm />
+              </div>
+            </div>
+            <p class="mt-4 text-center text-sm text-ink/55">
               Vos données servent uniquement à traiter votre demande
               (<NuxtLink to="/confidentialite" class="text-teal-700 underline">confidentialité</NuxtLink>).
             </p>
-            <div class="rounded-3xl border border-ink/5 bg-white p-6 shadow-soft sm:p-8">
-              <ContactForm />
-            </div>
           </div>
         </div>
       </section>
 
-      <!-- 3. À quoi vous attendre — panneau marine + frise dorée centrée, dans
+      <!-- 4. À quoi vous attendre — panneau marine + frise dorée centrée, dans
            l'esprit du bloc « Ma méthode » de l'accueil (demande Éléonore). -->
       <section
         v-if="content.nextSteps.length || content.responseTimeNote || content.stepsConclusion"
@@ -241,7 +308,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 4. Pour quelles situations ? (organisations / particuliers) -->
+      <!-- 5. Pour quelles situations ? (organisations / particuliers) -->
       <section v-if="content.reasons" v-reveal class="relative isolate overflow-hidden">
         <TentacleAccent
           side="right"
@@ -302,7 +369,7 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 5. FAQ — centrée, sur beige soutenu (les deux dernières sections
+      <!-- 6. FAQ — centrée, sur beige soutenu (les deux dernières sections
            partageaient la même couleur : demande Éléonore). -->
       <section
         v-if="content.faq.length"
@@ -324,18 +391,31 @@ useSeoMeta({
         </div>
       </section>
 
-      <!-- 6. CTA final → prise de RDV -->
+      <!-- 7. CTA final → les deux mêmes portes que le hero (RDV / rappel) -->
       <section v-if="content.finalCta" v-reveal class="mx-auto max-w-6xl px-4 py-20">
         <CtaBlock
           :title="content.finalCta.title || 'Parlons-en'"
           :description="content.finalCta.body ?? undefined"
           :subtext="content.finalCta.subtext ?? undefined"
-          cta-label="Réserver un échange"
-          to="#rdv"
-        />
+        >
+          <div class="flex flex-wrap justify-center gap-3">
+            <NuxtLink
+              to="#rdv"
+              class="inline-flex items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"
+            >
+              Réserver un échange <span aria-hidden="true">→</span>
+            </NuxtLink>
+            <NuxtLink
+              to="#rappel"
+              class="inline-flex items-center gap-2 rounded-full bg-paper px-7 py-3.5 font-semibold text-ink shadow-soft transition-colors hover:bg-white"
+            >
+              Être rappelé·e <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </div>
+        </CtaBlock>
       </section>
 
-      <!-- 7. Coordonnées directes -->
+      <!-- 8. Coordonnées directes -->
       <section
         v-if="content.contact.email || content.contact.linkedin || content.contact.location"
         class="bg-ink text-paper"
