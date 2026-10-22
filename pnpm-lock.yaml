@@ -25,8 +25,8 @@ importers:
   apps/web:
     dependencies:
       '@directus/sdk':
-        specifier: 22.0.0
-        version: 22.0.0
+        specifier: 26.0.0
+        version: 26.0.0
       '@encre/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -391,8 +391,8 @@ packages:
   '@colordx/core@5.8.0':
     resolution: {integrity: sha512-cG0QJAO6VkaRUlIb0zOzX9gfJgs1pjoOL9gZ/PK1kfvBs0GCkADu5oQh6gPxXgQnZ3gV575h+lQRC0NlMDTclA==}
 
-  '@directus/sdk@22.0.0':
-    resolution: {integrity: sha512-1D3cgjg2jnA7S1LXwKoYSw7yyJCs/DyKUOUDMLbvLtljafWJ5KOef7O8bVDPuQkVw6Bvoo6GUCbAMYI6Ff8Igg==}
+  '@directus/sdk@26.0.0':
+    resolution: {integrity: sha512-t6G900Rx43bTPPFtSrIX0EE6awIeJSoLbictRAVC0P/Eh4Nmud9lLfFodMAikFWe5IbocJ33Y3eio+hLZMqLTA==}
     engines: {node: '>=22'}
 
   '@drizzle-team/brocli@0.10.2':
@@ -5778,7 +5778,7 @@ snapshots:
 
   '@colordx/core@5.8.0': {}
 
-  '@directus/sdk@22.0.0': {}
+  '@directus/sdk@26.0.0': {}
 
   '@drizzle-team/brocli@0.10.2': {}
 
