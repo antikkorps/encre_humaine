@@ -22,6 +22,13 @@
       "when": 1791816813996,
       "tag": "0002_contact_callback",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792750707346,
+      "tag": "0003_directus_manage_contact_leads",
+      "breakpoints": true
     }
   ]
 }

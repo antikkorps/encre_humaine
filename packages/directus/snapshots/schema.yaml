@@ -129,8 +129,8 @@ collections:
     meta:
       accountability: all
       archive_app_filter: true
-      archive_field: null
-      archive_value: null
+      archive_field: status
+      archive_value: closed
       collapse: open
       collection: contact_leads
       color: null
@@ -141,8 +141,9 @@ collections:
       item_duplication_fields: null
       note: >-
         Demandes reçues via le formulaire de contact (« Être rappelé·e » :
-        téléphone et créneau de rappel). Lecture seule : elles sont enregistrées
-        automatiquement par le site.
+        téléphone et créneau de rappel). Enregistrées par le site : seul le
+        statut se modifie. « Archiver » = clôturer (masquée de la liste, gardée)
+        ; la corbeille supprime définitivement.
       preview_url: null
       singleton: false
       sort: null
@@ -152,7 +153,7 @@ collections:
           plural: messages
           singular: message
           translation: Messages reçus
-      unarchive_value: null
+      unarchive_value: new
       versioning: false
     schema:
       name: contact_leads
@@ -6420,15 +6421,29 @@ fields:
     meta:
       collection: contact_leads
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Nouvelle
+            value: new
+          - text: Recontactée
+            value: contacted
+          - text: Clôturée
+            value: closed
       field: status
       group: null
       hidden: false
-      interface: null
+      interface: select-dropdown
       note: null
-      options: null
-      readonly: true
+      options:
+        choices:
+          - text: Nouvelle
+            value: new
+          - text: Recontactée
+            value: contacted
+          - text: Clôturée
+            value: closed
+      readonly: false
       required: false
       searchable: true
       sort: null
@@ -22744,7 +22759,7 @@ fields:
       group: null
       hidden: false
       interface: input
-      note: URL de prise de RDV (Cal.com, Calendly… — consommée par l'embed RDV)
+      note: 'Lien de réservation PAR DÉFAUT (Cal.com…) : menu, pied de page, À propos'
       options: null
       readonly: false
       required: false

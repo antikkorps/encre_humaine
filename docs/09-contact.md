@@ -27,10 +27,19 @@ Les soumissions sont enregistrées dans `app.contact_leads` **avant** l'envoi de
 notification, qui est best-effort. Un email qui n'arrive pas ne perd donc aucun
 message — encore faut-il pouvoir les lire.
 
-L'admin Directus expose la table en **lecture seule** sous « Messages reçus »
-(`packages/directus/src/adopt-app-tables.ts`, appelé par le bootstrap). Trois
-garde-fous se cumulent : `SELECT` seul pour `directus_user` au niveau Postgres,
-champs `readonly` dans l'admin, action `read` seule pour la policy Éditrice.
+L'admin Directus expose la table sous « Messages reçus »
+(`packages/directus/src/adopt-app-tables.ts`, appelé par le bootstrap). Le
+**contenu** d'une demande est en lecture seule ; Éléonore peut seulement :
+- **la ranger** : changer son statut (Nouvelle / Recontactée / Clôturée).
+  « Archiver » = clôturer ; la liste par défaut masque les demandes clôturées,
+  qui restent consultables via le filtre d'archives ;
+- **la supprimer** définitivement (spam, demande d'effacement d'une personne).
+
+Trois garde-fous se cumulent : au niveau Postgres, `directus_user` n'a que
+`SELECT`, `UPDATE (status)` et `DELETE` sur cette table (migrations 0001 et
+0003, verrouillé par `packages/db/src/schema/directus-grants.test.ts`) ; dans
+l'admin, tous les champs sauf le statut sont `readonly` ; la policy Éditrice a
+`read`, `update` limité à `status` et `delete` (demande du 2026-10-23).
 
 Pré-requis d'infrastructure : `DB_SEARCH_PATH: directus,app` sur le conteneur
 Directus et le `GRANT SELECT` de `infra/postgres/init.sql`. Sur une base **déjà
