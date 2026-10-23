@@ -55,12 +55,11 @@ useSeoMeta({
         </figure>
       </template>
 
-      <p
+      <AccentBlocks
         v-if="content?.accrocheBody"
-        class="mt-6 max-w-xl whitespace-pre-line leading-relaxed text-ink/70"
-      >
-        <AccentText :text="content.accrocheBody" />
-      </p>
+        :text="content.accrocheBody"
+        class="mt-6 max-w-xl leading-relaxed text-ink/70"
+      />
 
       <div class="mt-8 flex flex-wrap gap-3">
         <NuxtLink

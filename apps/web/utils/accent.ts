@@ -39,3 +39,10 @@ export function parseAccent(text: string): AccentSegment[] {
   if (cursor < text.length) segments.push({ text: text.slice(cursor), accent: false });
   return segments;
 }
+
+/** Texte brut sans marquage — pour les contextes sans mise en forme (JSON-LD, fil d'Ariane). */
+export function stripAccent(text: string): string {
+  return parseAccent(text)
+    .map((segment) => segment.text)
+    .join("");
+}

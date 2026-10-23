@@ -119,13 +119,34 @@ useSeoMeta({
   robots: () => (content.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
 
+// Le dernier maillon du fil d'Ariane porte le NOM de l'offre (« Audit RH »), pas
+// la phrase d'accroche du héros.
+const offerName = computed(() => content.value?.title ?? stripAccent(heading.value));
+const startingPrice = computed(() => parseStartingPrice(content.value?.priceLabel));
+
 useSchemaOrg([
   defineBreadcrumb({
     itemListElement: [
       { name: "Accueil", item: "/" },
       { name: isB2c.value ? "Particuliers" : "Organisations", item: hub.value.to },
-      { name: heading.value },
+      { name: offerName.value },
     ],
+  }),
+  defineService({
+    name: offerName.value,
+    description: content.value?.seo.description ?? undefined,
+    serviceType: offerName.value,
+    areaServed: "FR",
+    // « À partir de » : prix plancher ; « sur devis » → aucun prix balisé.
+    ...(startingPrice.value !== null && {
+      offers: defineOffer({
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          minPrice: startingPrice.value,
+          priceCurrency: "EUR",
+        },
+      }),
+    }),
   }),
 ]);
 </script>
@@ -162,9 +183,10 @@ useSchemaOrg([
           >
             <Icon name="material-symbols:lightbulb" class="h-6 w-6" />
           </span>
-          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
-            <AccentText :text="content.accrocheBody" />
-          </p>
+          <AccentBlocks
+            :text="content.accrocheBody"
+            class="relative mt-5 text-[1.05rem] leading-relaxed text-ink/75"
+          />
         </figure>
       </template>
 

@@ -89,8 +89,10 @@ watch(
               <NuxtLink
                 to="/"
                 class="flex items-center text-ink/70 transition-colors hover:text-teal-700 aria-[current=page]:text-teal-700"
-                aria-label="Accueil"
               >
+                <!-- Texte réel (masqué à l'écran) plutôt qu'un aria-label : les robots
+                     qui extraient le texte lisaient sinon ce lien « / ». -->
+                <span class="sr-only">Accueil</span>
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
                     d="M3 11.5 12 4l9 7.5M5.5 10v9.5a1 1 0 0 0 1 1H10v-5.5h4V20.5h3.5a1 1 0 0 0 1-1V10"
