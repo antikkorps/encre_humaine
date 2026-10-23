@@ -25,6 +25,14 @@ export interface ContentPhoto {
   height: number | null;
 }
 
+/** Fiche autrice (E-E-A-T) — `site_settings`, affichée sur l'accueil et les ressources. */
+export interface AuthorInfo {
+  name: string;
+  title: string | null;
+  photo: ContentPhoto | null;
+  linkedinUrl: string | null;
+}
+
 /** Témoignage réutilisable — `testimonials` (docs/02 §5). */
 export interface TestimonialItem {
   quote: string;
@@ -81,6 +89,10 @@ export interface CaseStudyItem {
   periodLabel?: string;
   /** Slugs d'offre où le cas est épinglé ; vide = il ne vit que sur l'accueil. */
   offers: string[];
+  /** Ancre du cas sur sa page d'offre (`cas-<id>`), cible du « Lire le cas ». */
+  anchor?: string;
+  /** Accueil seulement : page d'offre + ancre où lire le cas complet. */
+  readMoreUrl?: string;
   /** Le cas figure aussi dans le carrousel de l'accueil (case cochée par défaut). */
   showOnHome: boolean;
 }
@@ -124,6 +136,20 @@ export interface ProductSummary {
 export interface FaqItem {
   question: string;
   answer: string;
+}
+
+/** Lien éditorial « titre + phrase + URL » (bloc « Pour aller plus loin »). */
+export interface LinkItem {
+  title: string;
+  body: string;
+  url: string;
+}
+
+/** Section « Pour aller plus loin » — n'existe que si elle porte un lien. */
+export interface FurtherSection {
+  title: string;
+  intro: string | null;
+  links: LinkItem[];
 }
 
 /** Item de navigation (en-tête / menu mobile) — docs/00-global.md §Layout. */

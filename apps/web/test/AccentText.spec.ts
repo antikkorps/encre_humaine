@@ -46,3 +46,15 @@ describe("AccentText", () => {
     expect(wrapper.classes()).toContain("whitespace-pre-line");
   });
 });
+
+describe("AccentText — liens", () => {
+  it("rend un vrai lien, texte intact", async () => {
+    const wrapper = await mountSuspended(AccentText, {
+      props: { text: "Voir l'[audit RH](/organisations/audit-rh)." },
+    });
+    expect(wrapper.element.textContent).toBe("Voir l'audit RH.");
+    const link = wrapper.find("a");
+    expect(link.attributes("href")).toBe("/organisations/audit-rh");
+    expect(link.text()).toBe("audit RH");
+  });
+});

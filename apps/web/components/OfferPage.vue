@@ -594,6 +594,11 @@ useSchemaOrg([
       </div>
     </section>
 
+    <!-- 11 bis. Pour aller plus loin — contenus liés (maillage interne) -->
+    <section v-if="content.further" v-reveal class="relative isolate overflow-hidden">
+      <FurtherReading :section="content.further" />
+    </section>
+
     <!-- 12. Témoignages (centralisés par audience de l'offre) — masqué si vide -->
     <section
       v-if="content.testimonials.length"

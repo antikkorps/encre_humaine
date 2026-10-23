@@ -327,3 +327,45 @@ describe("mapOfferContent", () => {
     expect(c.seo.description).toBe("Conseil RH.");
   });
 });
+
+// « Pour aller plus loin » (maillage, audit SEO 2026-10-22) : liens vers les
+// ressources liées à l'offre (articles aujourd'hui, carnets/guides demain).
+describe("mapOfferContent — pour aller plus loin", () => {
+  it("garde les liens sûrs, avec titre par défaut", () => {
+    const c = mapOfferContent(
+      {
+        further_links: [
+          {
+            title: "Le plan de développement des compétences",
+            body: "Article",
+            url: "/ressources/pdc",
+          },
+          { title: "Piège", url: "javascript:alert(1)" },
+          { title: "", url: "/vide" },
+        ],
+      },
+      [],
+      [],
+      [],
+      {},
+      BASE,
+      wrap,
+    );
+    expect(c.further).toEqual({
+      title: "Pour aller plus loin",
+      intro: null,
+      links: [
+        {
+          title: "Le plan de développement des compétences",
+          body: "Article",
+          url: "/ressources/pdc",
+        },
+      ],
+    });
+  });
+
+  it("masque la section sans lien valide", () => {
+    const c = mapOfferContent({ further_title: "Lire aussi" }, [], [], [], {}, BASE, wrap);
+    expect(c.further).toBeNull();
+  });
+});

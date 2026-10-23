@@ -7,11 +7,16 @@
 //
 // `full` = cas unique, présenté en pleine largeur (deux colonnes) ; sinon carte de
 // carrousel, en colonne.
+//
+// `compact` = accueil (audit SEO 2026-10-22) : titre + résumé de 2 lignes et un
+// lien « Lire le cas » vers la page d'offre. Le récit complet ne vit qu'à un
+// endroit, sinon Google voit le même texte deux fois.
 import type { CaseStudyItem } from "~/types/content";
 
-const props = withDefaults(defineProps<{ caseStudy: CaseStudyItem; full?: boolean }>(), {
-  full: false,
-});
+const props = withDefaults(
+  defineProps<{ caseStudy: CaseStudyItem; full?: boolean; compact?: boolean }>(),
+  { full: false, compact: false },
+);
 
 const STEPS = [
   { key: "situation", label: "La situation", icon: "material-symbols:insights" },
@@ -26,7 +31,8 @@ const steps = computed(() =>
 
 <template>
   <article
-    class="flex h-full flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white shadow-soft"
+    :id="compact ? undefined : caseStudy.anchor"
+    class="flex h-full scroll-mt-24 flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white shadow-soft"
     :class="full && caseStudy.image ? 'lg:grid lg:grid-cols-[1.35fr_0.65fr] lg:items-stretch' : ''"
   >
     <div class="flex flex-1 flex-col p-7 sm:p-9">
@@ -46,11 +52,24 @@ const steps = computed(() =>
       <h3 class="mt-3 font-display text-2xl font-bold text-ink">
         <AccentText :text="caseStudy.title" />
       </h3>
-      <p v-if="caseStudy.summary" class="mt-2 leading-relaxed text-ink/60">
+      <p
+        v-if="caseStudy.summary"
+        class="mt-2 leading-relaxed text-ink/60"
+        :class="compact ? 'line-clamp-2' : ''"
+      >
         <AccentText :text="caseStudy.summary" />
       </p>
 
-      <dl class="mt-7 space-y-5">
+      <NuxtLink
+        v-if="compact && caseStudy.readMoreUrl"
+        :to="caseStudy.readMoreUrl"
+        class="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-teal-700 hover:text-teal-800"
+      >
+        Lire le cas
+        <span aria-hidden="true">→</span>
+      </NuxtLink>
+
+      <dl v-if="!compact" class="mt-7 space-y-5">
         <div v-for="step in steps" :key="step.key">
           <dt
             class="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.08em] text-teal-800"
@@ -66,7 +85,7 @@ const steps = computed(() =>
 
       <!-- Le résultat : encadré doré, seul élément mis en avant de la carte. -->
       <div
-        v-if="caseStudy.result"
+        v-if="caseStudy.result && !compact"
         class="mt-7 rounded-2xl border border-sand-400/40 bg-orange-50 p-5"
       >
         <p
@@ -81,7 +100,7 @@ const steps = computed(() =>
       </div>
     </div>
 
-    <div v-if="caseStudy.image" :class="full ? '' : 'order-first'">
+    <div v-if="caseStudy.image && !compact" :class="full ? '' : 'order-first'">
       <NuxtImg
         :src="caseStudy.image"
         :alt="caseStudy.imageAlt ?? ''"

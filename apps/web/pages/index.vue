@@ -143,6 +143,10 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
                 {{ hero.ctaSecondaryLabel }}
               </a>
             </div>
+
+            <!-- E-E-A-T (audit SEO 2026-10-22) : visage, nom et LinkedIn dès le
+                 haut de page — qui parle compte pour Google, les IA et les visiteurs. -->
+            <AuthorByline v-if="content?.author" :author="content.author" class="mt-8" />
           </div>
 
           <!-- Colonne droite : micro-preuves sur une carte givrée (ne pas les poser
@@ -278,7 +282,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
         <div class="mx-auto max-w-6xl px-4 py-20">
           <SectionHeading
             :title="content.build.title"
-            eyebrow="Ce que je vous aide à construire"
+            :eyebrow="content.build.eyebrow"
             align="center"
           />
           <div class="mt-12 grid gap-6 md:grid-cols-3">
@@ -321,7 +325,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           <div v-if="content.build.ctaLabel" class="mt-12 flex justify-center">
             <NuxtLink
               :to="content.build.ctaUrl"
-              class="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-semibold text-paper shadow-soft transition-transform hover:-translate-y-0.5"
+              class="inline-flex items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-sand-500"
             >
               {{ content.build.ctaLabel }}
               <span aria-hidden="true">→</span>
@@ -347,7 +351,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           <SectionHeading
             :title="content.method.title"
             :subtitle="content.method.subtitle ?? undefined"
-            eyebrow="Ma méthode"
+            :eyebrow="content.method.eyebrow"
             tone="dark"
             wide
           />
@@ -378,9 +382,6 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
       </section>
 
       <!-- 6. Preuve par l'exemple — cas concrets (`case_studies`) -->
-      <!-- Le manque n°1 relevé par l'audit : aucun exemple complet et concret.
-           Un seul cas → pleine largeur ; dès le deuxième → carrousel, prêt pour
-           les cas suivants et le portfolio d'Éléonore, sans retoucher le code. -->
       <section v-if="content.proof" v-reveal class="relative isolate overflow-hidden bg-paper-2">
         <TentacleAccent
           side="right"
@@ -394,28 +395,13 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
             :eyebrow="content.proof.eyebrow"
             wide
           />
-          <div class="mt-12">
-            <CaseStudyCard
-              v-if="content.proof.cases.length === 1"
-              :case-study="content.proof.cases[0]!"
-              full
-            />
-            <SnapCarousel
-              v-else
-              label="Cas concrets"
-              prev-label="Cas précédent"
-              next-label="Cas suivant"
-              tone="light"
-            >
-              <li
-                v-for="(item, i) in content.proof.cases"
-                :key="i"
-                class="w-[88%] shrink-0 snap-start sm:w-[28rem] lg:w-[32rem]"
-              >
-                <CaseStudyCard :case-study="item" />
-              </li>
-            </SnapCarousel>
-          </div>
+          <!-- Cartes résumées (titre + 2 lignes + « Lire le cas ») : le récit
+               complet vit sur la page d'offre (audit SEO 2026-10-22). -->
+          <ul class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <li v-for="(item, i) in content.proof.cases" :key="i">
+              <CaseStudyCard :case-study="item" compact />
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -655,6 +641,17 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
             >
               🐙 Recevoir les prochaines Tentacules
             </NuxtLink>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 bis. FAQ de l'accueil (faq_items scope « home ») — avant le CTA final.
+           Le balisage FAQPage est porté par FaqAccordion. -->
+      <section v-if="content.faq" v-reveal class="relative isolate overflow-hidden bg-paper-2">
+        <div class="mx-auto max-w-3xl px-4 py-20">
+          <SectionHeading :title="content.faq.title" :eyebrow="content.faq.eyebrow" />
+          <div class="mt-10">
+            <FaqAccordion :items="content.faq.items" />
           </div>
         </div>
       </section>

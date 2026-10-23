@@ -45,3 +45,18 @@ describe("mapArticleContent", () => {
     expect(c.related).toEqual([]);
   });
 });
+
+// Signature sur chaque ressource (E-E-A-T, audit SEO 2026-10-22) : la fiche
+// autrice vient des Paramètres du site, comme sur l'accueil.
+describe("mapArticleContent — signature", () => {
+  it("joint la fiche autrice des paramètres du site", () => {
+    const content = mapArticleContent(
+      { title: "Le PDC" },
+      [],
+      { author_name: "Eléonore Morée", author_title: "Consultante RH" },
+      "https://cms.example.fr",
+      (h) => h ?? "",
+    );
+    expect(content.author).toMatchObject({ name: "Eléonore Morée", title: "Consultante RH" });
+  });
+});

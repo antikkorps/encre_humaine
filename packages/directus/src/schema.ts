@@ -37,6 +37,7 @@ const AUDIENCE_BOTH = [...AUDIENCE, { text: "Les deux", value: "both" }];
  * cosmétique. Le hub, lui, a désormais `b2c_hub` (symétrique de `org`).
  */
 export const FAQ_SCOPE = [
+  { text: "Page d'accueil", value: "home" },
   { text: "Page /contact", value: "contact" },
   { text: "Page /organisations", value: "org" },
   { text: "Page /particuliers", value: "b2c_hub" },
@@ -114,6 +115,10 @@ const singletons: CollectionDef[] = [
       f.input("tagline"),
       f.input("contact_email"),
       f.input("linkedin_url"),
+      // Fiche autrice (E-E-A-T) : en haut de l'accueil et en signature des ressources.
+      f.input("author_name", { half: true, note: "Nom affiché en signature" }),
+      f.input("author_title", { half: true, note: "Fonction (ex. Consultante RH)" }),
+      f.imageFile("author_photo", { note: "Portrait rond de la signature (carré de préférence)" }),
       f.input("booking_url", {
         note: "URL de prise de RDV (Cal.com, Calendly… — consommée par l'embed RDV)",
       }),
@@ -169,6 +174,7 @@ const singletons: CollectionDef[] = [
       f.textarea("recognition_conclusion"),
       // — Promesse / Offre : ce que je vous aide à construire (ancre #offres) —
       f.divider("build_divider", "Promesse / Offre (#offres)"),
+      f.input("build_eyebrow", { note: "Défaut : « Ce que je vous aide à construire »" }),
       f.input("build_title"),
       // Les blocs sont NUMÉROTÉS à l'affichage (1, 2, 3) plutôt qu'illustrés :
       // ce n'est pas une suite logique, mais le chiffre dit d'un coup d'œil qu'il
@@ -198,6 +204,7 @@ const singletons: CollectionDef[] = [
       f.input("build_cta_url", { half: true, note: "Cible du CTA (défaut /organisations)" }),
       // — Ma méthode (ancre #approche, étapes numérotées automatiquement) —
       f.divider("method_divider", "Ma méthode (#approche)"),
+      f.input("method_eyebrow", { note: "Défaut : « Ma méthode de conseil RH pour PME et ETI »" }),
       f.input("method_title"),
       f.textarea("method_subtitle"),
       f.repeater(
@@ -275,6 +282,13 @@ const singletons: CollectionDef[] = [
       f.input("resources_title"),
       f.textarea("resources_subtitle"),
       f.input("resources_cta_label"),
+      // — FAQ (avant le CTA final) : questions dans « FAQ », périmètre « Page d'accueil » —
+      f.divider("home_faq_divider", "FAQ"),
+      f.input("faq_eyebrow", { half: true, note: "Défaut : « FAQ »" }),
+      f.input("faq_title", {
+        half: true,
+        note: "Défaut : « Questions fréquentes ». Les questions se gèrent dans « FAQ » (périmètre « Page d'accueil »).",
+      }),
       // — CTA final (phrase de clôture + réassurance) —
       f.divider("home_cta_divider", "CTA final"),
       f.input("final_cta_title"),
@@ -918,6 +932,17 @@ const collections: CollectionDef[] = [
       f.repeater("takeaways", [{ field: "text", interface: "input-multiline" }], {
         note: "Ce que vous emportez (✓)",
       }),
+      // Pour aller plus loin (maillage, audit SEO 2026-10-22) — articles liés
+      // aujourd'hui, carnets et guides demain. Section masquée sans lien.
+      f.input("further_title", { note: "Défaut : « Pour aller plus loin »" }),
+      f.textarea("further_intro", { note: "Chapeau de la section (optionnel)" }),
+      f.repeater(
+        "further_links",
+        [{ field: "title" }, { field: "body", interface: "input-multiline" }, { field: "url" }],
+        {
+          note: "Contenus liés : titre, phrase d'accroche, lien (ex. /ressources/mon-article ou une page du Laboratoire)",
+        },
+      ),
       // Témoignage + CTA
       f.m2o("featured_testimonial", "testimonials"),
       f.input("cta_title"),

@@ -18,10 +18,18 @@ export interface AccentSegment {
   text: string;
   /** `true` → fragment à mettre en avant (gras doré). */
   accent: boolean;
+  /** Cible d'un lien `[texte](cible)` — maillage interne posé depuis l'admin. */
+  href?: string;
 }
 
-/** `**…**` non gourmand, multi-lignes (les textareas contiennent des `\n`). */
-const ACCENT_RE = /\*\*([\s\S]+?)\*\*/g;
+/**
+ * `**…**` non gourmand, multi-lignes (les textareas contiennent des `\n`), ou
+ * lien `[texte](cible)` sur une seule ligne.
+ */
+const ACCENT_RE = /\*\*([\s\S]+?)\*\*|\[([^\]\n]+)\]\(([^)\s]+)\)/g;
+
+/** Cibles autorisées : chemin du site, ancre, https ou mailto (jamais `javascript:`). */
+const SAFE_HREF_RE = /^(\/(?!\/)|#|https:\/\/|mailto:)/;
 
 /**
  * Découpe un texte en segments normaux / mis en avant. Les `**` non appariés
@@ -32,9 +40,16 @@ export function parseAccent(text: string): AccentSegment[] {
   let cursor = 0;
   for (const match of text.matchAll(ACCENT_RE)) {
     const start = match.index ?? 0;
+    const [whole, accent, label, href] = match;
+    // Lien au protocole non sûr : laissé tel quel dans le texte courant.
+    if (accent === undefined && !SAFE_HREF_RE.test(href ?? "")) continue;
     if (start > cursor) segments.push({ text: text.slice(cursor, start), accent: false });
-    segments.push({ text: match[1] ?? "", accent: true });
-    cursor = start + match[0].length;
+    segments.push(
+      accent === undefined
+        ? { text: label ?? "", accent: false, href }
+        : { text: accent, accent: true },
+    );
+    cursor = start + whole.length;
   }
   if (cursor < text.length) segments.push({ text: text.slice(cursor), accent: false });
   return segments;
