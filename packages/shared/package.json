@@ -7,7 +7,8 @@
     ".": "./src/index.ts",
     "./env": "./src/env.ts",
     "./errors": "./src/errors.ts",
-    "./validation": "./src/validation/index.ts"
+    "./validation": "./src/validation/index.ts",
+    "./diagnostics": "./src/diagnostics/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
