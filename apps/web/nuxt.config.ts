@@ -277,7 +277,7 @@ export default defineNuxtConfig({
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.
   nitro: {
     experimental: { tasks: true },
-    scheduledTasks: { "0 3 * * *": ["newsletter:purge", "contact:purge"] },
+    scheduledTasks: { "0 3 * * *": ["newsletter:purge", "contact:purge", "diagnostics:purge"] },
   },
 
   // @nuxtjs/seo : robots/sitemap/canonical/OG. `site.url` est lu au BUILD ; en
@@ -296,7 +296,12 @@ export default defineNuxtConfig({
   // Search Console. Une page ajoutée en `robots: "noindex"` doit l'être ici aussi.
   sitemap: {
     sources: ["/api/__sitemap__/urls"],
-    exclude: ["/coming-soon", "/newsletter/confirmation", "/laboratoire/confirmation"],
+    exclude: [
+      "/coming-soon",
+      "/newsletter/confirmation",
+      "/laboratoire/confirmation",
+      "/diagnostic/rapport/**",
+    ],
   },
 
   // Identité schema.org globale (Organization + WebSite + WebPage auto-injectés

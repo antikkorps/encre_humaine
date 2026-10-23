@@ -212,3 +212,18 @@ export function resendOrderEmailer(): OrderEmailer {
     },
   };
 }
+
+/**
+ * Envoie le rapport d'un diagnostic à la personne qui l'a demandé
+ * (docs/11-diagnostics.md §Email). Email transactionnel demandé : pas de lien de
+ * désinscription marketing (décision du 2026-10-23). Lève en cas d'échec.
+ */
+export async function sendDiagnosticReport(opts: {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+}): Promise<void> {
+  const config = useRuntimeConfig();
+  await sendEmail({ from: config.newsletterFrom, ...opts });
+}
