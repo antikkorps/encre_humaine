@@ -204,6 +204,63 @@ export interface ContactPage {
   callback_form_intro: string | null;
 }
 
+export interface DiagnosticB2b {
+  id: string;
+  title: string | null;
+  intro: string | null;
+  cta_label: string | null;
+  level_low: string | null;
+  level_mid: string | null;
+  level_high: string | null;
+  themes: unknown | null;
+  questions: unknown | null;
+  offers: unknown | null;
+  messages: unknown | null;
+  unlock_title: string | null;
+  unlock_body: string | null;
+  consent_label: string | null;
+  newsletter_label: string | null;
+  unlock_button: string | null;
+  email_subject: string | null;
+}
+
+export interface DiagnosticB2c {
+  id: string;
+  title: string | null;
+  intro: string | null;
+  cta_label: string | null;
+  level_low: string | null;
+  level_mid: string | null;
+  level_high: string | null;
+  themes: unknown | null;
+  questions: unknown | null;
+  offers: unknown | null;
+  messages: unknown | null;
+  unlock_title: string | null;
+  unlock_body: string | null;
+  consent_label: string | null;
+  newsletter_label: string | null;
+  unlock_button: string | null;
+  email_subject: string | null;
+}
+
+export interface Diagnostics {
+  created_at: string;
+  kind: string;
+  email: string;
+  status: string;
+  result: unknown;
+  answers: unknown;
+  booking_clicked_at: string | null;
+  consent_newsletter: boolean;
+  consent_report: boolean;
+  consent_text_version: string;
+  source: string | null;
+  device: string | null;
+  report_token_hash: string;
+  updated_at: string;
+}
+
 export interface FaqItems {
   id: string;
   question: string | null;
@@ -588,6 +645,9 @@ export interface Schema {
   case_studies: CaseStudies[];
   contact_leads: ContactLeads[];
   contact_page: ContactPage;
+  diagnostic_b2b: DiagnosticB2b;
+  diagnostic_b2c: DiagnosticB2c;
+  diagnostics: Diagnostics[];
   faq_items: FaqItems[];
   home_page: HomePage;
   legal_documents: LegalDocuments[];

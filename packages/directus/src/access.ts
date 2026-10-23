@@ -105,12 +105,14 @@ export async function bootstrapAccess(): Promise<void> {
       editorRules.push({ collection: t.collection, action });
     }
   }
-  // Messages du formulaire : la table appartient à l'application (migrations
+  // Messages du formulaire et diagnostics : tables de l'application (migrations
   // Drizzle). Éléonore les lit, les range (statut seul) et les supprime — jamais
   // de réécriture du contenu (cf. adopt-app-tables.ts, migration 0003).
-  editorRules.push({ collection: "contact_leads", action: "read" });
-  editorRules.push({ collection: "contact_leads", action: "update", fields: ["status"] });
-  editorRules.push({ collection: "contact_leads", action: "delete" });
+  for (const collection of ["contact_leads", "diagnostics"]) {
+    editorRules.push({ collection, action: "read" });
+    editorRules.push({ collection, action: "update", fields: ["status"] });
+    editorRules.push({ collection, action: "delete" });
+  }
   for (const action of ["create", "read", "update", "delete"] as Action[]) {
     editorRules.push({ collection: "directus_files", action });
   }

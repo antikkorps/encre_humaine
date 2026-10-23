@@ -3,6 +3,7 @@
 // le snapshot YAML en est l'artefact reproductible. DRY : un concept = une ligne.
 import * as f from "./fields.ts";
 import { ICON_CHOICES, ICON_SUBFIELD } from "./icons.ts";
+import { diagnosticSingletons } from "./schema-diagnostics.ts";
 
 export type CollectionDef = {
   collection: string;
@@ -1065,7 +1066,11 @@ const collections: CollectionDef[] = [
   },
 ];
 
-export const allCollections: CollectionDef[] = [...singletons, ...collections];
+export const allCollections: CollectionDef[] = [
+  ...singletons,
+  ...diagnosticSingletons,
+  ...collections,
+];
 
 /** Collections de contenu exposées en lecture à l'app (et éditables par l'éditrice). */
 export const contentCollections = allCollections.map((c) => c.collection);
