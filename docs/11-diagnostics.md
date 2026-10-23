@@ -14,7 +14,7 @@ Outil d'acquisition : 12 questions, ~4 minutes, un score utile en lui-même, des
 | Directus | **Textes** : intro, libellés de questions et variantes, libellés de réponses, conseils, noms de niveaux, messages de recommandation, mentions de taille, cartes d'offre (nom, prix, durée, phrase, lien), textes de l'encart email, de l'écran bienveillant, de l'email envoyé. |
 | `site_settings` | Agendas `booking_url_org` / `booking_url_b2c` (repli `booking_url`). |
 
-Un texte manquant dans Directus ne casse pas la page : le loader retombe sur le texte de référence du cahier des charges, embarqué dans le seed (`content-diagnostics.ts`) et dupliqué nulle part ailleurs.
+Un texte manquant dans Directus ne casse pas la page : le loader retombe, clé par clé, sur le texte de référence du cahier des charges (`packages/shared/src/diagnostics/texts-b2b.ts` / `texts-b2c.ts`), qui sert aussi de semence au seed. Une liste de réponses au mauvais nombre de lignes, une clé inconnue ou un lien d'offre non sûr sont ignorés.
 
 ## Parcours (commun)
 1. Écran d'intro (titre, durée, phrase de cadrage) puis question 1.

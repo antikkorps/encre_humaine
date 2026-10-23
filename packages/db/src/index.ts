@@ -26,5 +26,7 @@ export type Order = InferSelectModel<typeof schema.orders>;
 export type NewOrder = InferInsertModel<typeof schema.orders>;
 export type ContactLead = InferSelectModel<typeof schema.contactLeads>;
 export type NewContactLead = InferInsertModel<typeof schema.contactLeads>;
+export type Diagnostic = InferSelectModel<typeof schema.diagnostics>;
+export type NewDiagnostic = InferInsertModel<typeof schema.diagnostics>;
 export type NewsletterSubscriber = InferSelectModel<typeof schema.newsletterSubscribers>;
 export type NewNewsletterSubscriber = InferInsertModel<typeof schema.newsletterSubscribers>;

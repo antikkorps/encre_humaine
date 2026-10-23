@@ -1,6 +1,7 @@
 import { getTableConfig } from "drizzle-orm/pg-core";
 import { describe, expect, it } from "vitest";
 import { contactLeads } from "./contact-leads.ts";
+import { diagnostics } from "./diagnostics.ts";
 import { newsletterSubscribers } from "./newsletter-subscribers.ts";
 import { orders } from "./orders.ts";
 
@@ -41,5 +42,21 @@ describe("schéma app", () => {
       const col = cols.find((c) => c.name === name);
       expect(col?.columnType).toBe("PgInteger");
     }
+  });
+
+  // Diagnostics B2B/B2C — docs/11-diagnostics.md.
+  it("diagnostics : schéma app, aucune IP, aucune colonne pour la réponse sensible", () => {
+    const cfg = getTableConfig(diagnostics);
+    expect(cfg.schema).toBe("app");
+    const cols = cfg.columns.map((c) => c.name);
+    expect(cols).not.toContain("ip");
+    expect(cols.some((c) => c.includes("difficulty"))).toBe(false);
+  });
+
+  it("diagnostics : un jeton de rapport ne désigne qu'un seul diagnostic", () => {
+    const unique = getTableConfig(diagnostics).indexes.find(
+      (i) => i.config.name === "diagnostics_report_token_ux",
+    );
+    expect(unique?.config.unique).toBe(true);
   });
 });
