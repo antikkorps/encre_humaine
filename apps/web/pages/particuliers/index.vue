@@ -65,7 +65,7 @@ useSeoMeta({
           </p>
           <NuxtLink
             v-if="content.accrocheCtaLabel"
-            to="/contact"
+            to="/contact?pour=particulier"
             class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
           >
             {{ content.accrocheCtaLabel }}
@@ -396,7 +396,7 @@ useSeoMeta({
           :description="content.ctaBody ?? undefined"
           :cta-label="content.ctaLabel"
           :subtext="content.ctaSubtext ?? undefined"
-          to="/contact"
+          to="/contact?pour=particulier"
           variant="orange"
         />
       </section>

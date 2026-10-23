@@ -37,7 +37,8 @@ useSeoMeta({
   robots: () => (article.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
 
-// Données structurées Article (docs/07 §SEO) : auteur = Eléonore.
+// Données structurées Article (docs/07 §SEO) : auteur = la fiche autrice des
+// Paramètres du site (repli sur le nom historique si elle n'est pas remplie).
 if (article.value) {
   const a = article.value;
   useHead({
@@ -51,7 +52,12 @@ if (article.value) {
           ...(a.excerpt ? { description: a.excerpt } : {}),
           ...(a.cover ? { image: [a.cover.url] } : {}),
           ...(a.publishedAt ? { datePublished: a.publishedAt } : {}),
-          author: { "@type": "Person", name: "Eléonore Morée" },
+          author: {
+            "@type": "Person",
+            name: a.author?.name ?? "Eléonore Morée",
+            url: `${useSiteConfig().url}/a-propos`,
+            ...(a.author?.linkedinUrl ? { sameAs: [a.author.linkedinUrl] } : {}),
+          },
           publisher: { "@type": "Organization", name: siteName },
         }),
       },
@@ -124,6 +130,9 @@ if (article.value) {
 
           <!-- 2. Corps (rich text assaini, h2 ancrés) -->
           <RichText v-if="article.bodyHtml" :html="article.bodyHtml" class="mt-10" />
+
+          <!-- Signature (E-E-A-T) : qui écrit, son parcours, son LinkedIn. -->
+          <AuthorByline v-if="article.author" :author="article.author" variant="card" class="mt-12" />
         </article>
 
         <!-- 3. Encart newsletter — dans la colonne principale (aligné au corps) -->

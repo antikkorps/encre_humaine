@@ -10,6 +10,7 @@ import {
   mapB2c,
   mapBuild,
   mapHomeContent,
+  mapHomeFaq,
   mapIntro,
   mapMethod,
   mapRecognition,
@@ -80,6 +81,7 @@ describe("mapBuild", () => {
         build_blocks: [{ title: "Audit", body: "Faire le point." }, {}],
       }),
     ).toEqual({
+      eyebrow: "Ce que je vous aide à construire",
       title: "Ce que je construis",
       blocks: [{ title: "Audit", body: "Faire le point." }],
       ctaLabel: null,
@@ -106,6 +108,7 @@ describe("mapMethod / mapWhy", () => {
         method_steps: [{ title: "Comprendre", body: "J'écoute." }],
       }),
     ).toEqual({
+      eyebrow: "Ma méthode de conseil RH pour PME et ETI",
       title: "Ma méthode",
       subtitle: null,
       steps: [{ title: "Comprendre", body: "J'écoute." }],
@@ -309,5 +312,60 @@ describe("mapHomeContent", () => {
     );
     expect(content.seo.ogImage).toBe(`${BASE}/assets/page-og`);
     expect(content.seo.noIndex).toBe(true);
+  });
+});
+
+// Retours Éléonore du 2026-10-22 (SEO) : sur-titres parlants et éditables, FAQ
+// propre à l'accueil, cas résumés renvoyant vers leur page d'offre.
+describe("sur-titres éditables", () => {
+  it("prennent la valeur saisie dans l'admin", () => {
+    expect(mapMethod({ method_title: "T", method_eyebrow: "Ma méthode" })?.eyebrow).toBe(
+      "Ma méthode",
+    );
+    expect(mapBuild({ build_title: "T", build_eyebrow: "Mes offres" })?.eyebrow).toBe("Mes offres");
+  });
+});
+
+describe("mapHomeFaq", () => {
+  const sanitize = (h?: string | null) => h ?? "";
+
+  it("titres par défaut, questions assainies", () => {
+    expect(
+      mapHomeFaq(
+        {},
+        [{ question: "Qu'est-ce que la GEPP ?", answer: "<p>Anticiper.</p>" }],
+        sanitize,
+      ),
+    ).toEqual({
+      eyebrow: "FAQ",
+      title: "Questions fréquentes",
+      items: [{ question: "Qu'est-ce que la GEPP ?", answer: "<p>Anticiper.</p>" }],
+    });
+  });
+
+  it("masquée sans question", () => {
+    expect(mapHomeFaq({ faq_title: "Vos questions" }, [], sanitize)).toBeNull();
+  });
+});
+
+describe("mapHomeContent — cas résumés", () => {
+  it("relie chaque cas à l'ancre de sa page d'offre", () => {
+    const content = mapHomeContent({ proof_title: "Cas" }, [], {}, BASE, {
+      caseStudies: [
+        {
+          id: 7,
+          title: "Plan de formation",
+          summary: "Résumé.",
+          offer_scopes: ["carte-des-talents"],
+        },
+        { id: 8, title: "Sans offre", summary: "Résumé." },
+      ],
+      offers: [{ slug: "carte-des-talents", audience: "organisation" }],
+    });
+    expect(content.proof?.cases.map((c) => c.readMoreUrl)).toEqual([
+      "/organisations/carte-des-talents#cas-7",
+      undefined,
+    ]);
+    expect(content.proof?.cases[0]?.anchor).toBe("cas-7");
   });
 });

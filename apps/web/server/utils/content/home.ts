@@ -1,14 +1,16 @@
 import { readItems, readSingleton } from "@directus/sdk";
-import type { ArticleSummary, Stat, TestimonialItem } from "~/types/content";
+import type { ArticleSummary, AuthorInfo, FaqItem, Stat, TestimonialItem } from "~/types/content";
 import {
   CASE_STUDY_FIELDS,
   type ContentPhoto,
   type ContentSeo,
   caseStudiesForHome,
+  caseStudiesWithOfferLinks,
   type FileField,
   fileAlt,
   fileUrl,
   mapCaseStudies,
+  mapFaqItems,
   mapPhoto,
   mapProofSection,
   mapSeo,
@@ -23,6 +25,7 @@ import {
   TESTIMONIAL_FIELDS,
   type TitledItem,
 } from "./_shared";
+import { AUTHOR_SETTINGS_FIELDS, mapAuthor, type RawAuthorSettings } from "./author";
 
 /**
  * Contenu de la page d'accueil — docs/01-accueil.md, docs/02-content-model.md §4.
@@ -75,10 +78,12 @@ export interface RawHome {
   recognition_subtitle?: string | null;
   recognition_items?: unknown;
   recognition_conclusion?: string | null;
+  build_eyebrow?: string | null;
   build_title?: string | null;
   build_blocks?: unknown;
   build_cta_label?: string | null;
   build_cta_url?: string | null;
+  method_eyebrow?: string | null;
   method_title?: string | null;
   method_subtitle?: string | null;
   method_steps?: unknown;
@@ -104,6 +109,8 @@ export interface RawHome {
   resources_title?: string | null;
   resources_subtitle?: string | null;
   resources_cta_label?: string | null;
+  faq_eyebrow?: string | null;
+  faq_title?: string | null;
   final_cta_title?: string | null;
   final_cta_description?: string | null;
   final_cta_label?: string | null;
@@ -141,13 +148,14 @@ export interface HomeContent {
     conclusion: string | null;
   } | null;
   build: {
+    eyebrow: string;
     title: string;
     blocks: BuildBlock[];
     /** CTA de section (« Explorer »), `null` si non renseigné. */
     ctaLabel: string | null;
     ctaUrl: string;
   } | null;
-  method: { title: string; subtitle: string | null; steps: TitledItem[] } | null;
+  method: { eyebrow: string; title: string; subtitle: string | null; steps: TitledItem[] } | null;
   /** Preuve par l'exemple : habillage (home_page) + cas (collection `case_studies`). */
   proof: ProofSection | null;
   sectors: {
@@ -169,6 +177,10 @@ export interface HomeContent {
   articles: ArticleSummary[];
   /** Toujours présent (titres à défaut) ; la section se masque si aucun article. */
   resources: { title: string; subtitle: string | null; ctaLabel: string };
+  /** FAQ propre à l'accueil (`faq_items` scope `home`), placée avant le CTA final. */
+  faq: HomeFaq | null;
+  /** Fiche autrice (E-E-A-T) : photo + LinkedIn en haut de page. */
+  author: AuthorInfo | null;
   finalCta: { title: string; description: string | null; label: string } | null;
   seo: ContentSeo;
 }
@@ -219,6 +231,7 @@ export function mapBuild(home: RawHome): HomeContent["build"] {
     .filter((b) => b.title !== "" || b.body !== "");
   if (!title && !blocks.length) return null;
   return {
+    eyebrow: str(home.build_eyebrow) || "Ce que je vous aide à construire",
     title,
     blocks,
     ctaLabel: str(home.build_cta_label) || null,
@@ -232,7 +245,12 @@ export function mapMethod(home: RawHome): HomeContent["method"] {
   const subtitle = str(home.method_subtitle);
   const steps = mapTitledItems(home.method_steps);
   if (!title && !subtitle && !steps.length) return null;
-  return { title, subtitle: subtitle || null, steps };
+  return {
+    eyebrow: str(home.method_eyebrow) || "Ma méthode de conseil RH pour PME et ETI",
+    title,
+    subtitle: subtitle || null,
+    steps,
+  };
 }
 
 /** Secteurs d'intervention : réponse au « dans quels secteurs as-tu travaillé ? ». */
@@ -322,14 +340,46 @@ export function mapIntro(home: RawHome, assetBase: string): HomeContent["intro"]
   };
 }
 
+export interface HomeFaq {
+  eyebrow: string;
+  title: string;
+  items: FaqItem[];
+}
+
+/** FAQ de l'accueil : titres éditables, masquée tant qu'aucune question n'est publiée. */
+export function mapHomeFaq(
+  home: RawHome,
+  faqRaw: unknown,
+  sanitize: (html?: string | null) => string,
+): HomeFaq | null {
+  const items = mapFaqItems(faqRaw, sanitize);
+  if (!items.length) return null;
+  return {
+    eyebrow: str(home.faq_eyebrow) || "FAQ",
+    title: str(home.faq_title) || "Questions fréquentes",
+    items,
+  };
+}
+
+/** Données annexes de l'accueil, chargées à part du singleton. */
+export interface HomeExtras {
+  caseStudies?: unknown;
+  /** Offres publiées `{ slug, audience }` : résolvent le lien « Lire le cas ». */
+  offers?: unknown;
+  faq?: unknown;
+  settings?: RawAuthorSettings;
+  sanitize?: (html?: string | null) => string;
+}
+
 /** Compose le payload de la page (pur). Fallbacks = garde-fous d'affichage, jamais du contenu éditorial. */
 export function mapHomeContent(
   home: RawHome,
   articles: unknown,
   settings: RawSiteDefaults,
   assetBase: string,
-  caseStudies: unknown = [],
+  extras: HomeExtras = {},
 ): HomeContent {
+  const homeCases = caseStudiesForHome(mapCaseStudies(extras.caseStudies, assetBase));
   const finalTitle = str(home.final_cta_title);
   return {
     hero: {
@@ -346,7 +396,7 @@ export function mapHomeContent(
     recognition: mapRecognition(home),
     build: mapBuild(home),
     method: mapMethod(home),
-    proof: mapProofSection(home, caseStudiesForHome(mapCaseStudies(caseStudies, assetBase))),
+    proof: mapProofSection(home, caseStudiesWithOfferLinks(homeCases, extras.offers)),
     sectors: mapSectors(home),
     why: mapWhy(home),
     intro: mapIntro(home, assetBase),
@@ -358,6 +408,9 @@ export function mapHomeContent(
       subtitle: str(home.resources_subtitle) || null,
       ctaLabel: str(home.resources_cta_label) || "Voir toutes les ressources",
     },
+    // Sans assainisseur injecté, pas de HTML de FAQ rendu (jamais de repli brut).
+    faq: extras.sanitize ? mapHomeFaq(home, extras.faq, extras.sanitize) : null,
+    author: mapAuthor(extras.settings ?? {}, assetBase),
     finalCta: finalTitle
       ? {
           title: finalTitle,
@@ -374,7 +427,7 @@ export async function loadHomeContent(): Promise<HomeContent> {
   const client = directusServer();
   const assetBase = useRuntimeConfig().public.directusPublicUrl;
 
-  const [home, articles, settings, caseStudies] = await Promise.all([
+  const [home, articles, settings, caseStudies, offers, faq] = await Promise.all([
     client.request(
       readSingleton("home_page", {
         fields: [
@@ -391,10 +444,12 @@ export async function loadHomeContent(): Promise<HomeContent> {
           "recognition_subtitle",
           "recognition_items",
           "recognition_conclusion",
+          "build_eyebrow",
           "build_title",
           "build_blocks",
           "build_cta_label",
           "build_cta_url",
+          "method_eyebrow",
           "method_title",
           "method_subtitle",
           "method_steps",
@@ -421,6 +476,8 @@ export async function loadHomeContent(): Promise<HomeContent> {
           "resources_title",
           "resources_subtitle",
           "resources_cta_label",
+          "faq_eyebrow",
+          "faq_title",
           "final_cta_title",
           "final_cta_description",
           "final_cta_label",
@@ -453,7 +510,12 @@ export async function loadHomeContent(): Promise<HomeContent> {
     ),
     client.request(
       readSingleton("site_settings", {
-        fields: ["brand_name", "default_meta_description", "default_og_image"],
+        fields: [
+          "brand_name",
+          "default_meta_description",
+          "default_og_image",
+          ...AUTHOR_SETTINGS_FIELDS,
+        ],
       }),
     ),
     // Preuve par l'exemple — collection dédiée (une image par cas, donc une vraie
@@ -465,6 +527,19 @@ export async function loadHomeContent(): Promise<HomeContent> {
         fields: [...CASE_STUDY_FIELDS],
       }),
     ),
+    client.request(
+      readItems("offers", {
+        filter: { status: { _eq: "published" } },
+        fields: ["slug", "audience"],
+      }),
+    ),
+    client.request(
+      readItems("faq_items", {
+        filter: { status: { _eq: "published" }, scope: { _eq: "home" } },
+        sort: ["sort"],
+        fields: ["question", "answer"],
+      }),
+    ),
   ]);
 
   return mapHomeContent(
@@ -472,6 +547,12 @@ export async function loadHomeContent(): Promise<HomeContent> {
     articles,
     settings as unknown as RawSiteDefaults,
     assetBase,
-    caseStudies,
+    {
+      caseStudies,
+      offers,
+      faq,
+      settings: settings as unknown as RawAuthorSettings,
+      sanitize: sanitizeRichText,
+    },
   );
 }

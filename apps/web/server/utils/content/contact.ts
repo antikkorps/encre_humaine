@@ -1,5 +1,6 @@
 import { readItems, readSingleton } from "@directus/sdk";
 import type { FaqItem } from "~/types/content";
+import type { BookingLinks } from "~/utils/booking";
 import {
   type ContentSeo,
   type FileField,
@@ -62,6 +63,8 @@ export interface RawContactSettings extends RawSiteDefaults {
   linkedin_url?: string | null;
   location_label?: string | null;
   booking_url?: string | null;
+  booking_url_org?: string | null;
+  booking_url_b2c?: string | null;
 }
 
 export interface ContactContent {
@@ -82,7 +85,8 @@ export interface ContactContent {
   contactTitle: string | null;
   contactIntro: string | null;
   /** Prise de RDV : `null` si aucune URL configurée (section masquée). */
-  booking: { url: string; intro: string | null; reassurance: string | null } | null;
+  /** Liens de réservation (défaut + par public) ; `null` si aucun agenda. */
+  booking: (BookingLinks & { intro: string | null; reassurance: string | null }) | null;
   /** Carte « Être rappelé·e » et phrase au-dessus du formulaire de rappel. */
   callbackIntro: string | null;
   callbackFormIntro: string | null;
@@ -116,7 +120,10 @@ export function mapContactContent(
   assetBase: string,
   sanitize: Sanitize,
 ): ContactContent {
-  const bookingUrl = safeHref(settings.booking_url);
+  const bookingOrg = safeHref(settings.booking_url_org) || null;
+  const bookingB2c = safeHref(settings.booking_url_b2c) || null;
+  // Le lien par défaut retombe sur un lien de public : un seul agenda renseigné suffit.
+  const bookingUrl = safeHref(settings.booking_url) || bookingOrg || bookingB2c;
   const reasonsTitle = str(page.reasons_title);
   const reasonsOrg = mapStringList(page.reasons_org);
   const reasonsB2c = mapStringList(page.reasons_b2c);
@@ -145,6 +152,7 @@ export function mapContactContent(
     booking: bookingUrl
       ? {
           url: bookingUrl,
+          byAudience: { organisation: bookingOrg, particulier: bookingB2c },
           intro: str(page.booking_intro) || null,
           reassurance: str(page.booking_reassurance) || null,
         }
@@ -243,6 +251,8 @@ export async function loadContactContent(): Promise<ContactContent> {
           "linkedin_url",
           "location_label",
           "booking_url",
+          "booking_url_org",
+          "booking_url_b2c",
         ],
       }),
     ),

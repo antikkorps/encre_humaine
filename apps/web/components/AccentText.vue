@@ -10,6 +10,9 @@
 // Rendu en `<strong>` (mise en avant = importance, pas décoration) et en nœuds
 // Vue — jamais de `v-html` : aucun HTML éditeur n'est injecté ici.
 //
+// `[texte](/lien)` pose un lien (maillage interne, audit SEO 2026-10-22) : un
+// chemin du site passe par `NuxtLink` (navigation client), le reste est externe.
+//
 // Les retours à la ligne saisis dans Directus sont respectés partout
 // (`whitespace-pre-line`) : c'est porté ICI plutôt que par chaque parent, qui
 // l'oubliait sur la moitié des blocs.
@@ -25,6 +28,11 @@ const props = withDefaults(
 );
 
 const segments = computed(() => parseAccent(props.text ?? ""));
+const linkClass = computed(() =>
+  props.tone === "dark"
+    ? "underline decoration-sand-300/60 underline-offset-2 hover:text-sand-300"
+    : "underline decoration-orange-400/70 underline-offset-2 hover:text-teal-700",
+);
 </script>
 
-<template><span class="whitespace-pre-line"><template v-for="(segment, i) in segments" :key="i"><strong v-if="segment.accent" class="font-bold" :class="tone === 'dark' ? 'text-sand-300' : 'text-orange-500'">{{ segment.text }}</strong><template v-else>{{ segment.text }}</template></template></span></template>
+<template><span class="whitespace-pre-line"><template v-for="(segment, i) in segments" :key="i"><NuxtLink v-if="segment.href" :to="segment.href" :class="linkClass" :target="isExternalHref(segment.href) ? '_blank' : undefined" :rel="isExternalHref(segment.href) ? 'noopener' : undefined">{{ segment.text }}</NuxtLink><strong v-else-if="segment.accent" class="font-bold" :class="tone === 'dark' ? 'text-sand-300' : 'text-orange-500'">{{ segment.text }}</strong><template v-else>{{ segment.text }}</template></template></span></template>

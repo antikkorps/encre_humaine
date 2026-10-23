@@ -129,8 +129,8 @@ collections:
     meta:
       accountability: all
       archive_app_filter: true
-      archive_field: null
-      archive_value: null
+      archive_field: status
+      archive_value: closed
       collapse: open
       collection: contact_leads
       color: null
@@ -141,8 +141,9 @@ collections:
       item_duplication_fields: null
       note: >-
         Demandes reçues via le formulaire de contact (« Être rappelé·e » :
-        téléphone et créneau de rappel). Lecture seule : elles sont enregistrées
-        automatiquement par le site.
+        téléphone et créneau de rappel). Enregistrées par le site : seul le
+        statut se modifie. « Archiver » = clôturer (masquée de la liste, gardée)
+        ; la corbeille supprime définitivement.
       preview_url: null
       singleton: false
       sort: null
@@ -152,7 +153,7 @@ collections:
           plural: messages
           singular: message
           translation: Messages reçus
-      unarchive_value: null
+      unarchive_value: new
       versioning: false
     schema:
       name: contact_leads
@@ -6420,15 +6421,29 @@ fields:
     meta:
       collection: contact_leads
       conditions: null
-      display: null
-      display_options: null
+      display: labels
+      display_options:
+        choices:
+          - text: Nouvelle
+            value: new
+          - text: Recontactée
+            value: contacted
+          - text: Clôturée
+            value: closed
       field: status
       group: null
       hidden: false
-      interface: null
+      interface: select-dropdown
       note: null
-      options: null
-      readonly: true
+      options:
+        choices:
+          - text: Nouvelle
+            value: new
+          - text: Recontactée
+            value: contacted
+          - text: Clôturée
+            value: closed
+      readonly: false
       required: false
       searchable: true
       sort: null
@@ -8314,6 +8329,8 @@ fields:
       display: labels
       display_options:
         choices:
+          - text: Page d'accueil
+            value: home
           - text: Page /contact
             value: contact
           - text: Page /organisations
@@ -8340,6 +8357,8 @@ fields:
       note: null
       options:
         choices:
+          - text: Page d'accueil
+            value: home
           - text: Page /contact
             value: contact
           - text: Page /organisations
@@ -8838,7 +8857,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 41
       special:
         - alias
         - no-data
@@ -8863,7 +8882,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 42
       special: null
       translations: null
       validation: null
@@ -8903,7 +8922,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 41
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -8943,7 +8962,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 42
+      sort: 44
       special:
         - file
       translations: null
@@ -8984,7 +9003,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 50
+      sort: 52
       special:
         - m2o
       translations: null
@@ -9026,7 +9045,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 55
+      sort: 60
       special:
         - alias
         - no-data
@@ -9051,7 +9070,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 56
+      sort: 61
       special: null
       translations: null
       validation: null
@@ -9091,7 +9110,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 58
+      sort: 63
       special: null
       translations: null
       validation: null
@@ -9132,7 +9151,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 59
+      sort: 64
       special:
         - alias
         - no-data
@@ -9157,7 +9176,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 60
+      sort: 65
       special: null
       translations: null
       validation: null
@@ -9197,7 +9216,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 61
+      sort: 66
       special: null
       translations: null
       validation: null
@@ -9237,7 +9256,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 62
+      sort: 67
       special:
         - file
       translations: null
@@ -9278,7 +9297,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 63
+      sort: 68
       special:
         - cast-boolean
       translations: null
@@ -9794,7 +9813,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -9867,7 +9886,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 18
       special:
         - cast-json
       translations: null
@@ -9908,7 +9927,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -9948,7 +9967,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -9989,7 +10008,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special:
         - alias
         - no-data
@@ -10014,7 +10033,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -10054,7 +10073,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -10109,7 +10128,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 25
       special:
         - cast-json
       translations: null
@@ -10151,7 +10170,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 33
+      sort: 35
       special:
         - alias
         - no-data
@@ -10176,7 +10195,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 37
+      sort: 39
       special: null
       translations: null
       validation: null
@@ -10216,7 +10235,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 35
+      sort: 37
       special: null
       translations: null
       validation: null
@@ -10271,7 +10290,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 40
       special:
         - cast-json
       translations: null
@@ -10312,7 +10331,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 36
+      sort: 38
       special: null
       translations: null
       validation: null
@@ -10352,7 +10371,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 43
+      sort: 45
       special: null
       translations: null
       validation: null
@@ -10393,7 +10412,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 46
       special:
         - alias
         - no-data
@@ -10418,7 +10437,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 47
       special: null
       translations: null
       validation: null
@@ -10458,7 +10477,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -10603,7 +10622,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 49
       special:
         - cast-json
       translations: null
@@ -10644,7 +10663,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 48
+      sort: 50
       special: null
       translations: null
       validation: null
@@ -10685,7 +10704,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 49
+      sort: 51
       special:
         - alias
         - no-data
@@ -10711,7 +10730,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 51
+      sort: 53
       special:
         - alias
         - no-data
@@ -10736,7 +10755,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 52
+      sort: 54
       special: null
       translations: null
       validation: null
@@ -10776,7 +10795,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 53
+      sort: 55
       special: null
       translations: null
       validation: null
@@ -10816,7 +10835,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 54
+      sort: 56
       special: null
       translations: null
       validation: null
@@ -10856,7 +10875,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 57
+      sort: 62
       special: null
       translations: null
       validation: null
@@ -10981,7 +11000,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 26
       special:
         - alias
         - no-data
@@ -11006,7 +11025,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 27
       special: null
       translations: null
       validation: null
@@ -11046,7 +11065,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -11086,7 +11105,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -11127,7 +11146,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 30
       special:
         - alias
         - no-data
@@ -11152,7 +11171,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -11192,7 +11211,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 30
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -11232,7 +11251,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 31
+      sort: 33
       special: null
       translations: null
       validation: null
@@ -11379,7 +11398,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 32
+      sort: 34
       special:
         - cast-json
       translations: null
@@ -11420,7 +11439,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 34
+      sort: 36
       special: null
       translations: null
       validation: null
@@ -11428,6 +11447,194 @@ fields:
       width: full
     schema:
       name: why_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: build_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: build_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « Ce que je vous aide à construire »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: build_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: method_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: method_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « Ma méthode de conseil RH pour PME et ETI »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: method_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: home_faq_divider
+    type: alias
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: home_faq_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: FAQ
+      readonly: false
+      required: false
+      searchable: true
+      sort: 57
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: home_page
+    field: faq_eyebrow
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: faq_eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « FAQ »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 58
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: faq_eyebrow
+      table: home_page
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: home_page
+    field: faq_title
+    type: string
+    meta:
+      collection: home_page
+      conditions: null
+      display: null
+      display_options: null
+      field: faq_title
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Défaut : « Questions fréquentes ». Les questions se gèrent dans « FAQ »
+        (périmètre « Page d'accueil »).
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 59
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: faq_title
       table: home_page
       data_type: character varying
       default_value: null
@@ -13342,7 +13549,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 42
       special:
         - m2o
       translations: null
@@ -13383,7 +13590,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 42
+      sort: 45
       special: null
       translations: null
       validation: null
@@ -13424,7 +13631,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 47
       special:
         - alias
         - no-data
@@ -13449,7 +13656,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -13489,7 +13696,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -13529,7 +13736,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 50
       special:
         - file
       translations: null
@@ -13570,7 +13777,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 48
+      sort: 51
       special:
         - cast-boolean
       translations: null
@@ -13626,7 +13833,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 49
+      sort: 52
       special: null
       translations: null
       validation: null
@@ -13666,7 +13873,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 50
+      sort: 53
       special: null
       translations: null
       validation: null
@@ -13706,7 +13913,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 51
+      sort: 54
       special:
         - date-created
       translations: null
@@ -13747,7 +13954,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 52
+      sort: 55
       special:
         - date-updated
       translations: null
@@ -13788,7 +13995,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 53
+      sort: 56
       special:
         - user-created
       translations: null
@@ -13829,7 +14036,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 54
+      sort: 57
       special:
         - user-updated
       translations: null
@@ -14522,7 +14729,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 43
       special: null
       translations: null
       validation: null
@@ -14562,7 +14769,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 41
+      sort: 44
       special: null
       translations: null
       validation: null
@@ -14602,7 +14809,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 43
+      sort: 46
       special: null
       translations: null
       validation: null
@@ -15192,6 +15399,151 @@ fields:
       name: proof_intro
       table: offers
       data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: further_title
+    type: string
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: further_title
+      group: null
+      hidden: false
+      interface: input
+      note: 'Défaut : « Pour aller plus loin »'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 39
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: further_title
+      table: offers
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: further_intro
+    type: text
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: further_intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Chapeau de la section (optionnel)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 40
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: further_intro
+      table: offers
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: offers
+    field: further_links
+    type: json
+    meta:
+      collection: offers
+      conditions: null
+      display: null
+      display_options: null
+      field: further_links
+      group: null
+      hidden: false
+      interface: list
+      note: >-
+        Contenus liés : titre, phrase d'accroche, lien (ex.
+        /ressources/mon-article ou une page du Laboratoire)
+      options:
+        fields:
+          - field: title
+            meta:
+              field: title
+              interface: input
+              width: full
+            name: title
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: input-multiline
+              width: full
+            name: body
+            type: string
+          - field: url
+            meta:
+              field: url
+              interface: input
+              width: full
+            name: url
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 41
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: further_links
+      table: offers
+      data_type: json
       default_value: null
       max_length: null
       numeric_precision: null
@@ -22407,12 +22759,12 @@ fields:
       group: null
       hidden: false
       interface: input
-      note: URL de prise de RDV (Cal.com, Calendly… — consommée par l'embed RDV)
+      note: 'Lien de réservation PAR DÉFAUT (Cal.com…) : menu, pied de page, À propos'
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -22452,7 +22804,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -22507,7 +22859,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 16
       special:
         - cast-json
       translations: null
@@ -22549,7 +22901,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 17
       special:
         - alias
         - no-data
@@ -22574,7 +22926,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -22614,7 +22966,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -22654,7 +23006,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -22694,7 +23046,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -22734,7 +23086,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -22774,7 +23126,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -22815,7 +23167,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 24
       special:
         - alias
         - no-data
@@ -22840,7 +23192,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 25
       special:
         - file
       translations: null
@@ -22881,7 +23233,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -23043,6 +23395,211 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: site_settings
+    field: author_name
+    type: string
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: author_name
+      group: null
+      hidden: false
+      interface: input
+      note: Nom affiché en signature
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: author_name
+      table: site_settings
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: site_settings
+    field: author_title
+    type: string
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: author_title
+      group: null
+      hidden: false
+      interface: input
+      note: Fonction (ex. Consultante RH)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: author_title
+      table: site_settings
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: site_settings
+    field: author_photo
+    type: uuid
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: author_photo
+      group: null
+      hidden: false
+      interface: file-image
+      note: Portrait rond de la signature (carré de préférence)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: author_photo
+      table: site_settings
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: site_settings
+    field: booking_url_org
+    type: string
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: booking_url_org
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Lien de réservation des ORGANISATIONS (ex. RDV 30 min). Vide = lien par
+        défaut
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: booking_url_org
+      table: site_settings
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: site_settings
+    field: booking_url_b2c
+    type: string
+    meta:
+      collection: site_settings
+      conditions: null
+      display: null
+      display_options: null
+      field: booking_url_b2c
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Lien de réservation des PARTICULIERS (ex. séance découverte). Vide =
+        lien par défaut
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: booking_url_b2c
+      table: site_settings
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: testimonials
     field: id
     type: uuid
@@ -24578,6 +25135,27 @@ relations:
       foreign_key_table: directus_files
       foreign_key_column: id
       constraint_name: site_settings_default_og_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: site_settings
+    field: author_photo
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: site_settings
+      many_field: author_photo
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: site_settings
+      column: author_photo
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: site_settings_author_photo_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: testimonials

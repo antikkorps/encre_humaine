@@ -1,4 +1,5 @@
-// Adoption des tables de l'APPLICATION dans l'admin Directus — en LECTURE SEULE.
+// Adoption des tables de l'APPLICATION dans l'admin Directus — contenu en LECTURE
+// SEULE ; seuls le statut (ranger) et la suppression (nettoyer) sont ouverts.
 //
 // Pourquoi : les messages du formulaire de contact vivent dans `app.contact_leads`
 // (Postgres, migrations Drizzle), pas dans Directus. Eléonore n'avait donc aucun
@@ -13,10 +14,13 @@
 // autorise dès lors que `app` figure dans son `DB_SEARCH_PATH`.
 //
 // Trois garde-fous se cumulent :
-//   1. `directus_user` n'a qu'un `SELECT` sur la table (infra/postgres/init.sql) ;
-//   2. les champs sont marqués `readonly` dans l'admin ;
-//   3. la policy Éditrice ne reçoit que l'action `read`.
-// Une fausse manœuvre ne peut donc ni modifier ni supprimer un message.
+//   1. `directus_user` n'a que `SELECT`, `UPDATE (status)` et `DELETE` sur la
+//      table (migrations 0001 et 0003, test `directus-grants`) ;
+//   2. tous les champs sauf `status` sont `readonly` dans l'admin ;
+//   3. la policy Éditrice : `read`, `update` limité à `status`, `delete`.
+// Le contenu d'une demande ne se réécrit donc jamais. Éléonore la « clôture »
+// (archivage natif : la liste par défaut masque les clôturées) ou la supprime
+// (spam, demande d'effacement) — demande du 2026-10-23.
 //
 // Idempotent : relançable, ne réécrit que ce qui diffère. Si la table n'est pas
 // visible (search path non mis à jour, droits absents), on **avertit et on passe**
@@ -29,10 +33,16 @@ const COLLECTION = "contact_leads";
 /** Meta de collection : libellés FR, tri par défaut, note explicative. */
 const COLLECTION_META = {
   icon: "inbox",
-  note: "Demandes reçues via le formulaire de contact (« Être rappelé·e » : téléphone et créneau de rappel). Lecture seule : elles sont enregistrées automatiquement par le site.",
+  note: "Demandes reçues via le formulaire de contact (« Être rappelé·e » : téléphone et créneau de rappel). Enregistrées par le site : seul le statut se modifie. « Archiver » = clôturer (masquée de la liste, gardée) ; la corbeille supprime définitivement.",
   display_template: "{{first_name}} — {{phone}} — {{audience}}",
   sort_field: "-created_at",
   hidden: false,
+  // Archivage natif sur le statut : « Archiver » = clôturer, et la liste par
+  // défaut n'affiche que ce qui reste à traiter.
+  archive_field: "status",
+  archive_value: "closed",
+  unarchive_value: "new",
+  archive_app_filter: true,
   translations: [
     {
       language: "fr-FR",
@@ -43,11 +53,24 @@ const COLLECTION_META = {
   ],
 };
 
-/**
- * Meta des colonnes : libellé lisible, largeur, et `readonly` partout — y compris
- * `status`, qui reste piloté par l'application.
- */
-const FIELD_META: Record<string, { name: string; width?: "half" | "full"; interface?: string }> = {
+type FieldMeta = {
+  name: string;
+  width?: "half" | "full";
+  interface?: string;
+  /** Seul `status` est éditable ; tout le reste vient du formulaire du site. */
+  editable?: boolean;
+  options?: Record<string, unknown>;
+};
+
+/** Valeurs de `app.lead_status` (enum Postgres) avec leur libellé dans l'admin. */
+const STATUS_CHOICES = [
+  { text: "Nouvelle", value: "new" },
+  { text: "Recontactée", value: "contacted" },
+  { text: "Clôturée", value: "closed" },
+];
+
+/** Meta des colonnes : libellé lisible, largeur, lecture seule sauf `status`. */
+const FIELD_META: Record<string, FieldMeta> = {
   created_at: { name: "Reçu le", width: "half" },
   first_name: { name: "Prénom", width: "half" },
   phone: { name: "Téléphone", width: "half" },
@@ -56,7 +79,13 @@ const FIELD_META: Record<string, { name: string; width?: "half" | "full"; interf
   callback_slot: { name: "Moment de la journée", width: "half" },
   audience: { name: "Public", width: "half" },
   source_page: { name: "Page d'origine", width: "half" },
-  status: { name: "Statut", width: "half" },
+  status: {
+    name: "Statut",
+    width: "half",
+    interface: "select-dropdown",
+    editable: true,
+    options: { choices: STATUS_CHOICES },
+  },
   notification_sent: { name: "Notification envoyée", width: "half" },
   message: { name: "Ce qui l'amène", width: "full", interface: "input-multiline" },
   updated_at: { name: "Mis à jour le", width: "half" },
@@ -81,16 +110,19 @@ export async function adoptContactLeads(): Promise<void> {
   }
 
   await patch(`/collections/${COLLECTION}`, { meta: COLLECTION_META });
-  console.log(`~ ${COLLECTION} : collection exposée en lecture seule`);
+  console.log(`~ ${COLLECTION} : collection exposée (statut modifiable, suppression)`);
 
   for (const [field, meta] of Object.entries(FIELD_META)) {
     try {
       await patch(`/fields/${COLLECTION}/${field}`, {
         meta: {
           note: null,
-          readonly: true,
+          readonly: !meta.editable,
           width: meta.width ?? "full",
           ...(meta.interface ? { interface: meta.interface } : {}),
+          ...(meta.options
+            ? { options: meta.options, display: "labels", display_options: meta.options }
+            : {}),
           translations: [{ language: "fr-FR", translation: meta.name }],
         },
       });
@@ -99,5 +131,7 @@ export async function adoptContactLeads(): Promise<void> {
       console.warn(`  ⚠ ${COLLECTION}.${field} : meta non appliqué (${(err as Error).message})`);
     }
   }
-  console.log(`~ ${COLLECTION} : ${Object.keys(FIELD_META).length} champs en lecture seule`);
+  console.log(
+    `~ ${COLLECTION} : ${Object.keys(FIELD_META).length} champs (lecture seule sauf statut)`,
+  );
 }

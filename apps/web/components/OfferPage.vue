@@ -27,6 +27,8 @@ if (!content.value || content.value.audience !== props.audience) {
 }
 
 const isB2c = computed(() => props.audience === "particulier");
+// Le contact ouvre l'agenda du bon public (RDV 30 min / séance découverte).
+const contactTo = computed(() => `/contact?pour=${props.audience}`);
 
 // Registre : orga = fonds froids (teal-50) ; B2C = fonds chauds (orange-50). Les
 // accents dorés et les panneaux marine sont communs (charte navy + or).
@@ -119,13 +121,34 @@ useSeoMeta({
   robots: () => (content.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
 
+// Le dernier maillon du fil d'Ariane porte le NOM de l'offre (« Audit RH »), pas
+// la phrase d'accroche du héros.
+const offerName = computed(() => content.value?.title ?? stripAccent(heading.value));
+const startingPrice = computed(() => parseStartingPrice(content.value?.priceLabel));
+
 useSchemaOrg([
   defineBreadcrumb({
     itemListElement: [
       { name: "Accueil", item: "/" },
       { name: isB2c.value ? "Particuliers" : "Organisations", item: hub.value.to },
-      { name: heading.value },
+      { name: offerName.value },
     ],
+  }),
+  defineService({
+    name: offerName.value,
+    description: content.value?.seo.description ?? undefined,
+    serviceType: offerName.value,
+    areaServed: "FR",
+    // « À partir de » : prix plancher ; « sur devis » → aucun prix balisé.
+    ...(startingPrice.value !== null && {
+      offers: defineOffer({
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          minPrice: startingPrice.value,
+          priceCurrency: "EUR",
+        },
+      }),
+    }),
   }),
 ]);
 </script>
@@ -162,9 +185,10 @@ useSchemaOrg([
           >
             <Icon name="material-symbols:lightbulb" class="h-6 w-6" />
           </span>
-          <p class="relative mt-5 whitespace-pre-line text-[1.05rem] leading-relaxed text-ink/75">
-            <AccentText :text="content.accrocheBody" />
-          </p>
+          <AccentBlocks
+            :text="content.accrocheBody"
+            class="relative mt-5 text-[1.05rem] leading-relaxed text-ink/75"
+          />
         </figure>
       </template>
 
@@ -182,7 +206,7 @@ useSchemaOrg([
             <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
           <NuxtLink
-            to="/contact"
+            :to="contactTo"
             class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
           >
             {{ content.ctaLabel }}
@@ -572,6 +596,11 @@ useSchemaOrg([
       </div>
     </section>
 
+    <!-- 11 bis. Pour aller plus loin — contenus liés (maillage interne) -->
+    <section v-if="content.further" v-reveal class="relative isolate overflow-hidden">
+      <FurtherReading :section="content.further" />
+    </section>
+
     <!-- 12. Témoignages (centralisés par audience de l'offre) — masqué si vide -->
     <section
       v-if="content.testimonials.length"
@@ -610,7 +639,7 @@ useSchemaOrg([
         :description="content.ctaBody ?? undefined"
         :cta-label="content.ctaLabel"
         :subtext="content.ctaSubtext ?? undefined"
-        to="/contact"
+        :to="contactTo"
         variant="orange"
       />
     </section>

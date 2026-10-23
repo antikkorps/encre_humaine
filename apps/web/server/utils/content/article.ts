@@ -1,5 +1,5 @@
 import { readItems, readSingleton } from "@directus/sdk";
-import type { ArticleSummary } from "~/types/content";
+import type { ArticleSummary, AuthorInfo } from "~/types/content";
 import {
   type ContentPhoto,
   type ContentSeo,
@@ -9,6 +9,7 @@ import {
   type RawSiteDefaults,
   str,
 } from "./_shared";
+import { AUTHOR_SETTINGS_FIELDS, mapAuthor, type RawAuthorSettings } from "./author";
 import { mapArticles, type RawArticle } from "./home";
 import { buildToc, type TocEntry } from "./legal";
 
@@ -53,6 +54,8 @@ export interface ArticleContent {
   readingTime: number | null;
   publishedAt: string | null;
   related: ArticleSummary[];
+  /** Signature (E-E-A-T) : la même fiche autrice que l'accueil. */
+  author: AuthorInfo | null;
   seo: ContentSeo;
 }
 
@@ -63,7 +66,7 @@ type Sanitize = (html?: string | null) => string;
 export function mapArticleContent(
   raw: RawArticleDetail,
   relatedRaw: unknown,
-  settings: RawSiteDefaults,
+  settings: RawSiteDefaults & RawAuthorSettings,
   assetBase: string,
   sanitize: Sanitize,
 ): ArticleContent {
@@ -80,6 +83,7 @@ export function mapArticleContent(
     readingTime: typeof raw.reading_time === "number" ? raw.reading_time : null,
     publishedAt: str(raw.published_at) || null,
     related: mapArticles(relatedRaw, assetBase),
+    author: mapAuthor(settings, assetBase),
     seo: mapSeo(raw, settings, assetBase),
   };
 }
@@ -143,7 +147,12 @@ export async function loadArticleContent(slug: string): Promise<ArticleContent |
       : Promise.resolve([] as RawArticle[]),
     client.request(
       readSingleton("site_settings", {
-        fields: ["brand_name", "default_meta_description", "default_og_image"],
+        fields: [
+          "brand_name",
+          "default_meta_description",
+          "default_og_image",
+          ...AUTHOR_SETTINGS_FIELDS,
+        ],
       }),
     ),
   ]);
@@ -151,7 +160,7 @@ export async function loadArticleContent(slug: string): Promise<ArticleContent |
   return mapArticleContent(
     article as unknown as RawArticleDetail,
     related,
-    settings as unknown as RawSiteDefaults,
+    settings as unknown as RawSiteDefaults & RawAuthorSettings,
     assetBase,
     sanitizeRichText,
   );

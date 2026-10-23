@@ -21,9 +21,10 @@ import { FAQ_SCOPE_BY_SLUG } from "../server/utils/content/offer";
  *  - `contact` → server/utils/content/contact.ts
  *  - `b2c_hub` → server/utils/content/b2c-hub.ts (hub /particuliers)
  *  - `org`     → server/utils/content/org-hub.ts (hub /organisations)
+ *  - `home`    → server/utils/content/home.ts (accueil, avant le CTA final)
  * `general` est ajouté à toute offre par `faqScopesForSlug` (offer.ts).
  */
-const HUB_SCOPES = ["contact", "b2c_hub", "org"];
+const HUB_SCOPES = ["contact", "b2c_hub", "org", "home"];
 const RENDERED = new Set([...HUB_SCOPES, ...Object.values(FAQ_SCOPE_BY_SLUG), "general"]);
 
 describe("périmètres de FAQ", () => {

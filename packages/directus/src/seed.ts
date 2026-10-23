@@ -16,6 +16,7 @@ import { run16CaseStudies, run16ExistingCaseScopes } from "./content-run16.ts";
 import { run17B2cHub, run17CaseStudies } from "./content-run17.ts";
 import { run18CaseStudies } from "./content-run18.ts";
 import { run19ContactFaq, run19ContactPage, run19ContactRewrites } from "./content-run19.ts";
+import { run20Author, run20HomeFaq } from "./content-run20.ts";
 import { config } from "./env.ts";
 
 type Json = Record<string, unknown>;
@@ -50,7 +51,7 @@ async function main(): Promise<void> {
     brand_name: "L'Encre Humaine",
     tagline: "Conseil RH & accompagnement des parcours professionnels",
     contact_email: "contact@encrehumaine.fr",
-    linkedin_url: "https://www.linkedin.com/in/eleonore-moree",
+    ...run20Author,
     booking_url: config.bookingUrl,
     location_label: "Bouches-du-Rhône · France entière",
     social_links: [{ platform: "LinkedIn", url: "https://www.linkedin.com/in/eleonore-moree" }],
@@ -177,6 +178,7 @@ async function main(): Promise<void> {
       scope: "contact",
     },
     { q: run19ContactFaq.question, a: run19ContactFaq.answer, scope: run19ContactFaq.scope },
+    ...run20HomeFaq.map((f) => ({ q: f.question, a: f.answer, scope: f.scope })),
     {
       q: "Puis-je utiliser mon CPF ?",
       a: P(

@@ -7,14 +7,17 @@ import {
   type ContentSeo,
   caseStudiesForOffer,
   type FileField,
+  type FurtherSection,
   mapCaseStudies,
   mapFaqItems,
+  mapFurtherSection,
   mapProofSection,
   mapSeo,
   mapStringList,
   mapTestimonials,
   mapTitledItems,
   type ProofSection,
+  type RawFurther,
   type RawSiteDefaults,
   str,
   TESTIMONIAL_FIELDS,
@@ -37,7 +40,7 @@ import {
  */
 
 /** Sous-ensemble `offers` consommé par le gabarit (cf. schema.gen Offers). */
-export interface RawOfferFull {
+export interface RawOfferFull extends RawFurther {
   title?: string | null;
   slug?: string | null;
   audience?: string | null;
@@ -124,6 +127,7 @@ export interface OfferContent {
   /** « Investissement » — libellé libre, jamais un montant calculé. */
   priceLabel: string | null;
   priceNote: string | null;
+  further: FurtherSection | null;
   faq: FaqItem[];
   /** Témoignages centralisés (filtrés par audience de l'offre, vedettes d'abord). */
   testimonials: TestimonialItem[];
@@ -233,6 +237,7 @@ export function mapOfferContent(
     durationLabel: str(raw.duration_label) || null,
     priceLabel: str(raw.price_label) || null,
     priceNote: str(raw.price_note) || null,
+    further: mapFurtherSection(raw),
     faq: mapFaqItems(faqRaw, sanitize),
     // Épinglage par offre (`offer_scopes`) sinon repli sur le public de l'offre.
     testimonials: testimonialsForOffer(
@@ -267,6 +272,9 @@ export async function loadOfferContent(slug: string): Promise<OfferContent | nul
         "duration_label",
         "price_label",
         "price_note",
+        "further_title",
+        "further_intro",
+        "further_links",
         "accroche_title",
         "accroche_subtitle",
         "accroche_body",

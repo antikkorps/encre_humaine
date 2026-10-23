@@ -270,6 +270,10 @@ export interface HomePage {
   sectors_intro: string | null;
   sectors_items: unknown | null;
   why_eyebrow: string | null;
+  build_eyebrow: string | null;
+  method_eyebrow: string | null;
+  faq_eyebrow: string | null;
+  faq_title: string | null;
 }
 
 export interface LegalDocuments {
@@ -357,6 +361,9 @@ export interface Offers {
   proof_eyebrow: string | null;
   proof_title: string | null;
   proof_intro: string | null;
+  further_title: string | null;
+  further_intro: string | null;
+  further_links: unknown | null;
 }
 
 export interface OrgHubPage {
@@ -545,6 +552,11 @@ export interface SiteSettings {
   default_meta_description: string | null;
   site_open: boolean;
   show_cgv: boolean;
+  author_name: string | null;
+  author_title: string | null;
+  author_photo: string | DirectusFile | null;
+  booking_url_org: string | null;
+  booking_url_b2c: string | null;
 }
 
 export interface Testimonials {

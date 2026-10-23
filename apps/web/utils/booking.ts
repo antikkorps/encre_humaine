@@ -31,3 +31,20 @@ export function parseBookingUrl(raw: string | null | undefined): BookingTarget |
     return null;
   }
 }
+
+/** Liens de réservation : un par défaut, un par public (vide = celui par défaut). */
+export interface BookingLinks {
+  url: string;
+  byAudience: { organisation: string | null; particulier: string | null };
+}
+
+/**
+ * Lien à afficher selon le public du visiteur (RDV 30 min côté organisations,
+ * séance découverte côté particuliers) ; sans public connu, le lien par défaut.
+ */
+export function pickBookingUrl(
+  booking: BookingLinks,
+  audience: "organisation" | "particulier" | null | undefined,
+): string {
+  return (audience && booking.byAudience[audience]) || booking.url;
+}

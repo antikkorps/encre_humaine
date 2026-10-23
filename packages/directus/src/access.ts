@@ -99,16 +99,18 @@ export async function bootstrapAccess(): Promise<void> {
     app_access: true,
     admin_access: false,
   });
-  const editorRules: { collection: string; action: Action }[] = [];
+  const editorRules: { collection: string; action: Action; fields?: string[] }[] = [];
   for (const t of targets) {
     for (const action of ["create", "read", "update", "delete"] as Action[]) {
       editorRules.push({ collection: t.collection, action });
     }
   }
-  // Messages du formulaire : LECTURE SEULE. La table appartient à l'application
-  // (migrations Drizzle) ; l'admin sert uniquement à les consulter quand l'email
-  // de notification n'arrive pas (cf. adopt-app-tables.ts).
+  // Messages du formulaire : la table appartient à l'application (migrations
+  // Drizzle). Éléonore les lit, les range (statut seul) et les supprime — jamais
+  // de réécriture du contenu (cf. adopt-app-tables.ts, migration 0003).
   editorRules.push({ collection: "contact_leads", action: "read" });
+  editorRules.push({ collection: "contact_leads", action: "update", fields: ["status"] });
+  editorRules.push({ collection: "contact_leads", action: "delete" });
   for (const action of ["create", "read", "update", "delete"] as Action[]) {
     editorRules.push({ collection: "directus_files", action });
   }

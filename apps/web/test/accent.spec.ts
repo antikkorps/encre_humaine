@@ -48,3 +48,35 @@ describe("parseAccent", () => {
     expect(parseAccent("")).toEqual([]);
   });
 });
+
+// Maillage interne (audit SEO, 2026-10-22) : `[texte](/lien)` dans un champ texte
+// simple pose un lien, sans passer par un WYSIWYG ni par un déploiement.
+describe("parseAccent — liens", () => {
+  it("isole un lien interne", () => {
+    expect(parseAccent("Voir la [carte des talents](/organisations/carte-des-talents).")).toEqual([
+      { text: "Voir la ", accent: false },
+      { text: "carte des talents", accent: false, href: "/organisations/carte-des-talents" },
+      { text: ".", accent: false },
+    ]);
+  });
+
+  it("accepte https, mailto et les ancres, à côté d'un accent", () => {
+    const segments = parseAccent("**GEPP** : [guide](https://exemple.fr/g) ou [ici](#faq)");
+    expect(segments.filter((s) => s.href).map((s) => s.href)).toEqual([
+      "https://exemple.fr/g",
+      "#faq",
+    ]);
+    expect(segments[0]).toEqual({ text: "GEPP", accent: true });
+  });
+
+  it("laisse en texte brut un lien au protocole non sûr", () => {
+    expect(rendered("[x](javascript:alert(1))")).toBe("[x](javascript:alert(1))");
+    expect(parseAccent("[x](javascript:alert(1))").some((s) => s.href)).toBe(false);
+  });
+
+  it("refuse les chemins qui sortent du site (// ou /\\)", () => {
+    for (const href of ["//evil.fr", "/\\evil.fr"]) {
+      expect(parseAccent(`[x](${href})`).some((s) => s.href)).toBe(false);
+    }
+  });
+});

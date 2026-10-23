@@ -9,6 +9,8 @@ import type {
   CaseStudyItem,
   ContentPhoto,
   FaqItem,
+  FurtherSection,
+  LinkItem,
   OfferSummary,
   TestimonialItem,
 } from "~/types/content";
@@ -18,7 +20,7 @@ import { DEFAULT_OG_IMAGE } from "~/utils/seo";
 
 // Ré-exporté : les loaders importent toutes leurs formes depuis `_shared`, mais la
 // définition vit dans `~/types/content` (partagée avec les composants). DRY.
-export type { ContentPhoto };
+export type { ContentPhoto, FurtherSection, LinkItem };
 
 export interface RawFileRef {
   id?: string;
@@ -80,7 +82,8 @@ const RELATIVE_BASE = "https://relative.invalid/";
  */
 export function safeHref(val: unknown): string {
   const raw = str(val);
-  if (!raw || raw.startsWith("//")) return "";
+  // `/\` vaut `//` pour un navigateur : externe déguisée en chemin, elle aussi.
+  if (!raw || raw.startsWith("//") || raw.startsWith("/\\")) return "";
   if (raw.startsWith("/") || raw.startsWith("#") || raw.startsWith("?")) return raw;
   try {
     // Résolu contre une base https : un relatif (`contact`) hérite du schéma et
@@ -245,6 +248,7 @@ export const CASE_STUDY_FIELDS = ["*"] as const;
 
 /** Sous-ensemble `case_studies` consommé à l'affichage (docs/01 §Preuve). */
 export interface RawCaseStudy {
+  id?: number | string | null;
   title?: string | null;
   summary?: string | null;
   situation?: string | null;
@@ -262,6 +266,8 @@ export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[
   return (Array.isArray(raws) ? (raws as RawCaseStudy[]) : [])
     .map((raw) => ({
       title: str(raw.title),
+      // L'id Directus donne une ancre stable, que le titre soit retouché ou non.
+      anchor: raw.id != null && raw.id !== "" ? `cas-${raw.id}` : undefined,
       summary: str(raw.summary),
       situation: str(raw.situation),
       actions: str(raw.actions),
@@ -295,6 +301,29 @@ export function caseStudiesForOffer(items: CaseStudyItem[], slug: string): CaseS
  */
 export function caseStudiesForHome(items: CaseStudyItem[]): CaseStudyItem[] {
   return items.filter((c) => c.showOnHome);
+}
+
+/**
+ * Accueil : chaque cas renvoie vers sa version complète, sur la première page
+ * d'offre où il est épinglé (audit SEO 2026-10-22 : résumé sur l'accueil, cas
+ * complet sur l'offre, pas de contenu dupliqué). Le hub se déduit de l'audience
+ * de l'offre publiée ; un cas sans offre connue reste sans lien.
+ */
+export function caseStudiesWithOfferLinks(
+  items: CaseStudyItem[],
+  offersRaw: unknown,
+): CaseStudyItem[] {
+  const hubBySlug = new Map(
+    records(offersRaw).map((o) => [
+      str(o.slug),
+      asAudience(o.audience) === "particulier" ? "particuliers" : "organisations",
+    ]),
+  );
+  return items.map((item) => {
+    const slug = item.offers.find((s) => hubBySlug.has(s));
+    if (!slug || !item.anchor) return item;
+    return { ...item, readMoreUrl: `/${hubBySlug.get(slug)}/${slug}#${item.anchor}` };
+  });
 }
 
 /** Section « Preuve par l'exemple » : habillage de la page + cas à afficher. */
@@ -372,6 +401,33 @@ export function mapTitledItems(raw: unknown): TitledItem[] {
   return records(raw)
     .map((c) => ({ title: str(c.title), body: str(c.body), icon: str(c.icon) || undefined }))
     .filter((c) => c.title !== "" || c.body !== "");
+}
+
+/** Répéteur `[{ title, body?, url }]` ; sans titre ou sans URL sûre → exclu. */
+export function mapLinkItems(raw: unknown): LinkItem[] {
+  return records(raw)
+    .map((l) => ({ title: str(l.title), body: str(l.body), url: safeHref(l.url) }))
+    .filter((l) => l.title !== "" && l.url !== "");
+}
+
+export interface RawFurther {
+  further_title?: string | null;
+  further_intro?: string | null;
+  further_links?: unknown;
+}
+
+/**
+ * Bloc « Pour aller plus loin » (maillage interne, audit SEO 2026-10-22) : il
+ * n'existe que s'il porte au moins un lien, quel que soit le titre saisi.
+ */
+export function mapFurtherSection(raw: RawFurther): FurtherSection | null {
+  const links = mapLinkItems(raw.further_links);
+  if (!links.length) return null;
+  return {
+    title: str(raw.further_title) || "Pour aller plus loin",
+    intro: str(raw.further_intro) || null,
+    links,
+  };
 }
 
 /** Étape numérotée (méthode B2B, étapes contact). `number` tolère number|string. */

@@ -64,7 +64,7 @@ useSeoMeta({
             <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
           <NuxtLink
-            to="/contact"
+            to="/contact?pour=organisation"
             class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
           >
             Prendre rendez-vous
@@ -380,7 +380,7 @@ useSeoMeta({
           :description="content.cta.body ?? undefined"
           :cta-label="content.cta.label"
           :subtext="content.cta.subtext ?? undefined"
-          to="/contact"
+          to="/contact?pour=organisation"
           variant="orange"
         />
       </section>
