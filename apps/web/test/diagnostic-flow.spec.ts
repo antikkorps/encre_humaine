@@ -4,7 +4,17 @@
 // à trous, lien Cal.com pré-rempli pour préparer le rendez-vous.
 import { B2B_TEXTS, B2C_TEXTS, computeB2b, computeB2c } from "@encre/shared/diagnostics";
 import { describe, expect, it } from "vitest";
-import { bookingHref, bookingNote, diagnosticScreens, fillTemplate } from "~/utils/diagnostic-flow";
+import {
+  bookingHref,
+  bookingNote,
+  contactFallbackPath,
+  diagnosticQuestions,
+  fillTemplate,
+  themeScores,
+} from "~/utils/diagnostic-flow";
+
+const screens = (kind: "b2b" | "b2c", answers: Record<string, number | string>) =>
+  diagnosticQuestions(kind, answers).map((q) => q.id);
 
 const B2B_ANSWERS = {
   profile: "leader",
@@ -23,15 +33,15 @@ const B2B_ANSWERS = {
 
 describe("diagnosticScreens", () => {
   it("B2B : les 12 questions dans l'ordre", () => {
-    const screens = diagnosticScreens("b2b", {});
-    expect(screens).toHaveLength(12);
-    expect(screens[0]).toBe("profile");
-    expect(screens[11]).toBe("priority");
+    const ids = screens("b2b", {});
+    expect(ids).toHaveLength(12);
+    expect(ids[0]).toBe("profile");
+    expect(ids[11]).toBe("priority");
   });
 
   it("B2C : le parcours suit l'orientation, Direction tant qu'elle n'est pas choisie", () => {
-    expect(diagnosticScreens("b2c", {})[3]).toBe("d_one_sentence");
-    expect(diagnosticScreens("b2c", { orientation: "position" })[3]).toBe("p_target");
+    expect(screens("b2c", {})[3]).toBe("d_one_sentence");
+    expect(screens("b2c", { orientation: "position" })[3]).toBe("p_target");
   });
 });
 
@@ -57,6 +67,10 @@ describe("bookingHref", () => {
 
   it("sans agenda configuré, aucun lien", () => {
     expect(bookingHref("", { notes: "x" })).toBe("");
+  });
+
+  it("un agenda relatif (erreur de saisie) ne casse rien : aucun lien", () => {
+    expect(bookingHref("/cal", { notes: "x" })).toBe("");
   });
 });
 
@@ -90,5 +104,22 @@ describe("bookingNote", () => {
     expect(note).toContain("Clarté du projet");
     expect(note).toContain("Clarifier son projet");
     expect(note).not.toContain("période très difficile");
+  });
+});
+
+describe("themeScores / contactFallbackPath", () => {
+  it("B2B : trois thèmes nommés, avec score et niveau", () => {
+    const rows = themeScores("b2b", B2B_TEXTS, computeB2b(B2B_ANSWERS));
+    expect(rows.map((r) => r.label)).toEqual([
+      "Structuration RH",
+      "Compétences et GEPP",
+      "Management",
+    ]);
+    expect(rows[0]).toMatchObject({ score: expect.any(Number), level: expect.any(String) });
+  });
+
+  it("repli vers la page Contact du bon public", () => {
+    expect(contactFallbackPath("b2b")).toBe("/contact?pour=organisation");
+    expect(contactFallbackPath("b2c")).toBe("/contact?pour=particulier");
   });
 });

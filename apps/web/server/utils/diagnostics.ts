@@ -1,11 +1,12 @@
 import { createHash } from "node:crypto";
-import { type Database, diagnostics, lt } from "@encre/db";
+import { and, type Database, diagnostics, eq, gt, lt } from "@encre/db";
 import {
   type Answers,
   type B2bResult,
   type B2cResult,
   computeB2b,
   computeB2c,
+  SENSITIVE_ANSWERS,
 } from "@encre/shared/diagnostics";
 import type { DiagnosticKind } from "~/types/content";
 // Import EXPLICITE (pas d'auto-import `utils/` côté Nitro), même source que la page.
@@ -19,7 +20,10 @@ import { diagnosticQuestions } from "~/utils/diagnostic-flow";
 export const DIAGNOSTIC_RETENTION_MS = 3 * 365 * 24 * 60 * 60 * 1000; // ~3 ans, comme les leads
 
 /** Questions dont la réponse n'est jamais enregistrée (seulement l'écran affiché). */
-const NEVER_STORED = new Set(["difficulty"]);
+const NEVER_STORED = new Set<string>(SENSITIVE_ANSWERS);
+
+/** Délai minimal entre deux rapports du même diagnostic vers la même adresse. */
+export const REPORT_EMAIL_COOLDOWN_MS = 10 * 60 * 1000;
 
 export interface PreparedDiagnostic {
   answers: Answers;
@@ -49,6 +53,32 @@ export function deviceFromUserAgent(
 ): "mobile" | "desktop" | null {
   if (!userAgent) return null;
   return /Mobi|Android|iPhone|iPad/i.test(userAgent) ? "mobile" : "desktop";
+}
+
+/**
+ * Un rapport du même diagnostic est-il parti vers cette adresse il y a moins de
+ * 10 minutes ? Anti-abus : Turnstile et la limite par IP n'empêchent pas un
+ * script réparti d'inonder une boîte mail tierce de rapports.
+ */
+export async function recentReportExists(
+  db: Database,
+  email: string,
+  kind: DiagnosticKind,
+  now: Date = new Date(),
+): Promise<boolean> {
+  const since = new Date(now.getTime() - REPORT_EMAIL_COOLDOWN_MS);
+  const [row] = await db
+    .select({ id: diagnostics.id })
+    .from(diagnostics)
+    .where(
+      and(
+        eq(diagnostics.email, email),
+        eq(diagnostics.kind, kind),
+        gt(diagnostics.createdAt, since),
+      ),
+    )
+    .limit(1);
+  return row !== undefined;
 }
 
 /** Supprime les diagnostics plus vieux que la durée de conservation. `now` injectable (tests). */

@@ -44,6 +44,13 @@ const POSITION = [
   { id: "p_network", kind: "yes_no", theme: "B" },
 ] as const satisfies readonly Question[];
 
+/**
+ * Réponses sensibles : jamais transmises au serveur, jamais stockées ni
+ * envoyées (email, Cal.com). « hard » déclenche seulement l'écran bienveillant.
+ */
+export const SENSITIVE_ANSWERS = ["difficulty"] as const;
+export const CARE_TRIGGER = { id: "difficulty", value: "hard" } as const;
+
 export type B2cPath = "direction" | "position";
 export const B2C_PATHS: Record<B2cPath, readonly Question[]> = {
   direction: [...COMMON, ...DIRECTION],
@@ -100,7 +107,11 @@ function recommend(
 export function computeB2c(answers: Answers): B2cResult {
   const path: B2cPath = answers.orientation === "position" ? "position" : "direction";
   const questions = B2C_PATHS[path];
-  assertComplete(questions, answers);
+  // La réponse sensible n'entre dans aucun calcul et ne quitte pas le navigateur.
+  assertComplete(
+    questions.filter((q) => !(SENSITIVE_ANSWERS as readonly string[]).includes(q.id)),
+    answers,
+  );
   const scores = { A: themeScore(questions, answers, "A"), B: themeScore(questions, answers, "B") };
   return {
     path,

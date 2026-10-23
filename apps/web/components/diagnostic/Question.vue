@@ -19,15 +19,20 @@ const heading = ref<HTMLElement | null>(null);
 const selected = ref<string>("");
 const missing = ref(false);
 
+function reset() {
+  selected.value = typeof props.current === "string" ? props.current : "";
+  missing.value = false;
+}
+reset();
+// Focus déplacé ENTRE deux questions seulement : à l'arrivée sur la page, il
+// ferait sauter l'introduction.
 watch(
   () => props.question.id,
   async () => {
-    selected.value = typeof props.current === "string" ? props.current : "";
-    missing.value = false;
+    reset();
     await nextTick();
     heading.value?.focus();
   },
-  { immediate: true },
 );
 
 function submitSelect() {

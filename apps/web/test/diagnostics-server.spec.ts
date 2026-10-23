@@ -41,6 +41,11 @@ describe("prepareDiagnostic", () => {
     expect(prepared.answers).not.toHaveProperty("intrus");
   });
 
+  it("accepte un B2C sans la réponse sensible (retirée par le navigateur)", () => {
+    const { difficulty: _, ...sent } = B2C_ANSWERS;
+    expect(prepareDiagnostic("b2c", sent).result).toMatchObject({ offer: "clarify" });
+  });
+
   it("refuse un questionnaire incomplet", () => {
     const { d_funding: _, ...incomplete } = B2C_ANSWERS;
     expect(() => prepareDiagnostic("b2c", incomplete)).toThrow();

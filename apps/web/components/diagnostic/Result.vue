@@ -10,7 +10,6 @@ const props = defineProps<{
   answers: Answers;
   result: B2bResult | B2cResult;
   unlocked?: boolean;
-  email?: string;
   token?: string;
 }>();
 const track = useTrack();
@@ -28,7 +27,7 @@ async function onUnlocked(token: string) {
 
     <div class="relative mt-12">
       <div :class="unlocked ? '' : 'pointer-events-none select-none blur-[6px]'" :inert="!unlocked || undefined" :aria-hidden="!unlocked || undefined">
-        <DiagnosticReport :content="content" :answers="answers" :result="result" :email="email" :token="token" />
+        <DiagnosticReport :content="content" :answers="answers" :result="result" :token="token" />
       </div>
       <div v-if="!unlocked" class="absolute inset-x-0 top-0 flex justify-center">
         <DiagnosticUnlock :content="content" :answers="answers" class="w-full max-w-md" @unlocked="onUnlocked" />

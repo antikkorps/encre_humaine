@@ -1,7 +1,14 @@
 import type { Answers, B2bResult, B2cResult, DiagnosticTexts } from "@encre/shared/diagnostics";
 import type { DiagnosticKind } from "~/types/content";
 // Imports EXPLICITES (pas d'auto-import `utils/` côté Nitro) : mêmes règles que la page.
-import { answerLabelFor, bookingHref, bookingNote, fillTemplate } from "~/utils/diagnostic-flow";
+import {
+  answerLabelFor,
+  bookingHref,
+  bookingNote,
+  contactFallbackPath,
+  fillTemplate,
+  themeScores,
+} from "~/utils/diagnostic-flow";
 
 /**
  * Email du rapport de diagnostic (docs/11-diagnostics.md §Email) : scores,
@@ -24,19 +31,15 @@ const esc = (s: string) =>
 
 /** Lignes « thème : score/100 (niveau) », global en tête pour le B2B. */
 function scoreLines({ kind, texts, result }: DiagnosticEmailInput): string[] {
-  if (kind === "b2b") {
-    const r = result as B2bResult;
-    return [
-      `${texts.messages.global_label} : ${r.global}/100 (${texts.levels[r.globalLevel]})`,
-      ...(["A", "B", "C"] as const).map(
-        (t) => `${texts.themes[t]} : ${r.scores[t]}/100 (${texts.levels[r.levels[t]]})`,
-      ),
-    ];
-  }
-  const r = result as B2cResult;
-  return (["A", "B"] as const).map(
-    (t) => `${texts.themes[`${r.path}_${t}`]} : ${r.scores[t]}/100 (${texts.levels[r.levels[t]]})`,
+  const themes = themeScores(kind, texts, result).map(
+    (t) => `${t.label} : ${t.score}/100 (${t.level})`,
   );
+  if (kind === "b2c") return themes;
+  const r = result as B2bResult;
+  return [
+    `${texts.messages.global_label} : ${r.global}/100 (${texts.levels[r.globalLevel]})`,
+    ...themes,
+  ];
 }
 
 /** Message(s) de proposition, offres recommandées. */
@@ -82,7 +85,7 @@ function emailParts(input: DiagnosticEmailInput) {
     cards: offers.map((k) => texts.offers[k]).filter((o) => o !== undefined),
     booking:
       bookingHref(bookingUrl, { email, notes: bookingNote(kind, answers, result, texts) }) ||
-      `${origin}/contact?pour=${kind === "b2b" ? "organisation" : "particulier"}`,
+      `${origin}${contactFallbackPath(kind)}`,
   };
 }
 type EmailParts = ReturnType<typeof emailParts>;

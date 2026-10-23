@@ -6,7 +6,6 @@ import type { DiagnosticContent, DiagnosticKind } from "~/types/content";
 
 interface StoredReport {
   kind: DiagnosticKind;
-  email: string;
   answers: Answers;
   result: B2bResult | B2cResult;
 }
@@ -30,7 +29,6 @@ useSeoMeta({ title: "Votre diagnostic — L'Encre Humaine", robots: "noindex, no
       :content="content"
       :answers="report.answers"
       :result="report.result"
-      :email="report.email"
       :token="token"
       unlocked
     />

@@ -63,6 +63,9 @@ Bouton « Réserver 30 minutes pour en parler » (B2B) / « Réserver ma séance
 - Q3 B2C sensible : aucune trace individuelle ; seul un compteur anonyme d'affichages de l'écran bienveillant (événement Umami sans propriété).
 - Lecture : collection Directus « Diagnostics reçus », même mécanique que « Messages reçus » (docs/09) : contenu en lecture seule, **statut modifiable** (archivage natif Directus) et **suppression autorisée** à l'Éditrice ; export CSV natif de l'admin.
 - Newsletter : case cochée → même parcours que l'inscription existante (double opt-in maison, docs/08), jamais d'inscription directe.
+- Anti-abus : au plus un email (rapport + éventuelle confirmation newsletter) par adresse et par diagnostic toutes les 10 minutes, en plus de Turnstile et de la limite par IP. Le rapport reste enregistré et affiché.
+- La réponse sensible ne quitte jamais le navigateur (retirée avant l'envoi) et serait de toute façon ignorée par le serveur. Le lien de rapport ne renvoie pas l'email : il se transfère.
+- Exception assumée à « Directus ne lit pas le schéma `app` » (docs/CLAUDE.md) : comme `contact_leads` (docs/09), Directus lit `app.diagnostics` pour qu'Éléonore prépare ses rendez-vous ; droits limités à `SELECT`, `UPDATE (status)`, `DELETE`.
 
 ## Email au déblocage (Resend)
 Objet : « Votre diagnostic : [niveau] » (B2B) / « Votre point sur votre projet professionnel » (B2C). Contenu : scores et niveaux, conseils, offre(s), bouton RDV, lien vers le rapport en ligne, signature L'Encre Humaine. Transférable tel quel (aucun lien personnel autre que le rapport). Pas de lien de désinscription marketing : c'est un email transactionnel demandé ; la newsletter a les siens.
@@ -77,7 +80,7 @@ Mobile d'abord, boutons de réponse larges, pas de défilement horizontal ; navi
 Les 14 scénarios de recette du cahier des charges (§13), dont :
 - B2B tout au maximum → thèmes 100, global 100, « Une base solide », offre du besoin seule ; tout au minimum → 0, « Des bases à poser », Audit RH en premier.
 - B2B C le plus faible + priorité Tensions → 1 carte Expert au Manager + phrase « même direction » ; A le plus faible + Tensions → 2 cartes Audit RH puis Expert au Manager ; « Je ne sais pas » → 1 carte (score).
-- B2B taille < 10 ou > 300 → mention affichée.
+- B2B taille < 20 (dont « moins de 10 », scénario du cahier des charges) ou > 300 → mention affichée ; de 20 à 300 → aucune.
 - B2C Direction Clarté 50 → Clarifier ; 83 → Se (re)positionner « direction qui se dessine » ; Poste Q4 = Non & Lisibilité 100 → Clarifier ; Q4 = Oui & Lisibilité 33 → Se (re)positionner « cap posé ».
 - B2C retour sur Q2 + changement de parcours → réponses effacées, 12 écrans ; Q3 difficile → écran bienveillant puis possibilité de continuer.
 - Email invalide ou consentement non coché → pas de déblocage, erreur claire ; retour en arrière → réponses conservées.

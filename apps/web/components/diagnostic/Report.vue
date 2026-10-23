@@ -10,7 +10,6 @@ const props = defineProps<{
   content: DiagnosticContent;
   answers: Answers;
   result: B2bResult | B2cResult;
-  email?: string;
   token?: string;
 }>();
 const track = useTrack();
@@ -56,13 +55,10 @@ const cards = computed(() => {
 
 const bookingLink = computed(() =>
   bookingHref(props.content.bookingUrl, {
-    email: props.email,
     notes: bookingNote(props.content.kind, props.answers, props.result, texts.value),
   }),
 );
-const contactFallback = computed(
-  () => `/contact?pour=${props.content.kind === "b2b" ? "organisation" : "particulier"}`,
-);
+const contactFallback = computed(() => contactFallbackPath(props.content.kind));
 
 function onBooking() {
   track("diagnostic_booking_click", { kind: props.content.kind });

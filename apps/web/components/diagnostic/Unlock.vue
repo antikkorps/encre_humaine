@@ -3,7 +3,7 @@
 // consentement OBLIGATOIRE non coché, newsletter FACULTATIVE non cochée,
 // Turnstile. Le serveur recalcule le résultat, enregistre, envoie l'email et
 // renvoie le jeton du lien de rapport.
-import type { Answers } from "@encre/shared/diagnostics";
+import { type Answers, SENSITIVE_ANSWERS } from "@encre/shared/diagnostics";
 import type { DiagnosticContent } from "~/types/content";
 
 const props = defineProps<{ content: DiagnosticContent; answers: Answers }>();
@@ -19,6 +19,13 @@ const pending = ref(false);
 const turnstileEl = ref<HTMLElement | null>(null);
 const { token, reset: resetTurnstile } = useTurnstile(turnstileEl);
 const unlock = computed(() => props.content.texts.unlock);
+
+const withoutSensitive = (answers: Answers): Answers =>
+  Object.fromEntries(
+    Object.entries(answers).filter(
+      ([id]) => !(SENSITIVE_ANSWERS as readonly string[]).includes(id),
+    ),
+  );
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,7 +45,8 @@ async function submit() {
       method: "POST",
       body: {
         kind: props.content.kind,
-        answers: props.answers,
+        // La réponse sensible ne quitte jamais le navigateur.
+        answers: withoutSensitive(props.answers),
         email: email.value.trim(),
         consentReport: consent.value,
         consentNewsletter: newsletter.value,

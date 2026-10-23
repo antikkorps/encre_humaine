@@ -7,6 +7,7 @@ import {
   type Answers,
   type B2bResult,
   type B2cResult,
+  CARE_TRIGGER,
   computeB2b,
   computeB2c,
   questionLabel,
@@ -46,7 +47,7 @@ function onAnswer(value: number | string) {
     track("diagnostic_start", { kind: kind.value });
   record(id, value);
   // Réponse sensible : écran bienveillant, et aucune trace autre qu'un compteur anonyme.
-  if (id === "difficulty" && value === "hard") {
+  if (id === CARE_TRIGGER.id && value === CARE_TRIGGER.value) {
     track("diagnostic_care_screen");
     step.value = "care";
     return;

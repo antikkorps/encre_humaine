@@ -224,3 +224,17 @@ describe("B2C — parcours", () => {
     expect(JSON.stringify(r)).not.toContain("hard");
   });
 });
+
+describe("réponses sensibles", () => {
+  it("la difficulté personnelle (Q3 B2C) est désignée comme sensible", async () => {
+    const { SENSITIVE_ANSWERS } = await import("./b2c.ts");
+    expect(SENSITIVE_ANSWERS).toContain("difficulty");
+  });
+});
+
+describe("réponse sensible absente", () => {
+  it("le résultat se calcule sans elle : elle ne quitte jamais le navigateur", () => {
+    const { difficulty: _, ...withoutSensitive } = direction(0);
+    expect(() => computeB2c(withoutSensitive)).not.toThrow();
+  });
+});

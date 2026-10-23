@@ -4,6 +4,8 @@ import { diagnostics, eq } from "@encre/db";
  * Rapport retrouvé par son lien — `GET /api/diagnostics/report/:token`
  * (docs/11-diagnostics.md). Le jeton n'est jamais stocké en clair : on cherche
  * son empreinte. Jeton inconnu (ou purgé) → 404, sans rien révéler de plus.
+ * L'email n'est PAS renvoyé : le lien se transfère (dirigeant → DRH), l'adresse
+ * de la personne n'a pas à suivre.
  */
 export default defineEventHandler(async (event) => {
   const token = getRouterParam(event, "token") ?? "";
@@ -13,7 +15,6 @@ export default defineEventHandler(async (event) => {
   const [row] = await serverDb()
     .select({
       kind: diagnostics.kind,
-      email: diagnostics.email,
       answers: diagnostics.answers,
       result: diagnostics.result,
     })

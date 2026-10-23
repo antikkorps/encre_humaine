@@ -10,22 +10,7 @@ const props = defineProps<{
   result: B2bResult | B2cResult;
 }>();
 
-const bars = computed(() => {
-  if (props.kind === "b2b") {
-    const r = props.result as B2bResult;
-    return (["A", "B", "C"] as const).map((t) => ({
-      label: props.texts.themes[t] ?? t,
-      score: r.scores[t],
-      level: props.texts.levels[r.levels[t]],
-    }));
-  }
-  const r = props.result as B2cResult;
-  return (["A", "B"] as const).map((t) => ({
-    label: props.texts.themes[`${r.path}_${t}`] ?? t,
-    score: r.scores[t],
-    level: props.texts.levels[r.levels[t]],
-  }));
-});
+const bars = computed(() => themeScores(props.kind, props.texts, props.result));
 const b2b = computed(() => (props.kind === "b2b" ? (props.result as B2bResult) : null));
 </script>
 

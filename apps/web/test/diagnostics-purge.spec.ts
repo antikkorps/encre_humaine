@@ -8,7 +8,11 @@ import { PGlite } from "@electric-sql/pglite";
 import { type Database, diagnostics } from "@encre/db";
 import { drizzle } from "drizzle-orm/pglite";
 import { beforeAll, describe, expect, it } from "vitest";
-import { DIAGNOSTIC_RETENTION_MS, purgeOldDiagnostics } from "../server/utils/diagnostics";
+import {
+  DIAGNOSTIC_RETENTION_MS,
+  purgeOldDiagnostics,
+  recentReportExists,
+} from "../server/utils/diagnostics";
 
 // 0000 crée le schéma `app` et l'enum `lead_status` ; 0004 la table. Les GRANT
 // (0005) visent un rôle absent de PGlite et sont ignorés.
@@ -46,5 +50,36 @@ describe("purge RGPD des diagnostics", () => {
     expect(await purgeOldDiagnostics(db, now)).toBe(1);
     const left = await db.select({ hash: diagnostics.reportTokenHash }).from(diagnostics);
     expect(left).toEqual([{ hash: "recent" }]);
+  });
+});
+
+// Anti-abus (revue du 2026-10-23) : un même email ne reçoit pas plus d'un
+// rapport du même diagnostic toutes les 10 minutes, quelle que soit l'IP.
+describe("limite d'envoi par adresse", () => {
+  it("bloque un 2e rapport récent pour la même adresse et le même diagnostic", async () => {
+    const pg = new PGlite();
+    for (const migration of MIGRATIONS) await pg.exec(readFileSync(migration, "utf8"));
+    const db = drizzle(pg) as unknown as Database;
+    const now = new Date("2026-10-23T12:00:00Z");
+    await db.insert(diagnostics).values({
+      kind: "b2b",
+      email: "victime@exemple.fr",
+      consentReport: true,
+      consentTextVersion: "v1",
+      answers: {},
+      result: {},
+      reportTokenHash: "h1",
+      createdAt: new Date(now.getTime() - 60_000),
+    });
+    expect(await recentReportExists(db, "victime@exemple.fr", "b2b", now)).toBe(true);
+    expect(await recentReportExists(db, "victime@exemple.fr", "b2c", now)).toBe(false);
+    expect(
+      await recentReportExists(
+        db,
+        "victime@exemple.fr",
+        "b2b",
+        new Date(now.getTime() + 11 * 60_000),
+      ),
+    ).toBe(false);
   });
 });
