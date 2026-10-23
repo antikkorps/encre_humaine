@@ -7,12 +7,18 @@
  * balisé plutôt qu'un prix inventé.
  */
 
-/** Premier montant en euros d'un libellé, espaces de milliers et virgule décimale FR compris. */
-const AMOUNT_RE = /(\d{1,3}(?:[\s  ]\d{3})+|\d+)(?:,(\d{1,2}))?\s*€/;
+/**
+ * Premier montant d'un libellé : séparateur de milliers espace ou point, virgule
+ * décimale FR. Le PREMIER, car « de 500 à 900 € » a pour plancher 500.
+ */
+const AMOUNT_RE = /(\d{1,3}(?:[\s  .]\d{3})+|\d+)(?:,(\d{1,2}))?/;
 
 export function parseStartingPrice(label: string | null | undefined): number | null {
-  const match = label?.match(AMOUNT_RE);
+  // Sans euro ce n'est pas un prix (« 6 mois ») ; « sur devis » l'emporte sur
+  // tout montant indicatif : mieux vaut aucun prix balisé qu'un prix contesté.
+  if (!label?.includes("€") || /devis/i.test(label)) return null;
+  const match = label.match(AMOUNT_RE);
   if (!match?.[1]) return null;
-  const units = match[1].replace(/[\s  ]/g, "");
+  const units = match[1].replace(/[\s  .]/g, "");
   return Number(match[2] ? `${units}.${match[2]}` : units);
 }

@@ -82,7 +82,8 @@ const RELATIVE_BASE = "https://relative.invalid/";
  */
 export function safeHref(val: unknown): string {
   const raw = str(val);
-  if (!raw || raw.startsWith("//")) return "";
+  // `/\` vaut `//` pour un navigateur : externe déguisée en chemin, elle aussi.
+  if (!raw || raw.startsWith("//") || raw.startsWith("/\\")) return "";
   if (raw.startsWith("/") || raw.startsWith("#") || raw.startsWith("?")) return raw;
   try {
     // Résolu contre une base https : un relatif (`contact`) hérite du schéma et

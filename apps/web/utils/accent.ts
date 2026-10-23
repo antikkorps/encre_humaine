@@ -28,8 +28,12 @@ export interface AccentSegment {
  */
 const ACCENT_RE = /\*\*([\s\S]+?)\*\*|\[([^\]\n]+)\]\(([^)\s]+)\)/g;
 
-/** Cibles autorisées : chemin du site, ancre, https ou mailto (jamais `javascript:`). */
-const SAFE_HREF_RE = /^(\/(?!\/)|#|https:\/\/|mailto:)/;
+/**
+ * Cibles autorisées : chemin du site, ancre, https ou mailto (jamais `javascript:`).
+ * `//` et `/\` sont refusés : les navigateurs lisent `\` comme `/`, et les deux
+ * mènent hors du site sous l'apparence d'un chemin.
+ */
+const SAFE_HREF_RE = /^(\/(?![/\\])|#|https:\/\/|mailto:)/;
 
 /**
  * Découpe un texte en segments normaux / mis en avant. Les `**` non appariés

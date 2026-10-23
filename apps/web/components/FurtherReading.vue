@@ -6,8 +6,6 @@
 import type { FurtherSection } from "~/types/content";
 
 defineProps<{ section: FurtherSection }>();
-
-const isExternal = (url: string) => /^(https?:|mailto:)/.test(url);
 </script>
 
 <template>
@@ -21,8 +19,8 @@ const isExternal = (url: string) => /^(https?:|mailto:)/.test(url);
       <li v-for="(link, i) in section.links" :key="i">
         <NuxtLink
           :to="link.url"
-          :target="isExternal(link.url) ? '_blank' : undefined"
-          :rel="isExternal(link.url) ? 'noopener' : undefined"
+          :target="isExternalHref(link.url) ? '_blank' : undefined"
+          :rel="isExternalHref(link.url) ? 'noopener' : undefined"
           class="group flex h-full flex-col rounded-3xl border border-ink/5 bg-white p-7 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
         >
           <span class="font-display text-lg font-bold text-ink group-hover:text-teal-700">

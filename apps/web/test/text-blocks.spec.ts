@@ -37,4 +37,10 @@ describe("parseTextBlocks", () => {
   it("renvoie une liste vide pour un texte vide", () => {
     expect(parseTextBlocks("  \n ")).toEqual([]);
   });
+
+  it("garde en prose une ligne ouverte par un tiret demi-cadratin", () => {
+    expect(parseTextBlocks("– Et pourtant, ça marche.")).toEqual([
+      { kind: "p", text: "– Et pourtant, ça marche." },
+    ]);
+  });
 });

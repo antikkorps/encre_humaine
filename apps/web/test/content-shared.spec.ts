@@ -353,6 +353,8 @@ describe("safeHref", () => {
 
   it("refuse les URL protocol-relative (externe déguisée en chemin)", () => {
     expect(safeHref("//ailleurs.tld/piege")).toBe("");
+    // Les navigateurs lisent `\` comme `/` : `/\ailleurs.tld` sort aussi du site.
+    expect(safeHref("/\\ailleurs.tld/piege")).toBe("");
   });
 
   it('renvoie "" pour une entrée vide ou non-chaîne', () => {

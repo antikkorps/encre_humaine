@@ -23,6 +23,10 @@ const STEPS = [
   { key: "actions", label: "Ce qui a été mis en place", icon: "material-symbols:checklist" },
 ] as const;
 
+// Réduite seulement si le cas complet est lisible ailleurs : sinon le récit
+// disparaîtrait du site (cas sans offre publiée).
+const reduced = computed(() => props.compact && !!props.caseStudy.readMoreUrl);
+
 /** Étapes réellement renseignées (une entrée vide ne laisse pas d'intertitre orphelin). */
 const steps = computed(() =>
   STEPS.map((s) => ({ ...s, body: props.caseStudy[s.key] })).filter((s) => s.body),
@@ -31,7 +35,7 @@ const steps = computed(() =>
 
 <template>
   <article
-    :id="compact ? undefined : caseStudy.anchor"
+    :id="reduced ? undefined : caseStudy.anchor"
     class="flex h-full scroll-mt-24 flex-col overflow-hidden rounded-3xl border border-ink/5 bg-white shadow-soft"
     :class="full && caseStudy.image ? 'lg:grid lg:grid-cols-[1.35fr_0.65fr] lg:items-stretch' : ''"
   >
@@ -55,13 +59,13 @@ const steps = computed(() =>
       <p
         v-if="caseStudy.summary"
         class="mt-2 leading-relaxed text-ink/60"
-        :class="compact ? 'line-clamp-2' : ''"
+        :class="reduced ? 'line-clamp-2' : ''"
       >
         <AccentText :text="caseStudy.summary" />
       </p>
 
       <NuxtLink
-        v-if="compact && caseStudy.readMoreUrl"
+        v-if="reduced"
         :to="caseStudy.readMoreUrl"
         class="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-teal-700 hover:text-teal-800"
       >
@@ -69,7 +73,7 @@ const steps = computed(() =>
         <span aria-hidden="true">→</span>
       </NuxtLink>
 
-      <dl v-if="!compact" class="mt-7 space-y-5">
+      <dl v-if="!reduced" class="mt-7 space-y-5">
         <div v-for="step in steps" :key="step.key">
           <dt
             class="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.08em] text-teal-800"
@@ -85,7 +89,7 @@ const steps = computed(() =>
 
       <!-- Le résultat : encadré doré, seul élément mis en avant de la carte. -->
       <div
-        v-if="caseStudy.result && !compact"
+        v-if="caseStudy.result && !reduced"
         class="mt-7 rounded-2xl border border-sand-400/40 bg-orange-50 p-5"
       >
         <p
@@ -100,7 +104,7 @@ const steps = computed(() =>
       </div>
     </div>
 
-    <div v-if="caseStudy.image && !compact" :class="full ? '' : 'order-first'">
+    <div v-if="caseStudy.image && !reduced" :class="full ? '' : 'order-first'">
       <NuxtImg
         :src="caseStudy.image"
         :alt="caseStudy.imageAlt ?? ''"

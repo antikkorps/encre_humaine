@@ -66,17 +66,29 @@ async function seedHomeFaq(): Promise<void> {
   }
 }
 
-/** URL d'un cas concret sur sa page d'offre, retrouvé par le début de son titre. */
-async function caseUrl(titleStart: string, offerSlug: string): Promise<string | null> {
-  const cases = await get<{ id: number; title: string }[]>(
-    "/items/case_studies?limit=-1&fields=id,title",
-  );
+type CaseRef = { id: string; title: string };
+type FurtherLink = (typeof run20FurtherLinks)[string][number];
+
+/**
+ * URL d'un cas concret sur sa page d'offre, retrouvé par le début de son titre.
+ * Les offres ciblées par ce lot sont toutes côté organisations.
+ */
+function caseUrl(cases: CaseRef[], titleStart: string, offerSlug: string): string | null {
   const found = cases.find((c) => c.title.trim().startsWith(titleStart));
   return found ? `/organisations/${offerSlug}#cas-${found.id}` : null;
 }
 
-/** « Pour aller plus loin » : rempli seulement sur les offres qui n'en ont pas. */
+function resolveLink(link: FurtherLink, cases: CaseRef[]): Json | null {
+  const url = link.url ?? caseUrl(cases, link.caseTitle ?? "", link.caseOffer ?? "");
+  return url ? { title: link.title, body: link.body, url } : null;
+}
+
+/**
+ * « Pour aller plus loin » : rempli seulement sur les offres qui n'en ont pas, et
+ * jamais à moitié : un lien introuvable laisse l'offre vide, donc rejouable.
+ */
 async function seedFurtherLinks(): Promise<void> {
+  const cases = await get<CaseRef[]>("/items/case_studies?limit=-1&fields=id,title");
   for (const [slug, links] of Object.entries(run20FurtherLinks)) {
     const [offer] = await get<{ id: string; further_links: Json[] | null }[]>(
       `/items/offers?filter[slug][_eq]=${slug}&fields=id,further_links`,
@@ -89,17 +101,14 @@ async function seedFurtherLinks(): Promise<void> {
       console.log(`= offers « ${slug} » : « Pour aller plus loin » déjà renseigné`);
       continue;
     }
-    const resolved = await Promise.all(links.map(resolveLink));
-    const value = resolved.filter((l): l is Json => l !== null);
-    act(`offers « ${slug} » : ${value.map((l) => `« ${l.title} » → ${l.url}`).join(", ")}`);
+    const value = links.map((link) => resolveLink(link, cases));
+    if (value.some((l) => l === null)) {
+      console.log(`! offers « ${slug} » : un cas lié est introuvable, rien n'est écrit`);
+      continue;
+    }
+    act(`offers « ${slug} » : ${value.map((l) => `« ${l?.title} » → ${l?.url}`).join(", ")}`);
     if (apply) await patch(`/items/offers/${offer.id}`, { further_links: value });
   }
-}
-
-async function resolveLink(link: (typeof run20FurtherLinks)[string][number]): Promise<Json | null> {
-  const url = link.url ?? (await caseUrl(link.caseTitle ?? "", link.caseOffer ?? ""));
-  if (!url) console.log(`! cas « ${link.caseTitle} » introuvable : lien ignoré`);
-  return url ? { title: link.title, body: link.body, url } : null;
 }
 
 async function main(): Promise<void> {

@@ -8,7 +8,8 @@
 
 export type TextBlock = { kind: "p"; text: string } | { kind: "ul"; items: string[] };
 
-const BULLET_RE = /^\s*[•\-–]\s+/;
+/** « • » ou « - » : le tiret demi-cadratin « – » ouvre souvent une phrase en français. */
+const BULLET_RE = /^\s*[•-]\s+/;
 
 export function parseTextBlocks(text: string): TextBlock[] {
   const blocks: TextBlock[] = [];
@@ -29,7 +30,6 @@ export function parseTextBlocks(text: string): TextBlock[] {
     } else if (line.trim() === "") {
       flushParagraph();
     } else {
-      // Une ligne de texte après une liste ouvre forcément un nouveau bloc.
       lines.push(line);
     }
   }

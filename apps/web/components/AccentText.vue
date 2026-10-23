@@ -33,7 +33,6 @@ const linkClass = computed(() =>
     ? "underline decoration-sand-300/60 underline-offset-2 hover:text-sand-300"
     : "underline decoration-orange-400/70 underline-offset-2 hover:text-teal-700",
 );
-const isExternal = (href: string) => /^(https:|mailto:)/.test(href);
 </script>
 
-<template><span class="whitespace-pre-line"><template v-for="(segment, i) in segments" :key="i"><NuxtLink v-if="segment.href" :to="segment.href" :class="linkClass" :target="isExternal(segment.href) ? '_blank' : undefined" :rel="isExternal(segment.href) ? 'noopener' : undefined">{{ segment.text }}</NuxtLink><strong v-else-if="segment.accent" class="font-bold" :class="tone === 'dark' ? 'text-sand-300' : 'text-orange-500'">{{ segment.text }}</strong><template v-else>{{ segment.text }}</template></template></span></template>
+<template><span class="whitespace-pre-line"><template v-for="(segment, i) in segments" :key="i"><NuxtLink v-if="segment.href" :to="segment.href" :class="linkClass" :target="isExternalHref(segment.href) ? '_blank' : undefined" :rel="isExternalHref(segment.href) ? 'noopener' : undefined">{{ segment.text }}</NuxtLink><strong v-else-if="segment.accent" class="font-bold" :class="tone === 'dark' ? 'text-sand-300' : 'text-orange-500'">{{ segment.text }}</strong><template v-else>{{ segment.text }}</template></template></span></template>

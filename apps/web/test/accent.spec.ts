@@ -73,4 +73,10 @@ describe("parseAccent — liens", () => {
     expect(rendered("[x](javascript:alert(1))")).toBe("[x](javascript:alert(1))");
     expect(parseAccent("[x](javascript:alert(1))").some((s) => s.href)).toBe(false);
   });
+
+  it("refuse les chemins qui sortent du site (// ou /\\)", () => {
+    for (const href of ["//evil.fr", "/\\evil.fr"]) {
+      expect(parseAccent(`[x](${href})`).some((s) => s.href)).toBe(false);
+    }
+  });
 });
