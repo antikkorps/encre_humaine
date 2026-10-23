@@ -45,13 +45,15 @@ function submitSelect() {
 </script>
 
 <template>
-  <div>
+  <!-- Hauteurs réservées (titre + bloc, mesurées sur la plus longue question et
+       l'écran le plus haut) : d'une question à l'autre, rien ne saute. -->
+  <div class="flex min-h-[34rem] flex-col sm:min-h-[27rem]">
     <div class="h-1.5 overflow-hidden rounded-full bg-ink/10" aria-hidden="true">
       <div class="h-full bg-teal-700 transition-all" :style="{ width: `${((index + 1) / total) * 100}%` }" />
     </div>
     <p class="mt-2 text-sm text-ink/60" aria-live="polite">Question {{ index + 1 }} sur {{ total }}</p>
 
-    <h2 ref="heading" tabindex="-1" class="mt-6 font-display text-2xl font-bold leading-snug text-ink outline-none">
+    <h2 ref="heading" tabindex="-1" class="mt-6 min-h-[4lh] font-display text-2xl font-bold leading-snug text-ink outline-none sm:min-h-[3lh]">
       {{ label }}
     </h2>
 
@@ -104,7 +106,7 @@ function submitSelect() {
     <button
       v-if="index > 0"
       type="button"
-      class="mt-6 text-sm font-medium text-ink/60 underline underline-offset-4 hover:text-teal-700"
+      class="mt-auto self-start pt-6 text-sm font-medium text-ink/60 underline underline-offset-4 hover:text-teal-700"
       @click="emit('back')"
     >
       Retour
