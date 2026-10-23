@@ -1,4 +1,3 @@
-import { eq, newsletterSubscribers } from "@encre/db";
 import { NewsletterSubscribeSchema } from "@encre/shared";
 import * as v from "valibot";
 
@@ -29,73 +28,19 @@ export default defineEventHandler(async (event) => {
   }
   enforceRateLimit(event, "newsletter", { limit: 5, windowMs: 60_000 });
 
-  const db = serverDb();
-  const [existing] = await db
-    .select()
-    .from(newsletterSubscribers)
-    .where(eq(newsletterSubscribers.email, payload.email))
-    .limit(1);
-
   // Déjà confirmé : idempotent, aucun nouveau mail (docs/03 §3.1). Réponse
   // VOLONTAIREMENT identique au cas nominal (`pending`) pour ne pas révéler
   // qu'un email est déjà inscrit (anti-énumération).
-  if (existing?.status === "confirmed") {
-    return { status: "pending" as const };
-  }
-
-  const { token, tokenHash } = generateConfirmationToken();
-  const expiresAt = new Date(Date.now() + CONFIRMATION_TTL_MS);
-  const firstName = payload.firstName ?? null;
-  const userAgent = getHeader(event, "user-agent") ?? null;
-
-  if (!existing) {
-    await db.insert(newsletterSubscribers).values({
-      email: payload.email,
-      firstName,
-      status: "pending",
-      tokenHash,
-      expiresAt,
-      consentIp: ip, // preuve de consentement (légitime ici, docs/01 §7)
-      consentUserAgent: userAgent,
-    });
-  } else {
-    // pending (renvoi du mail) ou unsubscribed (ré-opt-in) → régénère + repousse.
-    await db
-      .update(newsletterSubscribers)
-      .set({
-        status: "pending",
-        firstName,
-        tokenHash,
-        expiresAt,
-        consentIp: ip,
-        consentUserAgent: userAgent,
-        requestedAt: new Date(),
-      })
-      .where(eq(newsletterSubscribers.id, existing.id));
-  }
-
-  // Contact Resend en UNSUBSCRIBED : un pending ne reçoit aucun broadcast (best-effort).
   try {
-    const contactId = await upsertNewsletterContact({
+    await requestNewsletterOptIn({
       email: payload.email,
       firstName: payload.firstName,
-      unsubscribed: true,
+      ip,
+      userAgent: getHeader(event, "user-agent") ?? null,
     });
-    if (contactId) {
-      await db
-        .update(newsletterSubscribers)
-        .set({ resendContactId: contactId })
-        .where(eq(newsletterSubscribers.email, payload.email));
-    }
   } catch (err) {
-    console.error(`[newsletter] sync contact Resend ${payload.email} échouée :`, err);
-  }
-
-  // Email de confirmation : essentiel au flow → un échec doit faire retenter.
-  try {
-    await sendNewsletterConfirmation({ email: payload.email, firstName, token });
-  } catch (err) {
-    console.error(`[newsletter] envoi confirmation ${payload.email} échoué :`, err);
+    // Email de confirmation : essentiel au flow → un échec doit faire retenter.
+    console.error(`[newsletter] demande d'inscription ${payload.email} échouée :`, err);
     throwApiError("internal_error", "Envoi de l'email de confirmation impossible.");
   }
 

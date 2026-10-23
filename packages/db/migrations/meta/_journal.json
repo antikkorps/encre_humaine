@@ -29,6 +29,20 @@
       "when": 1792750707346,
       "tag": "0003_directus_manage_contact_leads",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792752525859,
+      "tag": "0004_diagnostics",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792752532753,
+      "tag": "0005_directus_manage_diagnostics",
+      "breakpoints": true
     }
   ]
 }

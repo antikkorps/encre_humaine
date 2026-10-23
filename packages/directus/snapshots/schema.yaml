@@ -140,10 +140,9 @@ collections:
       icon: inbox
       item_duplication_fields: null
       note: >-
-        Demandes reçues via le formulaire de contact (« Être rappelé·e » :
-        téléphone et créneau de rappel). Enregistrées par le site : seul le
-        statut se modifie. « Archiver » = clôturer (masquée de la liste, gardée)
-        ; la corbeille supprime définitivement.
+        Demandes reçues via le formulaire de contact (« Être rappelé·e »). Seul
+        le statut se modifie. « Archiver » = clôturer (masqué de la liste,
+        gardé) ; la corbeille supprime définitivement.
       preview_url: null
       singleton: false
       sort: null
@@ -181,6 +180,88 @@ collections:
       versioning: false
     schema:
       name: contact_page
+  - collection: diagnostic_b2b
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: diagnostic_b2b
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: quiz
+      item_duplication_fields: null
+      note: Textes du diagnostic RH (organisations) — /diagnostic-rh
+      preview_url: null
+      singleton: true
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: diagnostic_b2b
+  - collection: diagnostic_b2c
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: diagnostic_b2c
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: explore
+      item_duplication_fields: null
+      note: >-
+        Textes du diagnostic projet professionnel (particuliers) —
+        /diagnostic-projet
+      preview_url: null
+      singleton: true
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: diagnostic_b2c
+  - collection: diagnostics
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: status
+      archive_value: closed
+      collapse: open
+      collection: diagnostics
+      color: null
+      display_template: '{{email}} — {{kind}}'
+      group: null
+      hidden: false
+      icon: quiz
+      item_duplication_fields: null
+      note: >-
+        Diagnostics débloqués par email (/diagnostic-rh, /diagnostic-projet).
+        Réponses et résultat servent à préparer le rendez-vous. Seul le statut
+        se modifie. « Archiver » = clôturer (masqué de la liste, gardé) ; la
+        corbeille supprime définitivement.
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: '-created_at'
+      translations:
+        - language: fr-FR
+          plural: diagnostics
+          singular: diagnostic
+          translation: Diagnostics reçus
+      unarchive_value: new
+      versioning: false
+    schema:
+      name: diagnostics
   - collection: faq_items
     meta:
       accountability: all
@@ -6424,11 +6505,11 @@ fields:
       display: labels
       display_options:
         choices:
-          - text: Nouvelle
+          - text: Nouveau
             value: new
-          - text: Recontactée
+          - text: Recontacté
             value: contacted
-          - text: Clôturée
+          - text: Clôturé
             value: closed
       field: status
       group: null
@@ -6437,11 +6518,11 @@ fields:
       note: null
       options:
         choices:
-          - text: Nouvelle
+          - text: Nouveau
             value: new
-          - text: Recontactée
+          - text: Recontacté
             value: contacted
-          - text: Clôturée
+          - text: Clôturé
             value: closed
       readonly: false
       required: false
@@ -8191,6 +8272,2466 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: id
+    type: uuid
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: diagnostic_b2b
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: intro_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: intro_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Accueil du questionnaire
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2b
+    field: title
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: intro
+    type: text
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: intro
+      table: diagnostic_b2b
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: cta_label
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: Bouton de prise de rendez-vous du rapport
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_label
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: levels_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: levels_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Niveaux (moins de 40 / 40 à 69 / 70 et plus)
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2b
+    field: level_low
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: level_low
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: level_low
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: level_mid
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: level_mid
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: level_mid
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: level_high
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: level_high
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: level_high
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: themes
+    type: json
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: themes
+      group: null
+      hidden: false
+      interface: list
+      note: Nom des scores affichés
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: label
+            meta:
+              field: label
+              interface: input
+              width: full
+            name: Nom du thème
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: themes
+      table: diagnostic_b2b
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: questions_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: questions_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Questions
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2b
+    field: questions
+    type: json
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: questions
+      group: null
+      hidden: false
+      interface: list
+      note: Textes des questions, réponses et conseils
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: label
+            meta:
+              field: label
+              interface: input-multiline
+              width: full
+            name: Question
+            type: string
+          - field: label_variant
+            meta:
+              field: label_variant
+              interface: input-multiline
+              note: Formulation pour le profil Dirigeant·e ou DRH, quand elle existe
+              width: full
+            name: Variante (selon le profil)
+            type: string
+          - field: options
+            meta:
+              field: options
+              interface: input-multiline
+              note: >-
+                Garder le même nombre de lignes et le même ordre : l'ordre fait
+                le barème (1re = 2 points, 2e = 1, 3e = 0)
+              width: full
+            name: Réponses (une par ligne)
+            type: string
+          - field: tip
+            meta:
+              field: tip
+              interface: input-multiline
+              width: full
+            name: Conseil (si réponse < 2 points)
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: questions
+      table: diagnostic_b2b
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: result_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: result_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Résultat
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2b
+    field: offers
+    type: json
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: offers
+      group: null
+      hidden: false
+      interface: list
+      note: Cartes d'offre recommandées
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: name
+            meta:
+              field: name
+              interface: input
+              width: full
+            name: Nom de l'offre
+            type: string
+          - field: price
+            meta:
+              field: price
+              interface: input
+              width: full
+            name: Prix et durée
+            type: string
+          - field: description
+            meta:
+              field: description
+              interface: input-multiline
+              width: full
+            name: Phrase de description
+            type: string
+          - field: url
+            meta:
+              field: url
+              interface: input
+              width: full
+            name: Lien (page de l'offre)
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: offers
+      table: diagnostic_b2b
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: messages
+    type: json
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: messages
+      group: null
+      hidden: false
+      interface: list
+      note: >-
+        Messages du rapport. {priorite} et {niveau} sont remplacés
+        automatiquement.
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: Texte
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: messages
+      table: diagnostic_b2b
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: unlock_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Déblocage par email
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2b
+    field: unlock_title
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: unlock_title
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: unlock_body
+    type: text
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: unlock_body
+      table: diagnostic_b2b
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: consent_label
+    type: text
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: consent_label
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: >-
+        Case obligatoire. Modifier ce texte change la version du consentement
+        enregistrée.
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: consent_label
+      table: diagnostic_b2b
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: newsletter_label
+    type: text
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: newsletter_label
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Case facultative
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: newsletter_label
+      table: diagnostic_b2b
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: unlock_button
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_button
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: unlock_button
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: email_subject
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: email_subject
+      group: null
+      hidden: false
+      interface: input
+      note: Objet de l'email du rapport ({niveau} possible)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: email_subject
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: id
+    type: uuid
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: diagnostic_b2c
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: intro_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: intro_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Accueil du questionnaire
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2c
+    field: title
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: intro
+    type: text
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: intro
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: intro
+      table: diagnostic_b2c
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: cta_label
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: Bouton de prise de rendez-vous du rapport
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_label
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: levels_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: levels_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Niveaux (moins de 40 / 40 à 69 / 70 et plus)
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2c
+    field: level_low
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: level_low
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: level_low
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: level_mid
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: level_mid
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: level_mid
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: level_high
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: level_high
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: level_high
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: themes
+    type: json
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: themes
+      group: null
+      hidden: false
+      interface: list
+      note: Nom des scores affichés
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: label
+            meta:
+              field: label
+              interface: input
+              width: full
+            name: Nom du thème
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: themes
+      table: diagnostic_b2c
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: questions_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: questions_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Questions
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2c
+    field: questions
+    type: json
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: questions
+      group: null
+      hidden: false
+      interface: list
+      note: Textes des questions, réponses et conseils
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: label
+            meta:
+              field: label
+              interface: input-multiline
+              width: full
+            name: Question
+            type: string
+          - field: label_variant
+            meta:
+              field: label_variant
+              interface: input-multiline
+              note: Formulation pour le profil Dirigeant·e ou DRH, quand elle existe
+              width: full
+            name: Variante (selon le profil)
+            type: string
+          - field: options
+            meta:
+              field: options
+              interface: input-multiline
+              note: >-
+                Garder le même nombre de lignes et le même ordre : l'ordre fait
+                le barème (1re = 2 points, 2e = 1, 3e = 0)
+              width: full
+            name: Réponses (une par ligne)
+            type: string
+          - field: tip
+            meta:
+              field: tip
+              interface: input-multiline
+              width: full
+            name: Conseil (si réponse < 2 points)
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: questions
+      table: diagnostic_b2c
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: result_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: result_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Résultat
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2c
+    field: offers
+    type: json
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: offers
+      group: null
+      hidden: false
+      interface: list
+      note: Cartes d'offre recommandées
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: name
+            meta:
+              field: name
+              interface: input
+              width: full
+            name: Nom de l'offre
+            type: string
+          - field: price
+            meta:
+              field: price
+              interface: input
+              width: full
+            name: Prix et durée
+            type: string
+          - field: description
+            meta:
+              field: description
+              interface: input-multiline
+              width: full
+            name: Phrase de description
+            type: string
+          - field: url
+            meta:
+              field: url
+              interface: input
+              width: full
+            name: Lien (page de l'offre)
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: offers
+      table: diagnostic_b2c
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: messages
+    type: json
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: messages
+      group: null
+      hidden: false
+      interface: list
+      note: >-
+        Messages du rapport. {priorite} et {niveau} sont remplacés
+        automatiquement.
+      options:
+        fields:
+          - field: key
+            meta:
+              field: key
+              interface: input
+              note: Repère technique qui relie ce texte au questionnaire.
+              width: half
+            name: Clé (ne pas modifier)
+            type: string
+          - field: text
+            meta:
+              field: text
+              interface: input-multiline
+              width: full
+            name: Texte
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: messages
+      table: diagnostic_b2c
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: unlock_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Déblocage par email
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2c
+    field: unlock_title
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: unlock_title
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: unlock_body
+    type: text
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: unlock_body
+      table: diagnostic_b2c
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: consent_label
+    type: text
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: consent_label
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: >-
+        Case obligatoire. Modifier ce texte change la version du consentement
+        enregistrée.
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: consent_label
+      table: diagnostic_b2c
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: newsletter_label
+    type: text
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: newsletter_label
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: Case facultative
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: newsletter_label
+      table: diagnostic_b2c
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: unlock_button
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: unlock_button
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: unlock_button
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: email_subject
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: email_subject
+      group: null
+      hidden: false
+      interface: input
+      note: Objet de l'email du rapport ({niveau} possible)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: email_subject
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: created_at
+    type: timestamp
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: created_at
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Reçu le
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: created_at
+      table: diagnostics
+      data_type: timestamp with time zone
+      default_value: now()
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: kind
+    type: unknown
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: kind
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Diagnostic (b2b = RH, b2c = projet)
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: kind
+      table: diagnostics
+      data_type: diagnostic_kind
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: email
+    type: text
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: email
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: E-mail
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: email
+      table: diagnostics
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: status
+    type: unknown
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: Nouveau
+            value: new
+          - text: Recontacté
+            value: contacted
+          - text: Clôturé
+            value: closed
+      field: status
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Nouveau
+            value: new
+          - text: Recontacté
+            value: contacted
+          - text: Clôturé
+            value: closed
+      readonly: false
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Statut
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: diagnostics
+      data_type: lead_status
+      default_value: new
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: result
+    type: json
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: result
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Résultat (scores, niveaux, offres)
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: result
+      table: diagnostics
+      data_type: jsonb
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: answers
+    type: json
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: answers
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Réponses
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: answers
+      table: diagnostics
+      data_type: jsonb
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: booking_clicked_at
+    type: timestamp
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: booking_clicked_at
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: A cliqué sur le rendez-vous le
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: booking_clicked_at
+      table: diagnostics
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: consent_newsletter
+    type: boolean
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: consent_newsletter
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Newsletter demandée
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: consent_newsletter
+      table: diagnostics
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: consent_report
+    type: boolean
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: consent_report
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Consentement rapport
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: consent_report
+      table: diagnostics
+      data_type: boolean
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: consent_text_version
+    type: text
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: consent_text_version
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Version du consentement
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: consent_text_version
+      table: diagnostics
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: source
+    type: text
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: source
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Source du lien
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: source
+      table: diagnostics
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: device
+    type: text
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: device
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Appareil
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: device
+      table: diagnostics
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: report_token_hash
+    type: text
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: report_token_hash
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Empreinte du lien de rapport
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: report_token_hash
+      table: diagnostics
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostics
+    field: updated_at
+    type: timestamp
+    meta:
+      collection: diagnostics
+      conditions: null
+      display: null
+      display_options: null
+      field: updated_at
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: null
+      special: null
+      translations:
+        - language: fr-FR
+          translation: Mis à jour le
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: updated_at
+      table: diagnostics
+      data_type: timestamp with time zone
+      default_value: now()
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
       is_unique: false
       is_indexed: false
       is_primary_key: false

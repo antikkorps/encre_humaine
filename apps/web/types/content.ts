@@ -162,3 +162,14 @@ export interface NavItem {
    */
   children?: { label: string; to: string; description?: string; icon?: string }[];
 }
+
+/** Diagnostic B2B (organisations) ou B2C (particuliers) — docs/11-diagnostics.md. */
+export type DiagnosticKind = "b2b" | "b2c";
+
+/** Textes fusionnés d'un diagnostic + agenda du public (`/api/content/diagnostic/:kind`). */
+export interface DiagnosticContent {
+  kind: DiagnosticKind;
+  texts: import("@encre/shared/diagnostics").DiagnosticTexts;
+  /** Agenda du public, repli sur le lien par défaut ; "" si aucun agenda. */
+  bookingUrl: string;
+}

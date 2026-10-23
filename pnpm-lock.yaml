@@ -139,6 +139,10 @@ importers:
         version: 4.1.11(@types/node@25.9.5)(happy-dom@20.14.0)(vite@8.2.2(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.48.0)(tsx@4.23.13)(yaml@2.9.0))
 
   packages/directus:
+    dependencies:
+      '@encre/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@types/node':
         specifier: 25.9.5

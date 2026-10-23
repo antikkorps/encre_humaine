@@ -20,13 +20,16 @@ function directusGrants(): string[] {
 }
 
 describe("droits de directus_user sur le schéma app", () => {
-  it("se limitent à lire, ranger (statut) et supprimer les demandes de contact", () => {
+  it("se limitent à lire, ranger (statut) et supprimer demandes de contact et diagnostics", () => {
     expect(directusGrants().sort()).toEqual(
       [
         "GRANT USAGE ON SCHEMA app TO directus_user",
         "GRANT SELECT ON app.contact_leads TO directus_user",
         "GRANT UPDATE (status) ON app.contact_leads TO directus_user",
         "GRANT DELETE ON app.contact_leads TO directus_user",
+        "GRANT SELECT ON app.diagnostics TO directus_user",
+        "GRANT UPDATE (status) ON app.diagnostics TO directus_user",
+        "GRANT DELETE ON app.diagnostics TO directus_user",
       ].sort(),
     );
   });
