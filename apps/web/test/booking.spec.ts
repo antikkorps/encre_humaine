@@ -2,7 +2,7 @@
 //
 // Décomposition de l'URL de RDV — utils/booking.ts (agnostique du provider).
 import { describe, expect, it } from "vitest";
-import { parseBookingUrl } from "../utils/booking";
+import { parseBookingUrl, pickBookingUrl } from "../utils/booking";
 
 describe("parseBookingUrl", () => {
   it("vise app.cal.com (origin + script) pour Cal.com cloud", () => {
@@ -38,5 +38,22 @@ describe("parseBookingUrl", () => {
     expect(parseBookingUrl(null)).toBeNull();
     expect(parseBookingUrl("pas-une-url")).toBeNull();
     expect(parseBookingUrl("https://cal.com")).toBeNull();
+  });
+});
+
+// Un agenda par public : le bon lien selon d'où vient le visiteur, sinon le défaut.
+describe("pickBookingUrl", () => {
+  const booking = {
+    url: "https://cal.com/e/defaut",
+    byAudience: { organisation: "https://cal.com/e/rdv-30", particulier: null },
+  };
+
+  it("prend le lien du public demandé", () => {
+    expect(pickBookingUrl(booking, "organisation")).toBe("https://cal.com/e/rdv-30");
+  });
+
+  it("retombe sur le lien par défaut sans public ou sans lien dédié", () => {
+    expect(pickBookingUrl(booking, null)).toBe("https://cal.com/e/defaut");
+    expect(pickBookingUrl(booking, "particulier")).toBe("https://cal.com/e/defaut");
   });
 });

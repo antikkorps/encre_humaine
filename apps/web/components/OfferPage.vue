@@ -27,6 +27,8 @@ if (!content.value || content.value.audience !== props.audience) {
 }
 
 const isB2c = computed(() => props.audience === "particulier");
+// Le contact ouvre l'agenda du bon public (RDV 30 min / séance découverte).
+const contactTo = computed(() => `/contact?pour=${props.audience}`);
 
 // Registre : orga = fonds froids (teal-50) ; B2C = fonds chauds (orange-50). Les
 // accents dorés et les panneaux marine sont communs (charte navy + or).
@@ -204,7 +206,7 @@ useSchemaOrg([
             <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
           <NuxtLink
-            to="/contact"
+            :to="contactTo"
             class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
           >
             {{ content.ctaLabel }}
@@ -637,7 +639,7 @@ useSchemaOrg([
         :description="content.ctaBody ?? undefined"
         :cta-label="content.ctaLabel"
         :subtext="content.ctaSubtext ?? undefined"
-        to="/contact"
+        :to="contactTo"
         variant="orange"
       />
     </section>

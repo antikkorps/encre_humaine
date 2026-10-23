@@ -43,8 +43,31 @@ describe("mapContactContent", () => {
       ).booking,
     ).toEqual({
       url: "https://cal.com/eleonore/decouverte",
+      byAudience: { organisation: null, particulier: null },
       intro: "Réservons 30 min.",
       reassurance: "Aucun tentacule.",
+    });
+  });
+
+  // Un agenda par public (2026-10-23) : RDV 30 min côté organisations, séance
+  // découverte côté particuliers ; `booking_url` reste le lien par défaut.
+  it("expose un lien par public, le lien par défaut retombant sur le premier renseigné", () => {
+    const booking = mapContactContent(
+      {},
+      [],
+      {
+        booking_url_org: "https://cal.com/eleonore/rdv-30",
+        booking_url_b2c: "https://cal.com/eleonore/decouverte",
+      },
+      BASE,
+      wrap,
+    ).booking;
+    expect(booking).toMatchObject({
+      url: "https://cal.com/eleonore/rdv-30",
+      byAudience: {
+        organisation: "https://cal.com/eleonore/rdv-30",
+        particulier: "https://cal.com/eleonore/decouverte",
+      },
     });
   });
 

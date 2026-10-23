@@ -120,7 +120,15 @@ const singletons: CollectionDef[] = [
       f.input("author_title", { half: true, note: "Fonction (ex. Consultante RH)" }),
       f.imageFile("author_photo", { note: "Portrait rond de la signature (carré de préférence)" }),
       f.input("booking_url", {
-        note: "URL de prise de RDV (Cal.com, Calendly… — consommée par l'embed RDV)",
+        note: "Lien de réservation PAR DÉFAUT (Cal.com…) : menu, pied de page, À propos",
+      }),
+      f.input("booking_url_org", {
+        half: true,
+        note: "Lien de réservation des ORGANISATIONS (ex. RDV 30 min). Vide = lien par défaut",
+      }),
+      f.input("booking_url_b2c", {
+        half: true,
+        note: "Lien de réservation des PARTICULIERS (ex. séance découverte). Vide = lien par défaut",
       }),
       f.input("location_label", { note: "Bouches-du-Rhône · France entière" }),
       f.repeater("social_links", [{ field: "platform" }, { field: "url" }], {

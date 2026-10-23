@@ -555,6 +555,8 @@ export interface SiteSettings {
   author_name: string | null;
   author_title: string | null;
   author_photo: string | DirectusFile | null;
+  booking_url_org: string | null;
+  booking_url_b2c: string | null;
 }
 
 export interface Testimonials {

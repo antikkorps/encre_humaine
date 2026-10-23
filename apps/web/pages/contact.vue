@@ -14,6 +14,26 @@ const { data: content, error } = await useFetch("/api/content/contact", {
   query: usePreviewQuery(),
 });
 
+// Un agenda par public (2026-10-23) : les boutons des hubs et des offres passent
+// `?pour=organisation|particulier`. Sans précision, le visiteur choisit, dès que
+// les deux agendas diffèrent.
+type BookingAudience = "organisation" | "particulier";
+const route = useRoute();
+const fromQuery = (v: unknown): BookingAudience | null =>
+  v === "organisation" || v === "particulier" ? v : null;
+const bookingAudience = ref<BookingAudience | null>(fromQuery(route.query.pour));
+const bookingUrl = computed(() =>
+  content.value?.booking ? pickBookingUrl(content.value.booking, bookingAudience.value) : "",
+);
+const hasAudienceChoice = computed(() => {
+  const links = content.value?.booking?.byAudience;
+  return !!links?.organisation && !!links.particulier && links.organisation !== links.particulier;
+});
+const AUDIENCE_TABS: { value: BookingAudience; label: string }[] = [
+  { value: "organisation", label: "Pour une organisation" },
+  { value: "particulier", label: "Pour moi, particulier" },
+];
+
 const siteName = "L'Encre Humaine";
 const heading = computed(() => content.value?.accrocheTitle ?? "Travaillons ensemble");
 
@@ -209,7 +229,30 @@ useSeoMeta({
 
           <!-- Prise de RDV (chargée au consentement) -->
           <div v-if="content.booking" id="rdv" class="mt-16 scroll-mt-24">
-            <BookingEmbed :url="content.booking.url" />
+            <div
+              v-if="hasAudienceChoice"
+              class="mb-6 flex flex-wrap justify-center gap-2"
+              role="group"
+              aria-label="Type de rendez-vous"
+            >
+              <button
+                v-for="tab in AUDIENCE_TABS"
+                :key="tab.value"
+                type="button"
+                :aria-pressed="bookingAudience === tab.value"
+                class="rounded-full border px-5 py-2 text-sm font-semibold transition-colors"
+                :class="
+                  bookingAudience === tab.value
+                    ? 'border-teal-800 bg-teal-800 text-paper'
+                    : 'border-ink/15 bg-white text-ink/70 hover:border-teal-700 hover:text-teal-700'
+                "
+                @click="bookingAudience = tab.value"
+              >
+                {{ tab.label }}
+              </button>
+            </div>
+            <!-- `key` : changer d'agenda remonte l'embed sur le nouveau lien. -->
+            <BookingEmbed :key="bookingUrl" :url="bookingUrl" />
             <p
               v-if="content.booking.reassurance"
               class="mt-6 text-center text-sm text-ink/60"

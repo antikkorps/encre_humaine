@@ -130,7 +130,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
 
             <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <NuxtLink
-                to="/contact"
+                to="/contact?pour=organisation"
                 class="inline-flex items-center justify-center gap-2 rounded-full bg-paper px-6 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5 hover:bg-white"
               >
                 {{ hero.ctaPrimaryLabel }}
@@ -671,7 +671,7 @@ const b2cIcons = ["material-symbols:explore", "material-symbols:rocket-launch"];
           :title="content.finalCta.title"
           :description="content.finalCta.description ?? undefined"
           :cta-label="content.finalCta.label"
-          to="/contact"
+          to="/contact?pour=organisation"
           variant="orange"
         />
       </section>
