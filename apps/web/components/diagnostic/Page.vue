@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Page d'un diagnostic (`/diagnostic-rh`, `/diagnostic-projet`) : textes
+// Page d'un diagnostic (`/organisations/diagnostic`, `/particuliers/diagnostic`) : textes
 // Directus + agenda, puis le déroulé. Une seule implémentation pour les deux.
 import type { DiagnosticContent, DiagnosticKind } from "~/types/content";
 

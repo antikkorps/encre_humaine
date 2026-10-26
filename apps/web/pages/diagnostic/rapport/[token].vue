@@ -1,7 +1,12 @@
 <script setup lang="ts">
 // Rapport retrouvé par son lien (email ou retour sur la page) — docs/11-diagnostics.md.
 // Le jeton est secret : la page n'est ni indexée ni dans le sitemap.
-import type { Answers, B2bResult, B2cResult } from "@encre/shared/diagnostics";
+import {
+  type Answers,
+  type B2bResult,
+  type B2cResult,
+  DIAGNOSTIC_PATHS,
+} from "@encre/shared/diagnostics";
 import type { DiagnosticContent, DiagnosticKind } from "~/types/content";
 
 interface StoredReport {
@@ -33,7 +38,7 @@ useSeoMeta({ title: "Votre diagnostic — L'Encre Humaine", robots: "noindex, no
       unlocked
     />
     <NuxtLink
-      :to="report.kind === 'b2b' ? '/diagnostic-rh' : '/diagnostic-projet'"
+      :to="DIAGNOSTIC_PATHS[report.kind]"
       class="mt-10 inline-block text-sm font-medium text-ink/60 underline underline-offset-4 hover:text-teal-700"
     >
       Refaire le diagnostic

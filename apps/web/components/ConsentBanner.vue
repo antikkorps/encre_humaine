@@ -93,8 +93,11 @@ function reopen() {
         </div>
 
         <div
-          class="mt-6 flex flex-col gap-3 border-t border-ink/10 pt-5 sm:flex-row sm:items-center sm:justify-between"
+          class="mt-6 flex flex-col gap-3 border-t border-ink/10 pt-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
         >
+          <!-- `flex-wrap` : les libellés sont insécables et, à trois, plus larges
+               que le panneau — sans retour à la ligne, le dernier bouton
+               débordait du cadre (vu par Franck, 2026-10-26). -->
           <button
             type="button"
             class="order-last rounded-full px-4 py-2.5 text-sm font-medium text-ink/60 whitespace-nowrap transition-colors hover:bg-ink/5 hover:text-ink sm:order-none"
@@ -102,7 +105,7 @@ function reopen() {
           >
             Je poursuis sans cookies optionnels
           </button>
-          <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+          <div class="flex flex-col gap-2.5 sm:ml-auto sm:flex-row sm:flex-wrap sm:items-center">
             <button
               type="button"
               class="whitespace-nowrap rounded-full bg-orange-400 px-5 py-2.5 text-sm font-semibold text-ink shadow-soft transition-colors hover:bg-sand-500"

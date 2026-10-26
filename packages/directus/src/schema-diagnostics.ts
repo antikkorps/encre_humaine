@@ -72,6 +72,14 @@ function diagnosticFields(): ReturnType<typeof f.input>[] {
     f.textarea("newsletter_label", { note: "Case facultative" }),
     f.input("unlock_button"),
     f.input("email_subject", { note: "Objet de l'email du rapport ({niveau} possible)" }),
+    f.divider("promo_divider", "Invitations au diagnostic sur le site"),
+    f.input("promo_title", { note: "Encart en bas de chaque page d'offre de ce public : titre" }),
+    f.textarea("promo_body", { note: "Encart en bas des pages d'offre : phrase sous le titre" }),
+    f.input("promo_label", { half: true, note: "Encart en bas des pages d'offre : bouton" }),
+    f.input("promo_hub_label", {
+      half: true,
+      note: "Second bouton du hub, à côté de « Prendre rendez-vous »",
+    }),
   ];
 }
 
@@ -80,14 +88,14 @@ export const diagnosticSingletons: CollectionDef[] = [
     collection: "diagnostic_b2b",
     singleton: true,
     icon: "quiz",
-    note: "Textes du diagnostic RH (organisations) — /diagnostic-rh",
+    note: "Textes du diagnostic RH (organisations) — /organisations/diagnostic",
     fields: diagnosticFields(),
   },
   {
     collection: "diagnostic_b2c",
     singleton: true,
     icon: "explore",
-    note: "Textes du diagnostic projet professionnel (particuliers) — /diagnostic-projet",
+    note: "Textes du diagnostic projet professionnel (particuliers) — /particuliers/diagnostic",
     fields: diagnosticFields(),
   },
 ];

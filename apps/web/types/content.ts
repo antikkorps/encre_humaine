@@ -95,6 +95,16 @@ export interface CaseStudyItem {
   readMoreUrl?: string;
   /** Le cas figure aussi dans le carrousel de l'accueil (case cochée par défaut). */
   showOnHome: boolean;
+  /** Carte résumée de l'accueil ; absente, la carte retombe sur le résumé. */
+  teaser?: CaseStudyTeaser;
+}
+
+/** Carte résumée d'un cas sur l'accueil — champs vides = "" (repli champ par champ). */
+export interface CaseStudyTeaser {
+  label: string;
+  situation: string;
+  result: string;
+  button: string;
 }
 
 /** Carte d'article de blog — sous-ensemble de `articles` (docs/02 §5). */
@@ -173,3 +183,8 @@ export interface DiagnosticContent {
   /** Agenda du public, repli sur le lien par défaut ; "" si aucun agenda. */
   bookingUrl: string;
 }
+
+/** Invitation au diagnostic d'un public (bas des offres, hubs) + adresse de sa page. */
+export type DiagnosticPromo = import("@encre/shared/diagnostics").DiagnosticTexts["promo"] & {
+  path: string;
+};

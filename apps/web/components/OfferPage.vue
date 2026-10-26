@@ -29,6 +29,7 @@ if (!content.value || content.value.audience !== props.audience) {
 const isB2c = computed(() => props.audience === "particulier");
 // Le contact ouvre l'agenda du bon public (RDV 30 min / séance découverte).
 const contactTo = computed(() => `/contact?pour=${props.audience}`);
+const diagnosticPromo = useDiagnosticPromo(() => (isB2c.value ? "b2c" : "b2b"));
 
 // Registre : orga = fonds froids (teal-50) ; B2C = fonds chauds (orange-50). Les
 // accents dorés et les panneaux marine sont communs (charte navy + or).
@@ -623,6 +624,12 @@ useSchemaOrg([
           />
         </div>
       </div>
+    </section>
+
+    <!-- 12 bis. Invitation au diagnostic, juste avant le contact (mail d'Éléonore
+         du 2026-10-26) — pour qui se demande si l'offre le concerne. -->
+    <section v-if="diagnosticPromo" v-reveal class="mx-auto max-w-6xl px-4 pt-20">
+      <DiagnosticOfferNudge :promo="diagnosticPromo" />
     </section>
 
     <!-- 13. CTA final → contact. Même bloc que l'accueil (dégradé marine + les

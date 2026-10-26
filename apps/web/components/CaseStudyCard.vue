@@ -8,9 +8,11 @@
 // `full` = cas unique, présenté en pleine largeur (deux colonnes) ; sinon carte de
 // carrousel, en colonne.
 //
-// `compact` = accueil (audit SEO 2026-10-22) : titre + résumé de 2 lignes et un
-// lien « Lire le cas » vers la page d'offre. Le récit complet ne vit qu'à un
-// endroit, sinon Google voit le même texte deux fois.
+// `compact` = accueil (audit SEO 2026-10-22) : carte résumée et bouton vers la
+// page d'offre. Le récit complet ne vit qu'à un endroit, sinon Google voit le
+// même texte deux fois. Depuis le mail d'Éléonore du 2026-10-26, la carte a ses
+// propres champs (étiquette, situation, résultat, bouton) et rien n'y est coupé :
+// le résultat chiffré doit se lire sans cliquer.
 import type { CaseStudyItem } from "~/types/content";
 
 const props = withDefaults(
@@ -27,6 +29,21 @@ const STEPS = [
 // disparaîtrait du site (cas sans offre publiée).
 const reduced = computed(() => props.compact && !!props.caseStudy.readMoreUrl);
 
+// Éléonore jugera la carte résumée sur les chiffres (clic sur un cas, puis
+// réservation) après quelques semaines : le clic est donc mesuré.
+const track = useTrack();
+
+/** Carte résumée : chaque champ vide retombe sur son équivalent du cas complet. */
+const teaser = computed(() => {
+  const t = props.caseStudy.teaser;
+  return {
+    label: t?.label,
+    situation: t?.situation || props.caseStudy.summary,
+    result: t?.result,
+    button: t?.button || "Lire le cas",
+  };
+});
+
 /** Étapes réellement renseignées (une entrée vide ne laisse pas d'intertitre orphelin). */
 const steps = computed(() =>
   STEPS.map((s) => ({ ...s, body: props.caseStudy[s.key] })).filter((s) => s.body),
@@ -41,7 +58,13 @@ const steps = computed(() =>
   >
     <div class="flex flex-1 flex-col p-7 sm:p-9">
       <p
-        v-if="caseStudy.sector || caseStudy.periodLabel"
+        v-if="reduced && teaser.label"
+        class="text-xs font-bold uppercase tracking-[0.14em] text-orange-600"
+      >
+        {{ teaser.label }}
+      </p>
+      <p
+        v-else-if="caseStudy.sector || caseStudy.periodLabel"
         class="flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-orange-600"
       >
         <!-- Le séparateur reste collé au secteur : sur un secteur long (« Secteur
@@ -56,22 +79,31 @@ const steps = computed(() =>
       <h3 class="mt-3 font-display text-2xl font-bold text-ink">
         <AccentText :text="caseStudy.title" />
       </h3>
-      <p
-        v-if="caseStudy.summary"
-        class="mt-2 leading-relaxed text-ink/60"
-        :class="reduced ? 'line-clamp-2' : ''"
-      >
-        <AccentText :text="caseStudy.summary" />
+      <p v-if="reduced ? teaser.situation : caseStudy.summary" class="mt-2 leading-relaxed text-ink/60">
+        <AccentText :text="reduced ? teaser.situation : caseStudy.summary" />
       </p>
 
-      <NuxtLink
-        v-if="reduced"
-        :to="caseStudy.readMoreUrl"
-        class="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-teal-700 hover:text-teal-800"
-      >
-        Lire le cas
-        <span aria-hidden="true">→</span>
-      </NuxtLink>
+      <template v-if="reduced">
+        <p v-if="teaser.result" class="mt-5 rounded-2xl bg-orange-50 p-4 leading-relaxed text-ink">
+          <!-- Espace explicite : Vue retire le blanc entre deux balises. -->
+          <span class="font-bold text-orange-600">Résultat&nbsp;:</span>{{ " " }}<AccentText
+            :text="teaser.result"
+          />
+        </p>
+        <!-- Bouton secondaire (contour doré, fond clair) : « Réserver 30 min »,
+             plein doré, reste l'appel le plus marqué de la page. 44 px minimum
+             pour le toucher au doigt. -->
+        <div class="mt-auto pt-6">
+          <NuxtLink
+            :to="caseStudy.readMoreUrl"
+            @click="track('case_click', { case: caseStudy.anchor ?? caseStudy.title })"
+            class="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-orange-400 bg-orange-50 px-5 py-2 text-sm font-semibold text-ink transition-colors hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+          >
+            <span>{{ teaser.button }}</span>
+            <span aria-hidden="true">→</span>
+          </NuxtLink>
+        </div>
+      </template>
 
       <dl v-if="!reduced" class="mt-7 space-y-5">
         <div v-for="step in steps" :key="step.key">

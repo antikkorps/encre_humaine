@@ -25,6 +25,8 @@ type Opt = {
   readonly?: boolean;
   hidden?: boolean;
   default?: unknown;
+  /** Compteur de caractères affiché à la saisie (indicatif, ne bloque pas). */
+  softLength?: number;
 };
 
 const width = (o?: Opt) => (o?.half ? "half" : "full");
@@ -47,8 +49,16 @@ function base(field: string, type: string, meta: Json, schema: Json | null, o?: 
 
 // ── Champs scalaires ─────────────────────────────────────────────────────────
 
+const lengthOptions = (o?: Opt) => (o?.softLength ? { options: { softLength: o.softLength } } : {});
+
 export const input = (field: string, o?: Opt): Spec =>
-  base(field, "string", { interface: "input" }, { is_nullable: !o?.required }, o);
+  base(
+    field,
+    "string",
+    { interface: "input", ...lengthOptions(o) },
+    { is_nullable: !o?.required },
+    o,
+  );
 
 export const slug = (field = "slug", o?: Opt): Spec =>
   base(
@@ -64,7 +74,13 @@ export const slug = (field = "slug", o?: Opt): Spec =>
   );
 
 export const textarea = (field: string, o?: Opt): Spec =>
-  base(field, "text", { interface: "input-multiline" }, { is_nullable: !o?.required }, o);
+  base(
+    field,
+    "text",
+    { interface: "input-multiline", ...lengthOptions(o) },
+    { is_nullable: !o?.required },
+    o,
+  );
 
 export const richtext = (field: string, o?: Opt): Spec =>
   base(field, "text", { interface: "input-rich-text-html" }, { is_nullable: !o?.required }, o);

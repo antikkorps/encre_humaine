@@ -208,4 +208,12 @@ export const B2C_TEXTS: DiagnosticTexts = {
     button: "Débloquer mon rapport",
   },
   emailSubject: "Votre point sur votre projet professionnel",
+  // Branchements sur le site (mail d'Éléonore du 2026-10-26) : sur les offres
+  // particuliers, le diagnostic sert surtout à choisir entre les deux.
+  promo: {
+    title: "Clarifier votre projet ou vous (re)positionner ?",
+    body: "Le diagnostic vous aide à choisir : 12 questions, 4 minutes, et des conseils concrets à la fin.",
+    label: "Faire le point en 4 minutes",
+    hubLabel: "Faire le point en 4 minutes",
+  },
 };

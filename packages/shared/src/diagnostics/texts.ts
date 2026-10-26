@@ -36,7 +36,19 @@ export interface DiagnosticTexts {
   messages: Record<string, string>;
   unlock: { title: string; body: string; consent: string; newsletter: string; button: string };
   emailSubject: string;
+  /** Invitations au diagnostic ailleurs sur le site (bas des offres, hubs). */
+  promo: { title: string; body: string; label: string; hubLabel: string };
 }
+
+/**
+ * Adresse de chaque diagnostic, sous le hub de son public (mail d'Éléonore du
+ * 2026-10-26) : c'est le lien qu'elle diffuse, et tous les autres emplacements
+ * du site y renvoient.
+ */
+export const DIAGNOSTIC_PATHS = {
+  b2b: "/organisations/diagnostic",
+  b2c: "/particuliers/diagnostic",
+} as const;
 
 /** Forme brute du singleton Directus (répéteurs JSON indexés par `key`). */
 export type RawDiagnosticTexts = Partial<Record<string, unknown>>;
@@ -113,6 +125,12 @@ export function mergeTexts(base: DiagnosticTexts, raw: RawDiagnosticTexts): Diag
       button: text(raw.unlock_button, base.unlock.button),
     },
     emailSubject: text(raw.email_subject, base.emailSubject),
+    promo: {
+      title: text(raw.promo_title, base.promo.title),
+      body: text(raw.promo_body, base.promo.body),
+      label: text(raw.promo_label, base.promo.label),
+      hubLabel: text(raw.promo_hub_label, base.promo.hubLabel),
+    },
   };
 }
 
