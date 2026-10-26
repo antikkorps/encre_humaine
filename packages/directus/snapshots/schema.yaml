@@ -245,10 +245,10 @@ collections:
       icon: quiz
       item_duplication_fields: null
       note: >-
-        Diagnostics débloqués par email (/diagnostic-rh, /diagnostic-projet).
-        Réponses et résultat servent à préparer le rendez-vous. Seul le statut
-        se modifie. « Archiver » = clôturer (masqué de la liste, gardé) ; la
-        corbeille supprime définitivement.
+        Diagnostics débloqués par email (/organisations/diagnostic,
+        /particuliers/diagnostic). Réponses et résultat servent à préparer le
+        rendez-vous. Seul le statut se modifie. « Archiver » = clôturer (masqué
+        de la liste, gardé) ; la corbeille supprime définitivement.
       preview_url: null
       singleton: false
       sort: null
@@ -5950,7 +5950,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -5990,7 +5990,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -6030,7 +6030,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 13
+      sort: 18
       special:
         - date-created
       translations: null
@@ -6071,7 +6071,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 14
+      sort: 19
       special:
         - date-updated
       translations: null
@@ -6112,7 +6112,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 15
+      sort: 20
       special:
         - user-created
       translations: null
@@ -6153,7 +6153,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 16
+      sort: 21
       special:
         - user-updated
       translations: null
@@ -6262,7 +6262,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special:
         - cast-boolean
       translations: null
@@ -6278,6 +6278,197 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: teaser_divider
+    type: alias
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: teaser_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: 'Accueil : carte résumée'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: case_studies
+    field: teaser_label
+    type: string
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: teaser_label
+      group: null
+      hidden: false
+      interface: input
+      note: Étiquette au-dessus du titre. Ex. « Plan de formation »
+      options:
+        softLength: 25
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: teaser_label
+      table: case_studies
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: teaser_situation
+    type: text
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: teaser_situation
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: La situation en une phrase (110 caractères maximum)
+      options:
+        softLength: 110
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: teaser_situation
+      table: case_studies
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: teaser_result
+    type: text
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: teaser_result
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: 'Le résultat en une phrase, sans « Résultat : » (ajouté à l''affichage)'
+      options:
+        softLength: 110
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: teaser_result
+      table: case_studies
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: case_studies
+    field: teaser_button
+    type: string
+    meta:
+      collection: case_studies
+      conditions: null
+      display: null
+      display_options: null
+      field: teaser_button
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Texte du bouton. Ex. « Lire le cas : plan de formation » (la flèche
+        s'ajoute seule)
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: teaser_button
+      table: case_studies
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -9209,6 +9400,192 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: promo_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Invitations au diagnostic sur le site
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2b
+    field: promo_title
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_title
+      group: null
+      hidden: false
+      interface: input
+      note: 'Encart en bas de chaque page d''offre de ce public : titre'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: promo_title
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: promo_body
+    type: text
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: 'Encart en bas des pages d''offre : phrase sous le titre'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: promo_body
+      table: diagnostic_b2b
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: promo_label
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_label
+      group: null
+      hidden: false
+      interface: input
+      note: 'Encart en bas des pages d''offre : bouton'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: promo_label
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2b
+    field: promo_hub_label
+    type: string
+    meta:
+      collection: diagnostic_b2b
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_hub_label
+      group: null
+      hidden: false
+      interface: input
+      note: Second bouton du hub, à côté de « Prendre rendez-vous »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: promo_hub_label
+      table: diagnostic_b2b
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: diagnostic_b2c
     field: id
     type: uuid
@@ -10123,6 +10500,192 @@ fields:
       width: full
     schema:
       name: email_subject
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: promo_divider
+    type: alias
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_divider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Invitations au diagnostic sur le site
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: diagnostic_b2c
+    field: promo_title
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_title
+      group: null
+      hidden: false
+      interface: input
+      note: 'Encart en bas de chaque page d''offre de ce public : titre'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: promo_title
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: promo_body
+    type: text
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_body
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: 'Encart en bas des pages d''offre : phrase sous le titre'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: promo_body
+      table: diagnostic_b2c
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: promo_label
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_label
+      group: null
+      hidden: false
+      interface: input
+      note: 'Encart en bas des pages d''offre : bouton'
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: promo_label
+      table: diagnostic_b2c
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: diagnostic_b2c
+    field: promo_hub_label
+    type: string
+    meta:
+      collection: diagnostic_b2c
+      conditions: null
+      display: null
+      display_options: null
+      field: promo_hub_label
+      group: null
+      hidden: false
+      interface: input
+      note: Second bouton du hub, à côté de « Prendre rendez-vous »
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 26
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: promo_hub_label
       table: diagnostic_b2c
       data_type: character varying
       default_value: null

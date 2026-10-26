@@ -1,8 +1,8 @@
 /**
  * Textes d'un diagnostic — `GET /api/content/diagnostic/:kind` (b2b | b2c),
  * docs/11-diagnostics.md. Cache court (60s, clé = kind) ; token Directus
- * strictement serveur. Consommé par `/diagnostic-rh`, `/diagnostic-projet` et
- * la page de rapport.
+ * strictement serveur. Consommé par les deux pages de diagnostic et la page de
+ * rapport.
  */
 export default defineCachedEventHandler(
   async (event) => {

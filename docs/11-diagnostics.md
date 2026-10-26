@@ -1,6 +1,6 @@
 # 11 — Diagnostics B2B et B2C (« Où en sont vos RH ? » / « Où en est votre projet ? »)
 
-**Routes** : `/diagnostic-rh` (B2B) · `/diagnostic-projet` (B2C) · `/diagnostic` (accueil de choix, facultatif) · `/diagnostic/rapport/:token` (rapport retrouvé)
+**Routes** : `/organisations/diagnostic` (B2B) · `/particuliers/diagnostic` (B2C) — anciennes `/diagnostic-rh` et `/diagnostic-projet` en 301 · `/diagnostic` (accueil de choix, facultatif) · `/diagnostic/rapport/:token` (rapport retrouvé)
 **Source de vérité métier** : cahier des charges d'Éléonore v1.0 du 2026-10-22 (questions, barème, règles de recommandation, textes, recette §13). Le prototype HTML joint vient d'une version antérieure : **en cas d'écart, le cahier des charges fait foi**.
 **Décisions** (Franck, 2026-10-23) : textes éditables dans Directus, structure et barème dans le code ; réponses dans le schéma `app` + lecture seule dans Directus ; réponse sensible B2C non stockée ; RDV = nouvel onglet Cal.com pré-rempli.
 
@@ -88,3 +88,10 @@ Plus : rapport retrouvable par le lien de l'email ; aucune trace de la Q3 en bas
 
 ## Hors périmètre v1
 Réservation effective remontée de Cal.com (webhook), relances commerciales automatiques, analyse de CV payante (§14 du cahier des charges, cahier séparé).
+
+## Branchements sur le site (mail d'Éléonore du 2026-10-26)
+1. **Une adresse par diagnostic**, sous le hub de son public : c'est le lien diffusé (email, signature, posts) et indexé. Tous les autres emplacements y renvoient (`DIAGNOSTIC_PATHS`).
+2. **Bas de chaque page d'offre**, juste avant le CTA de contact : encart « Pas sûr d'avoir besoin de ça ? » (organisations) ou aide au choix entre les deux offres (particuliers), vers le diagnostic du public de l'offre.
+3. **Hubs** `/organisations` et `/particuliers` : second bouton (contour) à côté de « Prendre rendez-vous », qui reste l'appel principal.
+
+Textes des encarts et du bouton : champs `promo_*` des singletons `diagnostic_b2b` / `diagnostic_b2c`, repli sur la référence du code.

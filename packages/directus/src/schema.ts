@@ -849,12 +849,31 @@ const collections: CollectionDef[] = [
       f.selectMulti("offer_scopes", OFFER_SCOPE, {
         note: "Cochez les offres où ce cas doit apparaître (section « Preuve par l'exemple » de la page d'offre).",
       }),
-      // Sans ce garde-fou, chaque cas ajouté pour une offre s'empilait aussi dans
-      // le carrousel de l'accueil (run 17). Coché par défaut : un cas créé sans y
-      // penser reste visible, comme avant.
+      // Accueil. Sans la case, chaque cas ajouté pour une offre s'empilait aussi
+      // dans le carrousel de l'accueil (run 17) ; cochée par défaut, un cas créé
+      // sans y penser reste visible, comme avant.
+      // Carte résumée (mail d'Éléonore du 2026-10-26) : le récit complet vit sur
+      // la page d'offre, l'accueil n'en montre que l'essentiel, en entier.
+      f.divider("teaser_divider", "Accueil : carte résumée"),
       f.bool("show_on_home", true, {
         half: true,
         note: "Afficher aussi ce cas sur l'accueil. Décochez-le pour le réserver aux pages d'offre cochées ci-dessus.",
+      }),
+      f.input("teaser_label", {
+        half: true,
+        softLength: 25,
+        note: "Étiquette au-dessus du titre. Ex. « Plan de formation »",
+      }),
+      f.textarea("teaser_situation", {
+        softLength: 110,
+        note: "La situation en une phrase (110 caractères maximum)",
+      }),
+      f.textarea("teaser_result", {
+        softLength: 110,
+        note: "Le résultat en une phrase, sans « Résultat : » (ajouté à l'affichage)",
+      }),
+      f.input("teaser_button", {
+        note: "Texte du bouton. Ex. « Lire le cas : plan de formation » (la flèche s'ajoute seule)",
       }),
       ...publishable(),
     ],

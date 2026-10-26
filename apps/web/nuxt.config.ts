@@ -272,6 +272,10 @@ export default defineNuxtConfig({
     "/particuliers/booster-recherche": {
       redirect: { to: "/particuliers/se-repositionner", statusCode: 301 },
     },
+    // Les diagnostics ont rejoint le hub de leur public (mail d'Éléonore du
+    // 2026-10-26). Premières adresses, en ligne depuis le 2026-10-23 : à garder.
+    "/diagnostic-rh": { redirect: { to: "/organisations/diagnostic", statusCode: 301 } },
+    "/diagnostic-projet": { redirect: { to: "/particuliers/diagnostic", statusCode: 301 } },
   },
 
   // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.

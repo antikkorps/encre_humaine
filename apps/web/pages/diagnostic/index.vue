@@ -2,6 +2,7 @@
 // Accueil de choix des diagnostics, pour les visiteurs du site (facultatif
 // d'après le cahier des charges) : les liens directs restent la voie principale.
 // Titres et intros viennent des textes de chaque diagnostic (Directus).
+import { DIAGNOSTIC_PATHS } from "@encre/shared/diagnostics";
 import type { DiagnosticContent } from "~/types/content";
 
 const [{ data: b2b }, { data: b2c }] = await Promise.all([
@@ -9,9 +10,9 @@ const [{ data: b2b }, { data: b2c }] = await Promise.all([
   useFetch<DiagnosticContent>("/api/content/diagnostic/b2c"),
 ]);
 const choices = computed(() => [
-  { to: "/diagnostic-rh", eyebrow: "Je représente une organisation", content: b2b.value },
+  { to: DIAGNOSTIC_PATHS.b2b, eyebrow: "Je représente une organisation", content: b2b.value },
   {
-    to: "/diagnostic-projet",
+    to: DIAGNOSTIC_PATHS.b2c,
     eyebrow: "Je suis en transition professionnelle",
     content: b2c.value,
   },

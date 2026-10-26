@@ -17,6 +17,7 @@ import type {
 // Import EXPLICITE (pas d'auto-import `utils/` côté Nitro) : la carte de partage
 // par défaut doit être la même valeur ici et dans `app.vue`.
 import { DEFAULT_OG_IMAGE } from "~/utils/seo";
+import { mapCaseTeaser, type RawCaseTeaser } from "./case-teaser";
 
 // Ré-exporté : les loaders importent toutes leurs formes depuis `_shared`, mais la
 // définition vit dans `~/types/content` (partagée avec les composants). DRY.
@@ -247,7 +248,7 @@ export function testimonialsForOffer(
 export const CASE_STUDY_FIELDS = ["*"] as const;
 
 /** Sous-ensemble `case_studies` consommé à l'affichage (docs/01 §Preuve). */
-export interface RawCaseStudy {
+export interface RawCaseStudy extends RawCaseTeaser {
   id?: number | string | null;
   title?: string | null;
   summary?: string | null;
@@ -280,6 +281,7 @@ export function mapCaseStudies(raws: unknown, assetBase: string): CaseStudyItem[
       // Faux seulement si la case a été décochée : un cas créé avant le champ (ou
       // lu par un web déployé avant le `bootstrap`) reste sur l'accueil.
       showOnHome: raw.show_on_home !== false,
+      teaser: mapCaseTeaser(raw),
     }))
     .filter((c) => c.title !== "" || c.situation !== "");
 }
