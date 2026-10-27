@@ -11,12 +11,20 @@
 // page et les pages suivent. Le pied de page partage la même clé `useFetch`, donc
 // la même requête. Repli : si l'appel échoue, l'entrée reste un simple lien vers
 // le hub (mieux qu'un menu vide).
-import type { NavItem } from "~/types/content";
+import type { DiagnosticPromo, NavItem } from "~/types/content";
 
 const { data: offers } = await useFetch("/api/content/nav-offers", {
   key: "nav-offers",
   default: () => ({ organisations: [], particuliers: [] }),
 });
+
+// Diagnostic de chaque public, sous ses offres (retour d'Éléonore du 2026-10-27) :
+// même requête légère que les hubs et les offres, donc déjà en cache.
+const promoB2b = useDiagnosticPromo("b2b");
+const promoB2c = useDiagnosticPromo("b2c");
+const diagnosticLink = (promo: DiagnosticPromo | undefined) =>
+  promo ? { label: promo.label, to: promo.path } : undefined;
+const track = useTrack();
 
 // Nav desktop : sections principales, libellés courts (1 ligne, cohérents). Pas
 // d'« Accueil » (le logo y mène) ni de « Contact » (le bouton « Prendre RDV » le couvre).
@@ -31,6 +39,7 @@ const nav = computed<NavItem[]>(() => [
       description: o.shortDescription || undefined,
       icon: o.icon,
     })),
+    diagnostic: diagnosticLink(promoB2b.value),
   },
   {
     label: "Particuliers",
@@ -41,6 +50,7 @@ const nav = computed<NavItem[]>(() => [
       description: o.shortDescription || undefined,
       icon: o.icon,
     })),
+    diagnostic: diagnosticLink(promoB2c.value),
   },
   { label: "Ressources", to: "/ressources" },
   { label: "Le Laboratoire", to: "/laboratoire" },
@@ -174,6 +184,21 @@ watch(
                             {{ child.description }}
                           </span>
                         </span>
+                      </NuxtLink>
+                    </NavigationMenuLink>
+                  </li>
+                  <!-- Diagnostic : fond doré pour le distinguer des offres ; pas
+                       d'icône, une pastille de plus le ferait passer pour une offre
+                       et une horloge fait « gadget » (retour du 2026-10-27). -->
+                  <li v-if="item.diagnostic" class="mt-1">
+                    <NavigationMenuLink as-child>
+                      <NuxtLink
+                        :to="item.diagnostic.to"
+                        class="flex items-center justify-between gap-2 rounded-xl bg-orange-50 px-3 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-orange-100"
+                        @click="track('diagnostic_link_click', { from: 'nav', path: item.diagnostic.to })"
+                      >
+                        {{ item.diagnostic.label }}
+                        <span aria-hidden="true" class="text-orange-600">→</span>
                       </NuxtLink>
                     </NavigationMenuLink>
                   </li>

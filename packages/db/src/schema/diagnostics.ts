@@ -22,6 +22,9 @@ export const diagnostics = app.table(
     consentTextVersion: text("consent_text_version").notNull(),
     // { [questionId]: index de réponse ou clé de menu }, sans la réponse sensible.
     answers: jsonb("answers").$type<Record<string, number | string>>().notNull(),
+    // Questions et réponses en toutes lettres pour l'admin (diagnosticSummary) ;
+    // NULL pour les diagnostics reçus avant son ajout.
+    summary: text("summary"),
     // Résultat recalculé serveur (scores, niveaux, offres, conseils).
     result: jsonb("result").$type<Record<string, unknown>>().notNull(),
     source: text("source"), // paramètre d'URL `?source=`, borné

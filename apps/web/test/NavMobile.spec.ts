@@ -35,4 +35,21 @@ describe("NavMobile", () => {
     expect(text).toContain("Particuliers");
     expect(text).toContain("Prendre RDV");
   });
+
+  it("propose le diagnostic sous le hub qui le porte", async () => {
+    const withDiagnostic = [
+      {
+        label: "Organisations",
+        to: "/organisations",
+        children: [{ label: "Audit RH", to: "/organisations/audit-rh" }],
+        diagnostic: { label: "Faire le diagnostic RH", to: "/organisations/diagnostic" },
+      },
+    ];
+    const wrapper = await mountSuspended(NavMobile, { props: { items: withDiagnostic } });
+    await wrapper.find("button").trigger("click");
+    await flushPromises();
+
+    const link = document.querySelector('[role="dialog"] a[href="/organisations/diagnostic"]');
+    expect(link?.textContent).toContain("Faire le diagnostic RH");
+  });
 });

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, type Database, diagnostics, eq, gt, lt } from "@encre/db";
+import { and, type Database, diagnostics, eq, gt, isNull, lt } from "@encre/db";
 import {
   type Answers,
   type B2bResult,
@@ -89,4 +89,38 @@ export async function purgeOldDiagnostics(db: Database, now: Date = new Date()):
     .where(lt(diagnostics.createdAt, cutoff))
     .returning({ id: diagnostics.id });
   return deleted.length;
+}
+
+type SummarySource = Pick<typeof diagnostics.$inferSelect, "kind" | "answers" | "result">;
+
+/**
+ * Remplit « Réponses en clair » des diagnostics reçus avant ce champ. Idempotent :
+ * ne touche que les lignes vides, d'où son passage chaque nuit sans risque. Une
+ * ligne en échec reste vide (retentée la nuit suivante) sans bloquer les autres.
+ * Renvoie le nombre de lignes complétées.
+ */
+export async function fillMissingSummaries(
+  db: Database,
+  summarize: (row: SummarySource) => string,
+): Promise<number> {
+  const rows = await db
+    .select({
+      id: diagnostics.id,
+      kind: diagnostics.kind,
+      answers: diagnostics.answers,
+      result: diagnostics.result,
+    })
+    .from(diagnostics)
+    .where(isNull(diagnostics.summary));
+  let filled = 0;
+  for (const row of rows) {
+    try {
+      const summary = summarize(row);
+      await db.update(diagnostics).set({ summary }).where(eq(diagnostics.id, row.id));
+      filled++;
+    } catch (err) {
+      console.error(`[diagnostics] résumé de ${row.id} impossible :`, err);
+    }
+  }
+  return filled;
 }

@@ -93,8 +93,11 @@ const DIAGNOSTICS: AppTable = {
     kind: { name: "Diagnostic (b2b = RH, b2c = projet)", width: "half" },
     email: { name: "E-mail", width: "half" },
     status: STATUS_FIELD,
-    result: { name: "Résultat (scores, niveaux, offres)", width: "full", interface: "input-code" },
-    answers: { name: "Réponses", width: "full", interface: "input-code" },
+    // Ce qu'Éléonore lit (retour du 2026-10-27) ; les deux champs bruts restent
+    // pour l'export, repliés plus bas.
+    summary: { name: "Réponses en clair", width: "full", interface: "input-multiline" },
+    result: { name: "Résultat (codes techniques)", width: "full", interface: "input-code" },
+    answers: { name: "Réponses (codes techniques)", width: "full", interface: "input-code" },
     booking_clicked_at: { name: "A cliqué sur le rendez-vous le", width: "half" },
     consent_newsletter: { name: "Newsletter demandée", width: "half" },
     consent_report: { name: "Consentement rapport", width: "half" },

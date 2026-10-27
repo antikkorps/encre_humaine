@@ -227,3 +227,16 @@ export async function sendDiagnosticReport(opts: {
   const config = useRuntimeConfig();
   await sendEmail({ from: config.newsletterFrom, ...opts });
 }
+
+/**
+ * Copie d'un diagnostic pour Éléonore (retour du 2026-10-27). `reply_to` = la
+ * personne : répondre au mail lui écrit directement. Lève en cas d'échec.
+ */
+export async function sendDiagnosticOwnerCopy(opts: {
+  replyTo: string;
+  subject: string;
+  text: string;
+}): Promise<void> {
+  const config = useRuntimeConfig();
+  await sendEmail({ from: config.newsletterFrom, to: config.contactNotifyTo, ...opts });
+}

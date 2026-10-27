@@ -278,10 +278,17 @@ export default defineNuxtConfig({
     "/diagnostic-projet": { redirect: { to: "/particuliers/diagnostic", statusCode: 301 } },
   },
 
-  // Nitro : tâches planifiées (purges RGPD newsletter + contact). Quotidien 03h.
+  // Nitro : tâches planifiées (purges RGPD + rattrapage des réponses en clair). Quotidien 03h.
   nitro: {
     experimental: { tasks: true },
-    scheduledTasks: { "0 3 * * *": ["newsletter:purge", "contact:purge", "diagnostics:purge"] },
+    scheduledTasks: {
+      "0 3 * * *": [
+        "newsletter:purge",
+        "contact:purge",
+        "diagnostics:purge",
+        "diagnostics:summarize",
+      ],
+    },
   },
 
   // @nuxtjs/seo : robots/sitemap/canonical/OG. `site.url` est lu au BUILD ; en

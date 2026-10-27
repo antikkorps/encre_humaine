@@ -57,6 +57,7 @@ Bouton « Réserver 30 minutes pour en parler » (B2B) / « Réserver ma séance
 | `source`, `device` | paramètre d'URL `?source=` (borné), type d'appareil (mobile/desktop, dérivé, pas d'UA brut) |
 | `report_token_hash` | hash du jeton du lien de rapport (jeton en clair seulement dans l'email/URL) |
 | `booking_clicked_at` | premier clic sur le bouton de RDV |
+| `summary` | « Réponses en clair » (migration 0006) : scores, offre(s), puis chaque question et sa réponse en toutes lettres, dans l'ordre du parcours ; Q3 B2C notée « non conservée ». Écrit au déblocage ; les lignes antérieures (ou en échec) sont complétées par la tâche nocturne `diagnostics:summarize`, avec les libellés Directus du jour : si Éléonore a reformulé une réponse entre-temps, c'est la nouvelle formulation qui s'affiche. |
 
 - Pas d'IP persistée. Rate-limit + Turnstile au déblocage. Scores **recalculés côté serveur** à partir des réponses (le client n'est pas cru).
 - Conservation **3 ans** après création (aligné sur `contact_leads`), purge par tâche planifiée `diagnostics:purge`.
@@ -69,6 +70,9 @@ Bouton « Réserver 30 minutes pour en parler » (B2B) / « Réserver ma séance
 
 ## Email au déblocage (Resend)
 Objet : « Votre diagnostic : [niveau] » (B2B) / « Votre point sur votre projet professionnel » (B2C). Contenu : scores et niveaux, conseils, offre(s), bouton RDV, lien vers le rapport en ligne, signature L'Encre Humaine. Transférable tel quel (aucun lien personnel autre que le rapport). Pas de lien de désinscription marketing : c'est un email transactionnel demandé ; la newsletter a les siens.
+
+## Copie à Éléonore (retour du 2026-10-27)
+À chaque déblocage (même règle anti-abus des 10 minutes que le rapport), un email texte part vers `CONTACT_NOTIFY_TO` : objet « Nouveau diagnostic RH|projet — [email] », `reply_to` = la personne, source, newsletter oui/non, lien du rapport, puis le même texte que `summary`. Best-effort : un échec ne touche ni la personne ni l'enregistrement. Pas de PDF (dépendance lourde, moins pratique qu'un mail auquel on répond). Dans l'admin, « Réponses en clair » vient en tête ; `answers` / `result` restent pour l'export (« codes techniques »).
 
 ## Mesure (Umami, sans cookie)
 Événements : `diagnostic_start`, `diagnostic_complete`, `diagnostic_unlock`, `diagnostic_booking_click`, `diagnostic_care_screen` (compteur anonyme), avec `kind` en propriété (sauf `diagnostic_care_screen`).
@@ -93,5 +97,9 @@ Réservation effective remontée de Cal.com (webhook), relances commerciales aut
 1. **Une adresse par diagnostic**, sous le hub de son public : c'est le lien diffusé (email, signature, posts) et indexé. Tous les autres emplacements y renvoient (`DIAGNOSTIC_PATHS`).
 2. **Bas de chaque page d'offre**, juste avant le CTA de contact : encart « Pas sûr d'avoir besoin de ça ? » (organisations) ou aide au choix entre les deux offres (particuliers), vers le diagnostic du public de l'offre.
 3. **Hubs** `/organisations` et `/particuliers` : second bouton (contour) à côté de « Prendre rendez-vous », qui reste l'appel principal.
+4. **Haut de chaque page d'offre** (retour du 2026-10-27) : même duo que les hubs dans le bandeau marine du hero, l'encart du bas reste.
+5. **Méga menu** Organisations / Particuliers (desktop et mobile) : ligne dorée sous les offres, libellé `promo_label`, sans icône.
+
+Clics mesurés par `diagnostic_link_click` avec `from` = `offer` (bas d'offre), `offer-hero`, `hub` ou `nav`.
 
 Textes des encarts et du bouton : champs `promo_*` des singletons `diagnostic_b2b` / `diagnostic_b2c`, repli sur la référence du code.

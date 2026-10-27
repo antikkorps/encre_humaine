@@ -7,8 +7,8 @@ import {
   bookingNote,
   contactFallbackPath,
   fillTemplate,
-  themeScores,
 } from "~/utils/diagnostic-flow";
+import { recommendedOffers, scoreLines } from "~/utils/diagnostic-summary";
 
 /**
  * Email du rapport de diagnostic (docs/11-diagnostics.md §Email) : scores,
@@ -29,26 +29,13 @@ export interface DiagnosticEmailInput {
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-/** Lignes « thème : score/100 (niveau) », global en tête pour le B2B. */
-function scoreLines({ kind, texts, result }: DiagnosticEmailInput): string[] {
-  const themes = themeScores(kind, texts, result).map(
-    (t) => `${t.label} : ${t.score}/100 (${t.level})`,
-  );
-  if (kind === "b2c") return themes;
-  const r = result as B2bResult;
-  return [
-    `${texts.messages.global_label} : ${r.global}/100 (${texts.levels[r.globalLevel]})`,
-    ...themes,
-  ];
-}
-
 /** Message(s) de proposition, offres recommandées. */
 function proposal({ kind, texts, answers, result }: DiagnosticEmailInput) {
   if (kind === "b2c") {
     const r = result as B2cResult;
     return {
       lines: [texts.messages[r.message] ?? "", r.ruptureNote ? (texts.messages.rupture ?? "") : ""],
-      offers: [r.offer],
+      offers: recommendedOffers(kind, result),
     };
   }
   const r = result as B2bResult;
@@ -61,7 +48,7 @@ function proposal({ kind, texts, answers, result }: DiagnosticEmailInput) {
       r.sameDirection ? (texts.messages.same_direction ?? "") : "",
       r.sizeNote ? (texts.messages[`size_${r.sizeNote}`] ?? "") : "",
     ],
-    offers: r.cards.map((c) => c.offer),
+    offers: recommendedOffers(kind, result),
   };
 }
 
@@ -79,7 +66,7 @@ function emailParts(input: DiagnosticEmailInput) {
     texts,
     reportUrl,
     abs: (url: string) => (url.startsWith("/") ? `${origin}${url}` : url),
-    scores: scoreLines(input),
+    scores: scoreLines(input.kind, texts, result),
     tips: result.tips.map((id) => texts.questions[id]?.tip ?? "").filter(Boolean),
     lines: lines.filter(Boolean),
     cards: offers.map((k) => texts.offers[k]).filter((o) => o !== undefined),
@@ -137,4 +124,34 @@ function renderText(e: EmailParts): string {
 export function renderDiagnosticEmail(input: DiagnosticEmailInput) {
   const parts = emailParts(input);
   return { subject: subject(input), html: renderHtml(parts), text: renderText(parts) };
+}
+
+export interface DiagnosticOwnerEmailInput {
+  kind: DiagnosticKind;
+  email: string;
+  /** `diagnosticSummary` : le même texte que « Réponses en clair » dans l'admin. */
+  summary: string;
+  reportUrl: string;
+  source: string | null;
+  consentNewsletter: boolean;
+}
+
+/**
+ * Copie pour Éléonore (retour du 2026-10-27) : qui, d'où, puis les réponses en
+ * clair, pour préparer l'appel sans ouvrir l'admin. Texte brut, comme la
+ * notification de demande de rappel.
+ */
+export function renderDiagnosticOwnerEmail(input: DiagnosticOwnerEmailInput) {
+  const label = input.kind === "b2b" ? "RH" : "projet";
+  return {
+    subject: `Nouveau diagnostic ${label} — ${input.email}`,
+    text: [
+      `E-mail : ${input.email} (répondre à ce message lui écrit directement)`,
+      ...(input.source ? [`Source : ${input.source}`] : []),
+      `Newsletter : ${input.consentNewsletter ? "oui" : "non"}`,
+      `Rapport en ligne : ${input.reportUrl}`,
+      "",
+      input.summary,
+    ].join("\n"),
+  };
 }

@@ -6,6 +6,7 @@
 import type { NavItem } from "~/types/content";
 
 defineProps<{ items: NavItem[] }>();
+const track = useTrack();
 
 const open = ref(false);
 const route = useRoute();
@@ -79,6 +80,16 @@ watch(
                       class="h-5 w-5 shrink-0 text-teal-700"
                     />
                     {{ child.label }}
+                  </NuxtLink>
+                </li>
+                <li v-if="item.diagnostic">
+                  <NuxtLink
+                    :to="item.diagnostic.to"
+                    class="flex items-center gap-2 rounded-lg px-2 py-2 text-base font-semibold text-orange-700 transition-colors hover:bg-orange-50"
+                    @click="track('diagnostic_link_click', { from: 'nav', path: item.diagnostic.to })"
+                  >
+                    {{ item.diagnostic.label }}
+                    <span aria-hidden="true">→</span>
                   </NuxtLink>
                 </li>
               </ul>
