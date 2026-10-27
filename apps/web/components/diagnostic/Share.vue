@@ -2,9 +2,11 @@
 // « Partager mon résultat » (B2C, cahier des charges §7) : LinkedIn ou copie du
 // lien. Seuls un message générique et le lien du QUESTIONNAIRE partent — jamais
 // un score, une réponse ni le lien du rapport.
+import { DIAGNOSTIC_PATHS } from "@encre/shared/diagnostics";
+
 const props = defineProps<{ text: string; label: string }>();
 
-const pageUrl = `${useRequestURL().origin}/diagnostic-projet`;
+const pageUrl = `${useRequestURL().origin}${DIAGNOSTIC_PATHS.b2c}`;
 const linkedin = computed(
   () => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`,
 );

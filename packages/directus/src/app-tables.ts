@@ -76,7 +76,7 @@ const DIAGNOSTICS: AppTable = {
   collection: "diagnostics",
   meta: {
     icon: "quiz",
-    note: `Diagnostics débloqués par email (/diagnostic-rh, /diagnostic-projet). Réponses et résultat servent à préparer le rendez-vous. ${TIDY_NOTE}`,
+    note: `Diagnostics débloqués par email (/organisations/diagnostic, /particuliers/diagnostic). Réponses et résultat servent à préparer le rendez-vous. ${TIDY_NOTE}`,
     display_template: "{{email}} — {{kind}}",
     ...ARCHIVE_ON_STATUS,
     translations: [

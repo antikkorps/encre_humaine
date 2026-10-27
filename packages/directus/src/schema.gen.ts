@@ -152,6 +152,10 @@ export interface CaseStudies {
   user_updated: string | null;
   offer_scopes: unknown | null;
   show_on_home: boolean;
+  teaser_label: string | null;
+  teaser_situation: string | null;
+  teaser_result: string | null;
+  teaser_button: string | null;
 }
 
 export interface ContactLeads {
@@ -222,6 +226,10 @@ export interface DiagnosticB2b {
   newsletter_label: string | null;
   unlock_button: string | null;
   email_subject: string | null;
+  promo_title: string | null;
+  promo_body: string | null;
+  promo_label: string | null;
+  promo_hub_label: string | null;
 }
 
 export interface DiagnosticB2c {
@@ -242,6 +250,10 @@ export interface DiagnosticB2c {
   newsletter_label: string | null;
   unlock_button: string | null;
   email_subject: string | null;
+  promo_title: string | null;
+  promo_body: string | null;
+  promo_label: string | null;
+  promo_hub_label: string | null;
 }
 
 export interface Diagnostics {

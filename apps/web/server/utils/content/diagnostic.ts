@@ -2,11 +2,12 @@ import { readSingleton } from "@directus/sdk";
 import {
   B2B_TEXTS,
   B2C_TEXTS,
+  DIAGNOSTIC_PATHS,
   type DiagnosticTexts,
   mergeTexts,
   type RawDiagnosticTexts,
 } from "@encre/shared/diagnostics";
-import type { DiagnosticContent, DiagnosticKind } from "~/types/content";
+import type { DiagnosticContent, DiagnosticKind, DiagnosticPromo } from "~/types/content";
 import { safeHref } from "./_shared";
 
 /**
@@ -14,7 +15,7 @@ import { safeHref } from "./_shared";
  * fusionnés clé par clé avec la référence du cahier des charges, plus l'agenda
  * du public concerné (organisations pour le B2B, particuliers pour le B2C).
  */
-export type { DiagnosticContent, DiagnosticKind };
+export type { DiagnosticContent, DiagnosticKind, DiagnosticPromo };
 
 export interface RawBookingSettings {
   booking_url?: string | null;
@@ -53,4 +54,9 @@ export async function loadDiagnosticContent(kind: DiagnosticKind): Promise<Diagn
     raw as unknown as RawDiagnosticTexts,
     settings as unknown as RawBookingSettings,
   );
+}
+
+/** Invitation au diagnostic d'un public : ses textes `promo` et l'adresse de sa page. */
+export function mapDiagnosticPromo(kind: DiagnosticKind, texts: DiagnosticTexts): DiagnosticPromo {
+  return { ...texts.promo, path: DIAGNOSTIC_PATHS[kind] };
 }

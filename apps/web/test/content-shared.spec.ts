@@ -402,6 +402,33 @@ describe("mapCaseStudies / caseStudiesForOffer / caseStudiesForHome / mapProofSe
     ]);
   });
 
+  it("carte d'accueil : les 4 champs résumés, sans flèche ni « Résultat : » en double", () => {
+    const [item] = mapCaseStudies(
+      [
+        {
+          title: "Un cas",
+          situation: "…",
+          teaser_label: " Plan de formation ",
+          teaser_situation: "30 000 € dépensés.",
+          teaser_result: "Résultat : Résultat : 3 consultants formés.",
+          teaser_button: "Lire le cas : plan de formation →",
+        },
+      ],
+      BASE,
+    );
+    expect(item?.teaser).toEqual({
+      label: "Plan de formation",
+      situation: "30 000 € dépensés.",
+      result: "3 consultants formés.",
+      button: "Lire le cas : plan de formation",
+    });
+  });
+
+  it("carte d'accueil : aucun champ résumé rempli → pas de résumé", () => {
+    const [item] = mapCaseStudies([{ title: "Un cas", situation: "…", teaser_label: " " }], BASE);
+    expect(item?.teaser).toBeUndefined();
+  });
+
   it("cas : entrée non tableau → liste vide", () => {
     expect(mapCaseStudies(null, BASE)).toEqual([]);
   });

@@ -20,6 +20,7 @@ useSeoMeta({
   ogType: "website",
   robots: () => (content.value?.seo.noIndex ? "noindex, nofollow" : undefined),
 });
+const diagnosticPromo = useDiagnosticPromo("b2b");
 </script>
 
 <template>
@@ -63,13 +64,18 @@ useSeoMeta({
             <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
             <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
-          <NuxtLink
-            to="/contact?pour=organisation"
-            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
-          >
-            Prendre rendez-vous
-            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
-          </NuxtLink>
+          <!-- Rendez-vous = appel principal (plein) ; diagnostic en second
+               (contour), pour qui n'est pas encore prêt (Éléonore, 2026-10-26). -->
+          <div class="flex flex-none flex-col gap-3">
+            <NuxtLink
+              to="/contact?pour=organisation"
+              class="inline-flex items-center justify-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
+            >
+              Prendre rendez-vous
+              <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+            </NuxtLink>
+            <DiagnosticHubLink v-if="diagnosticPromo" :promo="diagnosticPromo" />
+          </div>
         </div>
       </template>
     </PageHero>

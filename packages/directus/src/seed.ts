@@ -18,7 +18,7 @@ import { run18CaseStudies } from "./content-run18.ts";
 import { run19ContactFaq, run19ContactPage, run19ContactRewrites } from "./content-run19.ts";
 import { run20Author, run20HomeFaq } from "./content-run20.ts";
 import { config } from "./env.ts";
-import { seedDiagnosticTexts } from "./seed-diagnostics.ts";
+import { seedRun21 } from "./seed-run21.ts";
 
 type Json = Record<string, unknown>;
 
@@ -1872,7 +1872,8 @@ async function main(): Promise<void> {
   }
 
   // ── Diagnostics : textes de référence du cahier des charges (champs vides) ──
-  await seedDiagnosticTexts({ apply: true, act: (msg) => console.log(`~ ${msg}`) });
+  // Le run 21 complète les cas créés ci-dessus et les textes des diagnostics.
+  await seedRun21({ apply: true, act: (msg) => console.log(`~ ${msg}`) });
 
   console.log("✓ Seed terminé (contenu démo FR). Boutique : produits masqués sans prix Stripe.");
 }

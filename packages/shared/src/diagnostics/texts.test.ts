@@ -37,6 +37,14 @@ describe("mergeTexts", () => {
     expect(merged.messages.same_direction).toBe("Même cap.");
   });
 
+  it("textes d'invitation au diagnostic (offres, hubs) : admin sinon référence", () => {
+    const merged = mergeTexts(B2C_TEXTS, { promo_title: "Lequel choisir ?", promo_label: " " });
+    expect(merged.promo.title).toBe("Lequel choisir ?");
+    expect(merged.promo.label).toBe(B2C_TEXTS.promo.label);
+    expect(merged.promo.hubLabel).toBe(B2C_TEXTS.promo.hubLabel);
+    expect(B2B_TEXTS.promo.title).toBe("Pas sûr d’avoir besoin de ça ?");
+  });
+
   it("ignore une liste de réponses au mauvais nombre de lignes", () => {
     const merged = mergeTexts(B2B_TEXTS, {
       questions: [

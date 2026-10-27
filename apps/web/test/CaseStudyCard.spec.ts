@@ -31,4 +31,32 @@ describe("CaseStudyCard compact", () => {
     expect(wrapper.text()).toContain("Le résultat.");
     expect(wrapper.text()).not.toContain("Lire le cas");
   });
+
+  it("affiche la carte résumée en entier : étiquette, situation, résultat, bouton", async () => {
+    const wrapper = await mountSuspended(CaseStudyCard, {
+      props: {
+        caseStudy: {
+          ...base,
+          readMoreUrl: "/organisations/x#cas-1",
+          teaser: {
+            label: "Plan de formation",
+            situation: "30 000 € de formation.",
+            result: "3 consultants formés.",
+            button: "Lire le cas : plan de formation",
+          },
+        },
+        compact: true,
+      },
+    });
+    const text = wrapper.text();
+    expect(text).toContain("Plan de formation");
+    expect(text).toContain("30 000 € de formation.");
+    expect(text).toContain("Résultat\u00a0: 3 consultants formés.");
+    expect(text).toContain("3 consultants formés.");
+    expect(text).not.toContain("Résumé.");
+    const link = wrapper.get('a[href="/organisations/x#cas-1"]');
+    expect(link.text()).toContain("Lire le cas : plan de formation");
+    // Éléonore : aucun texte coupé automatiquement.
+    expect(wrapper.html()).not.toContain("line-clamp");
+  });
 });

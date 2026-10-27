@@ -21,7 +21,9 @@
  */
 export const run17AuditCaseStudies = [
   {
-    title: "Sécuriser une structure avant que l'audit ne devienne une source de stress",
+    // Titre repris de la carte d'accueil d'Éléonore au run 21 (seed-run21 renomme
+    // le cas sur les instances qui portent encore l'ancien).
+    title: "Qualiopi : passer d’un suivi dispersé à des audits sans non-conformité",
     summary: "Un référentiel qualité suivi de façon dispersée, sans process formalisé.",
     situation:
       "Un organisme de formation où les exigences qualité (Qualiopi) étaient suivies, mais de façon dispersée : pas de process formalisé, pas de suivi structuré des écarts, chaque audit vécu comme une source de stress plutôt que comme un point de contrôle serein.",

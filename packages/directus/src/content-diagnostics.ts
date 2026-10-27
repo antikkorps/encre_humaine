@@ -29,6 +29,10 @@ export function toDirectusTexts(t: DiagnosticTexts): Record<string, unknown> {
     newsletter_label: t.unlock.newsletter,
     unlock_button: t.unlock.button,
     email_subject: t.emailSubject,
+    promo_title: t.promo.title,
+    promo_body: t.promo.body,
+    promo_label: t.promo.label,
+    promo_hub_label: t.promo.hubLabel,
   };
 }
 

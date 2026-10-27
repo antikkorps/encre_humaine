@@ -159,4 +159,11 @@ export const B2B_TEXTS: DiagnosticTexts = {
     button: "Débloquer mon rapport",
   },
   emailSubject: "Votre diagnostic : {niveau}",
+  // Branchements sur le site (mail d'Éléonore du 2026-10-26).
+  promo: {
+    title: "Pas sûr d’avoir besoin de ça ?",
+    body: "Faites le point en 4 minutes : 12 questions, et un rapport avec des conseils concrets pour savoir par quoi commencer.",
+    label: "Faire le diagnostic RH",
+    hubLabel: "Faire le point en 4 minutes",
+  },
 };
