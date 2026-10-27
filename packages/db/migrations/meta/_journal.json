@@ -43,6 +43,13 @@
       "when": 1792752532753,
       "tag": "0005_directus_manage_diagnostics",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793091443711,
+      "tag": "0006_diagnostics_summary",
+      "breakpoints": true
     }
   ]
 }

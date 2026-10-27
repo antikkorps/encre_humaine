@@ -206,13 +206,19 @@ useSchemaOrg([
             <Icon name="material-symbols:format-quote" class="mb-1 block h-8 w-8 text-orange-300" />
             <AccentText :text="content.accrocheSignature" tone="dark" />
           </p>
-          <NuxtLink
-            :to="contactTo"
-            class="inline-flex flex-none items-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
-          >
-            {{ content.ctaLabel }}
-            <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
-          </NuxtLink>
+          <!-- Même duo que les hubs : rendez-vous plein, diagnostic en contour
+               pour qui hésite encore (retour d'Éléonore du 2026-10-27 : l'encart
+               du bas de page arrive trop tard). -->
+          <div class="flex flex-none flex-col gap-3">
+            <NuxtLink
+              :to="contactTo"
+              class="inline-flex items-center justify-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 text-center font-semibold text-ink shadow-soft transition-transform hover:-translate-y-0.5"
+            >
+              {{ content.ctaLabel }}
+              <Icon name="material-symbols:arrow-forward" class="h-5 w-5" />
+            </NuxtLink>
+            <DiagnosticHubLink v-if="diagnosticPromo" :promo="diagnosticPromo" from="offer-hero" />
+          </div>
         </div>
       </template>
     </PageHero>

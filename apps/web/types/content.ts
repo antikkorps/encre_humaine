@@ -171,6 +171,8 @@ export interface NavItem {
    * offres publiées dans Directus — jamais écrits en dur, cf. `nav-offers`.
    */
   children?: { label: string; to: string; description?: string; icon?: string }[];
+  /** Diagnostic du public du hub, mis en avant sous ses offres (libellé Directus). */
+  diagnostic?: { label: string; to: string };
 }
 
 /** Diagnostic B2B (organisations) ou B2C (particuliers) — docs/11-diagnostics.md. */

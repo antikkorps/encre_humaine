@@ -10,15 +10,18 @@ import { drizzle } from "drizzle-orm/pglite";
 import { beforeAll, describe, expect, it } from "vitest";
 import {
   DIAGNOSTIC_RETENTION_MS,
+  fillMissingSummaries,
   purgeOldDiagnostics,
   recentReportExists,
 } from "../server/utils/diagnostics";
 
-// 0000 crée le schéma `app` et l'enum `lead_status` ; 0004 la table. Les GRANT
-// (0005) visent un rôle absent de PGlite et sont ignorés.
-const MIGRATIONS = ["0000_messy_yellowjacket.sql", "0004_diagnostics.sql"].map((file) =>
-  fileURLToPath(new URL(`../../../packages/db/migrations/${file}`, import.meta.url)),
-);
+// 0000 crée le schéma `app` et l'enum `lead_status` ; 0004 la table, 0006 le
+// résumé lisible. Les GRANT (0005) visent un rôle absent de PGlite et sont ignorés.
+const MIGRATIONS = [
+  "0000_messy_yellowjacket.sql",
+  "0004_diagnostics.sql",
+  "0006_diagnostics_summary.sql",
+].map((file) => fileURLToPath(new URL(`../../../packages/db/migrations/${file}`, import.meta.url)));
 
 describe("purge RGPD des diagnostics", () => {
   let db: Database;
@@ -81,5 +84,60 @@ describe("limite d'envoi par adresse", () => {
         new Date(now.getTime() + 11 * 60_000),
       ),
     ).toBe(false);
+  });
+});
+
+describe("rattrapage des réponses en clair", () => {
+  let db: Database;
+
+  beforeAll(async () => {
+    const pg = new PGlite();
+    for (const migration of MIGRATIONS) await pg.exec(readFileSync(migration, "utf8"));
+    db = drizzle(pg) as unknown as Database;
+  });
+
+  it("remplit les diagnostics reçus avant le résumé, sans toucher aux autres", async () => {
+    const row = (hash: string, summary: string | null) => ({
+      kind: "b2c" as const,
+      email: "p@exemple.fr",
+      consentReport: true,
+      consentTextVersion: "v1",
+      answers: { situation: "employed" },
+      result: {},
+      reportTokenHash: hash,
+      summary,
+    });
+    await db.insert(diagnostics).values([row("vide", null), row("plein", "déjà là")]);
+
+    const filled = await fillMissingSummaries(db, (r) => `${r.kind}:${r.answers.situation}`);
+
+    expect(filled).toBe(1);
+    const rows = await db.select().from(diagnostics);
+    const byHash = Object.fromEntries(rows.map((r) => [r.reportTokenHash, r.summary]));
+    expect(byHash).toEqual({ vide: "b2c:employed", plein: "déjà là" });
+    expect(await fillMissingSummaries(db, () => "x")).toBe(0);
+  });
+
+  it("une ligne illisible n'empêche pas de compléter les autres", async () => {
+    const row = (hash: string, situation: string) => ({
+      kind: "b2c" as const,
+      email: "p@exemple.fr",
+      consentReport: true,
+      consentTextVersion: "v1",
+      answers: { situation },
+      result: {},
+      reportTokenHash: hash,
+    });
+    await db.insert(diagnostics).values([row("casse", "boom"), row("saine", "employed")]);
+
+    const filled = await fillMissingSummaries(db, (r) => {
+      if (r.answers.situation === "boom") throw new Error("texte manquant");
+      return "ok";
+    });
+
+    expect(filled).toBe(1);
+    const rows = await db.select().from(diagnostics);
+    const byHash = Object.fromEntries(rows.map((r) => [r.reportTokenHash, r.summary]));
+    expect(byHash).toMatchObject({ casse: null, saine: "ok" });
   });
 });

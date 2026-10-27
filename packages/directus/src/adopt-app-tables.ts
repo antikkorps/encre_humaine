@@ -39,9 +39,11 @@ async function isVisible(collection: string): Promise<boolean> {
   }
 }
 
-function fieldMeta(meta: FieldMeta): Record<string, unknown> {
+/** `sort` = rang dans la config : une colonne ajoutée plus tard ne tombe pas en bas du formulaire. */
+function fieldMeta(meta: FieldMeta, sort: number): Record<string, unknown> {
   return {
     note: null,
+    sort,
     readonly: !meta.editable,
     width: meta.width ?? "full",
     ...(meta.interface ? { interface: meta.interface } : {}),
@@ -60,9 +62,9 @@ async function adoptTable({ collection, meta, fields }: AppTable): Promise<void>
     return;
   }
   await patch(`/collections/${collection}`, { meta });
-  for (const [field, m] of Object.entries(fields)) {
+  for (const [i, [field, m]] of Object.entries(fields).entries()) {
     try {
-      await patch(`/fields/${collection}/${field}`, { meta: fieldMeta(m) });
+      await patch(`/fields/${collection}/${field}`, { meta: fieldMeta(m, i + 1) });
     } catch (err) {
       // Une colonne absente (schéma applicatif qui évolue) ne doit pas bloquer.
       console.warn(`  ⚠ ${collection}.${field} : meta non appliqué (${(err as Error).message})`);
