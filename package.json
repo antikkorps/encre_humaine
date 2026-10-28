@@ -37,7 +37,7 @@
       "vue-demi"
     ],
     "overrides": {
-      "@types/node": "25.9.8",
+      "@types/node": "26.6.3",
       "postcss": "8.5.28"
     }
   }

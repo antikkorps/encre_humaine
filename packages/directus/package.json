@@ -29,7 +29,7 @@
     "seed:run21": "tsx src/seed-run21.ts"
   },
   "devDependencies": {
-    "@types/node": "25.9.8",
+    "@types/node": "26.6.3",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
     "yaml": "2.9.1"
